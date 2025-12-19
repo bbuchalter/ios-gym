@@ -13,6 +13,7 @@ import type { CommandGrammar } from '@src/types';
 import { Footer } from '@/components/Footer';
 import { LessonSection } from '@/components/LessonSection';
 import { InfoBox } from '@/components/InfoBox';
+import { ProTip } from '@/components/ProTip';
 import { SkillCard } from '@/components/SkillCard';
 import { Diagram } from '@/components/Diagram';
 
@@ -83,8 +84,8 @@ export default function LearnPage() {
             </div>
           </LessonSection>
 
-          {/* LESSON 1: FIRST COMMANDS */}
-          <LessonSection lessonNumber={1} title="Your First Commands">
+          {/* LESSON 1: NAVIGATING MODES */}
+          <LessonSection lessonNumber={1} title="Navigating Between Modes">
             <p className="text-xl text-gray-200 my-6">
               Let's start with the basics. Every network device has different <strong className="text-white">"modes"</strong> — like different levels of access.
             </p>
@@ -107,41 +108,123 @@ export default function LearnPage() {
               </div>
             </div>
 
-            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">The Magic TAB Key ✨</h2>
+            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">Moving Between Modes</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              You'll use these commands constantly to navigate between modes:
+            </p>
 
-            <InfoBox variant="tip">
-              <p className="text-gray-200 text-lg"><strong className="text-green-300">Pro Tip:</strong> Press <kbd>TAB</kbd> at any time to auto-complete commands or see options!</p>
-              <p className="mt-3 text-gray-300">This is the #1 trick professionals use. It prevents typos and speeds you up.</p>
+            <div className="space-y-4 my-8">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <code className="font-mono text-lg text-blue-400">enable</code>
+                <p className="text-gray-400 mt-2">Moves from user mode (<code>&gt;</code>) to privileged mode (<code>#</code>)</p>
+              </div>
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <code className="font-mono text-lg text-blue-400">configure terminal</code>
+                <p className="text-gray-400 mt-2">Moves from privileged mode (<code>#</code>) to configuration mode (<code>(config)#</code>)</p>
+              </div>
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <code className="font-mono text-lg text-blue-400">exit</code>
+                <p className="text-gray-400 mt-2">Goes back one level (from <code>(config)#</code> to <code>#</code>, or from <code>#</code> to <code>&gt;</code>)</p>
+              </div>
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <code className="font-mono text-lg text-blue-400">end</code>
+                <p className="text-gray-400 mt-2">Jumps directly back to privileged mode (<code>#</code>) from anywhere in configuration mode</p>
+              </div>
+            </div>
+
+            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
+              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
+                <span className="text-4xl">👉</span> Try It Now
+              </h3>
+              <p className="text-gray-300 mb-8 text-lg">Practice moving between modes in the terminal below:</p>
+              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
+                <li>Type <code>enable</code> and press Enter — watch the prompt change from <code>&gt;</code> to <code>#</code></li>
+                <li>Type <code>configure terminal</code> and press Enter — watch the prompt change to <code>(config)#</code></li>
+                <li>Type <code>exit</code> — notice you go back one level to <code>#</code></li>
+                <li>Type <code>configure terminal</code> again to enter config mode</li>
+                <li>Type <code>end</code> — notice you jump directly back to <code>#</code></li>
+              </ol>
+
+              <Terminal terminalId="terminal-1" grammar={grammar} />
+
+              <InfoBox variant="info">
+                <ProTip>
+                  <ul className="ml-6 space-y-2 text-gray-300">
+                    <li>Notice how the prompt changes as you move between modes</li>
+                    <li><code>exit</code> goes back one level at a time</li>
+                    <li><code>end</code> jumps directly back to privileged mode — very useful if you're deep in configuration!</li>
+                  </ul>
+                </ProTip>
+              </InfoBox>
+            </div>
+          </LessonSection>
+
+          {/* LESSON 2: TAB COMPLETION */}
+          <LessonSection lessonNumber={2} title="The Magic TAB Key ✨">
+            <p className="text-xl text-gray-200 my-6">
+              One of the most powerful tools in your CLI toolkit is the <kbd>TAB</kbd> key. It saves time and prevents mistakes!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What Does TAB Do?</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              Pressing <kbd>TAB</kbd> does two amazing things:
+            </p>
+
+            <div className="space-y-4 my-8">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <h4 className="text-white font-semibold mb-3 text-lg">1. Auto-Completes Commands</h4>
+                <p className="text-gray-300 mb-3">Type part of a command and press <kbd>TAB</kbd> to complete it automatically.</p>
+                <div className="bg-gray-900 p-4 rounded mt-3">
+                  <p className="text-gray-400 mb-2">Example:</p>
+                  <p className="text-green-400 font-mono">Switch# conf{'<TAB>'}</p>
+                  <p className="text-gray-400 mt-2">→ Completes to: <code className="text-blue-400">configure</code></p>
+                </div>
+              </div>
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <h4 className="text-white font-semibold mb-3 text-lg">2. Shows Available Options</h4>
+                <p className="text-gray-300 mb-3">If multiple commands match, pressing <kbd>TAB</kbd> twice shows all options.</p>
+                <div className="bg-gray-900 p-4 rounded mt-3">
+                  <p className="text-gray-400 mb-2">Example:</p>
+                  <p className="text-green-400 font-mono">Switch# sh{'<TAB><TAB>'}</p>
+                  <p className="text-gray-400 mt-2">→ Shows: <code className="text-blue-400">show</code>, <code className="text-blue-400">shutdown</code>, etc.</p>
+                </div>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2">Press <kbd>TAB</kbd> at any time to auto-complete commands or see options!</p>
+                <p className="text-gray-300">This is the #1 trick professionals use. It prevents typos and speeds you up.</p>
+              </ProTip>
             </InfoBox>
 
             <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
               <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
                 <span className="text-4xl">👉</span> Try It Now
               </h3>
-              <p className="text-gray-300 mb-8 text-lg">Type these commands in the terminal below:</p>
+              <p className="text-gray-300 mb-8 text-lg">Practice using TAB completion in the terminal below:</p>
               <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li>Type <code>enable</code> and press Enter — watch the prompt change from <code>&gt;</code> to <code>#</code></li>
-                <li>Type <code>en</code> then press <kbd>TAB</kbd> — see it auto-complete!</li>
-                <li>Type <code>conf</code> then press <kbd>TAB</kbd> — now you're in configuration mode</li>
-                <li>Type <code>exit</code> to go back one level</li>
-                <li>Type <code>end</code> to jump back to privileged mode</li>
+                <li>Type <code>enable</code> to enter privileged mode</li>
+                <li>Type <code>conf</code> then press <kbd>TAB</kbd> — watch it auto-complete to <code>configure</code></li>
+                <li>Type <code> t</code> (space + t) then press <kbd>TAB</kbd> — it should complete to <code>terminal</code></li>
+                <li>Press Enter to enter configuration mode</li>
               </ol>
 
-              <Terminal terminalId="terminal-1" grammar={grammar} />
+              <Terminal terminalId="terminal-2" grammar={grammar} />
 
-              <InfoBox variant="help">
-                <p className="text-yellow-200 font-semibold mb-3 text-lg">💡 Helpful Hints</p>
-                <ul className="ml-6 space-y-2 text-gray-300">
-                  <li>Notice how the prompt changes as you move between modes</li>
-                  <li>Use <kbd>TAB</kbd> liberally — it's not cheating, it's smart!</li>
-                  <li>If you get lost, type <code>end</code> to jump back to <code>#</code></li>
-                </ul>
+              <InfoBox variant="info">
+                <ProTip>
+                  <ul className="ml-6 space-y-2 text-gray-300">
+                    <li>Use <kbd>TAB</kbd> liberally — it's not cheating, it's smart!</li>
+                    <li>TAB completion works at any mode level — user, privileged, or configuration</li>
+                  </ul>
+                </ProTip>
               </InfoBox>
             </div>
           </LessonSection>
 
-          {/* LESSON 2: SETTING HOSTNAME */}
-          <LessonSection lessonNumber={2} title="Giving Your Device a Name">
+          {/* LESSON 3: SETTING HOSTNAME */}
+          <LessonSection lessonNumber={3} title="Giving Your Device a Name">
             <p className="text-xl text-gray-200 my-6">
               Just like you name your phone "Brian's iPhone", network devices need names too!
             </p>
@@ -188,7 +271,7 @@ export default function LearnPage() {
                 <li><code>write memory</code> — <strong className="text-yellow-300">SAVE YOUR WORK!</strong></li>
               </ol>
 
-              <Terminal terminalId="terminal-2" grammar={grammar} />
+              <Terminal terminalId="terminal-3" grammar={grammar} />
 
               <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
                 <p className="text-green-300 font-semibold mb-3 text-lg">✓ You succeeded when:</p>
@@ -200,8 +283,8 @@ export default function LearnPage() {
             </div>
           </LessonSection>
 
-          {/* LESSON 3: ENABLE SECRET */}
-          <LessonSection lessonNumber={3} title="Security: Adding a Password">
+          {/* LESSON 4: ENABLE SECRET */}
+          <LessonSection lessonNumber={4} title="Security: Adding a Password">
             <p className="text-xl text-gray-200 my-6">
               Without a password, anyone can access and change your device. Let's lock it down!
             </p>
@@ -239,7 +322,7 @@ export default function LearnPage() {
 
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Password Best Practices</h2>
 
-            <InfoBox variant="tip">
+            <InfoBox variant="info">
               <p className="text-green-200 font-semibold mb-3">Good passwords have:</p>
               <ul className="ml-6 space-y-2 text-gray-300">
                 <li>Mix of uppercase and lowercase letters</li>
@@ -264,20 +347,21 @@ export default function LearnPage() {
                 <li><code>write memory</code> — Save your work</li>
               </ol>
 
-              <Terminal terminalId="terminal-3" grammar={grammar} />
+              <Terminal terminalId="terminal-4" grammar={grammar} />
 
-              <InfoBox variant="help">
-                <p className="text-yellow-200 font-semibold mb-2">💡 Did you know?</p>
-                <p className="text-gray-300">
-                  You can view your configuration with <code>show running-config</code>.
-                  Try it! Notice how the password is encrypted (shows as a long hash).
-                </p>
+              <InfoBox variant="info">
+                <ProTip>
+                  <p className="text-gray-300">
+                    You can view your configuration with <code>show running-config</code>.
+                    Try it! Notice how the password is encrypted (shows as a long hash).
+                  </p>
+                </ProTip>
               </InfoBox>
             </div>
           </LessonSection>
 
-          {/* LESSON 4: IP ADDRESSING */}
-          <LessonSection lessonNumber={4} title="IP Addresses: Your Device's Phone Number">
+          {/* LESSON 5: IP ADDRESSING */}
+          <LessonSection lessonNumber={5} title="IP Addresses: Your Device's Phone Number">
             <p className="text-xl text-gray-200 my-6">
               Every device on a network needs an address so others can find it. This is called an IP address.
             </p>
@@ -318,7 +402,7 @@ Together: 192.168.1.100`}
               <li><strong className="text-white">Default Gateway:</strong> The "door" to other networks (like the internet)</li>
             </ul>
 
-            <InfoBox variant="tip">
+            <InfoBox variant="info">
               <p className="text-gray-200">
                 Common subnet mask: <code>255.255.255.0</code> gives you 254 devices on one network
               </p>
@@ -341,7 +425,7 @@ Together: 192.168.1.100`}
                 <li><code>write memory</code></li>
               </ol>
 
-              <Terminal terminalId="terminal-4" grammar={grammar} />
+              <Terminal terminalId="terminal-5" grammar={grammar} />
 
               <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
                 <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -351,8 +435,8 @@ Together: 192.168.1.100`}
             </div>
           </LessonSection>
 
-          {/* LESSON 5: VLANs */}
-          <LessonSection lessonNumber={5} title="VLANs: Organizing Your Network">
+          {/* LESSON 6: VLANs */}
+          <LessonSection lessonNumber={6} title="VLANs: Organizing Your Network">
             <p className="text-xl text-gray-200 my-6">
               VLANs let you split one physical switch into multiple virtual networks. It's like having multiple switches in one!
             </p>
@@ -431,7 +515,7 @@ Together: 192.168.1.100`}
                 <li><code>write memory</code></li>
               </ol>
 
-              <Terminal terminalId="terminal-5" grammar={grammar} />
+              <Terminal terminalId="terminal-6" grammar={grammar} />
 
               <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
                 <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -445,8 +529,8 @@ Together: 192.168.1.100`}
             </div>
           </LessonSection>
 
-          {/* LESSON 6: TRUNK PORTS */}
-          <LessonSection lessonNumber={6} title="Trunk Ports: Connecting Switches">
+          {/* LESSON 7: TRUNK PORTS */}
+          <LessonSection lessonNumber={7} title="Trunk Ports: Connecting Switches">
             <p className="text-xl text-gray-200 my-6">
               What if you have switches in different rooms or buildings? Trunk ports carry multiple VLANs between switches!
             </p>
@@ -483,11 +567,12 @@ Together: 192.168.1.100`}
               <li><strong className="text-white">Best Practice:</strong> Be explicit about what you allow</li>
             </ul>
 
-            <InfoBox variant="tip">
-              <p className="text-green-200 font-semibold">Pro Tip:</p>
-              <p className="text-gray-300 mt-2">
-                In CyberPatriot competitions, you often need to restrict trunk VLANs for security points!
-              </p>
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300">
+                  In CyberPatriot competitions, you often need to restrict trunk VLANs for security points!
+                </p>
+              </ProTip>
             </InfoBox>
 
             <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
@@ -509,20 +594,21 @@ Together: 192.168.1.100`}
                 <li><code>write memory</code></li>
               </ol>
 
-              <Terminal terminalId="terminal-6" grammar={grammar} />
+              <Terminal terminalId="terminal-7" grammar={grammar} />
 
-              <InfoBox variant="help">
-                <p className="text-yellow-200 font-semibold mb-3">💡 Note:</p>
-                <ul className="ml-6 space-y-2 text-gray-300 list-disc">
-                  <li>VLAN 1 is included because it's the management VLAN</li>
-                  <li>Use commas to separate VLANs: <code>1,100,200</code> (no spaces!)</li>
-                </ul>
+              <InfoBox variant="info">
+                <ProTip>
+                  <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                    <li>VLAN 1 is included because it's the management VLAN</li>
+                    <li>Use commas to separate VLANs: <code>1,100,200</code> (no spaces!)</li>
+                  </ul>
+                </ProTip>
               </InfoBox>
             </div>
           </LessonSection>
 
-          {/* LESSON 7: SSH */}
-          <LessonSection lessonNumber={7} title="SSH: Secure Remote Access">
+          {/* LESSON 8: SSH */}
+          <LessonSection lessonNumber={8} title="SSH: Secure Remote Access">
             <p className="text-xl text-gray-200 my-6">
               SSH lets network engineers manage devices from anywhere — securely and encrypted!
             </p>
@@ -623,12 +709,12 @@ Hacker sees: gibberish
                 <li><code>write memory</code></li>
               </ol>
 
-              <Terminal terminalId="terminal-7" grammar={grammar} />
+              <Terminal terminalId="terminal-8" grammar={grammar} />
             </div>
           </LessonSection>
 
-          {/* LESSON 8: LAYER 3 SWITCHING */}
-          <LessonSection lessonNumber={8} title="Layer 3 Switching: Routed Ports">
+          {/* LESSON 9: LAYER 3 SWITCHING */}
+          <LessonSection lessonNumber={9} title="Layer 3 Switching: Routed Ports">
             <p className="text-xl text-gray-200 my-6">
               Layer 3 switches can both switch AND route! They combine the best of switches and routers.
             </p>
@@ -691,7 +777,7 @@ g1/0/1 = Switchport (connects to computers)
 g1/0/2 = Routed port (connects to router/internet)`}
             </Diagram>
 
-            <InfoBox variant="tip">
+            <InfoBox variant="info">
               <p className="text-green-200 font-semibold mb-2">Remember:</p>
               <p className="text-gray-300">
                 Layer 3 switches save money! Instead of buying a switch AND a router,
@@ -715,7 +801,7 @@ g1/0/2 = Routed port (connects to router/internet)`}
                 <li><code>write memory</code></li>
               </ol>
 
-              <Terminal terminalId="terminal-8" grammar={grammar} />
+              <Terminal terminalId="terminal-9" grammar={grammar} />
 
               <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
                 <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -723,19 +809,20 @@ g1/0/2 = Routed port (connects to router/internet)`}
                 <p className="text-gray-300 mt-2">You should see g1/0/2 with IP 35.72.12.1 and status "up"</p>
               </div>
 
-              <InfoBox variant="help">
-                <p className="text-yellow-200 font-semibold mb-3">💡 Notice:</p>
-                <ul className="ml-6 space-y-2 text-gray-300 list-disc">
-                  <li>The subnet mask is /30 (255.255.255.252) — this gives only 2 usable IPs</li>
-                  <li>Perfect for point-to-point links between routers!</li>
-                  <li>After "no switchport", you'll see: "Interface will be in routed mode"</li>
-                </ul>
+              <InfoBox variant="info">
+                <ProTip>
+                  <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                    <li>The subnet mask is /30 (255.255.255.252) — this gives only 2 usable IPs</li>
+                    <li>Perfect for point-to-point links between routers!</li>
+                    <li>After "no switchport", you'll see: "Interface will be in routed mode"</li>
+                  </ul>
+                </ProTip>
               </InfoBox>
             </div>
           </LessonSection>
 
-          {/* LESSON 9: STATIC ROUTING */}
-          <LessonSection lessonNumber={9} title="Static Routing: Directing Traffic">
+          {/* LESSON 10: STATIC ROUTING */}
+          <LessonSection lessonNumber={10} title="Static Routing: Directing Traffic">
             <p className="text-xl text-gray-200 my-6">
               Routers need to know where to send packets. Static routes are manual instructions you configure.
             </p>
@@ -772,7 +859,7 @@ g1/0/2 = Routed port (connects to router/internet)`}
               Think of it as: "If you don't know where to send a packet, send it here!"
             </p>
 
-            <InfoBox variant="tip">
+            <InfoBox variant="info">
               <p className="text-green-200 font-semibold mb-2">Translation:</p>
               <p className="text-gray-300"><code>ip route 0.0.0.0 0.0.0.0 35.72.13.1</code></p>
               <p className="text-gray-300 mt-2">Means: "For ANY destination we don't have a specific route for, send it to 35.72.13.1"</p>
@@ -859,7 +946,7 @@ Slower backup connection`}
                 <li><code>write memory</code></li>
               </ol>
 
-              <Terminal terminalId="terminal-9" grammar={grammar} />
+              <Terminal terminalId="terminal-10" grammar={grammar} />
 
               <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
                 <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -873,8 +960,8 @@ Slower backup connection`}
             </div>
           </LessonSection>
 
-          {/* LESSON 10: OSPF BASICS */}
-          <LessonSection lessonNumber={10} title="OSPF: Dynamic Routing Protocol">
+          {/* LESSON 11: OSPF BASICS */}
+          <LessonSection lessonNumber={11} title="OSPF: Dynamic Routing Protocol">
             <p className="text-xl text-gray-200 my-6">
               Static routes are manual. OSPF is automatic! Routers talk to each other and figure out the best paths.
             </p>
@@ -940,7 +1027,7 @@ Traffic flows: A → C → B`}
               Wildcard masks are the OPPOSITE of subnet masks:
             </p>
 
-            <InfoBox variant="tip">
+            <InfoBox variant="info">
               <p className="text-green-200 font-semibold mb-3">Quick Guide:</p>
               <ul className="ml-6 space-y-2 text-gray-300">
                 <li><code>0.0.0.0</code> = Match this EXACT IP address (one host)</li>
@@ -972,22 +1059,23 @@ Traffic flows: A → C → B`}
                 <li><code>write memory</code></li>
               </ol>
 
-              <Terminal terminalId="terminal-10" grammar={grammar} />
+              <Terminal terminalId="terminal-11" grammar={grammar} />
 
-              <InfoBox variant="help">
-                <p className="text-yellow-200 font-semibold mb-3">💡 Understanding the Command</p>
-                <p className="text-gray-300 mb-2"><code>network 35.72.12.2 0.0.0.0 area 0</code> breaks down to:</p>
-                <ul className="ml-6 space-y-2 text-gray-300 list-disc">
-                  <li><strong className="text-white">35.72.12.2</strong> = The IP address to match</li>
-                  <li><strong className="text-white">0.0.0.0</strong> = Wildcard mask (match exactly)</li>
-                  <li><strong className="text-white">area 0</strong> = Put this network in area 0</li>
-                </ul>
+              <InfoBox variant="info">
+                <ProTip>
+                  <p className="text-gray-300 mb-2"><code>network 35.72.12.2 0.0.0.0 area 0</code> breaks down to:</p>
+                  <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                    <li><strong className="text-white">35.72.12.2</strong> = The IP address to match</li>
+                    <li><strong className="text-white">0.0.0.0</strong> = Wildcard mask (match exactly)</li>
+                    <li><strong className="text-white">area 0</strong> = Put this network in area 0</li>
+                  </ul>
+                </ProTip>
               </InfoBox>
             </div>
           </LessonSection>
 
-          {/* LESSON 11: OSPF INTERFACE COST */}
-          <LessonSection lessonNumber={11} title="OSPF Interface Cost: Path Preference">
+          {/* LESSON 12: OSPF INTERFACE COST */}
+          <LessonSection lessonNumber={12} title="OSPF Interface Cost: Path Preference">
             <p className="text-xl text-gray-200 my-6">
               OSPF chooses paths based on "cost" — lower cost is better. You can manually set costs to control traffic flow!
             </p>
@@ -1020,7 +1108,7 @@ OSPF always chooses Path 1 (lowest total cost)`}
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Default OSPF Cost Calculation</h2>
             <p className="text-gray-300 mb-6">By default, OSPF calculates cost based on bandwidth:</p>
 
-            <InfoBox variant="tip">
+            <InfoBox variant="info">
               <p className="text-green-200 font-semibold mb-3">Formula: Cost = 100,000,000 / bandwidth in bps</p>
               <ul className="ml-6 space-y-2 text-gray-300">
                 <li><strong className="text-white">10 Gbps link:</strong> Cost = 1</li>
@@ -1094,7 +1182,7 @@ ip ospf cost 30
                 <li><code>write memory</code></li>
               </ol>
 
-              <Terminal terminalId="terminal-11" grammar={grammar} />
+              <Terminal terminalId="terminal-12" grammar={grammar} />
             </div>
           </LessonSection>
 
@@ -1106,12 +1194,13 @@ ip ospf cost 30
                 Congratulations!
               </h2>
               <p className="text-xl text-gray-300">
-                You've completed all 11 lessons and learned real networking skills!
+                You've completed all 12 lessons and learned real networking skills!
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mt-10">
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ CLI navigation and modes</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ TAB completion</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Setting hostnames</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Password security</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ IP address configuration</div>
