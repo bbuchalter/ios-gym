@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Terminal as XTerm } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import '@xterm/xterm/css/xterm.css';
@@ -15,7 +15,7 @@ interface TerminalProps {
   grammar: CommandGrammar;
 }
 
-export function Terminal({ terminalId, grammar }: TerminalProps) {
+export default function Terminal({ terminalId, grammar }: TerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
@@ -43,17 +43,25 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
         selectionBackground: '#264f78'
       },
       cols: 80,
-      rows: 20
+      rows: 20,
+      scrollback: 1000
     });
     
+    // Load fit addon
     const fitAddon = new FitAddon();
     terminal.loadAddon(fitAddon);
+    
+    // Open terminal in container
     terminal.open(containerRef.current);
     
-    // Delay fit to allow container to render
+    // Apply fit after a delay
     setTimeout(() => {
-      fitAddon.fit();
-    }, 10);
+      try {
+        fitAddon.fit();
+      } catch (e) {
+        console.error(`Terminal ${terminalId} - Fit error:`, e);
+      }
+    }, 100);
     
     // Initialize CLI
     const engine = new CLIEngine(grammar);
@@ -68,6 +76,30 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
     terminal.writeln('IOS CLI Practice Terminal');
     terminal.writeln('');
     terminal.write(session.getPrompt());
+    
+    // Ensure terminal is focused
+    setTimeout(() => {
+      terminal.focus();
+    }, 200);
+    
+    // Helper functions
+    const scrollToBottom = () => {
+      if (terminal.element) {
+        const viewport = terminal.element.querySelector('.xterm-viewport');
+        if (viewport) {
+          viewport.scrollTop = viewport.scrollHeight;
+        }
+      }
+    };
+    
+    const replaceCurrentLine = (newLine: string) => {
+      const oldLength = currentLineRef.current.length;
+      for (let i = 0; i < oldLength; i++) {
+        terminal.write('\b \b');
+      }
+      terminal.write(newLine);
+      currentLineRef.current = newLine;
+    };
     
     // Handle input
     const handleData = (data: string) => {
@@ -194,43 +226,41 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
       }
     };
     
-    const replaceCurrentLine = (newLine: string) => {
-      const oldLength = currentLineRef.current.length;
-      for (let i = 0; i < oldLength; i++) {
-        terminal.write('\b \b');
-      }
-      terminal.write(newLine);
-      currentLineRef.current = newLine;
-    };
-    
-    const scrollToBottom = () => {
-      if (terminal.element) {
-        const viewport = terminal.element.querySelector('.xterm-viewport');
-        if (viewport) {
-          viewport.scrollTop = viewport.scrollHeight;
-        }
-      }
-    };
-    
-    terminal.onData(handleData);
+    const dataDisposable = terminal.onData(handleData);
     
     // Handle resize
-    const handleResize = () => fitAddon.fit();
+    const handleResize = () => {
+      if (fitAddonRef.current) {
+        fitAddonRef.current.fit();
+      }
+    };
     window.addEventListener('resize', handleResize);
     
     return () => {
       window.removeEventListener('resize', handleResize);
-      terminal.dispose();
+      dataDisposable.dispose();
+      if (terminalRef.current) {
+        terminalRef.current.dispose();
+        terminalRef.current = null;
+      }
     };
-  }, [grammar]); // Only reinitialize when grammar changes
+  }, [grammar, terminalId]);
   
   return (
     <div className="bg-[#1e1e1e] rounded-lg overflow-hidden my-8 border-2 border-primary shadow-xl">
       <div className="bg-gradient-to-r from-primary to-secondary text-text-bright p-3 font-semibold text-sm">
         Practice Terminal - {terminalId}
       </div>
-      <div ref={containerRef} className="terminal-embed" style={{ minHeight: '400px' }} />
+      <div 
+        ref={containerRef} 
+        className="terminal-embed" 
+        style={{ 
+          minHeight: '400px',
+          width: '100%',
+          backgroundColor: '#1e1e1e'
+        }}
+        onClick={() => terminalRef.current?.focus()}
+      />
     </div>
   );
 }
-

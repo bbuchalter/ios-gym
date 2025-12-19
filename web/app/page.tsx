@@ -16,7 +16,7 @@ import { SkillCard } from '@/components/SkillCard';
 import { Diagram } from '@/components/Diagram';
 
 // Dynamically import Terminal to avoid SSR issues with XTerm
-const Terminal = dynamic(() => import('@/components/Terminal').then(mod => ({ default: mod.Terminal })), {
+const Terminal = dynamic(() => import('@/components/Terminal'), {
   ssr: false,
   loading: () => <div className="bg-dark-bg p-8 rounded-lg text-text-secondary text-center">Loading terminal...</div>
 });
