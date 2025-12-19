@@ -132,31 +132,29 @@ export default function LearnPage() {
               </div>
             </div>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Try It Now
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Practice moving between modes in the terminal below:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li>Type <code>enable</code> and press Enter — watch the prompt change from <code>&gt;</code> to <code>#</code></li>
-                <li>Type <code>configure terminal</code> and press Enter — watch the prompt change to <code>(config)#</code></li>
-                <li>Type <code>exit</code> — notice you go back one level to <code>#</code></li>
-                <li>Type <code>configure terminal</code> again to enter config mode</li>
-                <li>Type <code>end</code> — notice you jump directly back to <code>#</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Try It Now
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Practice moving between modes in the terminal below:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li>Type <code>enable</code> and press Enter — watch the prompt change from <code>&gt;</code> to <code>#</code></li>
+              <li>Type <code>configure terminal</code> and press Enter — watch the prompt change to <code>(config)#</code></li>
+              <li>Type <code>exit</code> — notice you go back one level to <code>#</code></li>
+              <li>Type <code>configure terminal</code> again to enter config mode</li>
+              <li>Type <code>end</code> — notice you jump directly back to <code>#</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-1" grammar={grammar} />
+            <Terminal terminalId="terminal-1" grammar={grammar} />
 
-              <InfoBox variant="info">
-                <ProTip>
-                  <ul className="ml-6 space-y-2 text-gray-300">
-                    <li>Notice how the prompt changes as you move between modes</li>
-                    <li><code>exit</code> goes back one level at a time</li>
-                    <li><code>end</code> jumps directly back to privileged mode — very useful if you're deep in configuration!</li>
-                  </ul>
-                </ProTip>
-              </InfoBox>
-            </div>
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300">
+                  <li>Notice how the prompt changes as you move between modes</li>
+                  <li><code>exit</code> goes back one level at a time</li>
+                  <li><code>end</code> jumps directly back to privileged mode — very useful if you're deep in configuration!</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
           {/* LESSON 2: TAB COMPLETION */}
@@ -198,29 +196,27 @@ export default function LearnPage() {
               </ProTip>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Try It Now
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Practice using TAB completion in the terminal below:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li>Type <code>enable</code> to enter privileged mode</li>
-                <li>Type <code>conf</code> then press <kbd>TAB</kbd> — watch it auto-complete to <code>configure</code></li>
-                <li>Type <code> t</code> (space + t) then press <kbd>TAB</kbd> — it should complete to <code>terminal</code></li>
-                <li>Press Enter to enter configuration mode</li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Try It Now
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Practice using TAB completion in the terminal below:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li>Type <code>enable</code> to enter privileged mode</li>
+              <li>Type <code>conf</code> then press <kbd>TAB</kbd> — watch it auto-complete to <code>configure</code></li>
+              <li>Type <code> t</code> (space + t) then press <kbd>TAB</kbd> — it should complete to <code>terminal</code></li>
+              <li>Press Enter to enter configuration mode</li>
+            </ol>
 
-              <Terminal terminalId="terminal-2" grammar={grammar} />
+            <Terminal terminalId="terminal-2" grammar={grammar} />
 
-              <InfoBox variant="info">
-                <ProTip>
-                  <ul className="ml-6 space-y-2 text-gray-300">
-                    <li>Use <kbd>TAB</kbd> liberally — it's not cheating, it's smart!</li>
-                    <li>TAB completion works at any mode level — user, privileged, or configuration</li>
-                  </ul>
-                </ProTip>
-              </InfoBox>
-            </div>
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300">
+                  <li>Use <kbd>TAB</kbd> liberally — it's not cheating, it's smart!</li>
+                  <li>TAB completion works at any mode level — user, privileged, or configuration</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
           {/* LESSON 3: SETTING HOSTNAME */}
@@ -255,31 +251,28 @@ export default function LearnPage() {
               <p className="text-red-200 font-semibold text-lg mb-2">⚠️ CRITICAL:</p>
               <p className="text-gray-200 mb-3">Changes in Cisco IOS are NOT saved automatically!</p>
               <p className="text-gray-300">You must use <code>write memory</code> to save, or your changes disappear when the device restarts.</p>
-              <p className="text-gray-400 mt-3 italic">Think of it like Microsoft Word — you have to click Save!</p>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Configure your first device with these steps:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code> — Enter privileged mode</li>
-                <li><code>configure terminal</code> — Enter configuration mode</li>
-                <li><code>hostname MyFirstSwitch</code> — Set the name (watch the prompt change!)</li>
-                <li><code>end</code> — Exit configuration mode</li>
-                <li><code>write memory</code> — <strong className="text-yellow-300">SAVE YOUR WORK!</strong></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure your first device with these steps:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode</li>
+              <li><code>configure terminal</code> — Enter configuration mode</li>
+              <li><code>hostname MyFirstSwitch</code> — Set the name (watch the prompt change!)</li>
+              <li><code>end</code> — Exit configuration mode</li>
+              <li><code>write memory</code> — <strong className="text-yellow-300">SAVE YOUR WORK!</strong></li>
+            </ol>
 
-              <Terminal terminalId="terminal-3" grammar={grammar} />
+            <Terminal terminalId="terminal-3" grammar={grammar} />
 
-              <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
-                <p className="text-green-300 font-semibold mb-3 text-lg">✓ You succeeded when:</p>
-                <ul className="ml-6 space-y-2 text-gray-300">
-                  <li>The prompt shows your new hostname instead of "Switch"</li>
-                  <li>You see <code className="text-emerald-400">[OK]</code> after running <code>write memory</code></li>
-                </ul>
-              </div>
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3 text-lg">✓ You succeeded when:</p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>The prompt shows your new hostname instead of "Switch"</li>
+                <li>You see <code className="text-emerald-400">[OK]</code> after running <code>write memory</code></li>
+              </ul>
             </div>
           </LessonSection>
 
@@ -333,31 +326,29 @@ export default function LearnPage() {
               <p className="mt-4 text-gray-300">Example: <code>C1sc0R0ck$</code> (notice the 1 is number one, 0 is zero)</p>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Add security to your device:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code> — Enter privileged mode</li>
-                <li><code>configure terminal</code> — Enter configuration mode</li>
-                <li><code>hostname CorporateSwitch</code> — Give it a professional name</li>
-                <li><code>enable secret C1sc0R0ck$</code> — Set the password (be careful with special characters!)</li>
-                <li><code>end</code> — Exit configuration mode</li>
-                <li><code>write memory</code> — Save your work</li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Add security to your device:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode</li>
+              <li><code>configure terminal</code> — Enter configuration mode</li>
+              <li><code>hostname CorporateSwitch</code> — Give it a professional name</li>
+              <li><code>enable secret C1sc0R0ck$</code> — Set the password (be careful with special characters!)</li>
+              <li><code>end</code> — Exit configuration mode</li>
+              <li><code>write memory</code> — Save your work</li>
+            </ol>
 
-              <Terminal terminalId="terminal-4" grammar={grammar} />
+            <Terminal terminalId="terminal-4" grammar={grammar} />
 
-              <InfoBox variant="info">
-                <ProTip>
-                  <p className="text-gray-300">
-                    You can view your configuration with <code>show running-config</code>.
-                    Try it! Notice how the password is encrypted (shows as a long hash).
-                  </p>
-                </ProTip>
-              </InfoBox>
-            </div>
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300">
+                  You can view your configuration with <code>show running-config</code>.
+                  Try it! Notice how the password is encrypted (shows as a long hash).
+                </p>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
           {/* LESSON 5: IP ADDRESSING */}
@@ -408,30 +399,28 @@ Together: 192.168.1.100`}
               </p>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Give your switch a management IP address:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code></li>
-                <li><code>configure terminal</code></li>
-                <li><code>interface vlan 1</code> — Enter the management interface</li>
-                <li><code>ip address 192.168.1.100 255.255.255.0</code> — Assign IP address</li>
-                <li><code>no shutdown</code> — Turn the interface on</li>
-                <li><code>exit</code></li>
-                <li><code>ip default-gateway 192.168.1.1</code> — Set gateway (router's IP)</li>
-                <li><code>end</code></li>
-                <li><code>write memory</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Give your switch a management IP address:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>interface vlan 1</code> — Enter the management interface</li>
+              <li><code>ip address 192.168.1.100 255.255.255.0</code> — Assign IP address</li>
+              <li><code>no shutdown</code> — Turn the interface on</li>
+              <li><code>exit</code></li>
+              <li><code>ip default-gateway 192.168.1.1</code> — Set gateway (router's IP)</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-5" grammar={grammar} />
+            <Terminal terminalId="terminal-5" grammar={grammar} />
 
-              <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
-                <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
-                <p className="text-gray-300 mb-2">Type: <code>show ip interface brief</code></p>
-                <p className="text-gray-300">You should see VLAN 1 with your IP address and status "up"</p>
-              </div>
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-gray-300 mb-2">Type: <code>show ip interface brief</code></p>
+              <p className="text-gray-300">You should see VLAN 1 with your IP address and status "up"</p>
             </div>
           </LessonSection>
 
@@ -491,41 +480,39 @@ Together: 192.168.1.100`}
               </ul>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Create VLANs and assign ports:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code></li>
-                <li><code>configure terminal</code></li>
-                <li><code>vlan 100</code> — Create VLAN 100</li>
-                <li><code>name Students</code> — Give it a name (optional but helpful!)</li>
-                <li><code>exit</code></li>
-                <li><code>vlan 200</code> — Create VLAN 200</li>
-                <li><code>name Teachers</code></li>
-                <li><code>exit</code></li>
-                <li><code>interface fa0/2</code> — Configure port FastEthernet 0/2</li>
-                <li><code>switchport mode access</code> — Make it an access port</li>
-                <li><code>switchport access vlan 100</code> — Assign to VLAN 100</li>
-                <li><code>interface fa0/3</code> — Configure another port</li>
-                <li><code>switchport mode access</code></li>
-                <li><code>switchport access vlan 200</code> — Assign to VLAN 200</li>
-                <li><code>end</code></li>
-                <li><code>write memory</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Create VLANs and assign ports:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>vlan 100</code> — Create VLAN 100</li>
+              <li><code>name Students</code> — Give it a name (optional but helpful!)</li>
+              <li><code>exit</code></li>
+              <li><code>vlan 200</code> — Create VLAN 200</li>
+              <li><code>name Teachers</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface fa0/2</code> — Configure port FastEthernet 0/2</li>
+              <li><code>switchport mode access</code> — Make it an access port</li>
+              <li><code>switchport access vlan 100</code> — Assign to VLAN 100</li>
+              <li><code>interface fa0/3</code> — Configure another port</li>
+              <li><code>switchport mode access</code></li>
+              <li><code>switchport access vlan 200</code> — Assign to VLAN 200</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-6" grammar={grammar} />
+            <Terminal terminalId="terminal-6" grammar={grammar} />
 
-              <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
-                <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
-                <p className="text-gray-300">Type: <code>show vlan brief</code></p>
-                <p className="text-gray-300 mt-2">You should see:</p>
-                <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
-                  <li>VLAN 100 (Students) with port Fa0/2</li>
-                  <li>VLAN 200 (Teachers) with port Fa0/3</li>
-                </ul>
-              </div>
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-gray-300">Type: <code>show vlan brief</code></p>
+              <p className="text-gray-300 mt-2">You should see:</p>
+              <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
+                <li>VLAN 100 (Students) with port Fa0/2</li>
+                <li>VLAN 200 (Teachers) with port Fa0/3</li>
+              </ul>
             </div>
           </LessonSection>
 
@@ -575,36 +562,34 @@ Together: 192.168.1.100`}
               </ProTip>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Configure trunk ports that carry only specific VLANs:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code></li>
-                <li><code>configure terminal</code></li>
-                <li><code>interface g0/1</code> — GigabitEthernet 0/1 (uplink port)</li>
-                <li><code>switchport mode trunk</code> — Make it a trunk</li>
-                <li><code>switchport trunk allowed vlan 1,100,200</code> — Allow only these VLANs</li>
-                <li><code>exit</code></li>
-                <li><code>interface fa0/1</code> — Another trunk port</li>
-                <li><code>switchport mode trunk</code></li>
-                <li><code>switchport trunk allowed vlan 1,100,200</code></li>
-                <li><code>end</code></li>
-                <li><code>write memory</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure trunk ports that carry only specific VLANs:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>interface g0/1</code> — GigabitEthernet 0/1 (uplink port)</li>
+              <li><code>switchport mode trunk</code> — Make it a trunk</li>
+              <li><code>switchport trunk allowed vlan 1,100,200</code> — Allow only these VLANs</li>
+              <li><code>exit</code></li>
+              <li><code>interface fa0/1</code> — Another trunk port</li>
+              <li><code>switchport mode trunk</code></li>
+              <li><code>switchport trunk allowed vlan 1,100,200</code></li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-7" grammar={grammar} />
+            <Terminal terminalId="terminal-7" grammar={grammar} />
 
-              <InfoBox variant="info">
-                <ProTip>
-                  <ul className="ml-6 space-y-2 text-gray-300 list-disc">
-                    <li>VLAN 1 is included because it's the management VLAN</li>
-                    <li>Use commas to separate VLANs: <code>1,100,200</code> (no spaces!)</li>
-                  </ul>
-                </ProTip>
-              </InfoBox>
-            </div>
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                  <li>VLAN 1 is included because it's the management VLAN</li>
+                  <li>Use commas to separate VLANs: <code>1,100,200</code> (no spaces!)</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
           {/* LESSON 8: SSH */}
@@ -689,28 +674,26 @@ Hacker sees: gibberish
               <code>line vty 0 4</code> means lines 0, 1, 2, 3, 4 — that's 5 simultaneous connections!
             </p>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Configure complete SSH access (this is a big one!):</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code></li>
-                <li><code>configure terminal</code></li>
-                <li><code>hostname SecureRouter</code> — Give it a name</li>
-                <li><code>ip domain-name cisco.com</code> — Required for key generation</li>
-                <li><code>crypto key generate rsa modulus 1024</code> — Generate encryption keys</li>
-                <li><code>ip ssh version 2</code> — Use secure version</li>
-                <li><code>username admin secret Cyb3rPatriot</code> — Create user account</li>
-                <li><code>line vty 0 4</code> — Enter VTY configuration</li>
-                <li><code>login local</code> — Use local user database</li>
-                <li><code>transport input ssh</code> — Only allow SSH (no Telnet!)</li>
-                <li><code>end</code></li>
-                <li><code>write memory</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure complete SSH access (this is a big one!):</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>hostname SecureRouter</code> — Give it a name</li>
+              <li><code>ip domain-name cisco.com</code> — Required for key generation</li>
+              <li><code>crypto key generate rsa modulus 1024</code> — Generate encryption keys</li>
+              <li><code>ip ssh version 2</code> — Use secure version</li>
+              <li><code>username admin secret Cyb3rPatriot</code> — Create user account</li>
+              <li><code>line vty 0 4</code> — Enter VTY configuration</li>
+              <li><code>login local</code> — Use local user database</li>
+              <li><code>transport input ssh</code> — Only allow SSH (no Telnet!)</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-8" grammar={grammar} />
-            </div>
+            <Terminal terminalId="terminal-8" grammar={grammar} />
           </LessonSection>
 
           {/* LESSON 9: LAYER 3 SWITCHING */}
@@ -785,40 +768,38 @@ g1/0/2 = Routed port (connects to router/internet)`}
               </p>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Configure a routed port on a Layer 3 switch:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code></li>
-                <li><code>configure terminal</code></li>
-                <li><code>interface g1/0/2</code> — Enter the interface</li>
-                <li><code>no switchport</code> — Convert to routed port (this is the key!)</li>
-                <li><code>ip address 35.72.12.1 255.255.255.252</code> — Assign IP address</li>
-                <li><code>no shutdown</code> — Turn the interface on</li>
-                <li><code>end</code></li>
-                <li><code>write memory</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure a routed port on a Layer 3 switch:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>interface g1/0/2</code> — Enter the interface</li>
+              <li><code>no switchport</code> — Convert to routed port (this is the key!)</li>
+              <li><code>ip address 35.72.12.1 255.255.255.252</code> — Assign IP address</li>
+              <li><code>no shutdown</code> — Turn the interface on</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-9" grammar={grammar} />
+            <Terminal terminalId="terminal-9" grammar={grammar} />
 
-              <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
-                <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
-                <p className="text-gray-300">Type: <code>show ip interface brief</code></p>
-                <p className="text-gray-300 mt-2">You should see g1/0/2 with IP 35.72.12.1 and status "up"</p>
-              </div>
-
-              <InfoBox variant="info">
-                <ProTip>
-                  <ul className="ml-6 space-y-2 text-gray-300 list-disc">
-                    <li>The subnet mask is /30 (255.255.255.252) — this gives only 2 usable IPs</li>
-                    <li>Perfect for point-to-point links between routers!</li>
-                    <li>After "no switchport", you'll see: "Interface will be in routed mode"</li>
-                  </ul>
-                </ProTip>
-              </InfoBox>
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-gray-300">Type: <code>show ip interface brief</code></p>
+              <p className="text-gray-300 mt-2">You should see g1/0/2 with IP 35.72.12.1 and status "up"</p>
             </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                  <li>The subnet mask is /30 (255.255.255.252) — this gives only 2 usable IPs</li>
+                  <li>Perfect for point-to-point links between routers!</li>
+                  <li>After "no switchport", you'll see: "Interface will be in routed mode"</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
           {/* LESSON 10: STATIC ROUTING */}
@@ -932,31 +913,29 @@ Slower backup connection`}
               <p className="text-gray-300 mt-3">If fiber fails, cable automatically takes over. If both fail, cellular kicks in!</p>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Configure a primary default route with a floating backup:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code></li>
-                <li><code>configure terminal</code></li>
-                <li><code>ip route 0.0.0.0 0.0.0.0 35.72.13.1</code> — Primary route (AD defaults to 1)</li>
-                <li><code>ip route 0.0.0.0 0.0.0.0 35.72.13.2 254</code> — Backup route (AD 254)</li>
-                <li><code>end</code></li>
-                <li><code>write memory</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure a primary default route with a floating backup:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>ip route 0.0.0.0 0.0.0.0 35.72.13.1</code> — Primary route (AD defaults to 1)</li>
+              <li><code>ip route 0.0.0.0 0.0.0.0 35.72.13.2 254</code> — Backup route (AD 254)</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-10" grammar={grammar} />
+            <Terminal terminalId="terminal-10" grammar={grammar} />
 
-              <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
-                <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
-                <p className="text-gray-300">Type: <code>show ip route</code></p>
-                <p className="text-gray-300 mt-2">You should see two default routes (0.0.0.0/0):</p>
-                <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
-                  <li>One via 35.72.13.1 with AD 1</li>
-                  <li>One via 35.72.13.2 with AD 254</li>
-                </ul>
-              </div>
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-gray-300">Type: <code>show ip route</code></p>
+              <p className="text-gray-300 mt-2">You should see two default routes (0.0.0.0/0):</p>
+              <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
+                <li>One via 35.72.13.1 with AD 1</li>
+                <li>One via 35.72.13.2 with AD 254</li>
+              </ul>
             </div>
           </LessonSection>
 
@@ -1045,33 +1024,31 @@ Traffic flows: A → C → B`}
               </p>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Configure OSPF to advertise a network:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code></li>
-                <li><code>configure terminal</code></li>
-                <li><code>router ospf 1</code> — Enable OSPF with process ID 1</li>
-                <li><code>network 35.72.12.2 0.0.0.0 area 0</code> — Advertise this IP in area 0</li>
-                <li><code>end</code></li>
-                <li><code>write memory</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure OSPF to advertise a network:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>router ospf 1</code> — Enable OSPF with process ID 1</li>
+              <li><code>network 35.72.12.2 0.0.0.0 area 0</code> — Advertise this IP in area 0</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-11" grammar={grammar} />
+            <Terminal terminalId="terminal-11" grammar={grammar} />
 
-              <InfoBox variant="info">
-                <ProTip>
-                  <p className="text-gray-300 mb-2"><code>network 35.72.12.2 0.0.0.0 area 0</code> breaks down to:</p>
-                  <ul className="ml-6 space-y-2 text-gray-300 list-disc">
-                    <li><strong className="text-white">35.72.12.2</strong> = The IP address to match</li>
-                    <li><strong className="text-white">0.0.0.0</strong> = Wildcard mask (match exactly)</li>
-                    <li><strong className="text-white">area 0</strong> = Put this network in area 0</li>
-                  </ul>
-                </ProTip>
-              </InfoBox>
-            </div>
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2"><code>network 35.72.12.2 0.0.0.0 area 0</code> breaks down to:</p>
+                <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                  <li><strong className="text-white">35.72.12.2</strong> = The IP address to match</li>
+                  <li><strong className="text-white">0.0.0.0</strong> = Wildcard mask (match exactly)</li>
+                  <li><strong className="text-white">area 0</strong> = Put this network in area 0</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
           {/* LESSON 12: OSPF INTERFACE COST */}
@@ -1165,25 +1142,23 @@ ip ospf cost 30
               </p>
             </InfoBox>
 
-            <div className="bg-gray-800 p-10 rounded-lg border border-gray-700 mt-12">
-              <h3 className="text-blue-400 text-3xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-4xl">👉</span> Your Task
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">Configure OSPF costs on two interfaces to control path preference:</p>
-              <ol className="bg-gray-900 p-8 rounded-lg my-8 border border-gray-700 list-decimal ml-6 space-y-5 text-gray-300">
-                <li><code>enable</code></li>
-                <li><code>configure terminal</code></li>
-                <li><code>interface g0/0</code> — Primary interface</li>
-                <li><code>ip ospf cost 10</code> — Set low cost (preferred path)</li>
-                <li><code>exit</code></li>
-                <li><code>interface g0/2</code> — Backup interface</li>
-                <li><code>ip ospf cost 30</code> — Set higher cost (backup path)</li>
-                <li><code>end</code></li>
-                <li><code>write memory</code></li>
-              </ol>
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure OSPF costs on two interfaces to control path preference:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>interface g0/0</code> — Primary interface</li>
+              <li><code>ip ospf cost 10</code> — Set low cost (preferred path)</li>
+              <li><code>exit</code></li>
+              <li><code>interface g0/2</code> — Backup interface</li>
+              <li><code>ip ospf cost 30</code> — Set higher cost (backup path)</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
 
-              <Terminal terminalId="terminal-12" grammar={grammar} />
-            </div>
+            <Terminal terminalId="terminal-12" grammar={grammar} />
           </LessonSection>
 
           {/* COMPLETION SECTION */}
