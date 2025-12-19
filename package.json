@@ -1,0 +1,44 @@
+{
+  "name": "ios-cli-trainer",
+  "version": "1.0.0",
+  "description": "Web-based Cisco IOS CLI typing trainer",
+  "main": "dist/server/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.client.json && node fix-imports.js",
+    "start": "npx http-server public -p 3000 -c-1",
+    "dev": "npm run build && npm start",
+    "watch": "tsc -p tsconfig.client.json -w",
+    "test": "./node_modules/.bin/jest",
+    "test:client": "./node_modules/.bin/jest --config=jest.config.client.js",
+    "test:watch": "./node_modules/.bin/jest --watch",
+    "test:coverage": "./node_modules/.bin/jest --coverage",
+    "convert:yaml": "node -e \"const yaml = require('js-yaml'); const fs = require('fs'); const commands = yaml.load(fs.readFileSync('commands.yaml', 'utf8')); fs.writeFileSync('public/commands.json', JSON.stringify(commands, null, 2)); const exercises = yaml.load(fs.readFileSync('exercises.yaml', 'utf8')); fs.writeFileSync('public/exercises.json', JSON.stringify(exercises, null, 2));\""
+  },
+  "keywords": [
+    "cisco",
+    "ios",
+    "cli",
+    "training"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  },
+  "optionalDependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@jest/test-sequencer": "^30.2.0",
+    "@types/express": "^4.17.20",
+    "@types/jest": "^29.5.14",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.10.0",
+    "@types/ws": "^8.5.8",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  }
+}

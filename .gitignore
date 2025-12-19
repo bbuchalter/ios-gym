@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+coverage/
+
+# Note: public/ contains the deployable static site
+# It's generated from client/ and should be committed
+# so it's ready to deploy
+
