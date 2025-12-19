@@ -216,6 +216,204 @@ export default function LearnPage() {
             </InfoBox>
           </LessonSection>
 
+          {/* LESSON: ABORTING NAME LOOKUP */}
+          <LessonSection title="What to Do When Things Freeze 🚨">
+            <p className="text-xl text-gray-200 my-6">
+              You'll sometimes type a command incorrectly or in the wrong mode, and something unexpected happens — 
+              the CLI seems to <strong className="text-red-300">freeze</strong> for what feels like forever!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The Mystery Freeze</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              Here's what commonly happens to beginners:
+            </p>
+
+            <div className="bg-gray-800 border border-yellow-600 rounded-lg p-6 my-8">
+              <p className="text-gray-400 mb-3">You type a command in the wrong place:</p>
+              <Diagram>
+                {`Switch> end`}
+              </Diagram>
+              <p className="text-gray-400 mt-4">Then you see this confusing message:</p>
+              <Diagram>
+                {`Translating "end"...domain server (255.255.255.255)
+% Name lookup aborted`}
+              </Diagram>
+              <p className="text-yellow-300 mt-4 font-semibold">
+                And your terminal is stuck for 5 seconds! 😰
+              </p>
+            </div>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What's Happening?</h2>
+            <p className="text-gray-300 mb-6">
+              When IOS doesn't recognize what you typed as a valid command, it thinks you might be trying to connect to 
+              another device by hostname. So it tries to look up that name using <strong className="text-white">DNS</strong> (Domain Name System) — 
+              just like your web browser looks up website names.
+            </p>
+
+            <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
+              <h4 className="text-blue-300 font-semibold mb-3 text-lg">Why Does This Happen?</h4>
+              <p className="text-gray-300 mb-4">
+                Cisco devices have a helpful feature: if you type a word that isn't a command, it assumes you want to 
+                <strong className="text-cyan-300"> telnet</strong> to another device with that name. But since there's probably no DNS server configured, 
+                it has to <strong className="text-yellow-300">wait until the lookup times out</strong>.
+              </p>
+              <div className="bg-gray-800 rounded-lg p-4 mt-4">
+                <p className="text-gray-400 text-sm mb-2">Common mistakes that trigger this:</p>
+                <ul className="ml-6 space-y-1 text-gray-300 text-sm">
+                  <li>• Typing <code>end</code> in User mode (it only works in Config mode)</li>
+                  <li>• Misspelling commands: <code>cofigure</code> instead of <code>configure</code></li>
+                  <li>• Typing Linux/Windows commands by mistake: <code>ls</code>, <code>dir</code>, <code>clear</code></li>
+                </ul>
+              </div>
+            </div>
+
+            <h2 className="text-3xl font-bold text-red-400 mt-12 mb-6">The Timeout Problem</h2>
+            <p className="text-gray-300 mb-6">
+              A <strong className="text-white">timeout</strong> is when your device waits for a response that never comes. 
+              In this case, IOS is waiting for a DNS server to respond, but:
+            </p>
+            <ul className="ml-8 space-y-3 text-gray-300 mb-6 list-disc">
+              <li>There probably isn't a DNS server configured</li>
+              <li>Even if there is one, it won't know what "end" or your typo means</li>
+              <li>So IOS waits... and waits... until it gives up (typically 5 seconds in this simulator)</li>
+            </ul>
+
+            <InfoBox variant="important">
+              <p className="text-red-200 font-semibold mb-2 text-lg">⏱️ Don't Just Wait!</p>
+              <p className="text-gray-300">
+                While 5 seconds doesn't sound like much, it feels like an eternity when you're working. 
+                And if you keep making typos, those delays add up fast!
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-green-400 mt-16 mb-6">The Escape Sequence: CTRL+SHIFT+6</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              Here's the <strong className="text-green-300">secret trick</strong> every Cisco engineer knows:
+            </p>
+
+            <div className="bg-green-900 border-2 border-green-500 rounded-lg p-8 my-8">
+              <div className="text-center mb-6">
+                <p className="text-green-200 text-2xl font-bold mb-4">Press these keys together:</p>
+                <div className="flex items-center justify-center gap-4">
+                  <kbd className="bg-gray-800 text-white px-6 py-4 rounded-lg text-3xl font-mono border-2 border-gray-600 shadow-lg">
+                    CTRL
+                  </kbd>
+                  <span className="text-white text-3xl">+</span>
+                  <kbd className="bg-gray-800 text-white px-6 py-4 rounded-lg text-3xl font-mono border-2 border-gray-600 shadow-lg">
+                    SHIFT
+                  </kbd>
+                  <span className="text-white text-3xl">+</span>
+                  <kbd className="bg-gray-800 text-white px-6 py-4 rounded-lg text-3xl font-mono border-2 border-gray-600 shadow-lg">
+                    6
+                  </kbd>
+                </div>
+              </div>
+              <p className="text-gray-300 text-center text-lg mt-6">
+                This is called the <strong className="text-yellow-300">"escape sequence"</strong> — 
+                it immediately stops whatever the device is doing and gives you back control!
+              </p>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg p-6 my-8">
+              <h4 className="text-white font-semibold mb-4 text-lg">How It Works:</h4>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <span className="text-3xl">1️⃣</span>
+                  <div>
+                    <p className="text-gray-300">You type a bad command and see "Translating..."</p>
+                    <code className="text-red-400 text-sm">Translating "end"...domain server (255.255.255.255)</code>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <span className="text-3xl">2️⃣</span>
+                  <div>
+                    <p className="text-gray-300">Instead of waiting, press <kbd>CTRL+SHIFT+6</kbd></p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <span className="text-3xl">3️⃣</span>
+                  <div>
+                    <p className="text-gray-300">You immediately see:</p>
+                    <code className="text-yellow-400 text-sm">% Name lookup aborted</code>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <span className="text-3xl">4️⃣</span>
+                  <div>
+                    <p className="text-gray-300">The prompt returns and you can keep working! 🎉</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-3">
+                  <strong>Why these specific keys?</strong> <kbd>CTRL+SHIFT+6</kbd> is Cisco's universal 
+                  "interrupt" signal. It works for aborting not just DNS lookups, but also ping commands, 
+                  traceroutes, and other operations you want to stop early.
+                </p>
+                <p className="text-gray-300">
+                  <strong>Important:</strong> You must press all three keys together — <kbd>CTRL</kbd>, 
+                  <kbd>SHIFT</kbd>, and <kbd>6</kbd>. Just <kbd>CTRL+6</kbd> won't work! This makes it harder 
+                  to trigger accidentally while you're typing commands.
+                </p>
+              </ProTip>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Try It Now
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              Let's deliberately trigger this error so you can practice escaping from it:
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li>
+                At the <code>Switch&gt;</code> prompt, type: <code className="text-red-400">end</code> and press Enter
+                <p className="text-sm text-gray-400 mt-2">
+                  (Remember: <code>end</code> only works in configuration mode, so this will trigger the DNS lookup)
+                </p>
+              </li>
+              <li>
+                Watch for the message: <code className="text-yellow-400">Translating "end"...</code>
+              </li>
+              <li>
+                <strong className="text-green-300">Immediately press:</strong> <kbd>CTRL+SHIFT+6</kbd>
+                <p className="text-sm text-gray-400 mt-2">
+                  You should see <code className="text-yellow-400">% Name lookup aborted</code> and get your prompt back
+                </p>
+              </li>
+              <li>
+                Try it again with other "fake" commands: <code className="text-red-400">test</code>, <code className="text-red-400">hello</code>, 
+                or any nonsense word — then use <kbd>CTRL+SHIFT+6</kbd> to abort
+              </li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
+              <p className="text-blue-300 font-semibold mb-3 text-lg">💡 Key Takeaway</p>
+              <p className="text-gray-300 mb-3">
+                When you see "Translating..." appear after typing a command:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>✓ You probably typed the command in the wrong mode or misspelled it</li>
+                <li>✓ IOS is trying to interpret it as a hostname to connect to</li>
+                <li>✓ Press <kbd>CTRL+SHIFT+6</kbd> immediately to abort the lookup</li>
+                <li>✓ Check your spelling and make sure you're in the right mode!</li>
+              </ul>
+            </div>
+
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-2">🎯 Real-World Wisdom</p>
+              <p className="text-gray-300">
+                Every network engineer has hit this problem hundreds of times. The mark of a professional 
+                isn't avoiding mistakes — it's knowing <kbd>CTRL+SHIFT+6</kbd> by heart so you can 
+                recover instantly! This keystroke will become muscle memory very quickly.
+              </p>
+            </InfoBox>
+          </LessonSection>
+
           {/* LESSON 3: SETTING HOSTNAME */}
           <LessonSection title="Giving Your Device a Name">
             <p className="text-xl text-gray-200 my-6">

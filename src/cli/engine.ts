@@ -28,6 +28,16 @@ export class CLIEngine {
     const parseResult = this.parser.parse(line, mode);
     
     if (!parseResult.success || !parseResult.command) {
+      // Check if this should trigger a name lookup
+      if (parseResult.shouldTriggerNameLookup && parseResult.lookupHostname) {
+        return {
+          output: [],
+          nameLookup: {
+            hostname: parseResult.lookupHostname
+          }
+        };
+      }
+      
       return {
         output: [parseResult.error || "% Invalid command"]
       };

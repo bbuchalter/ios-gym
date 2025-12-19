@@ -152,6 +152,8 @@ export interface ParseResult {
   args?: Record<string, string>;
   error?: string;
   matchedLength?: number;  // How many characters matched before failure
+  shouldTriggerNameLookup?: boolean; // True if this looks like a hostname attempt
+  lookupHostname?: string; // The hostname to look up
 }
 
 // Command execution result
@@ -163,6 +165,9 @@ export interface ExecutionResult {
     prompt: string;
     handler: string; // Handler type to invoke after password is entered
     handlerArgs?: Record<string, any>; // Additional args for handler
+  };
+  nameLookup?: {
+    hostname: string; // The unrecognized word being looked up
   };
 }
 

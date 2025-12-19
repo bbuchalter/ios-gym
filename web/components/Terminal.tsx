@@ -31,6 +31,8 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
   const historyIndexRef = useRef(-1);
   const sessionEndedRef = useRef(false);
   const passwordModeRef = useRef(false);
+  const nameLookupTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const inNameLookupRef = useRef(false);
   
   useEffect(() => {
     if (!containerRef.current || terminalRef.current) return;
@@ -97,6 +99,34 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
       }
     };
     
+    const abortNameLookup = () => {
+      if (nameLookupTimeoutRef.current) {
+        clearTimeout(nameLookupTimeoutRef.current);
+        nameLookupTimeoutRef.current = null;
+      }
+      if (inNameLookupRef.current) {
+        inNameLookupRef.current = false;
+        terminal.writeln('% Name lookup aborted');
+        terminal.write(sessionRef.current!.getPrompt());
+        scrollToBottom();
+      }
+    };
+    
+    const startNameLookup = (hostname: string) => {
+      inNameLookupRef.current = true;
+      terminal.writeln(`Translating "${hostname}"...domain server (255.255.255.255)`);
+      
+      // Set timeout for 5 seconds (simulating DNS lookup timeout)
+      nameLookupTimeoutRef.current = setTimeout(() => {
+        if (inNameLookupRef.current) {
+          inNameLookupRef.current = false;
+          terminal.writeln('% Name lookup aborted');
+          terminal.write(sessionRef.current!.getPrompt());
+          scrollToBottom();
+        }
+      }, 5000); // 5 seconds
+    };
+    
     const replaceCurrentLine = (newLine: string) => {
       const oldLength = currentLineRef.current.length;
       for (let i = 0; i < oldLength; i++) {
@@ -106,8 +136,32 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
       currentLineRef.current = newLine;
     };
     
+    // Track keyboard event for CTRL+SHIFT+6 detection
+    let lastKeyboardEvent: KeyboardEvent | null = null;
+    
+    const handleKeyDown = (event: KeyboardEvent) => {
+      lastKeyboardEvent = event;
+      
+      // Detect CTRL+SHIFT+6 (requires all three keys)
+      if (event.ctrlKey && event.shiftKey && event.key === '^') {
+        event.preventDefault();
+        if (inNameLookupRef.current) {
+          abortNameLookup();
+        }
+        lastKeyboardEvent = null;
+      }
+    };
+    
+    // Attach keyboard listener to terminal element
+    if (terminal.element) {
+      terminal.element.addEventListener('keydown', handleKeyDown);
+    }
+    
     // Handle input
     const handleData = (data: string) => {
+      // Clear the keyboard event tracker after handling
+      lastKeyboardEvent = null;
+      
       if (sessionEndedRef.current && data.charCodeAt(0) === 13) {
         // Restart session on Enter
         sessionEndedRef.current = false;
@@ -128,6 +182,11 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
       }
       
       const code = data.charCodeAt(0);
+      
+      // Block most input during name lookup (except CTRL+SHIFT+6 which is handled above)
+      if (inNameLookupRef.current) {
+        return;
+      }
       
       // Enter key
       if (code === 13) {
@@ -168,6 +227,13 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
           historyIndexRef.current = historyRef.current.length;
           
           const result = engineRef.current!.executeCommand(sessionRef.current!, line);
+          
+          // Check if this should trigger a name lookup
+          if (result.nameLookup) {
+            startNameLookup(result.nameLookup.hostname);
+            currentLineRef.current = '';
+            return;
+          }
           
           if (result.output && result.output.length > 0) {
             const prompt = sessionRef.current!.getPrompt();
@@ -302,7 +368,20 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
     
     return () => {
       window.removeEventListener('resize', handleResize);
+      
+      // Remove keyboard listener
+      if (terminal.element) {
+        terminal.element.removeEventListener('keydown', handleKeyDown);
+      }
+      
       dataDisposable.dispose();
+      
+      // Clean up name lookup timeout if active
+      if (nameLookupTimeoutRef.current) {
+        clearTimeout(nameLookupTimeoutRef.current);
+        nameLookupTimeoutRef.current = null;
+      }
+      
       if (terminalRef.current) {
         terminalRef.current.dispose();
         terminalRef.current = null;

@@ -25,10 +25,11 @@ describe("CommandParser", () => {
       expect(result.command?.name).toBe("exit");
     });
 
-    test("should reject invalid command", () => {
+    test("should trigger name lookup for invalid single-word command", () => {
       const result = parser.parse("invalid-command", ModeType.USER_EXEC);
       expect(result.success).toBe(false);
-      expect(result.error).toBeDefined();
+      expect(result.shouldTriggerNameLookup).toBe(true);
+      expect(result.lookupHostname).toBe("invalid-command");
     });
   });
 
@@ -230,7 +231,8 @@ describe("CommandParser", () => {
     });
 
     test("should show error marker format matches IOS style", () => {
-      const result = parser.parse("invalid", ModeType.PRIV_EXEC);
+      // Use a multi-word command to trigger caret error (not name lookup)
+      const result = parser.parse("show invalid", ModeType.PRIV_EXEC);
       
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();

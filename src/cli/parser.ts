@@ -50,6 +50,18 @@ export class CommandParser {
       }
     }
     
+    // Check if this looks like a hostname lookup attempt
+    // IOS triggers name lookup for single unrecognized words that don't match any command
+    const shouldTriggerNameLookup = tokens.length === 1 && bestMatchLength === 0;
+    
+    if (shouldTriggerNameLookup) {
+      return {
+        success: false,
+        shouldTriggerNameLookup: true,
+        lookupHostname: tokens[0]
+      };
+    }
+    
     // Generate error message with caret marker showing where parsing failed
     const errorPos = bestMatchLength > 0 ? bestMatchLength : 0;
     const marker = " ".repeat(errorPos) + "^";
