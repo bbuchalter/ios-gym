@@ -97,7 +97,8 @@
           "enable"
         ],
         "action": {
-          "type": "enable"
+          "type": "mode_push",
+          "mode": "PRIV_EXEC"
         },
         "help": "Enter privileged EXEC mode"
       },
