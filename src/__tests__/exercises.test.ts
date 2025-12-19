@@ -49,6 +49,10 @@ describe("Exercise Completion Tests", () => {
       // Set enable secret
       engine.executeCommand(session, "enable secret C1sc0R0ck$");
       
+      // Exit config mode and save
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
+      
       // Validate
       const result = validator.validate(session.deviceState, exercise);
       
@@ -83,7 +87,7 @@ describe("Exercise Completion Tests", () => {
       const result = validator.validate(session.deviceState, exercise);
       
       expect(result.passed).toBe(false);
-      expect(result.unmetRequirements).toHaveLength(1);
+      expect(result.unmetRequirements.length).toBeGreaterThanOrEqual(1);
       expect(result.unmetRequirements[0].type).toBe("state_equals");
     });
     
@@ -94,6 +98,8 @@ describe("Exercise Completion Tests", () => {
       engine.executeCommand(session, "conf t");
       engine.executeCommand(session, "hostname CorporateSwitch2");
       engine.executeCommand(session, "enable secret C1sc0R0ck$");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
@@ -123,6 +129,8 @@ describe("Exercise Completion Tests", () => {
       
       // Set default gateway
       engine.executeCommand(session, "ip default-gateway 172.16.16.1");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
@@ -175,6 +183,8 @@ describe("Exercise Completion Tests", () => {
       engine.executeCommand(session, "interface fa0/3");
       engine.executeCommand(session, "switchport mode access");
       engine.executeCommand(session, "switchport access vlan 200");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
@@ -218,6 +228,8 @@ describe("Exercise Completion Tests", () => {
       engine.executeCommand(session, "interface fa0/3");
       engine.executeCommand(session, "switchport mode access");
       engine.executeCommand(session, "switchport access vlan 200");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
@@ -251,6 +263,8 @@ describe("Exercise Completion Tests", () => {
       engine.executeCommand(session, "interface g0/1");
       engine.executeCommand(session, "switchport mode trunk");
       engine.executeCommand(session, "switchport trunk allowed vlan 1,100,200");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
@@ -293,6 +307,8 @@ describe("Exercise Completion Tests", () => {
       engine.executeCommand(session, "no switchport");
       engine.executeCommand(session, "ip address 35.72.12.1 255.255.255.252");
       engine.executeCommand(session, "no shutdown");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise!);
       
@@ -340,6 +356,8 @@ describe("Exercise Completion Tests", () => {
       
       // Floating backup route
       engine.executeCommand(session, "ip route 0.0.0.0 0.0.0.0 35.72.13.2 254");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
@@ -393,6 +411,8 @@ describe("Exercise Completion Tests", () => {
       // Configure OSPF
       engine.executeCommand(session, "router ospf 1");
       engine.executeCommand(session, "network 35.72.12.2 0.0.0.0 area 0");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
@@ -452,6 +472,8 @@ describe("Exercise Completion Tests", () => {
       // Set cost on g0/2
       engine.executeCommand(session, "interface g0/2");
       engine.executeCommand(session, "ip ospf cost 30");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
@@ -502,6 +524,8 @@ describe("Exercise Completion Tests", () => {
       engine.executeCommand(session, "line vty 0 4");
       engine.executeCommand(session, "login local");
       engine.executeCommand(session, "transport input ssh");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
       
       const result = validator.validate(session.deviceState, exercise);
       
