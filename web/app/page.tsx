@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable react/no-unescaped-entities */
+
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { TerminalManager } from '@/lib/terminal-manager';
@@ -20,6 +22,78 @@ const Terminal = dynamic(() => import('@/components/Terminal'), {
   ssr: false,
   loading: () => <div className="bg-slate-800/30 p-8 rounded-xl text-slate-400 text-center animate-pulse">Loading terminal...</div>
 });
+
+const highlightMetrics = [
+  {
+    label: 'Guided missions',
+    value: '11',
+    detail: 'Every topic ends inside the IOS terminal so you can rehearse immediately.',
+  },
+  {
+    label: 'Practice prompts',
+    value: '70+',
+    detail: 'Step-by-step drills with verification cues and competition tips.',
+  },
+  {
+    label: 'Visual explainers',
+    value: '40+',
+    detail: 'ASCII diagrams, real-world callouts, and InfoBoxes to anchor the why.',
+  },
+];
+
+const immersionHighlights = [
+  {
+    title: 'Narrated labs',
+    description:
+      'Each lesson starts with a mission brief so you know how the command fits into a real workflow.',
+    icon: '🛰️',
+  },
+  {
+    title: 'Click-to-copy steps',
+    description:
+      'Command sequences live beside diagrams, and tapping them copies everything into the terminal.',
+    icon: '⚡',
+  },
+  {
+    title: 'Scroll orchestration',
+    description:
+      'No page reloads or context-switching — the entire course lives on a single cinematic scroll.',
+    icon: '🌀',
+  },
+];
+
+const trackHighlights = [
+  {
+    title: 'Foundations',
+    subtitle: 'Lessons 1 – 4',
+    badge: 'Confident CLI',
+    bullets: [
+      'Mode transitions, prompt cues, and completion muscle memory',
+      'Device identity: hostnames, passwords, and saving configs',
+      'First management IP with gateways and verification drills',
+    ],
+  },
+  {
+    title: 'Campus Networks',
+    subtitle: 'Lessons 5 – 8',
+    badge: 'Switching IQ',
+    bullets: [
+      'VLAN design, access segmentation, and trunk best practices',
+      'SSH hardening, local auth, and remote readiness',
+      'Layer 3 switching with routed ports and show commands',
+    ],
+  },
+  {
+    title: 'Routing Control',
+    subtitle: 'Lessons 9 – 11',
+    badge: 'Traffic Authority',
+    bullets: [
+      'Default + floating routes for redundancy scenarios',
+      'OSPF fundamentals, areas, and wildcard intuition',
+      'Explicit OSPF costs for traffic engineering challenges',
+    ],
+  },
+];
 
 export default function LearnPage() {
   const [grammar, setGrammar] = useState<CommandGrammar | null>(null);
@@ -43,10 +117,101 @@ export default function LearnPage() {
   }
   
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div id="top" className="relative min-h-screen overflow-hidden bg-slate-950">
       <Header />
       
-      <main className="max-w-6xl mx-auto px-6 py-16">
+      <main className="relative z-10 mx-auto max-w-6xl px-6 pb-24">
+        <section className="-mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {highlightMetrics.map((metric) => (
+            <div
+              key={metric.label}
+              className="rounded-3xl border border-white/10 bg-slate-950/70 p-6 shadow-lg shadow-slate-950/60"
+            >
+              <p className="text-4xl font-bold text-white">{metric.value}</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.4em] text-slate-500">
+                {metric.label}
+              </p>
+              <p className="mt-3 text-sm text-slate-400">{metric.detail}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="mt-16 space-y-10" aria-label="Immersive learning highlights">
+          <div className="max-w-3xl">
+            <p className="text-xs uppercase tracking-[0.4em] text-cyan-200">
+              How it works
+            </p>
+            <h2 className="mt-4 text-3xl font-semibold text-white">
+              A cinematic, single-page classroom.
+            </h2>
+            <p className="mt-3 text-slate-300">
+              The entire course is choreographed on one surface. Read a concept,
+              drag the terminal into view, click to copy commands, and scroll to
+              level up — no context switching.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {immersionHighlights.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-white/10 bg-slate-950/60 p-6 shadow-lg shadow-slate-950/50"
+              >
+                <div className="text-3xl">{item.icon}</div>
+                <h3 className="mt-4 text-xl font-semibold text-white">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-sm text-slate-300 leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="curriculum"
+          className="mt-20 rounded-3xl border border-white/10 bg-slate-950/70 p-8 shadow-2xl shadow-slate-950/50"
+        >
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.4em] text-cyan-200">
+                Curriculum
+              </p>
+              <h2 className="mt-3 text-3xl font-semibold text-white">
+                Three arcs. One narrative.
+              </h2>
+            </div>
+            <p className="text-sm text-slate-400 max-w-md">
+              Move from prompt awareness to multi-area routing without jumping
+              into different tabs or PDFs.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {trackHighlights.map((track) => (
+              <div
+                key={track.title}
+                className="flex h-full flex-col gap-4 rounded-2xl border border-white/10 bg-slate-950/60 p-6"
+              >
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
+                  {track.subtitle}
+                </p>
+                <h3 className="text-2xl font-semibold text-white">
+                  {track.title}
+                </h3>
+                <span className="inline-flex w-max rounded-full border border-cyan-300/40 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">
+                  {track.badge}
+                </span>
+                <ul className="mt-2 list-disc space-y-3 pl-5 text-sm text-slate-300">
+                  {track.bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <div id="lessons" className="mt-32 border-t border-white/10 pt-24">
         {/* INTRODUCTION */}
         <LessonSection title="Welcome, Future Network Engineer! 👋" isIntro>
           <p className="text-2xl leading-relaxed text-white/90 my-6 font-light">
@@ -1123,6 +1288,7 @@ ip ospf cost 30
             <div className="bg-slate-800/30 rounded-lg p-4 text-slate-300">✅ OSPF dynamic routing</div>
             <div className="bg-slate-800/30 rounded-lg p-4 text-slate-300">✅ OSPF cost manipulation</div>
           </div>
+        </div>
         </div>
       </main>
       

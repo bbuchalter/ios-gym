@@ -5,9 +5,14 @@ interface DiagramProps {
 
 export function Diagram({ title, children }: DiagramProps) {
   return (
-    <div className="bg-slate-950 border border-slate-800 p-6 rounded-xl my-6 overflow-x-auto shadow-inner">
-      {title && <h4 className="text-white mb-3 font-semibold text-sm uppercase tracking-wide text-slate-400">{title}</h4>}
-      <pre className="font-mono text-sm leading-relaxed text-cyan-400 m-0">
+    <div className="relative my-6 overflow-hidden rounded-2xl border border-white/5 bg-slate-950/80 p-6 shadow-inner shadow-cyan-500/5">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-10" />
+      {title && (
+        <h4 className="text-xs uppercase tracking-[0.3em] text-slate-400 mb-4">
+          {title}
+        </h4>
+      )}
+      <pre className="relative m-0 whitespace-pre-wrap font-mono text-sm leading-relaxed text-cyan-300">
         {children}
       </pre>
     </div>

@@ -248,24 +248,23 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
   }, [grammar, terminalId]);
   
   return (
-    <div className="bg-slate-950 rounded-xl overflow-hidden my-8 border border-slate-700/50 shadow-2xl shadow-cyan-500/10">
-      <div className="bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700/50 px-4 py-3 flex items-center gap-2">
-        <div className="flex gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-slate-600"></div>
-          <div className="w-3 h-3 rounded-full bg-slate-600"></div>
-          <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+    <div className="my-10 overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
+      <div className="flex items-center justify-between border-b border-white/5 bg-gradient-to-r from-slate-900 via-slate-900/80 to-slate-900 px-5 py-3 text-xs font-mono uppercase tracking-[0.3em] text-slate-400">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+          <span className="ml-4 text-slate-300">{terminalId}</span>
         </div>
-        <div className="text-slate-400 text-sm font-mono ml-2">
-          {terminalId}
-        </div>
+        <span className="text-[10px] text-slate-500">Practice sandbox</span>
       </div>
-      <div 
-        ref={containerRef} 
-        className="terminal-embed cursor-text" 
-        style={{ 
-          minHeight: '400px',
-          width: '100%',
-          backgroundColor: '#0f172a'
+      <div
+        ref={containerRef}
+        className="terminal-embed cursor-text"
+        style={{
+          minHeight: "400px",
+          width: "100%",
+          backgroundColor: "#0f172a",
         }}
         onClick={() => terminalRef.current?.focus()}
       />
