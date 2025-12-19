@@ -511,16 +511,211 @@ Takes 1 command! ✅`}
               </p>
             </InfoBox>
 
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Try It Now
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              Let's see what IP addresses look like on a real device! Don't worry if you don't understand everything yet.
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode</li>
+              <li><code>show ip interface brief</code> — View IP addresses on interfaces (there won't be any configured yet!)</li>
+              <li>Look at the output — you'll see interface names and their status</li>
+            </ol>
+
+            <Terminal terminalId="terminal-6" grammar={grammar} />
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300">
+                  The output might look confusing now, but you're seeing the same format you'll use later: 
+                  four numbers separated by dots! Notice how interfaces can have IP addresses assigned to them.
+                </p>
+              </ProTip>
+            </InfoBox>
+
             <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
               <p className="text-blue-200 font-semibold mb-3">💡 Coming Up Next</p>
               <p className="text-gray-300">
-                In the next lesson, you'll learn how to use IP addresses and subnet masks to configure management access on a switch.
+                Before we configure IP addresses, let's learn about the physical parts of a network switch and how to connect to it.
               </p>
             </div>
           </LessonSection>
 
-          {/* LESSON 7: MANAGEMENT ACCESS */}
-          <LessonSection lessonNumber={7} title="Configuring Management Access">
+          {/* LESSON 7: NETWORK HARDWARE BASICS */}
+          <LessonSection lessonNumber={7} title="Network Hardware: Switches and Interfaces">
+            <p className="text-xl text-gray-200 my-6">
+              Before we configure a switch, let's look at what one actually looks like and understand its physical parts!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What Does a Switch Look Like?</h2>
+            <p className="text-gray-300 mb-6">
+              A network switch is a box with lots of ports (also called <strong className="text-white">interfaces</strong>) 
+              where you plug in network cables. Switches come in different sizes — some have 8 ports, some have 24 or 48 ports!
+            </p>
+
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 my-8">
+              <h4 className="text-white font-semibold mb-4 text-center">Typical Network Switch</h4>
+              <div className="bg-gray-900 p-8 rounded-lg">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/2550T-PWR-Front.jpg/1280px-2550T-PWR-Front.jpg" 
+                  alt="Cisco network switch showing multiple ethernet ports on the front panel"
+                  className="w-full rounded border border-gray-600"
+                />
+              </div>
+              <p className="text-gray-400 text-center mt-4">
+                This switch has 48 regular ports plus special uplink ports on the right
+              </p>
+            </div>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What is an Interface?</h2>
+            <p className="text-gray-300 mb-6">
+              An <strong className="text-white">interface</strong> (or port) is where you plug in a network cable. 
+              Each interface has a number so you can identify it, like <code>FastEthernet 0/1</code> or <code>GigabitEthernet 1/0/1</code>.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h4 className="text-white font-semibold mb-3">Interface Types</h4>
+                <ul className="space-y-3 text-gray-300">
+                  <li><strong className="text-blue-400">FastEthernet (Fa):</strong> 100 Mbps — older, slower</li>
+                  <li><strong className="text-green-400">GigabitEthernet (Gi):</strong> 1000 Mbps (1 Gbps) — common</li>
+                  <li><strong className="text-purple-400">TenGigabitEthernet:</strong> 10 Gbps — very fast!</li>
+                </ul>
+              </div>
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h4 className="text-white font-semibold mb-3">Interface Names</h4>
+                <ul className="space-y-3 text-gray-300 font-mono text-sm">
+                  <li><code className="text-blue-400">FastEthernet 0/1</code> — Port 1</li>
+                  <li><code className="text-blue-400">FastEthernet 0/24</code> — Port 24</li>
+                  <li><code className="text-green-400">GigabitEthernet 1/0/1</code> — Port 1</li>
+                </ul>
+                <p className="text-gray-400 mt-4 text-xs">The numbers identify which slot and port</p>
+              </div>
+            </div>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The Console Port: Your First Connection</h2>
+            <p className="text-gray-300 mb-6">
+              The <strong className="text-white">console port</strong> is a special port used for initial setup and configuration. 
+              It's usually labeled "Console" and looks different from the regular network ports.
+            </p>
+
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 my-8">
+              <h4 className="text-white font-semibold mb-4 text-center">Console Port Location</h4>
+              <div className="bg-gray-900 p-8 rounded-lg">
+                <img 
+                  src="https://www.cisco.com/c/dam/en/us/td/i/100001-200000/190001-200000/197001-198000/197840.jpg" 
+                  alt="Back of Cisco switch showing console port"
+                  className="w-full rounded border border-gray-600"
+                />
+              </div>
+              <p className="text-gray-400 text-center mt-4">
+                Console port (often blue) is usually on the front or back of the switch
+              </p>
+            </div>
+
+            <InfoBox variant="info">
+              <h4 className="text-blue-300 font-semibold mb-3">Why Do We Need a Console Port?</h4>
+              <p className="text-gray-300 mb-3">
+                When a switch is brand new (or has no configuration), it doesn't have an IP address yet. 
+                You can't connect to it over the network because... well, it's not on the network!
+              </p>
+              <p className="text-gray-300">
+                The console port lets you plug directly into the switch with a special cable to do the initial setup.
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Network Racks</h2>
+            <p className="text-gray-300 mb-6">
+              In professional environments, switches are mounted in <strong className="text-white">racks</strong> — 
+              metal cabinets that hold multiple network devices stacked on top of each other.
+            </p>
+
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 my-8">
+              <h4 className="text-white font-semibold mb-4 text-center">Equipment Rack</h4>
+              <div className="bg-gray-900 p-8 rounded-lg">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Rack001.jpg/800px-Rack001.jpg" 
+                  alt="Network equipment rack with multiple switches and servers"
+                  className="w-full rounded border border-gray-600"
+                />
+              </div>
+              <p className="text-gray-400 text-center mt-4">
+                A typical rack can hold many switches, routers, and servers
+              </p>
+            </div>
+
+            <InfoBox variant="real-world">
+              <h4 className="text-blue-300 font-semibold mb-2">🌍 Real World Example</h4>
+              <p className="text-gray-300">
+                In your school, there's probably a locked network closet with a rack containing switches. 
+                One switch might be on the 1st floor rack, another on the 2nd floor. 
+                Each switch has dozens of network cables running to classrooms and offices. 
+                The IT person can manage all of them remotely once they're configured!
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Summary: The Two Ways to Access a Switch</h2>
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h4 className="text-white font-semibold mb-3">1. Console Access</h4>
+                <ul className="space-y-2 text-gray-300 text-sm">
+                  <li>✅ Plug a cable into the console port</li>
+                  <li>✅ Direct physical connection</li>
+                  <li>✅ Works even with no configuration</li>
+                  <li>❌ Must be physically present</li>
+                </ul>
+                <p className="text-gray-400 mt-4"><strong>Use for:</strong> Initial setup</p>
+              </div>
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h4 className="text-white font-semibold mb-3">2. Remote Access</h4>
+                <ul className="space-y-2 text-gray-300 text-sm">
+                  <li>✅ Connect over the network using IP address</li>
+                  <li>✅ Manage from anywhere</li>
+                  <li>✅ No physical access needed</li>
+                  <li>❌ Requires configuration first</li>
+                </ul>
+                <p className="text-gray-400 mt-4"><strong>Use for:</strong> Day-to-day management</p>
+              </div>
+            </div>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Explore Your Switch
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              Let's look at the interfaces on a switch! These commands show you information about the physical hardware.
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode</li>
+              <li><code>show interfaces status</code> — See a list of all interfaces and their status</li>
+              <li>Look at the interface names — do you see FastEthernet or GigabitEthernet ports?</li>
+              <li><code>show version</code> — View hardware information about the switch itself</li>
+            </ol>
+
+            <Terminal terminalId="terminal-7" grammar={grammar} />
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2">
+                  Notice the interface names in the output! Each physical port has a name like <code>FastEthernet0/1</code> or <code>GigabitEthernet1/0/1</code>.
+                </p>
+                <p className="text-gray-300">
+                  The <code>show version</code> command tells you what model switch you have and how many ports it has.
+                </p>
+              </ProTip>
+            </InfoBox>
+
+            <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
+              <p className="text-blue-200 font-semibold mb-3">💡 Coming Up Next</p>
+              <p className="text-gray-300">
+                Now that you know what interfaces are and how to connect to a switch, 
+                you'll learn how to configure management access so you can manage it remotely!
+              </p>
+            </div>
+          </LessonSection>
+
+          {/* LESSON 8: MANAGEMENT ACCESS */}
+          <LessonSection lessonNumber={8} title="Configuring Management Access">
             <p className="text-xl text-gray-200 my-6">
               Now that you understand IP addresses, let's put that knowledge to use by configuring remote management access on a switch!
             </p>
@@ -571,18 +766,18 @@ Manage from anywhere! 💻`}
               </p>
             </InfoBox>
 
-            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">VLAN 1: The Management VLAN</h2>
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The Management Interface</h2>
             <p className="text-gray-300 mb-6">
-              On a switch, <strong className="text-white">VLAN 1</strong> is the default management VLAN.
-              This is a special virtual interface that lets the switch have an IP address.
+              To manage a switch remotely, the switch itself needs an IP address. 
+              Unlike the physical ports you plug cables into, there's a special <strong className="text-white">management interface</strong> where you assign this IP.
             </p>
 
             <InfoBox variant="info">
               <p className="text-gray-300 mb-2">
-                <strong className="text-white">Important:</strong> The switch itself needs an IP to manage it remotely.
+                <strong className="text-white">Important:</strong> You don't assign the IP to a physical port like <code>FastEthernet 0/1</code>.
               </p>
               <p className="text-gray-300">
-                We give this IP to the VLAN 1 interface (not a physical port).
+                Instead, you use a special interface called <code>interface vlan 1</code> for management access.
               </p>
             </InfoBox>
 
@@ -607,7 +802,7 @@ no shutdown:         Interface is ON ✅
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
-              <li><code>interface vlan 1</code> — Enter the management interface configuration</li>
+              <li><code>interface vlan 1</code> — Enter interface configuration for the management interface</li>
               <li><code>ip address 192.168.1.100 255.255.255.0</code> — Assign IP address and subnet mask</li>
               <li><code>no shutdown</code> — Turn the interface on (you'll see a log message!)</li>
               <li><code>exit</code> — Back to global config mode</li>
@@ -616,14 +811,14 @@ no shutdown:         Interface is ON ✅
               <li><code>write memory</code> — Save your configuration</li>
             </ol>
 
-            <Terminal terminalId="terminal-6" grammar={grammar} />
+            <Terminal terminalId="terminal-8" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
               <p className="text-gray-300 mb-2">Type: <code>show ip interface brief</code></p>
               <p className="text-gray-300">You should see:</p>
               <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
-                <li>VLAN 1 with IP address 192.168.1.100</li>
+                <li>An interface named <code>Vlan1</code> with IP address 192.168.1.100</li>
                 <li>Status: <code>up</code></li>
                 <li>Protocol: <code>up</code></li>
               </ul>
@@ -635,13 +830,14 @@ no shutdown:         Interface is ON ✅
                   <li>The default gateway must be on the same network as your IP address</li>
                   <li>In this example: 192.168.1.100 (switch) and 192.168.1.1 (gateway) are both on the 192.168.1.0 network</li>
                   <li>Later, you'll use this IP address to SSH into the switch remotely!</li>
+                  <li>You'll learn more about what "vlan 1" means in the next lesson!</li>
                 </ul>
               </ProTip>
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 8: VLANs */}
-          <LessonSection lessonNumber={8} title="VLANs: Organizing Your Network">
+          {/* LESSON 9: VLANs */}
+          <LessonSection lessonNumber={9} title="VLANs: Organizing Your Network">
             <p className="text-xl text-gray-200 my-6">
               VLANs let you split one physical switch into multiple virtual networks. It's like having multiple switches in one!
             </p>
@@ -719,7 +915,7 @@ no shutdown:         Interface is ON ✅
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-8" grammar={grammar} />
+            <Terminal terminalId="terminal-10" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -732,8 +928,8 @@ no shutdown:         Interface is ON ✅
             </div>
           </LessonSection>
 
-          {/* LESSON 9: TRUNK PORTS */}
-          <LessonSection lessonNumber={9} title="Trunk Ports: Connecting Switches">
+          {/* LESSON 10: TRUNK PORTS */}
+          <LessonSection lessonNumber={10} title="Trunk Ports: Connecting Switches">
             <p className="text-xl text-gray-200 my-6">
               What if you have switches in different rooms or buildings? Trunk ports carry multiple VLANs between switches!
             </p>
@@ -796,7 +992,7 @@ no shutdown:         Interface is ON ✅
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-9" grammar={grammar} />
+            <Terminal terminalId="terminal-11" grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -808,8 +1004,8 @@ no shutdown:         Interface is ON ✅
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 10: SSH */}
-          <LessonSection lessonNumber={10} title="SSH: Secure Remote Access">
+          {/* LESSON 11: SSH */}
+          <LessonSection lessonNumber={11} title="SSH: Secure Remote Access">
             <p className="text-xl text-gray-200 my-6">
               SSH lets network engineers manage devices from anywhere — securely and encrypted!
             </p>
@@ -909,11 +1105,11 @@ Hacker sees: gibberish
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-10" grammar={grammar} />
+            <Terminal terminalId="terminal-12" grammar={grammar} />
           </LessonSection>
 
-          {/* LESSON 11: LAYER 3 SWITCHING */}
-          <LessonSection lessonNumber={11} title="Layer 3 Switching: Routed Ports">
+          {/* LESSON 12: LAYER 3 SWITCHING */}
+          <LessonSection lessonNumber={12} title="Layer 3 Switching: Routed Ports">
             <p className="text-xl text-gray-200 my-6">
               Layer 3 switches can both switch AND route! They combine the best of switches and routers.
             </p>
@@ -999,7 +1195,7 @@ g1/0/2 = Routed port (connects to router/internet)`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-11" grammar={grammar} />
+            <Terminal terminalId="terminal-13" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -1018,8 +1214,8 @@ g1/0/2 = Routed port (connects to router/internet)`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 12: STATIC ROUTING */}
-          <LessonSection lessonNumber={12} title="Static Routing: Directing Traffic">
+          {/* LESSON 13: STATIC ROUTING */}
+          <LessonSection lessonNumber={13} title="Static Routing: Directing Traffic">
             <p className="text-xl text-gray-200 my-6">
               Routers need to know where to send packets. Static routes are manual instructions you configure.
             </p>
@@ -1142,7 +1338,7 @@ Slower backup connection`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-12" grammar={grammar} />
+            <Terminal terminalId="terminal-14" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -1155,8 +1351,8 @@ Slower backup connection`}
             </div>
           </LessonSection>
 
-          {/* LESSON 13: OSPF BASICS */}
-          <LessonSection lessonNumber={13} title="OSPF: Dynamic Routing Protocol">
+          {/* LESSON 14: OSPF BASICS */}
+          <LessonSection lessonNumber={14} title="OSPF: Dynamic Routing Protocol">
             <p className="text-xl text-gray-200 my-6">
               Static routes are manual. OSPF is automatic! Routers talk to each other and figure out the best paths.
             </p>
@@ -1253,7 +1449,7 @@ Traffic flows: A → C → B`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-13" grammar={grammar} />
+            <Terminal terminalId="terminal-15" grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -1267,8 +1463,8 @@ Traffic flows: A → C → B`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 14: OSPF INTERFACE COST */}
-          <LessonSection lessonNumber={14} title="OSPF Interface Cost: Path Preference">
+          {/* LESSON 15: OSPF INTERFACE COST */}
+          <LessonSection lessonNumber={15} title="OSPF Interface Cost: Path Preference">
             <p className="text-xl text-gray-200 my-6">
               OSPF chooses paths based on "cost" — lower cost is better. You can manually set costs to control traffic flow!
             </p>
@@ -1374,7 +1570,7 @@ ip ospf cost 30
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-14" grammar={grammar} />
+            <Terminal terminalId="terminal-16" grammar={grammar} />
           </LessonSection>
 
           {/* COMPLETION SECTION */}
@@ -1385,7 +1581,7 @@ ip ospf cost 30
                 Congratulations!
               </h2>
               <p className="text-xl text-gray-300">
-                You've completed all 14 lessons and learned real networking skills!
+                You've completed all 15 lessons and learned real networking skills!
               </p>
             </div>
 
@@ -1396,6 +1592,7 @@ ip ospf cost 30
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Password security</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Sub-configuration modes</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Understanding IP addresses</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Network hardware basics</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Management access configuration</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Creating and organizing VLANs</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Trunk ports</div>
