@@ -1,0 +1,113 @@
+#!/bin/sh
+#
+# Pre-commit hook for ios-practice
+# Validates TypeScript types, tests pass, and build succeeds before allowing commit
+#
+# To install: ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+#
+
+echo "🔍 Running pre-commit checks..."
+echo ""
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Function to print colored output
+print_error() {
+    echo "${RED}✗ $1${NC}"
+}
+
+print_success() {
+    echo "${GREEN}✓ $1${NC}"
+}
+
+print_warning() {
+    echo "${YELLOW}⚠ $1${NC}"
+}
+
+# Check if we're in the right directory
+if [ ! -f "package.json" ]; then
+    print_error "package.json not found. Are you in the project root?"
+    exit 1
+fi
+
+# Check grammar files are in sync
+echo "📝 Checking grammar files are synchronized..."
+if [ -f "commands.yaml" ] && [ -f "web/public/commands.json" ]; then
+    # Convert YAML to JSON and compare
+    YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands.yaml', 'utf8')), null, 2));" 2>&1)
+    if [ $? -ne 0 ]; then
+        print_error "Failed to parse commands.yaml"
+        echo "$YAML_JSON"
+        exit 1
+    fi
+    
+    CURRENT_JSON=$(cat web/public/commands.json)
+    
+    if [ "$YAML_JSON" != "$CURRENT_JSON" ]; then
+        print_error "Grammar files are out of sync!"
+        echo ""
+        echo "commands.yaml and web/public/commands.json are not identical."
+        echo "Run 'npm run build:grammar' to synchronize them."
+        exit 1
+    fi
+    print_success "Grammar files are synchronized"
+else
+    print_warning "Grammar files not found, skipping check"
+fi
+
+# Run TypeScript type checking
+echo "🔍 Checking TypeScript types..."
+if ! npx tsc --noEmit > /dev/null 2>&1; then
+    print_error "TypeScript type checking failed!"
+    echo ""
+    echo "Run 'npx tsc --noEmit' to see the errors."
+    exit 1
+fi
+print_success "TypeScript types are valid"
+
+# Run TypeScript build
+echo "📦 Building TypeScript..."
+if ! npm run build > /dev/null 2>&1; then
+    print_error "Build failed!"
+    echo ""
+    echo "Run 'npm run build' to see the errors."
+    exit 1
+fi
+print_success "Build successful"
+
+# Run tests
+echo "🧪 Running tests..."
+TEST_OUTPUT=$(./node_modules/.bin/jest --silent --passWithNoTests 2>&1)
+TEST_EXIT_CODE=$?
+
+if [ $TEST_EXIT_CODE -ne 0 ]; then
+    print_error "Tests failed!"
+    echo ""
+    echo "$TEST_OUTPUT" | tail -20
+    echo ""
+    echo "Run 'npm test' to see all failures."
+    exit 1
+fi
+print_success "All tests passed"
+
+# Check for linting errors (if you have a linter configured)
+# Uncomment if you add ESLint or similar
+# echo "🔎 Checking code style..."
+# if ! npm run lint > /dev/null 2>&1; then
+#     print_error "Linting failed!"
+#     echo ""
+#     echo "Run 'npm run lint' to see the errors."
+#     exit 1
+# fi
+# print_success "Code style checks passed"
+
+echo ""
+print_success "All pre-commit checks passed! 🎉"
+echo ""
+
+exit 0
+

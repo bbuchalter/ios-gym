@@ -4,18 +4,21 @@ This project uses Git hooks to ensure code quality before commits and pushes.
 
 ## Pre-Commit Hook
 
-**Location:** `.git/hooks/pre-commit`
+**Source:** `hooks/pre-commit` (tracked in git)  
+**Installed at:** `.git/hooks/pre-commit` (symlink)
 
 Runs automatically before every commit to validate:
 - ✅ Grammar files are synchronized
+- ✅ TypeScript types are valid
 - ✅ TypeScript build succeeds
 - ✅ All tests pass
 
 ### What it does:
 1. Checks that `commands.yaml` and `web/public/commands.json` are in sync
-2. Builds the TypeScript code (`npm run build`)
-3. Runs the test suite (`jest`)
-4. Blocks the commit if any check fails
+2. Validates TypeScript types with `tsc --noEmit` (no compilation, just type checking)
+3. Builds the TypeScript code (`npm run build`)
+4. Runs the test suite (`jest`)
+5. Blocks the commit if any check fails
 
 ### Output:
 ```
@@ -23,6 +26,8 @@ Runs automatically before every commit to validate:
 
 📝 Checking grammar files are synchronized...
 ✓ Grammar files are synchronized
+🔍 Checking TypeScript types...
+✓ TypeScript types are valid
 📦 Building TypeScript...
 ✓ Build successful
 🧪 Running tests...
@@ -33,11 +38,12 @@ Runs automatically before every commit to validate:
 
 ### If Checks Fail:
 **DO NOT bypass with `--no-verify`!** Instead:
-1. If grammar files are out of sync: Run `npm run build:grammar`
-2. Run `npm test` to see detailed test failures
-3. Run `npm run build` to see build errors
-4. Fix the issues
-5. Commit again normally
+1. **Grammar files out of sync:** Run `npm run build:grammar`
+2. **TypeScript type errors:** Run `npx tsc --noEmit` to see type errors
+3. **Build errors:** Run `npm run build` to see build errors
+4. **Test failures:** Run `npm test` to see detailed test output
+5. Fix the issues
+6. Commit again normally
 
 See `.claude.md` for full git commit policy.
 
@@ -79,7 +85,27 @@ See `.claude.md` for full git commit policy.
 
 ## Installation
 
-The hooks are already installed in `.git/hooks/` and are executable. They will run automatically.
+The hooks are stored in the `hooks/` directory (tracked in git) and need to be installed into `.git/hooks/`.
+
+### First Time Setup
+
+Run this command from the project root to install the hooks:
+
+```bash
+ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+```
+
+This creates a symlink from `.git/hooks/pre-commit` to the tracked `hooks/pre-commit` file, so any updates to the hook will automatically apply to your local git hooks.
+
+### Verification
+
+Test that the hook is installed and working:
+
+```bash
+./hooks/pre-commit
+```
+
+If you see the checks running successfully, the hook is properly installed and will run automatically on every commit.
 
 ## Benefits
 
@@ -103,6 +129,12 @@ Run tests manually to see detailed output:
 npm test
 ```
 
+### TypeScript type errors
+Run type checking manually to see errors:
+```bash
+npx tsc --noEmit
+```
+
 ### Build failing
 Run build manually to see errors:
 ```bash
@@ -111,9 +143,11 @@ npm run build
 
 ## Adding More Checks
 
-To add linting or other checks, edit the hook files:
-- `.git/hooks/pre-commit`
-- `.git/hooks/pre-push`
+To add linting or other checks, edit the hook files in the `hooks/` directory:
+- `hooks/pre-commit`
+- `hooks/pre-push`
+
+The changes will automatically apply since `.git/hooks/` contains symlinks to these files.
 
 Example adding ESLint:
 ```bash
@@ -124,5 +158,7 @@ if ! npm run lint > /dev/null 2>&1; then
 fi
 print_success "Code style checks passed"
 ```
+
+After editing, commit the updated hook file so other developers get the changes too.
 
 
