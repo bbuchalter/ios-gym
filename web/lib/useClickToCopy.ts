@@ -11,8 +11,8 @@ export function useClickToCopy() {
           // Visual feedback
           const originalBg = target.style.backgroundColor;
           const originalColor = target.style.color;
-          target.style.backgroundColor = '#22d3ee';
-          target.style.color = '#0f172a';
+          target.style.backgroundColor = '#3b82f6';
+          target.style.color = '#ffffff';
           target.style.cursor = 'pointer';
           setTimeout(() => {
             target.style.backgroundColor = originalBg;
