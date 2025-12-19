@@ -17,15 +17,13 @@ npm run build
 npm start
 ```
 
-Open http://localhost:3000/learn.html - start learning immediately!
+Open http://localhost:3000 - start learning immediately!
 
 **It's a static site** - no server required, runs entirely in your browser!
 
 ---
 
 ## 📚 The Learning Experience
-
-### `learn.html` - Complete Network Engineering Course (RECOMMENDED)
 
 **11 comprehensive lessons in one scrollable page** - read, practice, master!
 
@@ -53,21 +51,7 @@ Open http://localhost:3000/learn.html - start learning immediately!
 - ✅ **Mobile-friendly** - learn anywhere
 - ✅ **Works offline** - no internet required after loading
 
-**Perfect for:** First-time learners, classroom instruction, self-paced study
-
----
-
-### `index.html` - Exercise Practice Interface (OPTIONAL)
-
-**Exercise-driven practice** with progress tracking and achievements.
-
-#### Features
-- ✅ **9 CyberPatriot-style exercises**
-- ✅ **Progress tracking & achievements**
-- ✅ **Real-time validation**
-- ✅ **Exercise hints**
-
-**Perfect for:** Skill mastery, deliberate practice, competition prep
+**Perfect for:** First-time learners, classroom instruction, self-paced study, CyberPatriot competition prep
 
 ---
 
@@ -146,7 +130,7 @@ ios-practice/
 ├── client/                # Browser application (TypeScript)
 │   ├── cli/               # CLI engine (parser, completer, handlers)
 │   ├── exercise/          # Exercise validator
-│   └── *.ts               # UI components
+│   └── *.ts               # Core components
 │
 ├── src/                   # Test infrastructure (Node.js)
 │   ├── cli/               # CLI engine (for testing)
@@ -155,16 +139,14 @@ ios-practice/
 │
 └── public/                # ⭐ STATIC SITE - Deploy this!
     ├── learn.html         # 🎓 Complete course (1,561 lines)
-    ├── learn.css          # Styles for learn.html
-    ├── learn.js           # Functionality for learn.html
-    ├── index.html         # Exercise interface (90 lines)
-    ├── styles.css         # Styles for index.html
+    ├── learn.css          # Styles
+    ├── learn.js           # Functionality
     ├── commands.json      # 18KB (generated from commands.yaml)
     ├── exercises.json     # 10KB (generated from exercises.yaml)
-    └── *.js               # ~50KB (compiled from client/)
+    └── cli/*, src/*       # ~40KB (compiled CLI engine)
 ```
 
-**Total bundle size:** ~85KB (~25KB gzipped)
+**Total bundle size:** ~70KB (~20KB gzipped)
 
 ---
 
