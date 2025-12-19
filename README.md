@@ -8,6 +8,35 @@ A **pure static web application** for learning Cisco-style CLI commands with:
 - Real-time exercise validation with hints
 - **No server required** - runs entirely in your browser!
 
+## 🎓 Learning Modes
+
+This project offers **three ways to learn** - choose what works best for you:
+
+### 📖 `learn.html` - Integrated Learning (RECOMMENDED FOR BEGINNERS)
+**One long scrollable page** - read concept, practice immediately, scroll down!
+- ✅ No tabs, no clicking around - just scroll
+- ✅ 7 lessons from basics to SSH
+- ✅ Each lesson has embedded terminal
+- ✅ Perfect for first-time students
+- ✅ Great for classroom instruction
+- ✅ Mobile-friendly
+
+### 🎮 `index.html` - Interactive Trainer (FOR PRACTICE & MASTERY)
+**Full-featured trainer** with 10 exercises and progress tracking
+- ✅ All 10 CyberPatriot-style exercises
+- ✅ Progress tracking and achievements
+- ✅ Real-time hints and validation
+- ✅ Perfect for skill mastery
+
+### 📚 `tutorial.html` - Reference Guide (FOR REVIEW)
+**Complete tutorial** with navigation and detailed explanations
+- ✅ Command reference
+- ✅ Visual concept diagrams
+- ✅ Network fundamentals
+- ✅ Perfect for review and lookup
+
+---
+
 ## Features
 
 ### CLI Engine

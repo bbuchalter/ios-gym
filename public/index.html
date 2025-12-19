@@ -12,16 +12,33 @@
     <header>
       <h1>IOS CLI Typing Trainer</h1>
       <div class="status">
+        <a href="learn.html" class="tutorial-link" title="Learn by Scrolling" style="background: linear-gradient(135deg, #4ec9b0, #007acc);">📖 Learn</a>
+        <a href="tutorial.html" class="tutorial-link" title="Interactive Tutorial">📚 Tutorial</a>
         <span id="connection-status" class="connected">Ready</span>
       </div>
-    </header>
-    
+    </header>    
     <main>
       <div class="terminal-container">
         <div id="terminal"></div>
       </div>
       
       <aside class="exercise-panel">
+        <div class="progress-section">
+          <div class="progress-title">📊 Your Progress</div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar" style="width: 0%">0%</div>
+          </div>
+          <div class="progress-stats">
+            <span id="completed-count">0 of 0 completed</span>
+            <span id="current-level">Level 1</span>
+          </div>
+          <div class="achievement-badges" id="achievements">
+            <span class="badge locked" title="Complete your first exercise">🏆 First Steps</span>
+            <span class="badge locked" title="Complete 3 exercises">⭐ Getting Started</span>
+            <span class="badge locked" title="Complete all exercises">🎓 Master</span>
+          </div>
+        </div>
+        
         <h2>Exercises</h2>
         <div id="exercise-list">
           <p class="placeholder">Loading exercises...</p>
@@ -33,20 +50,34 @@
             <p class="placeholder">No exercise loaded</p>
           </div>
           
-          <h3>Instructions</h3>
+          <div class="tutorial-tips">
+            <h4>💡 Quick Tips</h4>
+            <ul>
+              <li>Use TAB for auto-completion</li>
+              <li>Read instructions carefully</li>
+              <li>Save with "write memory" at the end</li>
+              <li>Check hints if you're stuck!</li>
+            </ul>
+          </div>
+          
+          <h3>📋 Instructions</h3>
           <div id="exercise-instructions">
             <p class="placeholder">Select an exercise to begin</p>
           </div>
           
-          <h3>Status</h3>
+          <h3>✓ Status</h3>
           <div id="exercise-status">
             <p class="placeholder">-</p>
           </div>
           
-          <h3>Hints</h3>
+          <h3>💬 Hints</h3>
           <div id="exercise-hints">
             <ul id="hints-list"></ul>
           </div>
+          
+          <button class="help-button" onclick="window.open('STUDENT_GUIDE.md', '_blank')">
+            📚 View Student Guide
+          </button>
         </div>
       </aside>
     </main>

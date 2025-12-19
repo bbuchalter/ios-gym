@@ -1,0 +1,719 @@
+version: 0.1
+description: "Complete tutorial progression for middle school students - CyberPatriot preparation"
+
+devices:
+  L2_SWITCH:
+    start_state:
+      hostname: "Switch"
+      vlans:
+        "1": {name: "default"}
+      interfaces:
+        "fa0/1": {adminUp: true, l2mode: "access", accessVlan: "1", trunkAllowed: null, ip: null, mask: null}
+        "fa0/2": {adminUp: true, l2mode: "access", accessVlan: "1", trunkAllowed: null, ip: null, mask: null}
+        "fa0/3": {adminUp: true, l2mode: "access", accessVlan: "1", trunkAllowed: null, ip: null, mask: null}
+        "g0/1":  {adminUp: true, l2mode: "access", accessVlan: "1", trunkAllowed: null, ip: null, mask: null}
+  L3_SWITCH:
+    start_state:
+      hostname: "Switch"
+      vlans:
+        "1": {name: "default"}
+      interfaces:
+        "g1/0/1": {adminUp: true, l2mode: "access", accessVlan: "1", trunkAllowed: null, ip: null, mask: null}
+        "g1/0/2": {adminUp: true, l2mode: "access", accessVlan: "1", trunkAllowed: null, ip: null, mask: null}
+        "g1/0/3": {adminUp: true, l2mode: "access", accessVlan: "1", trunkAllowed: null, ip: null, mask: null}
+  ROUTER:
+    start_state:
+      hostname: "Router"
+      interfaces:
+        "g0/0": {adminUp: true, l2mode: "routed", accessVlan: null, trunkAllowed: null, ip: null, mask: null}
+        "g0/1": {adminUp: true, l2mode: "routed", accessVlan: null, trunkAllowed: null, ip: null, mask: null}
+        "g0/2": {adminUp: true, l2mode: "routed", accessVlan: null, trunkAllowed: null, ip: null, mask: null}
+
+exercises:
+
+  #############################################################################
+  # LEVEL 1: FIRST STEPS - Learning Basic Navigation
+  #############################################################################
+
+  - id: ex-000-first-steps
+    title: "🌟 Level 1.1: Your First Commands"
+    device_profile: L2_SWITCH
+    instructions: |
+      Welcome to your first exercise! Let's learn the basics.
+      
+      🎯 YOUR MISSION:
+      Change the device name from "Switch" to "MyFirstSwitch"
+      
+      📚 WHAT YOU'LL LEARN:
+      - How to enter privileged mode
+      - How to enter configuration mode
+      - How to change the hostname
+      - How to save your work
+      
+      💡 STEP-BY-STEP GUIDE:
+      1. Type: enable                  (enters privileged mode - you'll see #)
+      2. Type: configure terminal      (enters config mode - you'll see (config)#)
+      3. Type: hostname MyFirstSwitch  (changes the name)
+      4. Type: end                     (returns to privileged mode)
+      5. Type: write memory            (saves your changes!)
+      
+      🎓 TIP: Use TAB to auto-complete commands! Try typing "en" then press TAB.
+      
+      ⚠️ IMPORTANT: You MUST save with "write memory" or your changes will be lost!
+      
+    requirements:
+      - type: state_equals
+        path: hostname
+        value: "MyFirstSwitch"
+      - type: config_saved
+    hints:
+      - "Remember: enable → configure terminal → hostname MyFirstSwitch → end → write memory"
+      - "The prompt changes as you move between modes: > means user mode, # means privileged mode"
+      - "You can abbreviate commands: 'conf t' instead of 'configure terminal'"
+      - "Don't forget to SAVE at the end with 'write memory' (or 'wr' for short!)"
+
+  - id: ex-001-basics-hostname-enable-secret
+    title: "🔒 Level 1.2: Adding Security"
+    device_profile: L2_SWITCH
+    instructions: |
+      Great job on your first exercise! Now let's add security.
+      
+      🎯 YOUR MISSION:
+      1. Set hostname to "CorporateSwitch2"
+      2. Set a password to "C1sc0R0ck$" (notice: the 1 and 0 are numbers!)
+      3. Save your configuration
+      
+      📚 WHY THIS MATTERS:
+      Without a password, ANYONE could configure your device! In the real world,
+      that means hackers could take over your network. Passwords keep networks safe!
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. hostname CorporateSwitch2
+      4. enable secret C1sc0R0ck$
+      5. end
+      6. write memory
+      
+      🎓 TIPS:
+      - The password has a number 1 (not letter l) and number 0 (not letter O)
+      - "enable secret" is more secure than "enable password"
+      - Make sure everything is configured correctly BEFORE saving!
+      
+    requirements:
+      - type: state_equals
+        path: hostname
+        value: "CorporateSwitch2"
+      - type: state_equals
+        path: enableSecret
+        value: "C1sc0R0ck$"
+      - type: config_saved
+    hints:
+      - "Steps: enable → configure terminal → hostname CorporateSwitch2"
+      - "Then: enable secret C1sc0R0ck$ (be careful with the special characters!)"
+      - "Finally: end → write memory (save AFTER all configuration is correct)"
+      - "If you make a mistake, just type the command again to fix it"
+
+  #############################################################################
+  # LEVEL 2: IP ADDRESSING - Understanding Network Addresses
+  #############################################################################
+
+  - id: ex-002-l2-mgmt-ip-default-gateway
+    title: "🌐 Level 2.1: Management IP Address"
+    device_profile: L2_SWITCH
+    instructions: |
+      Now you'll learn about IP addresses - the "street addresses" of networks!
+      
+      🎯 YOUR MISSION:
+      Configure management access to your switch:
+      1. Set VLAN 1 IP to 172.16.16.3 with subnet mask 255.255.255.0
+      2. Set default gateway to 172.16.16.1
+      3. Save your configuration
+      
+      📚 WHAT'S HAPPENING:
+      - VLAN 1 is the default management VLAN (like the "admin office" of your switch)
+      - The IP address lets you access the switch remotely
+      - The default gateway is like a "post office" - it handles traffic to other networks
+      - Subnet mask defines how big your network is
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. interface vlan 1        (enter the management interface)
+      4. ip address 172.16.16.3 255.255.255.0
+      5. no shutdown             (turn the interface ON - very important!)
+      6. exit                    (leave interface mode)
+      7. ip default-gateway 172.16.16.1  (this is done in global config, not interface)
+      8. end
+      9. write memory
+      
+      🎓 REAL WORLD:
+      Think of it like setting up remote access to your computer. The IP address
+      is like your computer's phone number, and the gateway is like the cell tower
+      that connects you to the world!
+      
+    requirements:
+      - type: svi_ip_equals
+        vlan: "1"
+        ip: "172.16.16.3"
+        mask: "255.255.255.0"
+      - type: state_equals
+        path: ipDefaultGateway
+        value: "172.16.16.1"
+      - type: config_saved
+    hints:
+      - "First configure the VLAN 1 interface: interface vlan 1"
+      - "Set the IP: ip address 172.16.16.3 255.255.255.0"
+      - "Turn it on: no shutdown (interfaces are like light switches - they need to be turned on!)"
+      - "Exit interface mode: exit"
+      - "Set gateway in global config: ip default-gateway 172.16.16.1"
+      - "Save at the end: end → write memory"
+
+  #############################################################################
+  # LEVEL 3: VLANS - Organizing Your Network
+  #############################################################################
+
+  - id: ex-003-vlan-db-and-access-ports
+    title: "🏢 Level 3.1: Creating Departments with VLANs"
+    device_profile: L2_SWITCH
+    instructions: |
+      Imagine your school has different departments that need separate networks.
+      Let's create them using VLANs!
+      
+      🎯 YOUR MISSION:
+      1. Create VLAN 100 for the "Students" department
+      2. Create VLAN 200 for the "Teachers" department  
+      3. Connect Fa0/2 to the Students network (VLAN 100)
+      4. Connect Fa0/3 to the Teachers network (VLAN 200)
+      5. Save your configuration
+      
+      📚 WHAT ARE VLANS?
+      VLANs are like separate networks inside one switch. It's like having
+      different WiFi networks (one for students, one for teachers) but using
+      the same hardware!
+      
+      Benefits:
+      - Security: Students can't see teachers' computers
+      - Organization: Easy to manage different groups
+      - Performance: Less traffic congestion
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. vlan 100                          (create VLAN 100)
+      4. vlan 200                          (create VLAN 200)
+      5. interface fa0/2                   (configure port fa0/2)
+      6. switchport mode access            (make it an access port)
+      7. switchport access vlan 100        (assign to VLAN 100)
+      8. exit
+      9. interface fa0/3                   (configure port fa0/3)
+      10. switchport mode access
+      11. switchport access vlan 200       (assign to VLAN 200)
+      12. end
+      13. write memory
+      
+      🎓 REAL WORLD:
+      In a school, you might have:
+      - VLAN 10: Student computers
+      - VLAN 20: Teacher computers
+      - VLAN 30: Guest WiFi
+      - VLAN 40: Security cameras
+      
+      This keeps each group separate and secure!
+      
+    requirements:
+      - type: vlan_exists
+        vlan: "100"
+      - type: vlan_exists
+        vlan: "200"
+      - type: if_access_vlan_equals
+        ifname: "fa0/2"
+        vlan: "100"
+      - type: if_access_vlan_equals
+        ifname: "fa0/3"
+        vlan: "200"
+      - type: config_saved
+    hints:
+      - "Create VLANs: vlan 100, then vlan 200"
+      - "Configure fa0/2: interface fa0/2 → switchport mode access → switchport access vlan 100"
+      - "Configure fa0/3: interface fa0/3 → switchport mode access → switchport access vlan 200"
+      - "Remember to save: end → write memory"
+      - "Use 'show vlan brief' to check your work!"
+
+  - id: ex-004-trunk-allowed-vlans
+    title: "🌉 Level 3.2: Building Bridges Between Switches"
+    device_profile: L2_SWITCH
+    instructions: |
+      When you have multiple switches, you need "trunk" ports to carry
+      traffic between them. Think of it like a highway between cities!
+      
+      🎯 YOUR MISSION:
+      1. Configure Fa0/1 as a trunk port
+      2. Allow only VLANs 1, 100, and 200 on Fa0/1
+      3. Configure G0/1 as a trunk port
+      4. Allow only VLANs 1, 100, and 200 on G0/1
+      5. Save your configuration
+      
+      📚 WHAT'S A TRUNK PORT?
+      - Access Port: Carries traffic for ONE VLAN (like a single-lane road)
+      - Trunk Port: Carries traffic for MULTIPLE VLANs (like a multi-lane highway!)
+      
+      Why limit VLANs?
+      - Security: Only send necessary traffic
+      - Performance: Less unnecessary data
+      - Best Practice: Explicit is better than implicit
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. interface fa0/1
+      4. switchport mode trunk                    (make it a trunk)
+      5. switchport trunk allowed vlan 1,100,200  (allow specific VLANs)
+      6. exit
+      7. interface g0/1
+      8. switchport mode trunk
+      9. switchport trunk allowed vlan 1,100,200
+      10. end
+      11. write memory
+      
+      🎓 REAL WORLD:
+      When connecting switches in different classrooms or buildings, you use
+      trunk ports. This way, a student in Building A on VLAN 100 can talk to
+      a student in Building B also on VLAN 100!
+      
+      The VLAN tags travel over the trunk like labels on packages, telling
+      the receiving switch which VLAN each frame belongs to.
+      
+    requirements:
+      - type: if_trunk_allowed_equals
+        ifname: "fa0/1"
+        vlans: ["1","100","200"]
+      - type: if_trunk_allowed_equals
+        ifname: "g0/1"
+        vlans: ["1","100","200"]
+      - type: config_saved
+    hints:
+      - "Configure Fa0/1: interface fa0/1 → switchport mode trunk"
+      - "Then: switchport trunk allowed vlan 1,100,200 (note: no spaces in the list!)"
+      - "Repeat for G0/1: interface g0/1 → switchport mode trunk → switchport trunk allowed vlan 1,100,200"
+      - "Save: end → write memory"
+      - "Pro tip: Trunk ports connect switches to switches. Access ports connect devices to switches!"
+
+  #############################################################################
+  # LEVEL 4: LAYER 3 SWITCHING - When Switches Become Routers
+  #############################################################################
+
+  - id: ex-005-l3-switch-no-switchport-and-ip
+    title: "🚀 Level 4.1: Advanced Switch - Routing Between VLANs"
+    device_profile: L3_SWITCH
+    instructions: |
+      Some switches can do routing too! These are called "Layer 3 switches"
+      or "multilayer switches". Let's unlock this superpower!
+      
+      🎯 YOUR MISSION:
+      1. Convert port g1/0/2 from a switchport to a routed port
+      2. Give it IP address 35.72.12.1 with mask 255.255.255.252
+      3. Make sure the interface is active (no shutdown)
+      4. Save your configuration
+      
+      📚 WHAT'S HAPPENING:
+      - Normal Switch Port: Handles Layer 2 (MAC addresses, VLANs)
+      - Routed Port: Handles Layer 3 (IP addresses, routing)
+      
+      "no switchport" means: "Stop being a switch port, start being a router port!"
+      
+      Why use this?
+      - Connect to routers
+      - Inter-VLAN routing
+      - Higher performance routing
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. interface g1/0/2
+      4. no switchport                           (convert to routed port)
+      5. ip address 35.72.12.1 255.255.255.252  (assign IP)
+      6. no shutdown                             (activate it!)
+      7. end
+      8. write memory
+      
+      🎓 NETWORKING LAYERS:
+      Think of it like a building:
+      - Layer 1: Physical (cables, light signals)
+      - Layer 2: Data Link (MAC addresses, switches)
+      - Layer 3: Network (IP addresses, routers)
+      - Layer 4-7: Transport, Session, Presentation, Application
+      
+      Most switches work at Layer 2. Layer 3 switches work at both Layer 2 AND Layer 3!
+      
+    requirements:
+      - type: if_l2mode_equals
+        ifname: "g1/0/2"
+        l2mode: "routed"
+      - type: if_ip_equals
+        ifname: "g1/0/2"
+        ip: "35.72.12.1"
+        mask: "255.255.255.252"
+      - type: if_admin_up
+        ifname: "g1/0/2"
+      - type: config_saved
+    hints:
+      - "Enter interface: interface g1/0/2"
+      - "Convert to routed port: no switchport (this removes VLAN functionality)"
+      - "Assign IP: ip address 35.72.12.1 255.255.255.252"
+      - "Turn it on: no shutdown (always remember this!)"
+      - "Save: end → write memory"
+      - "Note: /30 subnet (255.255.255.252) has only 2 usable IPs - perfect for point-to-point links!"
+
+  #############################################################################
+  # LEVEL 5: ROUTING - Connecting Different Networks
+  #############################################################################
+
+  - id: ex-006-static-default-and-floating-default
+    title: "🗺️ Level 5.1: Creating Routes with Backup"
+    device_profile: ROUTER
+    instructions: |
+      Routing is how data finds its way across the internet. Let's create
+      a default route (the path for unknown destinations) with a backup!
+      
+      🎯 YOUR MISSION:
+      1. Create a primary default route to 35.72.13.1
+      2. Create a backup (floating) default route to 35.72.13.2
+      3. Save your configuration
+      
+      📚 WHAT'S A DEFAULT ROUTE?
+      - When a router doesn't know where to send traffic, it uses the default route
+      - Think of it as "when in doubt, send it here"
+      - Often called the "gateway of last resort"
+      
+      WHAT'S A FLOATING ROUTE?
+      - A backup route with a higher "administrative distance" (AD)
+      - Higher AD = lower priority
+      - Only used if the primary route fails
+      - Like having a backup plan!
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. ip route 0.0.0.0 0.0.0.0 35.72.13.1           (primary route)
+      4. ip route 0.0.0.0 0.0.0.0 35.72.13.2 254       (backup route with AD 254)
+      5. end
+      6. write memory
+      
+      🔢 UNDERSTANDING 0.0.0.0 0.0.0.0:
+      - First 0.0.0.0 = destination network (all networks)
+      - Second 0.0.0.0 = subnet mask (match everything)
+      - Together they mean "this route matches ANY destination"
+      
+      📊 ADMINISTRATIVE DISTANCE:
+      - Default: 1 (highest priority)
+      - OSPF: 110
+      - Floating/Backup: 254 (low priority)
+      - 255: Route is disabled
+      
+      Lower number = more trusted = used first!
+      
+      🎓 REAL WORLD:
+      Your home router has a default route pointing to your ISP. If your
+      primary internet connection fails, a backup route can point to a
+      cellular hotspot or secondary ISP!
+      
+    requirements:
+      - type: route_exists
+        dest: "0.0.0.0"
+        mask: "0.0.0.0"
+        nextHop: "35.72.13.1"
+        ad: 1
+      - type: route_exists
+        dest: "0.0.0.0"
+        mask: "0.0.0.0"
+        nextHop: "35.72.13.2"
+        ad: 254
+      - type: config_saved
+    hints:
+      - "Primary route: ip route 0.0.0.0 0.0.0.0 35.72.13.1"
+      - "Backup route: ip route 0.0.0.0 0.0.0.0 35.72.13.2 254"
+      - "The '254' at the end is the administrative distance (makes it lower priority)"
+      - "Don't forget to save: end → write memory"
+      - "Use 'show ip route' to verify your routes!"
+
+  - id: ex-007-ospf-area0-process1
+    title: "🤖 Level 5.2: Dynamic Routing with OSPF"
+    device_profile: ROUTER
+    instructions: |
+      Static routes are great, but what if networks change? OSPF is a
+      smart protocol that automatically finds the best paths!
+      
+      🎯 YOUR MISSION:
+      1. Enable OSPF with process ID 1
+      2. Advertise the specific IP 35.72.12.2 in area 0
+      3. Use wildcard mask 0.0.0.0 (exact match for this single IP)
+      4. Save your configuration
+      
+      📚 WHAT'S OSPF?
+      OSPF (Open Shortest Path First) is like GPS for networks:
+      - Routers share information about networks they know
+      - They automatically calculate the best paths
+      - If a link fails, OSPF finds a new path automatically
+      - Used in enterprise networks worldwide!
+      
+      KEY CONCEPTS:
+      - Process ID: A number identifying this OSPF instance (can be 1-65535)
+      - Network Command: Tells OSPF which interfaces to use
+      - Area: OSPF organizes networks into areas (Area 0 is the backbone)
+      - Wildcard Mask: Opposite of subnet mask (more on this below!)
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. router ospf 1                              (enter OSPF config, process 1)
+      4. network 35.72.12.2 0.0.0.0 area 0         (advertise this IP in area 0)
+      5. end
+      6. write memory
+      
+      🔢 WILDCARD MASKS EXPLAINED:
+      - Subnet Mask: 255.255.255.0 (defines network size)
+      - Wildcard Mask: 0.0.0.255 (opposite! 0=must match, 255=don't care)
+      
+      Examples:
+      - 0.0.0.0 = exact match (must match all bits)
+      - 0.0.0.255 = match first 3 octets (/24 network)
+      - 0.0.255.255 = match first 2 octets (/16 network)
+      
+      💡 QUICK TRICK:
+      Wildcard = 255.255.255.255 - Subnet Mask
+      
+      For /24 (255.255.255.0):
+        255.255.255.255
+      - 255.255.255.0
+      = 0.0.0.255 (wildcard!)
+      
+      🎓 REAL WORLD:
+      Large companies use OSPF to connect hundreds or thousands of routers.
+      When a link fails, OSPF reroutes traffic automatically in seconds!
+      
+      ISPs and enterprises prefer OSPF because:
+      - Fast convergence (quick to adapt to changes)
+      - Scales to large networks
+      - Loop-free paths (Dijkstra's algorithm)
+      - Support for authentication
+      
+    requirements:
+      - type: ospf_process_equals
+        value: 1
+      - type: ospf_network_exists
+        ip: "35.72.12.2"
+        wildcard: "0.0.0.0"
+        area: 0
+      - type: config_saved
+    hints:
+      - "Enter OSPF: router ospf 1 (the '1' is the process ID)"
+      - "Advertise network: network 35.72.12.2 0.0.0.0 area 0"
+      - "The wildcard 0.0.0.0 means 'match exactly this IP'"
+      - "Area 0 is the backbone area (required in OSPF)"
+      - "Save: end → write memory"
+      - "Pro tip: In real networks, you'd advertise entire subnets, not single IPs!"
+
+  - id: ex-008-ospf-interface-cost
+    title: "⚖️ Level 5.3: OSPF Path Optimization"
+    device_profile: ROUTER
+    instructions: |
+      OSPF chooses paths based on "cost" - lower cost = better path!
+      Let's manually set costs to control which paths OSPF prefers.
+      
+      🎯 YOUR MISSION:
+      1. Set interface g0/0 OSPF cost to 10
+      2. Set interface g0/2 OSPF cost to 30
+      3. Save your configuration
+      
+      📚 WHAT'S OSPF COST?
+      - OSPF uses cost to choose the best path
+      - Lower cost = preferred path
+      - Cost is based on bandwidth (faster links = lower cost)
+      - You can manually override costs
+      
+      DEFAULT COSTS:
+      - 10 Gbps link: Cost 1
+      - 1 Gbps link: Cost 1
+      - 100 Mbps link: Cost 1
+      - 10 Mbps link: Cost 10
+      
+      Formula: Cost = 100,000,000 / bandwidth in bps
+      
+      💡 WHY MANUALLY SET COSTS?
+      - Prefer certain paths (like fiber over copper)
+      - Balance load across multiple paths
+      - Avoid congested links
+      - Match business requirements
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. interface g0/0
+      4. ip ospf cost 10         (set cost to 10)
+      5. exit
+      6. interface g0/2
+      7. ip ospf cost 30         (set cost to 30)
+      8. end
+      9. write memory
+      
+      🎓 EXAMPLE SCENARIO:
+      Imagine you have two paths from Router A to Router B:
+      - Path 1: Cost 10 (fast fiber link)
+      - Path 2: Cost 30 (slower copper link)
+      
+      OSPF will choose Path 1 because it has lower cost!
+      
+      If Path 1 fails, OSPF automatically switches to Path 2.
+      When Path 1 comes back, OSPF switches back.
+      
+      🎯 REAL WORLD:
+      Network engineers tune OSPF costs to:
+      - Prefer expensive high-bandwidth links
+      - Balance traffic across multiple paths
+      - Implement traffic engineering policies
+      - Avoid paths through unstable areas
+      
+    requirements:
+      - type: ospf_if_cost_equals
+        ifname: "g0/0"
+        cost: 10
+      - type: ospf_if_cost_equals
+        ifname: "g0/2"
+        cost: 30
+      - type: config_saved
+    hints:
+      - "Enter interface g0/0: interface g0/0"
+      - "Set cost: ip ospf cost 10"
+      - "Exit and repeat for g0/2: exit → interface g0/2 → ip ospf cost 30"
+      - "Save: end → write memory"
+      - "Remember: Lower cost = preferred path!"
+      - "Use 'show ip ospf interface' to verify costs"
+
+  #############################################################################
+  # LEVEL 6: SECURITY - Protecting Your Network
+  #############################################################################
+
+  - id: ex-009-ssh-setup-vty
+    title: "🔐 Level 6.1: Secure Remote Access with SSH"
+    device_profile: ROUTER
+    instructions: |
+      Congratulations on making it to the final exercise! Now you'll learn
+      to set up secure remote access - a critical skill for network engineers!
+      
+      🎯 YOUR MISSION:
+      Configure SSH (Secure Shell) for remote management:
+      1. Set domain name to "cisco.com"
+      2. Generate RSA encryption keys with 1024-bit modulus
+      3. Enable SSH version 2
+      4. Create user "admin" with password "Cyb3rPatriot"
+      5. Configure VTY lines 0-4 to use local authentication
+      6. Configure VTY lines to accept only SSH connections
+      7. Save your configuration
+      
+      📚 WHAT'S SSH?
+      SSH (Secure Shell) is encrypted remote access. Think of it like:
+      - Telnet: Sending postcards (anyone can read them)
+      - SSH: Sending sealed letters (encrypted, private)
+      
+      WHY SSH?
+      - ✅ Encryption: Passwords can't be stolen
+      - ✅ Authentication: Verify who's connecting
+      - ✅ Integrity: Detect tampering
+      - ❌ Telnet: Plain text, easily hacked!
+      
+      🔐 COMPONENTS:
+      1. Domain Name: Required for generating keys
+      2. RSA Keys: Encryption keys (1024 or 2048 bits)
+      3. SSH Version: v2 is more secure than v1
+      4. Local User: Username/password stored on device
+      5. VTY Lines: Virtual terminal lines (remote access ports)
+      6. Login Local: Use local user database
+      7. Transport SSH: Only allow SSH (block Telnet)
+      
+      💡 STEP-BY-STEP:
+      1. enable
+      2. configure terminal
+      3. ip domain-name cisco.com                       (prerequisite for keys)
+      4. crypto key generate rsa modulus 1024           (generate encryption keys)
+      5. ip ssh version 2                               (use secure version)
+      6. username admin secret Cyb3rPatriot             (create local user)
+      7. line vty 0 4                                   (configure 5 VTY lines)
+      8. login local                                    (use local user database)
+      9. transport input ssh                            (only allow SSH)
+      10. end
+      11. write memory
+      
+      🔢 UNDERSTANDING VTY LINES:
+      - VTY = Virtual TeletYpe (virtual terminal)
+      - "line vty 0 4" = lines 0, 1, 2, 3, 4 (that's 5 lines)
+      - Allows 5 simultaneous remote connections
+      - More lines = more people can connect at once
+      
+      🎓 REAL WORLD APPLICATION:
+      Imagine you're a network engineer and there's a problem at 2 AM:
+      - You're at home (or on vacation!)
+      - A router needs configuration changes
+      - SSH lets you connect securely from anywhere
+      - You log in, fix the problem, log out
+      
+      Without SSH, you'd need to:
+      - Drive to the office
+      - Or use insecure Telnet (bad idea!)
+      
+      🏆 CYBERPATRIOT CONNECTION:
+      In CyberPatriot competitions:
+      - You MUST enable SSH and disable Telnet
+      - Strong passwords are required
+      - You need SSH version 2 (not version 1)
+      - This is a common scoring scenario!
+      
+      ⚠️ SECURITY BEST PRACTICES:
+      1. Always use SSH, never Telnet in production
+      2. Use strong passwords (mix of letters, numbers, symbols)
+      3. Use SSH version 2 (version 1 has vulnerabilities)
+      4. Use 2048-bit or higher RSA keys in production
+      5. Limit who can SSH with access control lists (ACLs)
+      6. Use AAA (Authentication, Authorization, Accounting) in enterprises
+      
+      🎉 FINAL EXERCISE!
+      Complete this and you've mastered the fundamentals of:
+      - Basic navigation
+      - VLANs and switching
+      - IP addressing
+      - Routing (static and dynamic)
+      - Security
+      
+      You're ready for CyberPatriot challenges!
+      
+    requirements:
+      - type: state_equals
+        path: ssh.domainName
+        value: "cisco.com"
+      - type: state_equals
+        path: ssh.rsaModulus
+        value: 1024
+      - type: state_equals
+        path: ssh.sshVersion
+        value: 2
+      - type: ssh_user_secret_equals
+        user: "admin"
+        secret: "Cyb3rPatriot"
+      - type: state_equals
+        path: ssh.vty.login
+        value: "local"
+      - type: state_equals
+        path: ssh.vty.transport
+        value: ["ssh"]
+      - type: config_saved
+    hints:
+      - "Step 1: ip domain-name cisco.com (required before generating keys)"
+      - "Step 2: crypto key generate rsa modulus 1024 (this generates encryption keys)"
+      - "Step 3: ip ssh version 2 (more secure than version 1)"
+      - "Step 4: username admin secret Cyb3rPatriot (create the user)"
+      - "Step 5: line vty 0 4 (enter VTY configuration mode)"
+      - "Step 6: login local (use local username database)"
+      - "Step 7: transport input ssh (only allow SSH, not Telnet)"
+      - "Step 8: end → write memory (save everything!)"
+      - "Pro tip: In real life, use 'transport input ssh' not 'transport input telnet ssh'"
+

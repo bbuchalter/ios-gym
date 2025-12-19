@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learn Network Commands - Interactive Tutorial</title>
+  <link rel="stylesheet" href="learn.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
+</head>
+<body>
+  <div class="tutorial-container">
+    <header class="tutorial-header">
+      <h1>🎮 Learn Network Commands</h1>
+      <p class="subtitle">Read, practice, master - all in one place</p>
+    </header>
+
+    <main class="tutorial-main">
+      
+      <!-- INTRODUCTION -->
+      <section class="lesson-section intro">
+        <div class="content">
+          <h1>Welcome, Future Network Engineer! 👋</h1>
+          
+          <p class="big-text">
+            You're about to learn how to configure real network devices - the computers that make the internet work!
+          </p>
+          
+          <p>
+            Think of this like learning to drive, but instead of a car, you're controlling routers and switches 
+            that connect the entire world. Pretty cool, right?
+          </p>
+          
+          <div class="info-box">
+            <h3>📚 How This Works</h3>
+            <ul>
+              <li><strong>Read</strong> each concept explanation</li>
+              <li><strong>Practice</strong> in the terminal right below it</li>
+              <li><strong>Scroll down</strong> to learn the next concept</li>
+              <li>That's it! No tabs, no clicking around - just scroll and learn</li>
+            </ul>
+          </div>
+          
+          <h2>What You'll Learn</h2>
+          <div class="skills-grid">
+            <div class="skill-card">
+              <div class="skill-icon">🔐</div>
+              <h4>Security Basics</h4>
+              <p>Passwords and protection</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">🌐</div>
+              <h4>IP Addresses</h4>
+              <p>How devices find each other</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">🏢</div>
+              <h4>VLANs</h4>
+              <p>Organizing networks</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">🗺️</div>
+              <h4>Routing</h4>
+              <p>How data travels</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 1: FIRST COMMANDS -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 1</div>
+          <h1>Your First Commands</h1>
+          
+          <p class="big-text">
+            Let's start with the basics. Every network device has different "modes" - like different levels of access.
+          </p>
+          
+          <h2>Understanding the Prompt</h2>
+          
+          <p>The prompt (the text before where you type) tells you where you are:</p>
+          
+          <div class="prompt-examples">
+            <div class="prompt-ex">
+              <code>Switch&gt;</code>
+              <span>User mode - Limited access</span>
+            </div>
+            <div class="prompt-ex">
+              <code>Switch#</code>
+              <span>Privileged mode - More access</span>
+            </div>
+            <div class="prompt-ex">
+              <code>Switch(config)#</code>
+              <span>Configuration mode - Where you make changes</span>
+            </div>
+          </div>
+          
+          <h2>The Magic TAB Key ✨</h2>
+          
+          <div class="tip-box">
+            <p><strong>Pro Tip:</strong> Press <kbd>TAB</kbd> at any time to auto-complete commands or see options!</p>
+            <p>This is the #1 trick professionals use. It prevents typos and speeds you up.</p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Try It Now</h3>
+          <p>Type these commands in the terminal below:</p>
+          <ol class="command-steps">
+            <li>Type <code>enable</code> and press Enter - watch the prompt change from <code>&gt;</code> to <code>#</code></li>
+            <li>Type <code>en</code> then press <kbd>TAB</kbd> - see it auto-complete!</li>
+            <li>Type <code>conf</code> then press <kbd>TAB</kbd> - now you're in configuration mode</li>
+            <li>Type <code>exit</code> to go back one level</li>
+            <li>Type <code>end</code> to jump back to privileged mode</li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 1</div>
+            <div id="terminal-1" class="terminal-embed"></div>
+          </div>
+          
+          <div class="help-box">
+            <p><strong>💡 Helpful Hints:</strong></p>
+            <ul>
+              <li>Notice how the prompt changes as you move between modes</li>
+              <li>Use <kbd>TAB</kbd> liberally - it's not cheating, it's smart!</li>
+              <li>If you get lost, type <code>end</code> to jump back to <code>#</code></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 2: SETTING HOSTNAME -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 2</div>
+          <h1>Giving Your Device a Name</h1>
+          
+          <p class="big-text">
+            Just like you name your phone "Brian's iPhone", network devices need names too!
+          </p>
+          
+          <h2>What's a Hostname?</h2>
+          
+          <p>
+            The hostname is your device's name. It appears in the prompt and helps identify which device you're working on.
+            In a real network, you might have dozens of switches - good names help you stay organized!
+          </p>
+          
+          <div class="diagram">
+            <h4>Before:</h4>
+            <pre>
+┌─────────────┐
+│   Switch    │  ← Generic name
+└─────────────┘
+            </pre>
+            
+            <h4>After:</h4>
+            <pre>
+┌──────────────────────┐
+│  MyFirstSwitch       │  ← Your unique name!
+└──────────────────────┘
+            </pre>
+          </div>
+          
+          <h2>Saving Your Work</h2>
+          
+          <div class="important-box">
+            <p><strong>⚠️ CRITICAL:</strong> Changes in Cisco IOS are NOT saved automatically!</p>
+            <p>You must use <code>write memory</code> to save, or your changes disappear when the device restarts.</p>
+            <p>Think of it like Microsoft Word - you have to click Save!</p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Configure your first device with these steps:</p>
+          <ol class="command-steps">
+            <li><code>enable</code> - Enter privileged mode</li>
+            <li><code>configure terminal</code> - Enter configuration mode</li>
+            <li><code>hostname MyFirstSwitch</code> - Set the name (watch the prompt change!)</li>
+            <li><code>end</code> - Exit configuration mode</li>
+            <li><code>write memory</code> - <strong>SAVE YOUR WORK!</strong></li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 2</div>
+            <div id="terminal-2" class="terminal-embed"></div>
+          </div>
+          
+          <div class="success-criteria">
+            <p><strong>✓ You succeeded when:</strong></p>
+            <ul>
+              <li>The prompt shows your new hostname instead of "Switch"</li>
+              <li>You see "[OK]" after running <code>write memory</code></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 3: ENABLE SECRET -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 3</div>
+          <h1>Security: Adding a Password</h1>
+          
+          <p class="big-text">
+            Without a password, anyone can access and change your device. Let's lock it down!
+          </p>
+          
+          <h2>Why Passwords Matter</h2>
+          
+          <p>
+            Imagine if anyone could reconfigure your school's network. They could:
+          </p>
+          <ul>
+            <li>Block internet access for everyone</li>
+            <li>See private traffic</li>
+            <li>Create security holes</li>
+            <li>Cause chaos!</li>
+          </ul>
+          
+          <p>
+            The <code>enable secret</code> command sets a password to enter privileged mode. 
+            It's encrypted (scrambled) so even if someone sees the configuration file, they can't read your password.
+          </p>
+          
+          <div class="comparison">
+            <div class="bad">
+              <h4>❌ Without Password</h4>
+              <pre>
+Anyone → Switch → Full access!
+      (No protection)
+              </pre>
+            </div>
+            <div class="good">
+              <h4>✅ With Password</h4>
+              <pre>
+You → Password → Switch → Secure!
+    (Protected)
+              </pre>
+            </div>
+          </div>
+          
+          <h2>Password Best Practices</h2>
+          
+          <div class="tip-box">
+            <p><strong>Good passwords have:</strong></p>
+            <ul>
+              <li>Mix of uppercase and lowercase letters</li>
+              <li>Numbers</li>
+              <li>Special characters (!@#$%)</li>
+              <li>At least 8 characters</li>
+            </ul>
+            <p>Example: <code>C1sc0R0ck$</code> (notice the 1 is number one, 0 is zero)</p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Add security to your device:</p>
+          <ol class="command-steps">
+            <li><code>enable</code> - Enter privileged mode</li>
+            <li><code>configure terminal</code> - Enter configuration mode</li>
+            <li><code>hostname CorporateSwitch</code> - Give it a professional name</li>
+            <li><code>enable secret C1sc0R0ck$</code> - Set the password (be careful with special characters!)</li>
+            <li><code>end</code> - Exit configuration mode</li>
+            <li><code>write memory</code> - Save your work</li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 3</div>
+            <div id="terminal-3" class="terminal-embed"></div>
+          </div>
+          
+          <div class="help-box">
+            <p><strong>💡 Did you know?</strong></p>
+            <p>
+              You can view your configuration with <code>show running-config</code>. 
+              Try it! Notice how the password is encrypted (shows as a long hash).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 4: IP ADDRESSING -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 4</div>
+          <h1>IP Addresses: Your Device's Phone Number</h1>
+          
+          <p class="big-text">
+            Every device on a network needs an address so others can find it. This is called an IP address.
+          </p>
+          
+          <h2>What's an IP Address?</h2>
+          
+          <p>
+            Think of an IP address like a phone number or street address:
+          </p>
+          <ul>
+            <li><strong>Phone number:</strong> Let's people call you</li>
+            <li><strong>Street address:</strong> Let's mail reach you</li>
+            <li><strong>IP address:</strong> Let's data reach your device</li>
+          </ul>
+          
+          <div class="diagram">
+            <h4>IP Address Format:</h4>
+            <pre>
+192  .  168  .  1    .  100
+ ↓       ↓      ↓        ↓
+Network addresses   Host number
+
+Together: 192.168.1.100
+            </pre>
+          </div>
+          
+          <h2>Management Access</h2>
+          
+          <p>
+            To manage a switch remotely, you need to give it an IP address on VLAN 1 (the management VLAN).
+            Without this, you can only access the switch by plugging a cable directly into it!
+          </p>
+          
+          <div class="real-world">
+            <h4>🌍 Real World Example:</h4>
+            <p>
+              Your school's IT person needs to manage switches in different buildings. 
+              With IP addresses on each switch, they can connect from their office without walking to each closet!
+            </p>
+          </div>
+          
+          <h2>Subnet Mask & Default Gateway</h2>
+          
+          <p><strong>Subnet Mask:</strong> Defines how big your network is</p>
+          <p><strong>Default Gateway:</strong> The "door" to other networks (like the internet)</p>
+          
+          <div class="tip-box">
+            <p>Common subnet mask: <code>255.255.255.0</code> gives you 254 devices on one network</p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Give your switch a management IP address:</p>
+          <ol class="command-steps">
+            <li><code>enable</code></li>
+            <li><code>configure terminal</code></li>
+            <li><code>interface vlan 1</code> - Enter the management interface</li>
+            <li><code>ip address 172.16.16.10 255.255.255.0</code> - Set the IP and subnet mask</li>
+            <li><code>no shutdown</code> - Turn the interface ON (very important!)</li>
+            <li><code>exit</code> - Leave interface configuration</li>
+            <li><code>ip default-gateway 172.16.16.1</code> - Set the gateway</li>
+            <li><code>end</code></li>
+            <li><code>write memory</code> - Save!</li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 4</div>
+            <div id="terminal-4" class="terminal-embed"></div>
+          </div>
+          
+          <div class="help-box">
+            <p><strong>💡 Common Mistake:</strong></p>
+            <p>Forgetting <code>no shutdown</code> is the #1 beginner mistake! Interfaces start in "shutdown" (off) mode. You MUST turn them on!</p>
+          </div>
+          
+          <div class="success-criteria">
+            <p><strong>✓ Verify your work:</strong></p>
+            <p>Type: <code>show ip interface brief</code></p>
+            <p>You should see VLAN 1 with your IP address and status "up"</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 5: VLANs -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 5</div>
+          <h1>VLANs: Organizing Your Network</h1>
+          
+          <p class="big-text">
+            VLANs let you split one physical switch into multiple virtual networks. It's like having multiple switches in one!
+          </p>
+          
+          <h2>Why Use VLANs?</h2>
+          
+          <p>Imagine your school network without VLANs:</p>
+          
+          <div class="diagram">
+            <h4>❌ Without VLANs - Everyone sees everything!</h4>
+            <pre>
+┌────────────────────────┐
+│   ONE BIG NETWORK      │
+│                        │
+│  👨‍🎓 Students          │
+│  👨‍🏫 Teachers          │
+│  👔 Admin              │
+│  📹 Cameras            │
+│                        │
+│  All mixed together!   │
+└────────────────────────┘
+⚠️ Privacy & Security Risk!
+            </pre>
+          </div>
+          
+          <p>With VLANs, you can separate them:</p>
+          
+          <div class="diagram">
+            <h4>✅ With VLANs - Organized & Secure!</h4>
+            <pre>
+┌───────────────────────────────────┐
+│         SWITCH                    │
+│  ┌──────────┐    ┌──────────┐    │
+│  │ VLAN 100 │    │ VLAN 200 │    │
+│  │ Students │    │ Teachers │    │
+│  │  👨‍🎓👨‍🎓   │    │  👨‍🏫👨‍🏫   │    │
+│  └──────────┘    └──────────┘    │
+│      ↕               ↕            │
+│   Fa0/2-5        Fa0/6-10         │
+└───────────────────────────────────┘
+✅ Students can't see teacher files!
+            </pre>
+          </div>
+          
+          <h2>Creating VLANs</h2>
+          
+          <p>
+            Creating a VLAN is easy - just give it a number (1-4094) and optionally a name.
+            Then you assign switch ports to that VLAN.
+          </p>
+          
+          <div class="real-world">
+            <h4>🌍 Real School Network:</h4>
+            <ul>
+              <li><strong>VLAN 10:</strong> Student computers (limited internet)</li>
+              <li><strong>VLAN 20:</strong> Teacher computers (full access)</li>
+              <li><strong>VLAN 30:</strong> Guest WiFi (internet only)</li>
+              <li><strong>VLAN 40:</strong> Security cameras (isolated)</li>
+              <li><strong>VLAN 50:</strong> Servers (restricted access)</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Create VLANs and assign ports:</p>
+          <ol class="command-steps">
+            <li><code>enable</code></li>
+            <li><code>configure terminal</code></li>
+            <li><code>vlan 100</code> - Create VLAN 100</li>
+            <li><code>name Students</code> - Give it a name (optional but helpful!)</li>
+            <li><code>vlan 200</code> - Create VLAN 200</li>
+            <li><code>name Teachers</code></li>
+            <li><code>exit</code> - Leave VLAN configuration</li>
+            <li><code>interface fa0/2</code> - Configure port FastEthernet 0/2</li>
+            <li><code>switchport mode access</code> - Make it an access port</li>
+            <li><code>switchport access vlan 100</code> - Assign to VLAN 100</li>
+            <li><code>interface fa0/3</code> - Configure another port</li>
+            <li><code>switchport mode access</code></li>
+            <li><code>switchport access vlan 200</code> - Assign to VLAN 200</li>
+            <li><code>end</code></li>
+            <li><code>write memory</code></li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 5</div>
+            <div id="terminal-5" class="terminal-embed"></div>
+          </div>
+          
+          <div class="success-criteria">
+            <p><strong>✓ Verify your work:</strong></p>
+            <p>Type: <code>show vlan brief</code></p>
+            <p>You should see:</p>
+            <ul>
+              <li>VLAN 100 (Students) with port Fa0/2</li>
+              <li>VLAN 200 (Teachers) with port Fa0/3</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 6: TRUNK PORTS -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 6</div>
+          <h1>Trunk Ports: Connecting Switches</h1>
+          
+          <p class="big-text">
+            What if you have switches in different rooms or buildings? Trunk ports carry multiple VLANs between switches!
+          </p>
+          
+          <h2>Access Port vs Trunk Port</h2>
+          
+          <div class="comparison">
+            <div class="item">
+              <h4>Access Port</h4>
+              <p>Carries <strong>ONE</strong> VLAN</p>
+              <p>Connects to end devices (computers, printers)</p>
+              <div class="mini-diagram">
+                <pre>
+[Computer] ──── Access Port
+ VLAN 100       (Only VLAN 100)
+                </pre>
+              </div>
+            </div>
+            
+            <div class="item">
+              <h4>Trunk Port</h4>
+              <p>Carries <strong>MULTIPLE</strong> VLANs</p>
+              <p>Connects switches to switches</p>
+              <div class="mini-diagram">
+                <pre>
+[Switch A] ──── Trunk ──── [Switch B]
+   VLAN 100 ═══════════════ VLAN 100
+   VLAN 200 ═══════════════ VLAN 200
+                </pre>
+              </div>
+            </div>
+          </div>
+          
+          <h2>Why Limit Allowed VLANs?</h2>
+          
+          <p>
+            By default, trunks allow ALL VLANs (1-4094). But best practice is to allow only the VLANs you need:
+          </p>
+          <ul>
+            <li><strong>Security:</strong> Don't send unnecessary traffic</li>
+            <li><strong>Performance:</strong> Less broadcast traffic</li>
+            <li><strong>Best Practice:</strong> Be explicit about what you allow</li>
+          </ul>
+          
+          <div class="tip-box">
+            <p><strong>Pro Tip:</strong> In CyberPatriot competitions, you often need to restrict trunk VLANs for security points!</p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Configure trunk ports that carry only specific VLANs:</p>
+          <ol class="command-steps">
+            <li><code>enable</code></li>
+            <li><code>configure terminal</code></li>
+            <li><code>interface g0/1</code> - GigabitEthernet 0/1 (uplink port)</li>
+            <li><code>switchport mode trunk</code> - Make it a trunk</li>
+            <li><code>switchport trunk allowed vlan 1,100,200</code> - Allow only these VLANs</li>
+            <li><code>exit</code></li>
+            <li><code>interface fa0/1</code> - Another trunk port</li>
+            <li><code>switchport mode trunk</code></li>
+            <li><code>switchport trunk allowed vlan 1,100,200</code></li>
+            <li><code>end</code></li>
+            <li><code>write memory</code></li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 6</div>
+            <div id="terminal-6" class="terminal-embed"></div>
+          </div>
+          
+          <div class="help-box">
+            <p><strong>💡 Note:</strong> VLAN 1 is included because it's the management VLAN</p>
+            <p><strong>Format:</strong> Use commas to separate VLANs: <code>1,100,200</code> (no spaces!)</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 7: SSH -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 7</div>
+          <h1>SSH: Secure Remote Access</h1>
+          
+          <p class="big-text">
+            SSH lets network engineers manage devices from anywhere - securely and encrypted!
+          </p>
+          
+          <h2>Why SSH Matters</h2>
+          
+          <p>
+            Imagine it's 2 AM and a network problem takes your school offline. 
+            The IT person doesn't want to drive to school - they want to fix it from home!
+          </p>
+          
+          <p>SSH (Secure Shell) makes this possible - with encryption so hackers can't steal passwords.</p>
+          
+          <div class="comparison">
+            <div class="bad">
+              <h4>🚫 Telnet (Old Way)</h4>
+              <pre>
+You → "password: admin123" → Router
+
+⚠️ UNENCRYPTED!
+Hacker sees: "password: admin123"
+❌ They're in!
+              </pre>
+            </div>
+            
+            <div class="good">
+              <h4>✅ SSH (Secure Way)</h4>
+              <pre>
+You → 🔒 %#^&*@!$^&* → Router
+
+✅ ENCRYPTED!
+Hacker sees: gibberish
+✅ Can't break in!
+              </pre>
+            </div>
+          </div>
+          
+          <h2>SSH Setup Components</h2>
+          
+          <div class="numbered-steps">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <h4>Domain Name</h4>
+                <p>Required to generate encryption keys</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <h4>RSA Keys</h4>
+                <p>Encryption keys (1024 or 2048 bits)</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <h4>SSH Version 2</h4>
+                <p>More secure than version 1</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-content">
+                <h4>Local User</h4>
+                <p>Username and password</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">5</div>
+              <div class="step-content">
+                <h4>VTY Lines</h4>
+                <p>Virtual terminals for remote access</p>
+              </div>
+            </div>
+          </div>
+          
+          <h2>VTY Lines Explained</h2>
+          
+          <p>
+            VTY (Virtual TeletYpe) lines are like "phone lines" for remote connections.
+            "line vty 0 4" means lines 0, 1, 2, 3, 4 - that's 5 simultaneous connections!
+          </p>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Configure complete SSH access (this is a big one!):</p>
+          <ol class="command-steps">
+            <li><code>enable</code></li>
+            <li><code>configure terminal</code></li>
+            <li><code>hostname SecureRouter</code> - Give it a name</li>
+            <li><code>ip domain-name cisco.com</code> - Required for key generation</li>
+            <li><code>crypto key generate rsa modulus 1024</code> - Generate encryption keys</li>
+            <li><code>ip ssh version 2</code> - Use secure version</li>
+            <li><code>username admin secret Cyb3rPatriot</code> - Create user account</li>
+            <li><code>line vty 0 4</code> - Enter VTY configuration</li>
+            <li><code>login local</code> - Use local user database</li>
+            <li><code>transport input ssh</code> - Only allow SSH (no Telnet!)</li>
+            <li><code>end</code></li>
+            <li><code>write memory</code></li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 7</div>
+            <div id="terminal-7" class="terminal-embed"></div>
+          </div>
+          
+          <div class="success-criteria">
+            <p><strong>✓ You succeeded when:</strong></p>
+            <ul>
+              <li>You see "Generating RSA keys..." message</li>
+              <li>No error messages appear</li>
+              <li>Configuration is saved</li>
+            </ul>
+          </div>
+          
+          <div class="important-box">
+            <p><strong>🏆 CyberPatriot Tip:</strong></p>
+            <p>SSH configuration is a common scoring item! Make sure to:</p>
+            <ul>
+              <li>Use SSH version 2 (not 1)</li>
+              <li>Block Telnet (<code>transport input ssh</code>)</li>
+              <li>Use strong passwords</li>
+              <li>Use <code>login local</code> not <code>login</code></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONGRATULATIONS -->
+      <section class="lesson-section final">
+        <div class="content">
+          <h1>🎉 Congratulations!</h1>
+          
+          <p class="big-text">
+            You've completed the fundamentals of network device configuration!
+          </p>
+          
+          <h2>What You've Mastered</h2>
+          
+          <div class="skills-checklist">
+            <div class="skill-check">✅ Command line navigation</div>
+            <div class="skill-check">✅ Setting hostnames and passwords</div>
+            <div class="skill-check">✅ IP address configuration</div>
+            <div class="skill-check">✅ Creating and using VLANs</div>
+            <div class="skill-check">✅ Trunk port configuration</div>
+            <div class="skill-check">✅ SSH secure remote access</div>
+          </div>
+          
+          <h2>Next Steps</h2>
+          
+          <div class="next-steps-grid">
+            <div class="next-step-card">
+              <h3>🏃 Practice More</h3>
+              <p>Try the advanced exercises in the full trainer</p>
+              <a href="index.html" class="button">Open Full Trainer</a>
+            </div>
+            
+            <div class="next-step-card">
+              <h3>🏆 CyberPatriot</h3>
+              <p>Apply your skills in competition</p>
+              <p>Visit <strong>uscyberpatriot.org</strong></p>
+            </div>
+            
+            <div class="next-step-card">
+              <h3>📚 Keep Learning</h3>
+              <p>Explore these topics next:</p>
+              <ul>
+                <li>Static routing</li>
+                <li>OSPF dynamic routing</li>
+                <li>Access Control Lists (ACLs)</li>
+                <li>DHCP and NAT</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="motivation-final">
+            <h2>Remember</h2>
+            <p class="big-text">
+              Every network engineer started exactly where you are right now.
+            </p>
+            <p>
+              The internet wasn't built in a day, and mastering networking takes time. 
+              Be patient, keep practicing, and celebrate your progress!
+            </p>
+            <p>
+              <strong>You're on your way to becoming a network professional. Keep going! 🚀</strong>
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="tutorial-footer">
+      <p>Created with ❤️ for students learning networking</p>
+      <p><a href="index.html">Full Interactive Trainer</a> | <a href="tutorial.html">Detailed Tutorial</a></p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+  <script type="module" src="learn.js"></script>
+</body>
+</html>
+
