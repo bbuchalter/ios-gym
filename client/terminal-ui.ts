@@ -78,12 +78,14 @@ export class TerminalUI {
   
   public writeln(text: string): void {
     this.term.writeln(text);
+    this.scrollToBottom();
   }
   
   public writeLines(lines: string[]): void {
     for (const line of lines) {
       this.term.writeln(line);
     }
+    this.scrollToBottom();
   }
   
   public setPrompt(prompt: string): void {
@@ -96,14 +98,29 @@ export class TerminalUI {
   
   public displayPrompt(): void {
     this.term.write(this.prompt);
+    this.scrollToBottom();
   }
   
   public clearCurrentLine(lineLength: number): void {
     this.term.write("\r" + this.prompt + " ".repeat(lineLength) + "\r" + this.prompt);
   }
   
+  public clear(): void {
+    this.term.clear();
+  }
+  
   public fit(): void {
     this.fitAddon.fit();
+  }
+  
+  private scrollToBottom(): void {
+    // Scroll the xterm viewport to show the bottom (current line)
+    if (this.term.element) {
+      const viewport = this.term.element.querySelector('.xterm-viewport') as HTMLElement;
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
+    }
   }
 }
 

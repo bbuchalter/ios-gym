@@ -80,6 +80,9 @@ export class TerminalUI {
     clearCurrentLine(lineLength) {
         this.term.write("\r" + this.prompt + " ".repeat(lineLength) + "\r" + this.prompt);
     }
+    clear() {
+        this.term.clear();
+    }
     fit() {
         this.fitAddon.fit();
     }

@@ -62,11 +62,13 @@ export class TerminalUI {
     }
     writeln(text) {
         this.term.writeln(text);
+        this.scrollToBottom();
     }
     writeLines(lines) {
         for (const line of lines) {
             this.term.writeln(line);
         }
+        this.scrollToBottom();
     }
     setPrompt(prompt) {
         this.prompt = prompt;
@@ -76,11 +78,24 @@ export class TerminalUI {
     }
     displayPrompt() {
         this.term.write(this.prompt);
+        this.scrollToBottom();
     }
     clearCurrentLine(lineLength) {
         this.term.write("\r" + this.prompt + " ".repeat(lineLength) + "\r" + this.prompt);
     }
+    clear() {
+        this.term.clear();
+    }
     fit() {
         this.fitAddon.fit();
+    }
+    scrollToBottom() {
+        // Scroll the xterm viewport to show the bottom (current line)
+        if (this.term.element) {
+            const viewport = this.term.element.querySelector('.xterm-viewport');
+            if (viewport) {
+                viewport.scrollTop = viewport.scrollHeight;
+            }
+        }
     }
 }

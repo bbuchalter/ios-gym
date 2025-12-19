@@ -15,9 +15,16 @@ class LearnTerminal {
     this.cursorPos = 0;
     this.history = [];
     this.historyIndex = -1;
+    this.sessionEnded = false;
+    this.grammar = null;
+    this.exercises = null;
   }
 
   async initialize(grammar, exercises) {
+    // Store grammar and exercises for restart
+    this.grammar = grammar;
+    this.exercises = exercises;
+
     const container = document.getElementById(this.elementId);
     if (!container) {
       console.error(`Terminal container ${this.elementId} not found`);
@@ -27,28 +34,30 @@ class LearnTerminal {
     // Remove loading state
     container.classList.remove('loading');
 
-    // Create terminal instance
-    this.terminal = new Terminal({
-      cursorBlink: true,
-      fontSize: 14,
-      fontFamily: '"Courier New", Courier, monospace',
-      theme: {
-        background: '#1e1e1e',
-        foreground: '#d4d4d4',
-        cursor: '#4ec9b0',
-        selection: '#264f78'
-      },
-      cols: 80,
-      rows: 20
-    });
+    // Create terminal instance if it doesn't exist
+    if (!this.terminal) {
+      this.terminal = new Terminal({
+        cursorBlink: true,
+        fontSize: 14,
+        fontFamily: '"Courier New", Courier, monospace',
+        theme: {
+          background: '#1e1e1e',
+          foreground: '#d4d4d4',
+          cursor: '#4ec9b0',
+          selection: '#264f78'
+        },
+        cols: 80,
+        rows: 20
+      });
 
-    // Create fit addon
-    this.fitAddon = new FitAddon.FitAddon();
-    this.terminal.loadAddon(this.fitAddon);
+      // Create fit addon
+      this.fitAddon = new FitAddon.FitAddon();
+      this.terminal.loadAddon(this.fitAddon);
 
-    // Open terminal
-    this.terminal.open(container);
-    this.fitAddon.fit();
+      // Open terminal
+      this.terminal.open(container);
+      this.fitAddon.fit();
+    }
 
     // Initialize CLI components
     this.engine = new CLIEngine(grammar);
@@ -120,6 +129,12 @@ class LearnTerminal {
   }
 
   handleEnter() {
+    // If session ended, restart on Enter
+    if (this.sessionEnded) {
+      this.restartSession();
+      return;
+    }
+
     this.terminal.write('\r\n');
 
     const line = this.currentLine.trim();
@@ -139,7 +154,15 @@ class LearnTerminal {
 
       // Check for session end
       if (result.sessionEnd) {
-        this.terminal.writeln('\r\nSession ended. Refresh page to restart.');
+        this.sessionEnded = true;
+        this.terminal.writeln('\r\nSession ended. Press Enter to restart.');
+        // Scroll to show end message
+        if (this.terminal.element) {
+          const viewport = this.terminal.element.querySelector('.xterm-viewport');
+          if (viewport) {
+            viewport.scrollTop = viewport.scrollHeight;
+          }
+        }
         return;
       }
     }
@@ -168,6 +191,13 @@ class LearnTerminal {
         this.terminal.writeln(completion.options.join('  '));
         this.displayPrompt();
         this.terminal.write(this.currentLine);
+        // Scroll to show completion options
+        if (this.terminal.element) {
+          const viewport = this.terminal.element.querySelector('.xterm-viewport');
+          if (viewport) {
+            viewport.scrollTop = viewport.scrollHeight;
+          }
+        }
       }
     }
   }
@@ -225,6 +255,13 @@ class LearnTerminal {
   displayPrompt() {
     const prompt = this.session.getPrompt();
     this.terminal.write(prompt);
+    // Ensure cursor is visible by scrolling terminal viewport
+    if (this.terminal.element) {
+      const viewport = this.terminal.element.querySelector('.xterm-viewport');
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
+    }
   }
 
   displayOutput(lines) {
@@ -240,6 +277,35 @@ class LearnTerminal {
         this.terminal.writeln(line);
       }
     }
+    // Ensure cursor is visible by scrolling terminal viewport
+    if (this.terminal.element) {
+      const viewport = this.terminal.element.querySelector('.xterm-viewport');
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
+    }
+  }
+
+  async restartSession() {
+    this.sessionEnded = false;
+    
+    // Clear terminal
+    this.terminal.clear();
+    
+    // Reset state
+    this.currentLine = '';
+    this.cursorPos = 0;
+    this.history = [];
+    this.historyIndex = -1;
+    
+    // Reinitialize session
+    this.engine = new CLIEngine(this.grammar);
+    this.session = new CLISession(this.grammar, this.exercises);
+    
+    // Display initial prompt
+    this.terminal.writeln(`IOS CLI Practice Terminal`);
+    this.terminal.writeln('');
+    this.displayPrompt();
   }
 }
 

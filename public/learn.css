@@ -383,8 +383,10 @@ code {
 }
 
 .terminal-embed {
-  height: 400px;
+  min-height: 400px;
+  max-height: 600px;
   padding: 1rem;
+  overflow: hidden;
 }
 
 /* XTerm overrides for embedded terminals */
@@ -394,6 +396,7 @@ code {
 
 .terminal-embed .xterm-viewport {
   background-color: #1e1e1e;
+  overflow-y: auto !important;
 }
 
 /* Success Criteria */
@@ -556,7 +559,8 @@ li {
   }
   
   .terminal-embed {
-    height: 300px;
+    min-height: 300px;
+    max-height: 500px;
   }
   
   .comparison {

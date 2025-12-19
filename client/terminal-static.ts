@@ -16,6 +16,7 @@ class StaticIOSTerminal {
   private cliEngine: CLIEngine | null = null;
   private session: CLISession | null = null;
   private validator: ExerciseValidator | null = null;
+  private sessionEnded: boolean = false;
   
   constructor() {
     this.terminalUI = new TerminalUI("terminal");
@@ -87,6 +88,11 @@ class StaticIOSTerminal {
     
     // Enter key
     if (code === 13) {
+      // If session ended, restart on Enter
+      if (this.sessionEnded) {
+        this.restartSession();
+        return;
+      }
       this.handleEnter();
       return;
     }
@@ -143,7 +149,8 @@ class StaticIOSTerminal {
       
       // Check for session end
       if (result.sessionEnd) {
-        this.terminalUI.writeln("\r\nSession ended. Refresh page to restart.");
+        this.sessionEnded = true;
+        this.terminalUI.writeln("\r\nSession ended. Press Enter to restart.");
         return;
       }
       
@@ -241,6 +248,17 @@ class StaticIOSTerminal {
       unmetRequirements: validation.unmetRequirements,
       hints: exercise.hints
     });
+  }
+  
+  private async restartSession(): Promise<void> {
+    this.terminalUI.write("\r\n");
+    this.sessionEnded = false;
+    
+    // Clear terminal
+    this.terminalUI.clear();
+    
+    // Reinitialize
+    await this.initialize();
   }
 }
 

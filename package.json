@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.client.json && node fix-imports.js",
     "start": "npx http-server public -p 3000 -c-1",
     "dev": "npm run build && npm start",
-    "watch": "tsc -p tsconfig.client.json -w",
+    "watch": "node watch.js",
     "test": "./node_modules/.bin/jest",
     "test:client": "./node_modules/.bin/jest --config=jest.config.client.js",
     "test:watch": "./node_modules/.bin/jest --watch",

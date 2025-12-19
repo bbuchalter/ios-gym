@@ -196,10 +196,26 @@ npm run build
 ```bash
 npm run dev
 ```
+Builds once and starts the server.
 
-### Watch Mode
+### Watch Mode (Recommended for Development)
 ```bash
 npm run watch
+```
+Automatically rebuilds TypeScript files on every save:
+- 🔨 Watches `client/` and `src/` directories
+- ✅ Compiles TypeScript to JavaScript in `public/`
+- ✅ Runs import fixer after each build
+- ✅ Shows build status (building, success, error)
+- ✅ Debounced to prevent multiple rebuilds
+
+**Tip:** Run watch mode in one terminal, and the dev server in another:
+```bash
+# Terminal 1
+npm run watch
+
+# Terminal 2
+npm start
 ```
 
 ### Testing
