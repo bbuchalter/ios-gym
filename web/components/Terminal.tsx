@@ -30,6 +30,7 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
   const historyRef = useRef<string[]>([]);
   const historyIndexRef = useRef(-1);
   const sessionEndedRef = useRef(false);
+  const passwordModeRef = useRef(false);
   
   useEffect(() => {
     if (!containerRef.current || terminalRef.current) return;
@@ -133,6 +134,35 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
         terminal.write('\r\n');
         const line = currentLineRef.current.trim();
         
+        // Check if we're in password mode
+        if (passwordModeRef.current) {
+          // Submit password (without trimming - passwords may have whitespace)
+          const password = currentLineRef.current;
+          const result = engineRef.current!.submitPassword(sessionRef.current!, password);
+          
+          if (result.output && result.output.length > 0) {
+            result.output.forEach((outputLine) => {
+              terminal.writeln(outputLine);
+            });
+          }
+          
+          // Check if we need to re-prompt for password
+          if (result.passwordPrompt) {
+            // Stay in password mode and show prompt again
+            terminal.write(result.passwordPrompt.prompt);
+            currentLineRef.current = '';
+            scrollToBottom();
+            return;
+          }
+          
+          // Password phase complete (success or final failure)
+          passwordModeRef.current = false;
+          currentLineRef.current = '';
+          terminal.write(sessionRef.current!.getPrompt());
+          scrollToBottom();
+          return;
+        }
+        
         if (line) {
           historyRef.current = [...historyRef.current, line];
           historyIndexRef.current = historyRef.current.length;
@@ -156,6 +186,15 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
             scrollToBottom();
             return;
           }
+          
+          // Check if we need to prompt for password
+          if (result.passwordPrompt) {
+            passwordModeRef.current = true;
+            terminal.write(result.passwordPrompt.prompt);
+            currentLineRef.current = '';
+            scrollToBottom();
+            return;
+          }
         }
         
         currentLineRef.current = '';
@@ -164,8 +203,12 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
         return;
       }
       
-      // Tab key
+      // Tab key (disabled in password mode)
       if (code === 9) {
+        if (passwordModeRef.current) {
+          return; // Ignore tab in password mode
+        }
+        
         const completion = engineRef.current!.getCompletion(
           sessionRef.current!,
           currentLineRef.current,
@@ -189,7 +232,10 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
       if (code === 127 || code === 8) {
         if (currentLineRef.current.length > 0) {
           currentLineRef.current = currentLineRef.current.slice(0, -1);
-          terminal.write('\b \b');
+          // Only echo backspace if not in password mode
+          if (!passwordModeRef.current) {
+            terminal.write('\b \b');
+          }
         }
         return;
       }
@@ -198,12 +244,20 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
       if (code === 3) {
         terminal.writeln('^C');
         currentLineRef.current = '';
+        // Cancel password mode on Ctrl+C
+        if (passwordModeRef.current) {
+          passwordModeRef.current = false;
+          sessionRef.current!.pendingPasswordPrompt = null;
+        }
         terminal.write(sessionRef.current!.getPrompt());
         return;
       }
       
-      // Arrow Up
+      // Arrow Up (disabled in password mode)
       if (data === '\x1b[A') {
+        if (passwordModeRef.current) {
+          return; // Ignore arrow keys in password mode
+        }
         if (historyIndexRef.current > 0) {
           historyIndexRef.current--;
           replaceCurrentLine(historyRef.current[historyIndexRef.current]);
@@ -211,8 +265,11 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
         return;
       }
       
-      // Arrow Down
+      // Arrow Down (disabled in password mode)
       if (data === '\x1b[B') {
+        if (passwordModeRef.current) {
+          return; // Ignore arrow keys in password mode
+        }
         if (historyIndexRef.current < historyRef.current.length - 1) {
           historyIndexRef.current++;
           replaceCurrentLine(historyRef.current[historyIndexRef.current]);
@@ -226,7 +283,10 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
       // Regular character input
       if (code >= 32 && code < 127) {
         currentLineRef.current += data;
-        terminal.write(data);
+        // Only echo if not in password mode
+        if (!passwordModeRef.current) {
+          terminal.write(data);
+        }
       }
     };
     

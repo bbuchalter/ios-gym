@@ -40,6 +40,48 @@ export class CLIEngine {
       parseResult.args || {}
     );
     
+    // Store password prompt state if present
+    if (result.passwordPrompt) {
+      session.pendingPasswordPrompt = {
+        handler: result.passwordPrompt.handler,
+        handlerArgs: result.passwordPrompt.handlerArgs
+      };
+    }
+    
+    return result;
+  }
+  
+  /**
+   * Submit password for pending password prompt
+   */
+  public submitPassword(session: CLISession, password: string): ExecutionResult {
+    if (!session.pendingPasswordPrompt) {
+      return {
+        output: ["% No password prompt pending"]
+      };
+    }
+    
+    const currentAttempts = session.pendingPasswordPrompt.attempts || 0;
+    
+    const result = this.handlerRegistry.executePasswordHandler(
+      session,
+      password,
+      session.pendingPasswordPrompt.handler,
+      session.pendingPasswordPrompt.handlerArgs
+    );
+    
+    // If result has a password prompt, update attempts count
+    if (result.passwordPrompt) {
+      session.pendingPasswordPrompt = {
+        handler: result.passwordPrompt.handler,
+        handlerArgs: result.passwordPrompt.handlerArgs,
+        attempts: currentAttempts + 1
+      };
+    } else {
+      // Clear pending prompt if no re-prompt
+      session.pendingPasswordPrompt = null;
+    }
+    
     return result;
   }
   

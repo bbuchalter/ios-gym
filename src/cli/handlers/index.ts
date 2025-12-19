@@ -4,7 +4,9 @@ import {
   handleModePush,
   handleModePop,
   handleModePopTo,
-  handleSessionEnd
+  handleSessionEnd,
+  handleEnableWithPassword,
+  handleVerifyEnablePassword
 } from "./mode";
 import { handleSet, handlePersist } from "./config";
 import {
@@ -50,6 +52,9 @@ export class HandlerRegistry {
     switch (action.type) {
       case "mode_push":
         return handleModePush(session, args, action);
+      
+      case "enable_with_password":
+        return handleEnableWithPassword(session, args, action);
       
       case "mode_pop":
         return handleModePop(session, args, action);
@@ -124,6 +129,26 @@ export class HandlerRegistry {
     }
     
     return result;
+  }
+  
+  /**
+   * Execute a password verification handler
+   */
+  public executePasswordHandler(
+    session: CLISession,
+    password: string,
+    handlerType: string,
+    handlerArgs?: Record<string, any>
+  ): ExecutionResult {
+    switch (handlerType) {
+      case "verify_enable_password":
+        return handleVerifyEnablePassword(session, password, handlerArgs || {});
+      
+      default:
+        return {
+          output: [`% Password handler '${handlerType}' not implemented`]
+        };
+    }
   }
 }
 

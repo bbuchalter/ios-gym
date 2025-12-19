@@ -159,6 +159,11 @@ export interface ExecutionResult {
   output: string[];
   newMode?: ModeType;
   sessionEnd?: boolean;
+  passwordPrompt?: {
+    prompt: string;
+    handler: string; // Handler type to invoke after password is entered
+    handlerArgs?: Record<string, any>; // Additional args for handler
+  };
 }
 
 // Tab completion result

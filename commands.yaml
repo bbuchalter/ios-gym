@@ -82,7 +82,7 @@ commands:
   USER_EXEC:
     - name: enable
       tokens: ["enable"]
-      action: {type: "mode_push", mode: "PRIV_EXEC"}
+      action: {type: "enable_with_password", mode: "PRIV_EXEC"}
       help: "Enter privileged EXEC mode"
 
     - name: exit

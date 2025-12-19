@@ -6,6 +6,13 @@ import { setStatePath } from "../state";
  * Handle basic configuration commands
  */
 
+// Fields that should be stored as numbers
+const NUMERIC_FIELDS = [
+  "ssh.sshVersion",
+  "ssh.rsaModulus",
+  "ospf.processId"
+];
+
 export function handleSet(
   session: CLISession,
   args: Record<string, string>,
@@ -15,8 +22,8 @@ export function handleSet(
   const valueFrom = action.value_from;
   let value = valueFrom ? args[valueFrom] : action.value;
   
-  // Parse integers for numeric fields
-  if (valueFrom && args[valueFrom]) {
+  // Parse integers only for specific numeric fields
+  if (valueFrom && args[valueFrom] && NUMERIC_FIELDS.includes(path)) {
     const strValue = args[valueFrom];
     if (/^\d+$/.test(strValue)) {
       const numValue = parseInt(strValue, 10);

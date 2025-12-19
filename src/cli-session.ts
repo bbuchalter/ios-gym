@@ -11,6 +11,11 @@ import { createInitialState } from "./cli/state";
 export class CLISession {
   public modeStack: ModeStack;
   public deviceState: DeviceState;
+  public pendingPasswordPrompt: {
+    handler: string;
+    handlerArgs?: Record<string, any>;
+    attempts?: number;
+  } | null = null;
   
   constructor(grammar: CommandGrammar) {
     this.modeStack = new ModeStack(grammar);
