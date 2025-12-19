@@ -165,6 +165,22 @@ commands:
         value_from: "secret"
       help: "Set enable secret"
 
+    - name: no_hostname
+      tokens: ["no", "hostname"]
+      action:
+        type: "set"
+        path: "hostname"
+        value: "Switch"
+      help: "Reset hostname to default"
+
+    - name: no_enable_secret
+      tokens: ["no", "enable", "secret"]
+      action:
+        type: "set"
+        path: "enableSecret"
+        value: null
+      help: "Remove enable secret"
+
     # VLAN
     - name: vlan
       tokens: ["vlan", {arg: "VLAN_ID", name: "vlan"}]

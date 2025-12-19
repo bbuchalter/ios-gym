@@ -495,7 +495,192 @@ Attacker sees: "Could be any length!"
             <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
               <p className="text-blue-200 font-semibold mb-3">💡 Coming Up Next</p>
               <p className="text-gray-300">
-                Now that you're comfortable with password entry, you'll learn about sub-configuration modes — 
+                Now that you know how to set configuration, you'll learn how to <strong>remove</strong> it using the powerful <code>no</code> command!
+              </p>
+            </div>
+          </LessonSection>
+
+          {/* LESSON: THE NO COMMAND */}
+          <LessonSection title="The 'no' Command: Undoing Configuration">
+            <p className="text-xl text-gray-200 my-6">
+              You've learned how to <strong>add</strong> configuration — but what if you make a mistake or need to change something? 
+              Enter the <code className="text-yellow-300">no</code> command: IOS's "undo button"!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The Power of 'no'</h2>
+            <p className="text-gray-300 mb-6">
+              In IOS, almost every configuration command can be reversed by putting <code>no</code> in front of it. 
+              Think of it like a time machine for your device's configuration!
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-green-900 border border-green-600 rounded-lg p-6">
+                <h4 className="text-green-300 font-semibold mb-3">Adding Configuration</h4>
+                <Diagram>
+                  {`Switch(config)# hostname Router1
+Switch(config)# enable secret MyPass123`}
+                </Diagram>
+                <p className="text-gray-400 mt-3">You add settings</p>
+              </div>
+              <div className="bg-red-900 border border-red-600 rounded-lg p-6">
+                <h4 className="text-red-300 font-semibold mb-3">Removing Configuration</h4>
+                <Diagram>
+                  {`Router1(config)# no hostname
+Router1(config)# no enable secret`}
+                </Diagram>
+                <p className="text-gray-400 mt-3">You remove them with 'no'</p>
+              </div>
+            </div>
+
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-2">🎯 Key Concept</p>
+              <p className="text-gray-300">
+                The <code>no</code> command doesn't just delete things randomly — it <strong>reverses specific commands</strong>. 
+                If you set something, <code>no</code> unsets it. If you enabled something, <code>no</code> disables it.
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">How 'no' Works</h2>
+            <p className="text-gray-300 mb-4">
+              The pattern is simple: take the command you used to set something, and put <code>no</code> at the front:
+            </p>
+
+            <div className="bg-gray-800 rounded-lg p-6 my-8 space-y-6">
+              <div>
+                <p className="text-blue-300 font-semibold mb-2">Setting a hostname:</p>
+                <code className="text-gray-300">hostname Lab-Router</code>
+                <p className="text-green-300 font-semibold mb-2 mt-4">Removing it:</p>
+                <code className="text-gray-300">no hostname</code>
+                <p className="text-gray-400 mt-2 text-sm">→ Resets to default "Switch"</p>
+              </div>
+
+              <hr className="border-gray-700" />
+
+              <div>
+                <p className="text-blue-300 font-semibold mb-2">Setting a password:</p>
+                <code className="text-gray-300">enable secret MySecurePass</code>
+                <p className="text-green-300 font-semibold mb-2 mt-4">Removing it:</p>
+                <code className="text-gray-300">no enable secret</code>
+                <p className="text-gray-400 mt-2 text-sm">→ Removes the password requirement</p>
+              </div>
+            </div>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What Happens When You Use 'no'?</h2>
+            <p className="text-gray-300 mb-6">
+              Using <code>no</code> typically does one of two things:
+            </p>
+
+            <div className="space-y-4 mb-8">
+              <div className="bg-gray-800 border-l-4 border-blue-500 p-6">
+                <h4 className="text-blue-300 font-semibold mb-2">1. Resets to Default</h4>
+                <p className="text-gray-300 mb-3">
+                  Some commands have a default value. Using <code>no</code> brings it back:
+                </p>
+                <code className="text-sm text-gray-400">no hostname</code>
+                <p className="text-gray-400 mt-2 text-sm">→ Resets hostname back to "Switch"</p>
+              </div>
+
+              <div className="bg-gray-800 border-l-4 border-purple-500 p-6">
+                <h4 className="text-purple-300 font-semibold mb-2">2. Completely Removes</h4>
+                <p className="text-gray-300 mb-3">
+                  Other commands don't have defaults — using <code>no</code> removes them entirely:
+                </p>
+                <code className="text-sm text-gray-400">no enable secret</code>
+                <p className="text-gray-400 mt-2 text-sm">→ No password required for enable (back to how it was initially)</p>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300">
+                  <strong>Pro Tip:</strong> When you use <code>no</code>, you typically <strong>don't</strong> include the value you set. 
+                  For example, use <code>no hostname</code> instead of <code>no hostname Router1</code>. 
+                  IOS knows what you configured and will remove it!
+                </p>
+              </ProTip>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Why Is This Useful?</h2>
+            <p className="text-gray-300 mb-4">
+              The <code>no</code> command is essential for several scenarios:
+            </p>
+
+            <ul className="ml-8 space-y-4 text-gray-300 list-disc">
+              <li>
+                <strong className="text-white">Fixing Mistakes:</strong> Typed the wrong hostname? 
+                <code>no hostname</code> and start over
+              </li>
+              <li>
+                <strong className="text-white">Changing Configuration:</strong> Need to change a password? 
+                Remove the old one with <code>no</code>, then set a new one
+              </li>
+              <li>
+                <strong className="text-white">Troubleshooting:</strong> Something not working? 
+                Remove configuration to test if that was causing the problem
+              </li>
+              <li>
+                <strong className="text-white">Decommissioning:</strong> No longer need security on a lab device? 
+                <code>no enable secret</code> removes the password
+              </li>
+            </ul>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              Practice the complete configuration lifecycle — set something, then remove it:
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode</li>
+              <li><code>configure terminal</code> — Enter configuration mode</li>
+              <li><code>hostname TestLab</code> — Set a hostname (watch the prompt change!)</li>
+              <li><code>enable secret Practice123</code> — Set a password</li>
+              <li><code>end</code> — Exit to privileged mode to see your changes</li>
+              <li>Notice your prompt shows <code>TestLab#</code></li>
+              <li><code>disable</code> — Go to user mode (you'll see <code>TestLab&gt;</code>)</li>
+              <li><code>enable</code> — Try to enter privileged mode (password prompt appears)</li>
+              <li>Type <code>Practice123</code> carefully (no visual feedback) and press Enter</li>
+              <li><code>configure terminal</code> — Back to config mode</li>
+              <li><strong className="text-yellow-300">Now remove everything:</strong></li>
+              <li><code>no enable secret</code> — Remove the password</li>
+              <li><code>no hostname</code> — Reset hostname to default</li>
+              <li>Notice the prompt changed back to <code>Switch(config)#</code></li>
+              <li><code>end</code> then <code>disable</code> — Exit to user mode</li>
+              <li><code>enable</code> — Try again (no password needed now!)</li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ You succeeded when:</p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>You can set a hostname and password, then remove both</li>
+                <li>You understand that <code>no hostname</code> resets to "Switch" (default)</li>
+                <li>You understand that <code>no enable secret</code> removes password protection</li>
+                <li>You verified the password was removed by using <code>enable</code> without being prompted</li>
+              </ul>
+            </div>
+
+            <InfoBox variant="real-world">
+              <h4 className="text-blue-300 font-semibold mb-2">🌍 Real World Application</h4>
+              <p className="text-gray-300 mb-3">
+                Network engineers use the <code>no</code> command constantly:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                <li>Removing old VLANs that are no longer used</li>
+                <li>Disabling interfaces for security (and re-enabling them later with <code>no shutdown</code>)</li>
+                <li>Cleaning up routing configuration</li>
+                <li>Removing access control lists (ACLs) for testing</li>
+              </ul>
+              <p className="text-gray-300 mt-3">
+                Master the <code>no</code> command now, and you'll save yourself hours of frustration later!
+              </p>
+            </InfoBox>
+
+            <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
+              <p className="text-blue-200 font-semibold mb-3">💡 Coming Up Next</p>
+              <p className="text-gray-300">
+                Now that you can both add and remove configuration, you're ready to learn about sub-configuration modes — 
                 configurations within configurations!
               </p>
             </div>
