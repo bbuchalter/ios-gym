@@ -346,8 +346,161 @@ export default function LearnPage() {
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 5: SUB-CONFIGURATION MODES */}
-          <LessonSection lessonNumber={5} title="Working with Sub-Configuration Modes">
+          {/* LESSON 5: PASSWORD ENTRY EXPERIENCE */}
+          <LessonSection lessonNumber={5} title="Understanding Password Entry in IOS">
+            <p className="text-xl text-gray-200 my-6">
+              Now that you've set a password, let's experience what it's like to use it. This is where many students get confused!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The Big Surprise: You Won't See Anything!</h2>
+            <p className="text-gray-300 mb-6">
+              When you type a password on a website, you usually see asterisks (<code>********</code>) or dots (<code>••••••••</code>). 
+              This gives you feedback that you're typing.
+            </p>
+
+            <p className="text-gray-300 mb-6">
+              <strong className="text-white">But IOS is different!</strong> When you type a password in the Cisco CLI, 
+              you see absolutely NOTHING. No asterisks, no dots, no indication that you're typing at all.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h4 className="text-white font-semibold mb-3">Web Password (What you're used to)</h4>
+                <Diagram>
+                  {`Username: admin
+Password: ••••••••
+                    ↑
+              You see dots!`}
+                </Diagram>
+                <p className="text-gray-400 mt-3">Visual feedback as you type</p>
+              </div>
+              <div className="bg-blue-900 border border-blue-600 rounded-lg p-6">
+                <h4 className="text-blue-300 font-semibold mb-3">IOS CLI Password (The real thing)</h4>
+                <Diagram>
+                  {`Switch> enable
+Password: 
+          ↑
+    You see NOTHING!`}
+                </Diagram>
+                <p className="text-gray-400 mt-3">No visual feedback at all</p>
+              </div>
+            </div>
+
+            <InfoBox variant="important">
+              <p className="text-red-200 font-semibold text-lg mb-2">⚠️ This is NORMAL!</p>
+              <p className="text-gray-300 mb-3">
+                The screen not showing anything when you type a password is <strong className="text-white">not a bug</strong> — 
+                it's a security feature!
+              </p>
+              <p className="text-gray-300">
+                Someone looking over your shoulder can't even tell how long your password is.
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Why Does IOS Do This?</h2>
+            <p className="text-gray-300 mb-4">There are two main security reasons:</p>
+            <ul className="ml-8 space-y-3 text-gray-300 list-disc">
+              <li>
+                <strong className="text-white">Password Length Privacy:</strong> If someone sees asterisks, 
+                they can count them and know your password length. With no feedback, they learn nothing!
+              </li>
+              <li>
+                <strong className="text-white">Console History:</strong> If the password appeared on screen (even as dots), 
+                it might get saved in logs or screen recordings.
+              </li>
+            </ul>
+
+            <Diagram title="Security Comparison">
+              {`With Dots:
+Password: ••••••••
+         ↑
+Attacker sees: "8 characters long"
+
+Without Dots:
+Password: 
+         ↑
+Attacker sees: "Could be any length!"
+`}
+            </Diagram>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What Happens If You Get It Wrong?</h2>
+            <p className="text-gray-300 mb-6">
+              If you type the wrong password, IOS will simply say:
+            </p>
+
+            <div className="bg-gray-800 border border-red-600 rounded-lg p-6 my-8">
+              <code className="text-red-400 font-mono">% Bad secrets</code>
+              <p className="text-gray-400 mt-3">This means: "Wrong password, try again!"</p>
+            </div>
+
+            <p className="text-gray-300 mb-6">
+              Don't panic — just type <code>enable</code> again and try entering your password more carefully.
+            </p>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300">
+                  <li>Type slowly and deliberately when entering passwords</li>
+                  <li>Remember: uppercase letters, lowercase letters, numbers, and special characters ALL matter</li>
+                  <li>If you make a mistake while typing, press Backspace — even though you can't see it, it works!</li>
+                  <li>Passwords are case-sensitive: <code>Cisco123</code> ≠ <code>cisco123</code></li>
+                </ul>
+              </ProTip>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              First, you'll set up a password, then practice using it with no visual feedback:
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode (no password yet)</li>
+              <li><code>configure terminal</code> — Enter configuration mode</li>
+              <li><code>enable secret C1sc0R0ck$</code> — Set the password</li>
+              <li><code>end</code> — Exit configuration mode</li>
+              <li><code>disable</code> — Go back to user mode (the password is now active!)</li>
+              <li><strong className="text-yellow-300">Now the real test:</strong> Type <code>enable</code> and press Enter</li>
+              <li>You'll be prompted for a password</li>
+              <li>Type <code>C1sc0R0ck$</code> carefully — <strong className="text-yellow-300">you won't see anything appear on screen!</strong></li>
+              <li>Press Enter and watch the prompt change to <code>#</code> (success!)</li>
+              <li>Type <code>disable</code> to go back to user mode</li>
+              <li>Try <code>enable</code> again, but this time type the wrong password on purpose</li>
+              <li>See the "% Bad secrets" message</li>
+              <li>Try one more time with the correct password: <code>C1sc0R0ck$</code></li>
+            </ol>
+
+            <Terminal terminalId="terminal-5" grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ You succeeded when:</p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>You can successfully enter privileged mode by typing the password without seeing it</li>
+                <li>You understand this is normal CLI behavior, not a bug</li>
+                <li>You've seen what happens when you enter the wrong password</li>
+              </ul>
+            </div>
+
+            <InfoBox variant="real-world">
+              <h4 className="text-blue-300 font-semibold mb-2">🌍 Real World Note</h4>
+              <p className="text-gray-300">
+                This "no visual feedback" behavior isn't just Cisco — it's common in many Unix/Linux systems, 
+                enterprise networking equipment from Juniper, Arista, and others. 
+                Once you get used to it, you'll feel like a pro!
+              </p>
+            </InfoBox>
+
+            <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
+              <p className="text-blue-200 font-semibold mb-3">💡 Coming Up Next</p>
+              <p className="text-gray-300">
+                Now that you're comfortable with password entry, you'll learn about sub-configuration modes — 
+                configurations within configurations!
+              </p>
+            </div>
+          </LessonSection>
+
+          {/* LESSON 6: SUB-CONFIGURATION MODES */}
+          <LessonSection lessonNumber={6} title="Working with Sub-Configuration Modes">
             <p className="text-xl text-gray-200 my-6">
               So far you've worked with two modes: privileged (<code>#</code>) and global config (<code>(config)#</code>).
               Now you'll learn about <strong className="text-white">sub-configuration modes</strong> — configurations within configurations!
@@ -430,7 +583,7 @@ Takes 1 command! ✅`}
               <li><code>end</code> — Jump directly back to <code>#</code> (compare how fast this is!)</li>
             </ol>
 
-            <Terminal terminalId="terminal-5" grammar={grammar} />
+            <Terminal terminalId="terminal-6" grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -443,8 +596,8 @@ Takes 1 command! ✅`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 6: IP ADDRESSING BASICS */}
-          <LessonSection lessonNumber={6} title="Understanding IP Addresses">
+          {/* LESSON 7: IP ADDRESSING BASICS */}
+          <LessonSection lessonNumber={7} title="Understanding IP Addresses">
             <p className="text-xl text-gray-200 my-6">
               Every device on a network needs an address so others can find it. This is called an IP address.
             </p>
@@ -523,7 +676,7 @@ Takes 1 command! ✅`}
               <li>Look at the output — you'll see interface names and their status</li>
             </ol>
 
-            <Terminal terminalId="terminal-6" grammar={grammar} />
+            <Terminal terminalId="terminal-7" grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -542,8 +695,8 @@ Takes 1 command! ✅`}
             </div>
           </LessonSection>
 
-          {/* LESSON 7: NETWORK HARDWARE BASICS */}
-          <LessonSection lessonNumber={7} title="Network Hardware: Switches and Interfaces">
+          {/* LESSON 8: NETWORK HARDWARE BASICS */}
+          <LessonSection lessonNumber={8} title="Network Hardware: Switches and Interfaces">
             <p className="text-xl text-gray-200 my-6">
               Before we configure a switch, let's look at what one actually looks like and understand its physical parts!
             </p>
@@ -692,7 +845,7 @@ Takes 1 command! ✅`}
               <li><code>show version</code> — View hardware information about the switch itself</li>
             </ol>
 
-            <Terminal terminalId="terminal-7" grammar={grammar} />
+            <Terminal terminalId="terminal-8" grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -714,8 +867,8 @@ Takes 1 command! ✅`}
             </div>
           </LessonSection>
 
-          {/* LESSON 8: MANAGEMENT ACCESS */}
-          <LessonSection lessonNumber={8} title="Configuring Management Access">
+          {/* LESSON 9: MANAGEMENT ACCESS */}
+          <LessonSection lessonNumber={9} title="Configuring Management Access">
             <p className="text-xl text-gray-200 my-6">
               Now that you understand IP addresses, let's put that knowledge to use by configuring remote management access on a switch!
             </p>
@@ -811,7 +964,7 @@ no shutdown:         Interface is ON ✅
               <li><code>write memory</code> — Save your configuration</li>
             </ol>
 
-            <Terminal terminalId="terminal-8" grammar={grammar} />
+            <Terminal terminalId="terminal-9" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -836,8 +989,8 @@ no shutdown:         Interface is ON ✅
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 9: VLANs */}
-          <LessonSection lessonNumber={9} title="VLANs: Organizing Your Network">
+          {/* LESSON 10: VLANs */}
+          <LessonSection lessonNumber={10} title="VLANs: Organizing Your Network">
             <p className="text-xl text-gray-200 my-6">
               VLANs let you split one physical switch into multiple virtual networks. It's like having multiple switches in one!
             </p>
@@ -928,8 +1081,8 @@ no shutdown:         Interface is ON ✅
             </div>
           </LessonSection>
 
-          {/* LESSON 10: TRUNK PORTS */}
-          <LessonSection lessonNumber={10} title="Trunk Ports: Connecting Switches">
+          {/* LESSON 11: TRUNK PORTS */}
+          <LessonSection lessonNumber={11} title="Trunk Ports: Connecting Switches">
             <p className="text-xl text-gray-200 my-6">
               What if you have switches in different rooms or buildings? Trunk ports carry multiple VLANs between switches!
             </p>
@@ -1004,8 +1157,8 @@ no shutdown:         Interface is ON ✅
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 11: SSH */}
-          <LessonSection lessonNumber={11} title="SSH: Secure Remote Access">
+          {/* LESSON 12: SSH */}
+          <LessonSection lessonNumber={12} title="SSH: Secure Remote Access">
             <p className="text-xl text-gray-200 my-6">
               SSH lets network engineers manage devices from anywhere — securely and encrypted!
             </p>
@@ -1108,8 +1261,8 @@ Hacker sees: gibberish
             <Terminal terminalId="terminal-12" grammar={grammar} />
           </LessonSection>
 
-          {/* LESSON 12: LAYER 3 SWITCHING */}
-          <LessonSection lessonNumber={12} title="Layer 3 Switching: Routed Ports">
+          {/* LESSON 13: LAYER 3 SWITCHING */}
+          <LessonSection lessonNumber={13} title="Layer 3 Switching: Routed Ports">
             <p className="text-xl text-gray-200 my-6">
               Layer 3 switches can both switch AND route! They combine the best of switches and routers.
             </p>
@@ -1214,8 +1367,8 @@ g1/0/2 = Routed port (connects to router/internet)`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 13: STATIC ROUTING */}
-          <LessonSection lessonNumber={13} title="Static Routing: Directing Traffic">
+          {/* LESSON 14: STATIC ROUTING */}
+          <LessonSection lessonNumber={14} title="Static Routing: Directing Traffic">
             <p className="text-xl text-gray-200 my-6">
               Routers need to know where to send packets. Static routes are manual instructions you configure.
             </p>
@@ -1351,8 +1504,8 @@ Slower backup connection`}
             </div>
           </LessonSection>
 
-          {/* LESSON 14: OSPF BASICS */}
-          <LessonSection lessonNumber={14} title="OSPF: Dynamic Routing Protocol">
+          {/* LESSON 15: OSPF BASICS */}
+          <LessonSection lessonNumber={15} title="OSPF: Dynamic Routing Protocol">
             <p className="text-xl text-gray-200 my-6">
               Static routes are manual. OSPF is automatic! Routers talk to each other and figure out the best paths.
             </p>
@@ -1463,8 +1616,8 @@ Traffic flows: A → C → B`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 15: OSPF INTERFACE COST */}
-          <LessonSection lessonNumber={15} title="OSPF Interface Cost: Path Preference">
+          {/* LESSON 16: OSPF INTERFACE COST */}
+          <LessonSection lessonNumber={16} title="OSPF Interface Cost: Path Preference">
             <p className="text-xl text-gray-200 my-6">
               OSPF chooses paths based on "cost" — lower cost is better. You can manually set costs to control traffic flow!
             </p>
@@ -1581,7 +1734,7 @@ ip ospf cost 30
                 Congratulations!
               </h2>
               <p className="text-xl text-gray-300">
-                You've completed all 15 lessons and learned real networking skills!
+                You've completed all 16 lessons and learned real networking skills!
               </p>
             </div>
 
@@ -1590,6 +1743,7 @@ ip ospf cost 30
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ TAB completion</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Setting hostnames</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Password security</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Password entry experience</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Sub-configuration modes</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Understanding IP addresses</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Network hardware basics</div>
