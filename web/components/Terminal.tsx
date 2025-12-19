@@ -22,10 +22,11 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
   const engineRef = useRef<CLIEngine | null>(null);
   const sessionRef = useRef<CLISession | null>(null);
   
-  const [currentLine, setCurrentLine] = useState('');
-  const [history, setHistory] = useState<string[]>([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
-  const [sessionEnded, setSessionEnded] = useState(false);
+  // Use refs for values accessed in handlers to avoid stale closures
+  const currentLineRef = useRef('');
+  const historyRef = useRef<string[]>([]);
+  const historyIndexRef = useRef(-1);
+  const sessionEndedRef = useRef(false);
   
   useEffect(() => {
     if (!containerRef.current || terminalRef.current) return;
@@ -48,7 +49,11 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
     const fitAddon = new FitAddon();
     terminal.loadAddon(fitAddon);
     terminal.open(containerRef.current);
-    fitAddon.fit();
+    
+    // Delay fit to allow container to render
+    setTimeout(() => {
+      fitAddon.fit();
+    }, 10);
     
     // Initialize CLI
     const engine = new CLIEngine(grammar);
@@ -66,12 +71,12 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
     
     // Handle input
     const handleData = (data: string) => {
-      if (sessionEnded && data.charCodeAt(0) === 13) {
+      if (sessionEndedRef.current && data.charCodeAt(0) === 13) {
         // Restart session on Enter
-        setSessionEnded(false);
-        setCurrentLine('');
-        setHistory([]);
-        setHistoryIndex(-1);
+        sessionEndedRef.current = false;
+        currentLineRef.current = '';
+        historyRef.current = [];
+        historyIndexRef.current = -1;
         
         terminal.clear();
         const newEngine = new CLIEngine(grammar);
@@ -90,11 +95,11 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
       // Enter key
       if (code === 13) {
         terminal.write('\r\n');
-        const line = currentLine.trim();
+        const line = currentLineRef.current.trim();
         
         if (line) {
-          setHistory(prev => [...prev, line]);
-          setHistoryIndex(history.length + 1);
+          historyRef.current = [...historyRef.current, line];
+          historyIndexRef.current = historyRef.current.length;
           
           const result = engineRef.current!.executeCommand(sessionRef.current!, line);
           
@@ -110,14 +115,14 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
           }
           
           if (result.sessionEnd) {
-            setSessionEnded(true);
+            sessionEndedRef.current = true;
             terminal.writeln('\r\nSession ended. Press Enter to restart.');
             scrollToBottom();
             return;
           }
         }
         
-        setCurrentLine('');
+        currentLineRef.current = '';
         terminal.write(sessionRef.current!.getPrompt());
         scrollToBottom();
         return;
@@ -127,18 +132,18 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
       if (code === 9) {
         const completion = engineRef.current!.getCompletion(
           sessionRef.current!,
-          currentLine,
-          currentLine.length
+          currentLineRef.current,
+          currentLineRef.current.length
         );
         
         if (completion.type === 'complete' && completion.value) {
-          setCurrentLine(prev => prev + completion.value);
+          currentLineRef.current += completion.value;
           terminal.write(completion.value);
         } else if (completion.type === 'list' && completion.options && completion.options.length > 0) {
           terminal.writeln('');
           terminal.writeln(completion.options.join('  '));
           terminal.write(sessionRef.current!.getPrompt());
-          terminal.write(currentLine);
+          terminal.write(currentLineRef.current);
           scrollToBottom();
         }
         return;
@@ -146,8 +151,8 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
       
       // Backspace / Delete
       if (code === 127 || code === 8) {
-        if (currentLine.length > 0) {
-          setCurrentLine(prev => prev.slice(0, -1));
+        if (currentLineRef.current.length > 0) {
+          currentLineRef.current = currentLineRef.current.slice(0, -1);
           terminal.write('\b \b');
         }
         return;
@@ -156,29 +161,27 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
       // Ctrl+C
       if (code === 3) {
         terminal.writeln('^C');
-        setCurrentLine('');
+        currentLineRef.current = '';
         terminal.write(sessionRef.current!.getPrompt());
         return;
       }
       
       // Arrow Up
       if (data === '\x1b[A') {
-        if (historyIndex > 0) {
-          const newIndex = historyIndex - 1;
-          setHistoryIndex(newIndex);
-          replaceCurrentLine(history[newIndex]);
+        if (historyIndexRef.current > 0) {
+          historyIndexRef.current--;
+          replaceCurrentLine(historyRef.current[historyIndexRef.current]);
         }
         return;
       }
       
       // Arrow Down
       if (data === '\x1b[B') {
-        if (historyIndex < history.length - 1) {
-          const newIndex = historyIndex + 1;
-          setHistoryIndex(newIndex);
-          replaceCurrentLine(history[newIndex]);
+        if (historyIndexRef.current < historyRef.current.length - 1) {
+          historyIndexRef.current++;
+          replaceCurrentLine(historyRef.current[historyIndexRef.current]);
         } else {
-          setHistoryIndex(history.length);
+          historyIndexRef.current = historyRef.current.length;
           replaceCurrentLine('');
         }
         return;
@@ -186,18 +189,18 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
       
       // Regular character input
       if (code >= 32 && code < 127) {
-        setCurrentLine(prev => prev + data);
+        currentLineRef.current += data;
         terminal.write(data);
       }
     };
     
     const replaceCurrentLine = (newLine: string) => {
-      const oldLength = currentLine.length;
+      const oldLength = currentLineRef.current.length;
       for (let i = 0; i < oldLength; i++) {
         terminal.write('\b \b');
       }
       terminal.write(newLine);
-      setCurrentLine(newLine);
+      currentLineRef.current = newLine;
     };
     
     const scrollToBottom = () => {
@@ -219,14 +222,14 @@ export function Terminal({ terminalId, grammar }: TerminalProps) {
       window.removeEventListener('resize', handleResize);
       terminal.dispose();
     };
-  }, [grammar, currentLine, history, historyIndex, sessionEnded]);
+  }, [grammar]); // Only reinitialize when grammar changes
   
   return (
     <div className="bg-[#1e1e1e] rounded-lg overflow-hidden my-8 border-2 border-primary shadow-xl">
       <div className="bg-gradient-to-r from-primary to-secondary text-text-bright p-3 font-semibold text-sm">
         Practice Terminal - {terminalId}
       </div>
-      <div ref={containerRef} className="terminal-embed" />
+      <div ref={containerRef} className="terminal-embed" style={{ minHeight: '400px' }} />
     </div>
   );
 }
