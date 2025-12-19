@@ -390,6 +390,23 @@ Together: 192.168.1.100`}
 ✅ Students can't see teacher files!`}
           </Diagram>
           
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Creating VLANs</h2>
+          <p className="text-slate-300 mb-6">
+            Creating a VLAN is easy — just give it a number (1-4094) and optionally a name.
+            Then you assign switch ports to that VLAN.
+          </p>
+          
+          <InfoBox variant="real-world">
+            <h4 className="text-cyan-300 font-semibold mb-3">🌍 Real School Network</h4>
+            <ul className="ml-6 space-y-2 text-slate-300">
+              <li><strong className="text-white">VLAN 10:</strong> Student computers (limited internet)</li>
+              <li><strong className="text-white">VLAN 20:</strong> Teacher computers (full access)</li>
+              <li><strong className="text-white">VLAN 30:</strong> Guest WiFi (internet only)</li>
+              <li><strong className="text-white">VLAN 40:</strong> Security cameras (isolated)</li>
+              <li><strong className="text-white">VLAN 50:</strong> Servers (restricted access)</li>
+            </ul>
+          </InfoBox>
+          
           <div className="bg-gradient-to-br from-slate-900/70 to-slate-800/50 backdrop-blur-sm p-10 rounded-2xl border border-slate-700/50 mt-12 shadow-xl">
             <h3 className="text-cyan-400 text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
@@ -399,19 +416,32 @@ Together: 192.168.1.100`}
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
               <li><code>vlan 100</code> — Create VLAN 100</li>
-              <li><code>name Students</code> — Give it a name</li>
+              <li><code>name Students</code> — Give it a name (optional but helpful!)</li>
               <li><code>exit</code></li>
-              <li><code>vlan 200</code></li>
+              <li><code>vlan 200</code> — Create VLAN 200</li>
               <li><code>name Teachers</code></li>
               <li><code>exit</code></li>
-              <li><code>interface fa0/2</code> — Configure a port</li>
+              <li><code>interface fa0/2</code> — Configure port FastEthernet 0/2</li>
               <li><code>switchport mode access</code> — Make it an access port</li>
               <li><code>switchport access vlan 100</code> — Assign to VLAN 100</li>
+              <li><code>interface fa0/3</code> — Configure another port</li>
+              <li><code>switchport mode access</code></li>
+              <li><code>switchport access vlan 200</code> — Assign to VLAN 200</li>
               <li><code>end</code></li>
               <li><code>write memory</code></li>
             </ol>
             
             <Terminal terminalId="terminal-5" grammar={grammar} />
+            
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 my-8">
+              <p className="text-emerald-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-slate-300">Type: <code>show vlan brief</code></p>
+              <p className="text-slate-300 mt-2">You should see:</p>
+              <ul className="ml-6 mt-2 space-y-1 text-slate-300 list-disc">
+                <li>VLAN 100 (Students) with port Fa0/2</li>
+                <li>VLAN 200 (Teachers) with port Fa0/3</li>
+              </ul>
+            </div>
           </div>
         </LessonSection>
 
@@ -443,6 +473,16 @@ Together: 192.168.1.100`}
             </div>
           </div>
           
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Why Limit Allowed VLANs?</h2>
+          <p className="text-slate-300 mb-6">
+            By default, trunks allow ALL VLANs (1-4094). But best practice is to allow only the VLANs you need:
+          </p>
+          <ul className="ml-8 space-y-2 text-slate-300 list-disc">
+            <li><strong className="text-white">Security:</strong> Don't send unnecessary traffic</li>
+            <li><strong className="text-white">Performance:</strong> Less broadcast traffic</li>
+            <li><strong className="text-white">Best Practice:</strong> Be explicit about what you allow</li>
+          </ul>
+          
           <InfoBox variant="tip">
             <p className="text-emerald-200 font-semibold">Pro Tip:</p>
             <p className="text-slate-300 mt-2">
@@ -454,17 +494,30 @@ Together: 192.168.1.100`}
             <h3 className="text-cyan-400 text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
+            <p className="text-slate-300 mb-8 text-lg">Configure trunk ports that carry only specific VLANs:</p>
             <ol className="bg-slate-900/50 p-8 rounded-xl my-8 border border-slate-700/30 list-decimal ml-6 space-y-5 text-slate-300 leading-relaxed">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
               <li><code>interface g0/1</code> — GigabitEthernet 0/1 (uplink port)</li>
               <li><code>switchport mode trunk</code> — Make it a trunk</li>
               <li><code>switchport trunk allowed vlan 1,100,200</code> — Allow only these VLANs</li>
+              <li><code>exit</code></li>
+              <li><code>interface fa0/1</code> — Another trunk port</li>
+              <li><code>switchport mode trunk</code></li>
+              <li><code>switchport trunk allowed vlan 1,100,200</code></li>
               <li><code>end</code></li>
               <li><code>write memory</code></li>
             </ol>
             
             <Terminal terminalId="terminal-6" grammar={grammar} />
+            
+            <InfoBox variant="help">
+              <p className="text-amber-200 font-semibold mb-3">💡 Note:</p>
+              <ul className="ml-6 space-y-2 text-slate-300 list-disc">
+                <li>VLAN 1 is included because it's the management VLAN</li>
+                <li>Use commas to separate VLANs: <code>1,100,200</code> (no spaces!)</li>
+              </ul>
+            </InfoBox>
           </div>
         </LessonSection>
 
@@ -479,6 +532,8 @@ Together: 192.168.1.100`}
             Imagine it's 2 AM and a network problem takes your school offline. 
             The IT person doesn't want to drive to school — they want to fix it from home!
           </p>
+          
+          <p className="text-slate-300 mb-8">SSH (Secure Shell) makes this possible — with encryption so hackers can't steal passwords.</p>
           
           <div className="grid md:grid-cols-2 gap-6 my-8">
             <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-6">
@@ -503,11 +558,56 @@ Hacker sees: gibberish
             </div>
           </div>
           
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">SSH Setup Components</h2>
+          <div className="space-y-4 my-8">
+            <div className="flex gap-4 p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl">
+              <div className="text-3xl font-bold text-cyan-400">1</div>
+              <div>
+                <h4 className="text-white font-semibold mb-1">Domain Name</h4>
+                <p className="text-slate-400">Required to generate encryption keys</p>
+              </div>
+            </div>
+            <div className="flex gap-4 p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl">
+              <div className="text-3xl font-bold text-cyan-400">2</div>
+              <div>
+                <h4 className="text-white font-semibold mb-1">RSA Keys</h4>
+                <p className="text-slate-400">Encryption keys (1024 or 2048 bits)</p>
+              </div>
+            </div>
+            <div className="flex gap-4 p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl">
+              <div className="text-3xl font-bold text-cyan-400">3</div>
+              <div>
+                <h4 className="text-white font-semibold mb-1">SSH Version 2</h4>
+                <p className="text-slate-400">More secure than version 1</p>
+              </div>
+            </div>
+            <div className="flex gap-4 p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl">
+              <div className="text-3xl font-bold text-cyan-400">4</div>
+              <div>
+                <h4 className="text-white font-semibold mb-1">Local User</h4>
+                <p className="text-slate-400">Username and password</p>
+              </div>
+            </div>
+            <div className="flex gap-4 p-5 bg-slate-800/30 border border-slate-700/50 rounded-xl">
+              <div className="text-3xl font-bold text-cyan-400">5</div>
+              <div>
+                <h4 className="text-white font-semibold mb-1">VTY Lines</h4>
+                <p className="text-slate-400">Virtual terminals for remote access</p>
+              </div>
+            </div>
+          </div>
+          
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">VTY Lines Explained</h2>
+          <p className="text-slate-300 mb-6">
+            VTY (Virtual TeletYpe) lines are like "phone lines" for remote connections.
+            <code>line vty 0 4</code> means lines 0, 1, 2, 3, 4 — that's 5 simultaneous connections!
+          </p>
+          
           <div className="bg-gradient-to-br from-slate-900/70 to-slate-800/50 backdrop-blur-sm p-10 rounded-2xl border border-slate-700/50 mt-12 shadow-xl">
             <h3 className="text-cyan-400 text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
-            <p className="text-slate-300 mb-8 text-lg">Configure complete SSH access:</p>
+            <p className="text-slate-300 mb-8 text-lg">Configure complete SSH access (this is a big one!):</p>
             <ol className="bg-slate-900/50 p-8 rounded-xl my-8 border border-slate-700/30 list-decimal ml-6 space-y-5 text-slate-300 leading-relaxed">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
@@ -533,27 +633,104 @@ Hacker sees: gibberish
             Layer 3 switches can both switch AND route! They combine the best of switches and routers.
           </p>
           
-          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">The Magic: "no switchport"</h2>
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Understanding Switch vs Router Ports</h2>
           <p className="text-slate-300 mb-6">
-            The command <code>no switchport</code> transforms a switch port into a routed port.
+            By default, all switch ports operate at Layer 2 — they handle MAC addresses and VLANs.
+            But Layer 3 switches have a special power: you can convert ports to work like router interfaces!
           </p>
+          
+          <div className="grid md:grid-cols-2 gap-6 my-8">
+            <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6">
+              <h4 className="text-white font-semibold mb-3">Layer 2 Port (Default)</h4>
+              <Diagram>
+{`[Computer] ──── [Switch Port]
+               Layer 2
+               MAC: aa:bb:cc...
+               VLAN: 100
+               Works with VLANs`}
+              </Diagram>
+              <p className="text-slate-400 mt-3"><strong>Used for:</strong> Connecting end devices</p>
+            </div>
+            <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6">
+              <h4 className="text-white font-semibold mb-3">Layer 3 Port (Routed)</h4>
+              <Diagram>
+{`[Router] ──── [Routed Port]
+              Layer 3
+              IP: 35.72.12.1
+              No VLAN!
+              Routes packets`}
+              </Diagram>
+              <p className="text-slate-400 mt-3"><strong>Used for:</strong> Connecting to routers</p>
+            </div>
+          </div>
+          
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">The Magic: "no switchport"</h2>
+          <p className="text-slate-300 mb-4">
+            The command <code>no switchport</code> transforms a switch port into a routed port. After this command:
+          </p>
+          <ul className="ml-8 space-y-2 text-slate-300 list-disc">
+            <li>✅ Port works at Layer 3 (can route packets)</li>
+            <li>✅ Can assign an IP address directly</li>
+            <li>✅ Can run routing protocols (OSPF, etc.)</li>
+            <li>❌ No longer works with VLANs</li>
+            <li>❌ Can't connect end-user devices</li>
+          </ul>
+          
+          <Diagram title="Real-World Scenario">
+{`┌──────────────────────┐        ┌──────────────────────┐
+│   Layer 3 Switch     │        │      Router          │
+│                      │        │                      │
+│   g1/0/1 (L2) ──┐   │        │                      │
+│   VLAN 100       │   │        │                      │
+│                  │   │        │                      │
+│   g1/0/2 (L3) ══╪════╪════════╪══► To ISP           │
+│   IP: 35.72.12.1│   │        │   IP: 35.72.12.2     │
+└──────────────────────┘        └──────────────────────┘
+
+g1/0/1 = Switchport (connects to computers)
+g1/0/2 = Routed port (connects to router/internet)`}
+          </Diagram>
+          
+          <InfoBox variant="tip">
+            <p className="text-emerald-200 font-semibold mb-2">Remember:</p>
+            <p className="text-slate-300">
+              Layer 3 switches save money! Instead of buying a switch AND a router, 
+              you buy one device that does both jobs.
+            </p>
+          </InfoBox>
           
           <div className="bg-gradient-to-br from-slate-900/70 to-slate-800/50 backdrop-blur-sm p-10 rounded-2xl border border-slate-700/50 mt-12 shadow-xl">
             <h3 className="text-cyan-400 text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
+            <p className="text-slate-300 mb-8 text-lg">Configure a routed port on a Layer 3 switch:</p>
             <ol className="bg-slate-900/50 p-8 rounded-xl my-8 border border-slate-700/30 list-decimal ml-6 space-y-5 text-slate-300 leading-relaxed">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
-              <li><code>interface g1/0/2</code></li>
-              <li><code>no switchport</code> — Convert to routed port</li>
-              <li><code>ip address 35.72.12.1 255.255.255.252</code></li>
-              <li><code>no shutdown</code></li>
+              <li><code>interface g1/0/2</code> — Enter the interface</li>
+              <li><code>no switchport</code> — Convert to routed port (this is the key!)</li>
+              <li><code>ip address 35.72.12.1 255.255.255.252</code> — Assign IP address</li>
+              <li><code>no shutdown</code> — Turn the interface on</li>
               <li><code>end</code></li>
               <li><code>write memory</code></li>
             </ol>
             
             <Terminal terminalId="terminal-8" grammar={grammar} />
+            
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 my-8">
+              <p className="text-emerald-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-slate-300">Type: <code>show ip interface brief</code></p>
+              <p className="text-slate-300 mt-2">You should see g1/0/2 with IP 35.72.12.1 and status "up"</p>
+            </div>
+            
+            <InfoBox variant="help">
+              <p className="text-amber-200 font-semibold mb-3">💡 Notice:</p>
+              <ul className="ml-6 space-y-2 text-slate-300 list-disc">
+                <li>The subnet mask is /30 (255.255.255.252) — this gives only 2 usable IPs</li>
+                <li>Perfect for point-to-point links between routers!</li>
+                <li>After "no switchport", you'll see: "Interface will be in routed mode"</li>
+              </ul>
+            </InfoBox>
           </div>
         </LessonSection>
 
@@ -563,20 +740,136 @@ Hacker sees: gibberish
             Routers need to know where to send packets. Static routes are manual instructions you configure.
           </p>
           
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">What is Routing?</h2>
+          <p className="text-slate-300 mb-4">
+            Imagine you're at a massive mall with thousands of stores. You want to find the food court.
+            Without directions, you're lost! Routing is like having a map that tells you:
+          </p>
+          <ul className="ml-8 space-y-2 text-slate-300 list-disc">
+            <li>"To reach the food court, go through Exit 3"</li>
+            <li>"To reach parking lot B, go through Exit 1"</li>
+            <li>"For everything else, go to the information desk"</li>
+          </ul>
+          <p className="text-slate-300 mt-4">Routers need the same kind of directions for network traffic!</p>
+          
+          <Diagram title="Default Route - The Internet Exit">
+{`Your Network          Your Router         The Internet
+┌──────────┐         ┌──────────┐        ┌──────────┐
+│ Computer │ ─────► │  Router  │ ─────► │   ISP    │
+│          │         │          │        │          │
+│ Wants to │         │ "Send    │        │ Forward  │
+│ reach    │         │ everything│        │ to final │
+│ Google   │         │ to ISP!" │        │ destination│
+└──────────┘         └──────────┘        └──────────┘
+                         │
+                 ip route 0.0.0.0 0.0.0.0 [ISP IP]
+                 └── This means "all traffic"`}
+          </Diagram>
+          
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">What is 0.0.0.0 0.0.0.0?</h2>
+          <p className="text-slate-300 mb-6">
+            <code>0.0.0.0 0.0.0.0</code> is the "catch-all" route, also called a <strong className="text-white">default route</strong>.
+            Think of it as: "If you don't know where to send a packet, send it here!"
+          </p>
+          
+          <InfoBox variant="tip">
+            <p className="text-emerald-200 font-semibold mb-2">Translation:</p>
+            <p className="text-slate-300"><code>ip route 0.0.0.0 0.0.0.0 35.72.13.1</code></p>
+            <p className="text-slate-300 mt-2">Means: "For ANY destination we don't have a specific route for, send it to 35.72.13.1"</p>
+          </InfoBox>
+          
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Floating Static Routes: The Backup Plan</h2>
+          <p className="text-slate-300 mb-6">
+            What happens if your primary internet connection fails? You need a backup!
+            This is where <strong className="text-white">floating static routes</strong> come in.
+          </p>
+          
+          <Diagram title="Dual ISP Redundancy">
+{`                ┌──────────────┐
+                │  ISP 1       │  ← Primary (Fast fiber)
+                │  35.72.13.1  │     AD = 1 (default)
+                └──────────────┘
+                       ▲
+                       │ Normal traffic ✅
+                       │
+                ┌──────────────┐
+                │ Your Router  │
+                └──────────────┘
+                       │
+                       │ Backup (only if ISP 1 fails) 🔄
+                       ▼
+                ┌──────────────┐
+                │  ISP 2       │  ← Backup (Slower DSL)
+                │  35.72.13.2  │     AD = 254 (backup)
+                └──────────────┘`}
+          </Diagram>
+          
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Administrative Distance (AD)</h2>
+          <p className="text-slate-300 mb-6">
+            AD is the "trust level" of a route. Lower number = more trusted = preferred.
+          </p>
+          
+          <div className="grid md:grid-cols-2 gap-6 my-8">
+            <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6">
+              <h4 className="text-white font-semibold mb-3">Primary Route (AD = 1)</h4>
+              <Diagram>
+{`ip route 0.0.0.0 0.0.0.0 35.72.13.1
+
+AD 1 is default
+Router uses this route first
+Fast, reliable connection`}
+              </Diagram>
+            </div>
+            <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6">
+              <h4 className="text-white font-semibold mb-3">Backup Route (AD = 254)</h4>
+              <Diagram>
+{`ip route 0.0.0.0 0.0.0.0 35.72.13.2 254
+
+AD 254 = "only if needed"
+Router ignores unless primary fails
+Slower backup connection`}
+              </Diagram>
+            </div>
+          </div>
+          
+          <InfoBox variant="real-world">
+            <h4 className="text-cyan-300 font-semibold mb-3">🌍 Business Continuity Example</h4>
+            <p className="text-slate-300 mb-3">
+              A hospital MUST stay online — patients' lives depend on it! They have:
+            </p>
+            <ul className="ml-6 space-y-1 text-slate-300">
+              <li><strong className="text-white">Primary:</strong> Fast fiber connection (AD 1)</li>
+              <li><strong className="text-white">Backup:</strong> Slower cable connection (AD 254)</li>
+              <li><strong className="text-white">Last Resort:</strong> Cellular modem (AD 253)</li>
+            </ul>
+            <p className="text-slate-300 mt-3">If fiber fails, cable automatically takes over. If both fail, cellular kicks in!</p>
+          </InfoBox>
+          
           <div className="bg-gradient-to-br from-slate-900/70 to-slate-800/50 backdrop-blur-sm p-10 rounded-2xl border border-slate-700/50 mt-12 shadow-xl">
             <h3 className="text-cyan-400 text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
+            <p className="text-slate-300 mb-8 text-lg">Configure a primary default route with a floating backup:</p>
             <ol className="bg-slate-900/50 p-8 rounded-xl my-8 border border-slate-700/30 list-decimal ml-6 space-y-5 text-slate-300 leading-relaxed">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
-              <li><code>ip route 0.0.0.0 0.0.0.0 35.72.12.2</code> — Default route</li>
-              <li><code>ip route 0.0.0.0 0.0.0.0 35.72.12.3 10</code> — Backup route with higher AD</li>
+              <li><code>ip route 0.0.0.0 0.0.0.0 35.72.13.1</code> — Primary route (AD defaults to 1)</li>
+              <li><code>ip route 0.0.0.0 0.0.0.0 35.72.13.2 254</code> — Backup route (AD 254)</li>
               <li><code>end</code></li>
               <li><code>write memory</code></li>
             </ol>
             
             <Terminal terminalId="terminal-9" grammar={grammar} />
+            
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 my-8">
+              <p className="text-emerald-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-slate-300">Type: <code>show ip route</code></p>
+              <p className="text-slate-300 mt-2">You should see two default routes (0.0.0.0/0):</p>
+              <ul className="ml-6 mt-2 space-y-1 text-slate-300 list-disc">
+                <li>One via 35.72.13.1 with AD 1</li>
+                <li>One via 35.72.13.2 with AD 254</li>
+              </ul>
+            </div>
           </div>
         </LessonSection>
 
@@ -586,18 +879,90 @@ Hacker sees: gibberish
             Static routes are manual. OSPF is automatic! Routers talk to each other and figure out the best paths.
           </p>
           
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Static vs Dynamic Routing</h2>
+          
+          <div className="grid md:grid-cols-2 gap-6 my-8">
+            <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-6">
+              <h4 className="text-rose-300 font-semibold mb-3">❌ Static Routing (Manual)</h4>
+              <ul className="ml-6 space-y-2 text-slate-300 list-disc">
+                <li>You configure every route by hand</li>
+                <li>If a link fails, routes don't update</li>
+                <li>Hard to manage in large networks</li>
+                <li>Simple but not scalable</li>
+              </ul>
+              <p className="text-slate-400 mt-4"><strong>Best for:</strong> Small networks, backup routes</p>
+            </div>
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+              <h4 className="text-emerald-300 font-semibold mb-3">✅ Dynamic Routing (Automatic)</h4>
+              <ul className="ml-6 space-y-2 text-slate-300 list-disc">
+                <li>Routers automatically share information</li>
+                <li>Routes update when topology changes</li>
+                <li>Calculates best paths automatically</li>
+                <li>Scales to huge networks</li>
+              </ul>
+              <p className="text-slate-400 mt-4"><strong>Best for:</strong> Medium to large networks</p>
+            </div>
+          </div>
+          
           <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">What is OSPF?</h2>
-          <p className="text-slate-300 mb-4"><strong className="text-white">OSPF</strong> = Open Shortest Path First</p>
-          <ul className="ml-8 space-y-2 text-slate-300 list-disc">
+          <p className="text-slate-300 mb-4 text-lg"><strong className="text-white">OSPF</strong> = Open Shortest Path First</p>
+          <ul className="ml-8 space-y-3 text-slate-300 list-disc">
             <li><strong className="text-white">Open:</strong> Industry standard (not proprietary)</li>
             <li><strong className="text-white">Shortest Path:</strong> Calculates fastest route</li>
             <li><strong className="text-white">First:</strong> Uses best path first</li>
           </ul>
           
+          <Diagram title="OSPF in Action">
+{`NORMAL OPERATION:
+                Cost 10 (Fast!)
+[Router A] ═══════════════════════ [Router B]
+    │                                   │
+    │                                   │
+    └────── [Router C] ─────────────────┘
+              Cost 30 (Backup)
+
+OSPF chooses top path (Cost 10)
+Traffic flows: A → B directly
+
+IF TOP LINK FAILS:
+[Router A] ══════ ❌ LINK DOWN ═══ [Router B]
+    │                                   │
+    │         OSPF recalculates!        │
+    └────── [Router C] ─────────────────┘
+              Cost 30 (Now used!)
+
+OSPF automatically switches to backup path
+Traffic flows: A → C → B`}
+          </Diagram>
+          
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Wildcard Masks Explained</h2>
+          <p className="text-slate-300 mb-6">
+            Wildcard masks are the OPPOSITE of subnet masks:
+          </p>
+          
+          <InfoBox variant="tip">
+            <p className="text-emerald-200 font-semibold mb-3">Quick Guide:</p>
+            <ul className="ml-6 space-y-2 text-slate-300">
+              <li><code>0.0.0.0</code> = Match this EXACT IP address (one host)</li>
+              <li><code>0.0.0.255</code> = Match this network (all hosts in /24)</li>
+              <li><code>0.0.255.255</code> = Match this major network (all hosts in /16)</li>
+            </ul>
+            <p className="text-slate-300 mt-3">In wildcard: <strong className="text-white">0 = must match</strong>, <strong className="text-white">255 = don't care</strong></p>
+          </InfoBox>
+          
+          <InfoBox variant="important">
+            <p className="text-rose-200 font-semibold mb-2">⚠️ Area 0 is Special</p>
+            <p className="text-slate-300">
+              Area 0 is called the "backbone area". All other areas must connect to Area 0.
+              For most basic configurations, everything is in Area 0.
+            </p>
+          </InfoBox>
+          
           <div className="bg-gradient-to-br from-slate-900/70 to-slate-800/50 backdrop-blur-sm p-10 rounded-2xl border border-slate-700/50 mt-12 shadow-xl">
             <h3 className="text-cyan-400 text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
+            <p className="text-slate-300 mb-8 text-lg">Configure OSPF to advertise a network:</p>
             <ol className="bg-slate-900/50 p-8 rounded-xl my-8 border border-slate-700/30 list-decimal ml-6 space-y-5 text-slate-300 leading-relaxed">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
@@ -608,6 +973,16 @@ Hacker sees: gibberish
             </ol>
             
             <Terminal terminalId="terminal-10" grammar={grammar} />
+            
+            <InfoBox variant="help">
+              <p className="text-amber-200 font-semibold mb-3">💡 Understanding the Command</p>
+              <p className="text-slate-300 mb-2"><code>network 35.72.12.2 0.0.0.0 area 0</code> breaks down to:</p>
+              <ul className="ml-6 space-y-2 text-slate-300 list-disc">
+                <li><strong className="text-white">35.72.12.2</strong> = The IP address to match</li>
+                <li><strong className="text-white">0.0.0.0</strong> = Wildcard mask (match exactly)</li>
+                <li><strong className="text-white">area 0</strong> = Put this network in area 0</li>
+              </ul>
+            </InfoBox>
           </div>
         </LessonSection>
 
@@ -617,11 +992,88 @@ Hacker sees: gibberish
             OSPF chooses paths based on "cost" — lower cost is better. You can manually set costs to control traffic flow!
           </p>
           
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">What is OSPF Cost?</h2>
+          <p className="text-slate-300 mb-4">OSPF assigns a "cost" to each link based on its bandwidth. Think of cost as:</p>
+          <ul className="ml-8 space-y-2 text-slate-300 list-disc">
+            <li><strong className="text-white">Low cost</strong> = Fast, preferred path (like a highway)</li>
+            <li><strong className="text-white">High cost</strong> = Slow, avoid if possible (like a dirt road)</li>
+          </ul>
+          
+          <Diagram title="Path Selection Example">
+{`                 Cost 10 (Fiber - Fast!)
+    [Router A] ════════════════════ [Router B]
+        │                               │
+        │                               │
+        │ Cost 30                       │
+        │ (Copper - Medium)             │
+        │                               │
+    [Router C] ─────────────────────────┘
+                Cost 50 (DSL - Slow)
+
+OSPF adds costs along path:
+- Path 1: A → B = Cost 10 ✅ BEST!
+- Path 2: A → C → B = Cost 80 (30 + 50)
+
+OSPF always chooses Path 1 (lowest total cost)`}
+          </Diagram>
+          
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Default OSPF Cost Calculation</h2>
+          <p className="text-slate-300 mb-6">By default, OSPF calculates cost based on bandwidth:</p>
+          
+          <InfoBox variant="tip">
+            <p className="text-emerald-200 font-semibold mb-3">Formula: Cost = 100,000,000 / bandwidth in bps</p>
+            <ul className="ml-6 space-y-2 text-slate-300">
+              <li><strong className="text-white">10 Gbps link:</strong> Cost = 1</li>
+              <li><strong className="text-white">1 Gbps link:</strong> Cost = 1</li>
+              <li><strong className="text-white">100 Mbps link:</strong> Cost = 1</li>
+              <li><strong className="text-white">10 Mbps link:</strong> Cost = 10</li>
+            </ul>
+            <p className="text-slate-300 mt-3">Higher bandwidth = Lower cost = Preferred path!</p>
+          </InfoBox>
+          
+          <h2 className="text-3xl font-bold text-cyan-400 mt-12 mb-6">Why Manually Set Cost?</h2>
+          <p className="text-slate-300 mb-4">Sometimes you want to override the automatic calculation:</p>
+          
+          <InfoBox variant="real-world">
+            <h4 className="text-cyan-300 font-semibold mb-3">🌍 Real-World Scenarios</h4>
+            <ul className="ml-6 space-y-2 text-slate-300">
+              <li><strong className="text-white">Traffic Engineering:</strong> Force traffic through specific paths</li>
+              <li><strong className="text-white">Load Balancing:</strong> Distribute traffic across multiple links</li>
+              <li><strong className="text-white">Backup Links:</strong> Make backup paths less preferred</li>
+              <li><strong className="text-white">Cost Considerations:</strong> Expensive satellite link = high cost even if fast</li>
+            </ul>
+          </InfoBox>
+          
+          <div className="grid md:grid-cols-2 gap-6 my-8">
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+              <h4 className="text-emerald-300 font-semibold mb-3">Low Cost Interface</h4>
+              <Diagram>
+{`interface g0/0
+ip ospf cost 10
+
+✅ Primary path
+✅ Fast link
+✅ Use this first`}
+              </Diagram>
+            </div>
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-6">
+              <h4 className="text-amber-300 font-semibold mb-3">High Cost Interface</h4>
+              <Diagram>
+{`interface g0/2
+ip ospf cost 30
+
+⚠️ Backup path
+⚠️ Slower link
+⚠️ Use if primary fails`}
+              </Diagram>
+            </div>
+          </div>
+          
           <InfoBox variant="important">
-            <p className="text-rose-200 font-semibold mb-2">⚡ Power User Skill</p>
+            <p className="text-rose-200 font-semibold mb-2">🏆 CyberPatriot Tip</p>
             <p className="text-slate-300">
-              Setting OSPF costs gives you precise control over how traffic flows through your network. 
-              This is what network engineers do in real production networks!
+              Scenarios often require setting specific OSPF costs to control traffic flow.
+              Pay attention to requirements like "prefer path through Router A" — you'll need to adjust costs!
             </p>
           </InfoBox>
           
@@ -629,11 +1081,15 @@ Hacker sees: gibberish
             <h3 className="text-cyan-400 text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
+            <p className="text-slate-300 mb-8 text-lg">Configure OSPF costs on two interfaces to control path preference:</p>
             <ol className="bg-slate-900/50 p-8 rounded-xl my-8 border border-slate-700/30 list-decimal ml-6 space-y-5 text-slate-300 leading-relaxed">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
-              <li><code>interface g1/0/2</code></li>
-              <li><code>ip ospf cost 50</code> — Set interface cost to 50</li>
+              <li><code>interface g0/0</code> — Primary interface</li>
+              <li><code>ip ospf cost 10</code> — Set low cost (preferred path)</li>
+              <li><code>exit</code></li>
+              <li><code>interface g0/2</code> — Backup interface</li>
+              <li><code>ip ospf cost 30</code> — Set higher cost (backup path)</li>
               <li><code>end</code></li>
               <li><code>write memory</code></li>
             </ol>
