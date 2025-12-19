@@ -3,6 +3,9 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { TerminalManager } from '@/lib/terminal-manager';
+import { useScrollAnimations } from '@/lib/useScrollAnimations';
+import { useProgressBar } from '@/lib/useProgressBar';
+import { useClickToCopy } from '@/lib/useClickToCopy';
 import type { CommandGrammar } from '@src/types';
 
 import { Header } from '@/components/Header';
@@ -20,6 +23,11 @@ const Terminal = dynamic(() => import('@/components/Terminal').then(mod => ({ de
 
 export default function LearnPage() {
   const [grammar, setGrammar] = useState<CommandGrammar | null>(null);
+  
+  // Enable interactivity features
+  useScrollAnimations();
+  useProgressBar();
+  useClickToCopy();
   
   useEffect(() => {
     const manager = new TerminalManager();
