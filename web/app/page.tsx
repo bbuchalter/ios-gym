@@ -450,141 +450,73 @@ Takes 1 command! ✅`}
             </p>
 
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What's an IP Address?</h2>
-            <p className="text-gray-300 mb-4">Think of an IP address like a phone number or street address:</p>
-            <ul className="ml-8 space-y-2 text-gray-300 list-disc">
-              <li><strong className="text-white">Phone number:</strong> Let's people call you</li>
-              <li><strong className="text-white">Street address:</strong> Let's mail reach you</li>
-              <li><strong className="text-white">IP address:</strong> Let's data reach your device</li>
+            <p className="text-gray-300 mb-6">Think of an IP address like a phone number or street address:</p>
+            <ul className="ml-8 space-y-3 text-gray-300 list-disc mb-8">
+              <li><strong className="text-white">Phone number:</strong> Lets people call you</li>
+              <li><strong className="text-white">Street address:</strong> Lets mail reach you</li>
+              <li><strong className="text-white">IP address:</strong> Lets data reach your device</li>
             </ul>
 
-            <Diagram title="IP Address Format">
-              {`192  .  168  .  1    .  100
- ↓       ↓      ↓        ↓
-Network addresses   Host number
-
-Together: 192.168.1.100`}
-            </Diagram>
-
-            <InfoBox variant="info">
-              <p className="text-gray-300">
-                IP addresses are written as four numbers separated by dots (periods).
-                Each number can be from 0 to 255.
-              </p>
-            </InfoBox>
-
-            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Subnet Mask: Defining Your Network</h2>
-            <p className="text-gray-300 mb-4">
-              The <strong className="text-white">subnet mask</strong> tells devices which part of the IP address is the network
-              and which part identifies individual devices (hosts) on that network.
-            </p>
-
-            <p className="text-gray-300 mb-6">
-              Think of it like a street address: <code>123 Main Street</code>.
-              "Main Street" is the network (the neighborhood), and "123" is the specific house (the host).
-            </p>
-
-            <Diagram title="How Subnet Masks Work">
-              {`IP Address:   192  .  168  .  1   .  100
-Subnet Mask:  255  .  255  .  255 .  0
-
-Where subnet mask = 255:  Network portion (same for all devices)
-Where subnet mask = 0:    Host portion (unique for each device)
-
-Breaking it down:
-┌─────────────────────────┬──────────┐
-│    Network Part         │   Host   │
-│  192  .  168  .  1      │   100    │
-└─────────────────────────┴──────────┘
-    All devices on           This specific
-    this network share       device's number
-    these numbers`}
-            </Diagram>
-
-            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 my-8">
-              <h4 className="text-white font-semibold mb-4">Example: Devices on Network 192.168.1.0</h4>
-              <div className="space-y-2 text-gray-300 font-mono">
-                <div className="flex items-center gap-4">
-                  <span className="text-green-400">192.168.1.1</span>
-                  <span className="text-gray-500">← Router (gateway)</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-green-400">192.168.1.10</span>
-                  <span className="text-gray-500">← Computer 1</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-green-400">192.168.1.11</span>
-                  <span className="text-gray-500">← Computer 2</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-green-400">192.168.1.100</span>
-                  <span className="text-gray-500">← Switch (management)</span>
-                </div>
-                <p className="text-gray-400 mt-4">
-                  All share <span className="text-white">192.168.1</span> (network) but have different last numbers (host)
-                </p>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 my-8">
+              <h4 className="text-white font-semibold mb-6 text-center">IP Address Format</h4>
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="bg-blue-600 text-white font-bold text-2xl px-6 py-4 rounded">192</div>
+                <div className="text-white text-2xl">.</div>
+                <div className="bg-blue-600 text-white font-bold text-2xl px-6 py-4 rounded">168</div>
+                <div className="text-white text-2xl">.</div>
+                <div className="bg-blue-600 text-white font-bold text-2xl px-6 py-4 rounded">1</div>
+                <div className="text-white text-2xl">.</div>
+                <div className="bg-blue-600 text-white font-bold text-2xl px-6 py-4 rounded">100</div>
               </div>
+              <p className="text-center text-gray-400 mb-4">Four numbers separated by dots (periods)</p>
+              <p className="text-center text-gray-300 font-mono text-xl">192.168.1.100</p>
             </div>
 
             <InfoBox variant="info">
               <p className="text-gray-300 mb-2">
-                <strong className="text-white">255.255.255.0</strong> is the most common subnet mask for small networks.
+                IP addresses are written as <strong className="text-white">four numbers</strong> separated by dots (periods).
               </p>
               <p className="text-gray-300">
-                It allows 254 devices (host numbers 1-254) on the same network. Host 0 and 255 are reserved.
+                Each number can be from <strong className="text-white">0 to 255</strong>.
               </p>
             </InfoBox>
 
-            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Default Gateway: Your Network's Door</h2>
-            <p className="text-gray-300 mb-4">
-              The <strong className="text-white">default gateway</strong> is the IP address of the router that connects your network to other networks
-              (like the internet). Think of it as the "door" out of your network.
+            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">What's a Subnet Mask?</h2>
+            <p className="text-gray-300 mb-6">
+              Along with an IP address, you'll also configure something called a <strong className="text-white">subnet mask</strong>.
+              For now, just know that it's written in the same format as an IP address.
             </p>
 
-            <Diagram title="How Gateway Works">
-              {`Your Computer          Local Network         Gateway (Router)        Internet
-192.168.1.100  ──►      192.168.1.0/24  ──►      192.168.1.1  ──►   🌐
-                         Same network           "The door"
-                    (talk directly)        (path to other
-                                           networks)`}
-            </Diagram>
-
-            <InfoBox variant="real-world">
-              <h4 className="text-blue-300 font-semibold mb-2">🌍 Real World Example</h4>
-              <p className="text-gray-300 mb-3">
-                When you visit Google.com from your laptop:
-              </p>
-              <ul className="ml-6 space-y-2 text-gray-300">
-                <li>Your laptop knows Google isn't on your local network</li>
-                <li>So it sends the request to your default gateway (your home router)</li>
-                <li>The router forwards it to the internet</li>
-                <li>The response comes back the same way!</li>
-              </ul>
-            </InfoBox>
-
-            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Key Concepts Summary</h2>
-            <div className="space-y-4 my-8">
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <h4 className="text-white font-semibold mb-2">IP Address</h4>
-                <p className="text-gray-400">The unique address of your device (like 192.168.1.100)</p>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 my-8">
+              <h4 className="text-white font-semibold mb-6 text-center">Subnet Mask Format</h4>
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="bg-green-600 text-white font-bold text-2xl px-6 py-4 rounded">255</div>
+                <div className="text-white text-2xl">.</div>
+                <div className="bg-green-600 text-white font-bold text-2xl px-6 py-4 rounded">255</div>
+                <div className="text-white text-2xl">.</div>
+                <div className="bg-green-600 text-white font-bold text-2xl px-6 py-4 rounded">255</div>
+                <div className="text-white text-2xl">.</div>
+                <div className="bg-green-600 text-white font-bold text-2xl px-6 py-4 rounded">0</div>
               </div>
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <h4 className="text-white font-semibold mb-2">Subnet Mask</h4>
-                <p className="text-gray-400">Defines the size of your network (like 255.255.255.0)</p>
-              </div>
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <h4 className="text-white font-semibold mb-2">Default Gateway</h4>
-                <p className="text-gray-400">The router's IP address that connects you to other networks (like 192.168.1.1)</p>
-              </div>
+              <p className="text-center text-gray-400 mb-4">Also four numbers separated by dots</p>
+              <p className="text-center text-gray-300 font-mono text-xl">255.255.255.0</p>
             </div>
 
             <InfoBox variant="info">
-              <ProTip>
-                <p className="text-gray-300">
-                  In the next lesson, you'll apply these concepts by configuring management access on a switch.
-                  Understanding these three components is essential!
-                </p>
-              </ProTip>
+              <p className="text-gray-300 mb-2">
+                <strong className="text-white">255.255.255.0</strong> is the most common subnet mask you'll see.
+              </p>
+              <p className="text-gray-300">
+                Don't worry about what it means yet — you'll use it when configuring devices in the next lesson!
+              </p>
             </InfoBox>
+
+            <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
+              <p className="text-blue-200 font-semibold mb-3">💡 Coming Up Next</p>
+              <p className="text-gray-300">
+                In the next lesson, you'll learn how to use IP addresses and subnet masks to configure management access on a switch.
+              </p>
+            </div>
           </LessonSection>
 
           {/* LESSON 7: MANAGEMENT ACCESS */}
