@@ -7,18 +7,22 @@ This project uses Git hooks to ensure code quality before commits and pushes.
 **Location:** `.git/hooks/pre-commit`
 
 Runs automatically before every commit to validate:
+- ✅ Grammar files are synchronized
 - ✅ TypeScript build succeeds
 - ✅ All tests pass
 
 ### What it does:
-1. Builds the TypeScript code (`npm run build`)
-2. Runs the test suite (`jest`)
-3. Blocks the commit if either fails
+1. Checks that `commands.yaml` and `web/public/commands.json` are in sync
+2. Builds the TypeScript code (`npm run build`)
+3. Runs the test suite (`jest`)
+4. Blocks the commit if any check fails
 
 ### Output:
 ```
 🔍 Running pre-commit checks...
 
+📝 Checking grammar files are synchronized...
+✓ Grammar files are synchronized
 📦 Building TypeScript...
 ✓ Build successful
 🧪 Running tests...
@@ -29,10 +33,11 @@ Runs automatically before every commit to validate:
 
 ### If Checks Fail:
 **DO NOT bypass with `--no-verify`!** Instead:
-1. Run `npm test` to see detailed test failures
-2. Run `npm run build` to see build errors
-3. Fix the issues
-4. Commit again normally
+1. If grammar files are out of sync: Run `npm run build:grammar`
+2. Run `npm test` to see detailed test failures
+3. Run `npm run build` to see build errors
+4. Fix the issues
+5. Commit again normally
 
 See `.claude.md` for full git commit policy.
 

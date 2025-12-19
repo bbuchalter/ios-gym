@@ -188,6 +188,14 @@ cp -r public/* /var/www/html/ios-trainer/
 npm run build
 ```
 
+### Grammar Files
+When you modify `commands.yaml`, you need to regenerate the JSON file:
+```bash
+npm run build:grammar
+```
+
+This converts `commands.yaml` → `web/public/commands.json`. The pre-commit hook automatically ensures these files stay synchronized.
+
 ### Watch Mode (Recommended)
 ```bash
 npm run watch

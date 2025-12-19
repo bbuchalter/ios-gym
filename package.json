@@ -8,7 +8,7 @@
     "test": "./node_modules/.bin/jest",
     "test:watch": "./node_modules/.bin/jest --watch",
     "test:coverage": "./node_modules/.bin/jest --coverage",
-    "convert:yaml": "node -e \"const yaml = require('js-yaml'); const fs = require('fs'); const commands = yaml.load(fs.readFileSync('commands.yaml', 'utf8')); fs.writeFileSync('web/public/commands.json', JSON.stringify(commands, null, 2));\"",
+    "build:grammar": "node -e \"const yaml = require('js-yaml'); const fs = require('fs'); const commands = yaml.load(fs.readFileSync('commands.yaml', 'utf8')); fs.writeFileSync('web/public/commands.json', JSON.stringify(commands, null, 2));\"",
     "web:dev": "cd web && npm run dev",
     "web:build": "cd web && npm run build",
     "web:start": "cd web && npm start"
