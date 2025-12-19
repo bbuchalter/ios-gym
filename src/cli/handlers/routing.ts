@@ -1,12 +1,12 @@
 import { ExecutionResult, ModeType } from "../../types";
-import { Session } from "../../server/session";
+import { CLISession } from "../../cli-session";
 
 /**
  * Handle routing commands (static routes and OSPF)
  */
 
 export function handleRouteAdd(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -28,7 +28,7 @@ export function handleRouteAdd(
 }
 
 export function handleOspfEnter(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -46,7 +46,7 @@ export function handleOspfEnter(
 }
 
 export function handleOspfNetworkAdd(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -64,7 +64,7 @@ export function handleOspfNetworkAdd(
 }
 
 export function handleOspfIfCostSet(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {

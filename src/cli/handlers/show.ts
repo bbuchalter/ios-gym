@@ -1,12 +1,12 @@
 import { ExecutionResult } from "../../types";
-import { Session } from "../../server/session";
+import { CLISession } from "../../cli-session";
 
 /**
  * Handle show commands with template rendering
  */
 
 export function handleRender(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any,
   templates: Record<string, string>
@@ -32,7 +32,7 @@ export function handleRender(
  * - {#interfaces}...{#end} loops over interfaces
  * - {#routes}...{#end} loops over routes
  */
-function renderTemplate(template: string, session: Session): string {
+function renderTemplate(template: string, session: CLISession): string {
   const state = session.deviceState;
   let result = template;
   

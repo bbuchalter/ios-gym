@@ -1,12 +1,12 @@
 import { ExecutionResult } from "../../types";
-import { Session } from "../../server/session";
+import { CLISession } from "../../cli-session";
 
 /**
  * Handle VLAN configuration commands
  */
 
 export function handleVlanEnter(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -26,7 +26,7 @@ export function handleVlanEnter(
 }
 
 export function handleVlanSetName(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {

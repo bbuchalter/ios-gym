@@ -1,5 +1,5 @@
 import { ExecutionResult, ModeType } from "../../types";
-import { Session } from "../../server/session";
+import { CLISession } from "../../cli-session";
 import { normalizeInterfaceName, ensureInterface } from "../state";
 
 /**
@@ -7,7 +7,7 @@ import { normalizeInterfaceName, ensureInterface } from "../state";
  */
 
 export function handleIfEnter(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -27,7 +27,7 @@ export function handleIfEnter(
 }
 
 export function handleIfSet(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -54,7 +54,7 @@ export function handleIfSet(
 }
 
 export function handleIfSetIp(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -77,7 +77,7 @@ export function handleIfSetIp(
 }
 
 export function handleIfSetTrunkAllowed(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {

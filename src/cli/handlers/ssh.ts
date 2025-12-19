@@ -1,12 +1,12 @@
 import { ExecutionResult, ModeType } from "../../types";
-import { Session } from "../../server/session";
+import { CLISession } from "../../cli-session";
 
 /**
  * Handle SSH and VTY configuration commands
  */
 
 export function handleSshUserSet(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -21,7 +21,7 @@ export function handleSshUserSet(
 }
 
 export function handleLineVtyEnter(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {

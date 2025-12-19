@@ -1,5 +1,5 @@
 import { ExecutionResult, ModeType } from "../../types";
-import { Session } from "../../server/session";
+import { CLISession } from "../../cli-session";
 import { setStatePath } from "../state";
 
 /**
@@ -7,7 +7,7 @@ import { setStatePath } from "../state";
  */
 
 export function handleSet(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -32,7 +32,7 @@ export function handleSet(
 }
 
 export function handlePersist(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {

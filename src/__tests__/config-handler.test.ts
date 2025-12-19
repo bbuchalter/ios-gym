@@ -1,10 +1,10 @@
 import { handlePersist, handleSet } from "../cli/handlers/config";
-import { Session } from "../server/session";
+import { CLISession } from "../cli-session";
 import { createInitialState } from "../cli/state";
-import { CommandGrammar, ExerciseData } from "../types";
+import { CommandGrammar } from "../types";
 
 describe("Config Handlers", () => {
-  let session: Session;
+  let session: CLISession;
   
   beforeEach(() => {
     const mockGrammar = {
@@ -18,14 +18,7 @@ describe("Config Handlers", () => {
       templates: {}
     } as CommandGrammar;
     
-    const mockExercises = {
-      version: "0.1",
-      description: "Test",
-      devices: {},
-      exercises: []
-    } as ExerciseData;
-    
-    session = new Session("test-session", mockGrammar, mockExercises);
+    session = new CLISession(mockGrammar);
   });
 
   describe("handlePersist", () => {

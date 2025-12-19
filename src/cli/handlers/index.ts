@@ -1,5 +1,5 @@
 import { ExecutionResult, CommandDef } from "../../types";
-import { Session } from "../../server/session";
+import { CLISession } from "../../cli-session";
 import {
   handleModePush,
   handleModePop,
@@ -38,7 +38,7 @@ export class HandlerRegistry {
    * Execute a command's action
    */
   public execute(
-    session: Session,
+    session: CLISession,
     command: CommandDef,
     args: Record<string, string>
   ): ExecutionResult {

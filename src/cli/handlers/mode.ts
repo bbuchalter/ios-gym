@@ -1,12 +1,12 @@
 import { ExecutionResult, ModeType } from "../../types";
-import { Session } from "../../server/session";
+import { CLISession } from "../../cli-session";
 
 /**
  * Handle mode transition actions
  */
 
 export function handleModePush(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -17,7 +17,7 @@ export function handleModePush(
 }
 
 export function handleModePop(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -26,7 +26,7 @@ export function handleModePop(
 }
 
 export function handleModePopTo(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
@@ -37,7 +37,7 @@ export function handleModePopTo(
 }
 
 export function handleSessionEnd(
-  session: Session,
+  session: CLISession,
   args: Record<string, string>,
   action: any
 ): ExecutionResult {

@@ -1,5 +1,5 @@
 import { CommandGrammar, ExecutionResult, CompletionResult } from "../types";
-import { Session } from "../server/session";
+import { CLISession } from "../cli-session";
 import { CommandParser } from "./parser";
 import { TabCompleter } from "./completer";
 import { HandlerRegistry } from "./handlers";
@@ -21,7 +21,7 @@ export class CLIEngine {
   /**
    * Execute a command line
    */
-  public executeCommand(session: Session, line: string): ExecutionResult {
+  public executeCommand(session: CLISession, line: string): ExecutionResult {
     const mode = session.modeStack.getCurrentMode();
     
     // Parse the command
@@ -47,7 +47,7 @@ export class CLIEngine {
    * Get tab completion suggestions
    */
   public getCompletion(
-    session: Session,
+    session: CLISession,
     line: string,
     cursorPos: number
   ): CompletionResult {

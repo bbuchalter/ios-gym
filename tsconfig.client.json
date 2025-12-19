@@ -14,6 +14,6 @@
     "declaration": false,
     "sourceMap": false
   },
-  "include": ["client/**/*.ts", "src/cli/**/*.ts", "src/exercise/**/*.ts", "src/types.ts"],
+  "include": ["src/cli/**/*.ts", "src/types.ts", "src/cli-session.ts"],
   "exclude": ["node_modules", "**/*.test.ts", "**/__tests__", "src/server", "src/grammar"]
 }
