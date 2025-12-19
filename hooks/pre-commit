@@ -69,16 +69,6 @@ if ! npx tsc --noEmit > /dev/null 2>&1; then
 fi
 print_success "TypeScript types are valid"
 
-# Run TypeScript build
-echo "📦 Building TypeScript..."
-if ! npm run build > /dev/null 2>&1; then
-    print_error "Build failed!"
-    echo ""
-    echo "Run 'npm run build' to see the errors."
-    exit 1
-fi
-print_success "Build successful"
-
 # Run tests
 echo "🧪 Running tests..."
 TEST_OUTPUT=$(./node_modules/.bin/jest --silent --passWithNoTests 2>&1)

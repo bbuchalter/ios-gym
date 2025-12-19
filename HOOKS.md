@@ -10,15 +10,13 @@ This project uses Git hooks to ensure code quality before commits and pushes.
 Runs automatically before every commit to validate:
 - ✅ Grammar files are synchronized
 - ✅ TypeScript types are valid
-- ✅ TypeScript build succeeds
 - ✅ All tests pass
 
 ### What it does:
 1. Checks that `commands.yaml` and `web/public/commands.json` are in sync
-2. Validates TypeScript types with `tsc --noEmit` (no compilation, just type checking)
-3. Builds the TypeScript code (`npm run build`)
-4. Runs the test suite (`jest`)
-5. Blocks the commit if any check fails
+2. Validates TypeScript types with `tsc --noEmit` (type checking without compilation)
+3. Runs the test suite (`jest`)
+4. Blocks the commit if any check fails
 
 ### Output:
 ```
@@ -28,8 +26,6 @@ Runs automatically before every commit to validate:
 ✓ Grammar files are synchronized
 🔍 Checking TypeScript types...
 ✓ TypeScript types are valid
-📦 Building TypeScript...
-✓ Build successful
 🧪 Running tests...
 ✓ All tests passed
 
@@ -40,10 +36,9 @@ Runs automatically before every commit to validate:
 **DO NOT bypass with `--no-verify`!** Instead:
 1. **Grammar files out of sync:** Run `npm run build:grammar`
 2. **TypeScript type errors:** Run `npx tsc --noEmit` to see type errors
-3. **Build errors:** Run `npm run build` to see build errors
-4. **Test failures:** Run `npm test` to see detailed test output
-5. Fix the issues
-6. Commit again normally
+3. **Test failures:** Run `npm test` to see detailed test output
+4. Fix the issues
+5. Commit again normally
 
 See `.claude.md` for full git commit policy.
 
@@ -130,15 +125,9 @@ npm test
 ```
 
 ### TypeScript type errors
-Run type checking manually to see errors:
+Run type checking manually to see detailed errors:
 ```bash
 npx tsc --noEmit
-```
-
-### Build failing
-Run build manually to see errors:
-```bash
-npm run build
 ```
 
 ## Adding More Checks

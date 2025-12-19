@@ -18,7 +18,6 @@ ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
 Runs before every commit to validate:
 - Grammar files are synchronized (`commands.yaml` ↔ `web/public/commands.json`)
 - TypeScript types are valid (`tsc --noEmit`)
-- TypeScript build succeeds (`npm run build`)
 - All tests pass (`jest`)
 
 See [../HOOKS.md](../HOOKS.md) for complete documentation.
