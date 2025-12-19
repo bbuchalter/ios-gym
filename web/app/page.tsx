@@ -10,7 +10,7 @@ import { useProgressBar } from '@/lib/useProgressBar';
 import { useClickToCopy } from '@/lib/useClickToCopy';
 import type { CommandGrammar } from '@src/types';
 
-import { Footer } from '@/components/Footer';
+
 import { LessonSection } from '@/components/LessonSection';
 import { InfoBox } from '@/components/InfoBox';
 import { ProTip } from '@/components/ProTip';
@@ -124,11 +124,7 @@ export default function LearnPage() {
               </div>
               <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <code className="font-mono text-lg text-blue-400">exit</code>
-                <p className="text-gray-400 mt-2">Goes back one level (from <code>(config)#</code> to <code>#</code>, or from <code>#</code> to <code>&gt;</code>)</p>
-              </div>
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <code className="font-mono text-lg text-blue-400">end</code>
-                <p className="text-gray-400 mt-2">Jumps directly back to privileged mode (<code>#</code>) from anywhere in configuration mode</p>
+                <p className="text-gray-400 mt-2">Goes back one level at a time</p>
               </div>
             </div>
 
@@ -141,7 +137,7 @@ export default function LearnPage() {
               <li>Type <code>configure terminal</code> and press Enter — watch the prompt change to <code>(config)#</code></li>
               <li>Type <code>exit</code> — notice you go back one level to <code>#</code></li>
               <li>Type <code>configure terminal</code> again to enter config mode</li>
-              <li>Type <code>end</code> — notice you jump directly back to <code>#</code></li>
+              <li>Type <code>exit</code> again to return to privileged mode</li>
             </ol>
 
             <Terminal terminalId="terminal-1" grammar={grammar} />
@@ -150,8 +146,7 @@ export default function LearnPage() {
               <ProTip>
                 <ul className="ml-6 space-y-2 text-gray-300">
                   <li>Notice how the prompt changes as you move between modes</li>
-                  <li><code>exit</code> goes back one level at a time</li>
-                  <li><code>end</code> jumps directly back to privileged mode — very useful if you're deep in configuration!</li>
+                  <li>Pay attention to the prompt — it tells you exactly where you are!</li>
                 </ul>
               </ProTip>
             </InfoBox>
@@ -351,8 +346,105 @@ export default function LearnPage() {
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 5: IP ADDRESSING */}
-          <LessonSection lessonNumber={5} title="IP Addresses: Your Device's Phone Number">
+          {/* LESSON 5: SUB-CONFIGURATION MODES */}
+          <LessonSection lessonNumber={5} title="Working with Sub-Configuration Modes">
+            <p className="text-xl text-gray-200 my-6">
+              So far you've worked with two modes: privileged (<code>#</code>) and global config (<code>(config)#</code>).
+              Now you'll learn about <strong className="text-white">sub-configuration modes</strong> — configurations within configurations!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Understanding Configuration Layers</h2>
+            <p className="text-gray-300 mb-6">
+              When you configure specific parts of a device (like interfaces, routing protocols, or VTY lines),
+              you enter a <strong className="text-white">sub-configuration mode</strong>.
+              This creates multiple layers you need to navigate through.
+            </p>
+
+            <Diagram title="Configuration Layers">
+              {`Switch#                    ← Privileged mode
+   ↓ (configure terminal)
+Switch(config)#            ← Global config mode
+   ↓ (interface vlan 1)
+Switch(config-if)#         ← Interface config mode (deeper!)
+   ↓ (exit)
+Switch(config)#            ← Back one level
+   ↓ (exit)
+Switch#                    ← Back to privileged mode`}
+            </Diagram>
+
+            <InfoBox variant="info">
+              <p className="text-gray-300 mb-2">
+                Notice the prompt changes to <code>(config-if)#</code> when you're in interface configuration mode.
+              </p>
+              <p className="text-gray-300">
+                The prompt ALWAYS tells you exactly where you are!
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Exit vs End: The Important Difference</h2>
+            <p className="text-gray-300 mb-4">
+              When you're deep in configuration modes, you have two ways to get back to privileged mode:
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h4 className="text-white font-semibold mb-3">exit — One Level at a Time</h4>
+                <Diagram>
+                  {`Switch(config-if)# exit
+Switch(config)# exit
+Switch#
+
+Takes 2 exits to get back`}
+                </Diagram>
+                <p className="text-gray-400 mt-3"><strong>Use when:</strong> You want to go back one level</p>
+              </div>
+              <div className="bg-green-900 border border-green-600 rounded-lg p-6">
+                <h4 className="text-green-300 font-semibold mb-3">end — Jump Directly</h4>
+                <Diagram>
+                  {`Switch(config-if)# end
+Switch#
+
+Takes 1 command! ✅`}
+                </Diagram>
+                <p className="text-gray-400 mt-3"><strong>Use when:</strong> You want to jump straight to privileged mode</p>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2">Use <code>end</code> when you're deep in configuration and want to get back to privileged mode quickly!</p>
+                <p className="text-gray-300">Use <code>exit</code> when you want to go back just one level (e.g., from interface config back to global config).</p>
+              </ProTip>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Practice navigating sub-configuration modes:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode</li>
+              <li><code>configure terminal</code> — Enter global config mode</li>
+              <li><code>interface vlan 1</code> — Enter interface configuration mode (notice the prompt changes!)</li>
+              <li><code>exit</code> — Go back one level to <code>(config)#</code></li>
+              <li><code>interface vlan 1</code> — Enter interface config mode again</li>
+              <li><code>end</code> — Jump directly back to <code>#</code> (compare how fast this is!)</li>
+            </ol>
+
+            <Terminal terminalId="terminal-5" grammar={grammar} />
+
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300">
+                  <li>Watch how the prompt changes: <code>(config)#</code> → <code>(config-if)#</code></li>
+                  <li>You'll use sub-configuration modes for interfaces, routing protocols, VTY lines, and more</li>
+                  <li>The deeper you go, the more useful <code>end</code> becomes!</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
+          </LessonSection>
+
+          {/* LESSON 6: IP ADDRESSING BASICS */}
+          <LessonSection lessonNumber={6} title="Understanding IP Addresses">
             <p className="text-xl text-gray-200 my-6">
               Every device on a network needs an address so others can find it. This is called an IP address.
             </p>
@@ -373,59 +465,251 @@ Network addresses   Host number
 Together: 192.168.1.100`}
             </Diagram>
 
-            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Management Access</h2>
-            <p className="text-gray-300 mb-6">
-              To manage a switch remotely, you need to give it an IP address on VLAN 1 (the management VLAN).
-              Without this, you can only access the switch by plugging a cable directly into it!
+            <InfoBox variant="info">
+              <p className="text-gray-300">
+                IP addresses are written as four numbers separated by dots (periods).
+                Each number can be from 0 to 255.
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Subnet Mask: Defining Your Network</h2>
+            <p className="text-gray-300 mb-4">
+              The <strong className="text-white">subnet mask</strong> tells devices which part of the IP address is the network
+              and which part identifies individual devices (hosts) on that network.
             </p>
+
+            <p className="text-gray-300 mb-6">
+              Think of it like a street address: <code>123 Main Street</code>.
+              "Main Street" is the network (the neighborhood), and "123" is the specific house (the host).
+            </p>
+
+            <Diagram title="How Subnet Masks Work">
+              {`IP Address:   192  .  168  .  1   .  100
+Subnet Mask:  255  .  255  .  255 .  0
+
+Where subnet mask = 255:  Network portion (same for all devices)
+Where subnet mask = 0:    Host portion (unique for each device)
+
+Breaking it down:
+┌─────────────────────────┬──────────┐
+│    Network Part         │   Host   │
+│  192  .  168  .  1      │   100    │
+└─────────────────────────┴──────────┘
+    All devices on           This specific
+    this network share       device's number
+    these numbers`}
+            </Diagram>
+
+            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 my-8">
+              <h4 className="text-white font-semibold mb-4">Example: Devices on Network 192.168.1.0</h4>
+              <div className="space-y-2 text-gray-300 font-mono">
+                <div className="flex items-center gap-4">
+                  <span className="text-green-400">192.168.1.1</span>
+                  <span className="text-gray-500">← Router (gateway)</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-green-400">192.168.1.10</span>
+                  <span className="text-gray-500">← Computer 1</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-green-400">192.168.1.11</span>
+                  <span className="text-gray-500">← Computer 2</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-green-400">192.168.1.100</span>
+                  <span className="text-gray-500">← Switch (management)</span>
+                </div>
+                <p className="text-gray-400 mt-4">
+                  All share <span className="text-white">192.168.1</span> (network) but have different last numbers (host)
+                </p>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <p className="text-gray-300 mb-2">
+                <strong className="text-white">255.255.255.0</strong> is the most common subnet mask for small networks.
+              </p>
+              <p className="text-gray-300">
+                It allows 254 devices (host numbers 1-254) on the same network. Host 0 and 255 are reserved.
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Default Gateway: Your Network's Door</h2>
+            <p className="text-gray-300 mb-4">
+              The <strong className="text-white">default gateway</strong> is the IP address of the router that connects your network to other networks
+              (like the internet). Think of it as the "door" out of your network.
+            </p>
+
+            <Diagram title="How Gateway Works">
+              {`Your Computer          Local Network         Gateway (Router)        Internet
+192.168.1.100  ──►      192.168.1.0/24  ──►      192.168.1.1  ──►   🌐
+                         Same network           "The door"
+                    (talk directly)        (path to other
+                                           networks)`}
+            </Diagram>
+
+            <InfoBox variant="real-world">
+              <h4 className="text-blue-300 font-semibold mb-2">🌍 Real World Example</h4>
+              <p className="text-gray-300 mb-3">
+                When you visit Google.com from your laptop:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>Your laptop knows Google isn't on your local network</li>
+                <li>So it sends the request to your default gateway (your home router)</li>
+                <li>The router forwards it to the internet</li>
+                <li>The response comes back the same way!</li>
+              </ul>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Key Concepts Summary</h2>
+            <div className="space-y-4 my-8">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <h4 className="text-white font-semibold mb-2">IP Address</h4>
+                <p className="text-gray-400">The unique address of your device (like 192.168.1.100)</p>
+              </div>
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <h4 className="text-white font-semibold mb-2">Subnet Mask</h4>
+                <p className="text-gray-400">Defines the size of your network (like 255.255.255.0)</p>
+              </div>
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <h4 className="text-white font-semibold mb-2">Default Gateway</h4>
+                <p className="text-gray-400">The router's IP address that connects you to other networks (like 192.168.1.1)</p>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300">
+                  In the next lesson, you'll apply these concepts by configuring management access on a switch.
+                  Understanding these three components is essential!
+                </p>
+              </ProTip>
+            </InfoBox>
+          </LessonSection>
+
+          {/* LESSON 7: MANAGEMENT ACCESS */}
+          <LessonSection lessonNumber={7} title="Configuring Management Access">
+            <p className="text-xl text-gray-200 my-6">
+              Now that you understand IP addresses, let's put that knowledge to use by configuring remote management access on a switch!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What is Management Access?</h2>
+            <p className="text-gray-300 mb-6">
+              By default, you can only configure a switch by plugging a cable directly into it (console access).
+              But in the real world, network devices are in closets, racks, or even different buildings!
+            </p>
+
+            <p className="text-gray-300 mb-6">
+              <strong className="text-white">Management access</strong> means giving your switch an IP address so you can
+              connect to it remotely over the network — without needing physical access.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-red-900 border border-red-600 rounded-lg p-6">
+                <h4 className="text-red-300 font-semibold mb-3">❌ Without Management IP</h4>
+                <Diagram>
+                  {`🏢 Building A          🏢 Building B
+     │                      │
+     │                      │
+   [Switch]          [Switch] ← Need to fix
+                            
+IT Person must walk there! 👟`}
+                </Diagram>
+              </div>
+              <div className="bg-green-900 border border-green-600 rounded-lg p-6">
+                <h4 className="text-green-300 font-semibold mb-3">✅ With Management IP</h4>
+                <Diagram>
+                  {`🏢 Building A          🏢 Building B
+     │                      │
+     │   Network Cable      │
+   [IT PC] ═══════════ [Switch]
+                       IP: 192.168.1.100
+                            
+Manage from anywhere! 💻`}
+                </Diagram>
+              </div>
+            </div>
 
             <InfoBox variant="real-world">
               <h4 className="text-blue-300 font-semibold mb-2">🌍 Real World Example</h4>
               <p className="text-gray-300">
-                Your school's IT person needs to manage switches in different buildings.
-                With IP addresses on each switch, they can connect from their office without walking to each closet!
+                Your school's IT person needs to manage 50 switches across different buildings.
+                With management IPs configured, they can connect to any switch from their office using SSH!
+                No walking required.
               </p>
             </InfoBox>
 
-            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Subnet Mask & Default Gateway</h2>
-            <ul className="ml-8 space-y-3 text-gray-300">
-              <li><strong className="text-white">Subnet Mask:</strong> Defines how big your network is</li>
-              <li><strong className="text-white">Default Gateway:</strong> The "door" to other networks (like the internet)</li>
-            </ul>
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">VLAN 1: The Management VLAN</h2>
+            <p className="text-gray-300 mb-6">
+              On a switch, <strong className="text-white">VLAN 1</strong> is the default management VLAN.
+              This is a special virtual interface that lets the switch have an IP address.
+            </p>
 
             <InfoBox variant="info">
-              <p className="text-gray-200">
-                Common subnet mask: <code>255.255.255.0</code> gives you 254 devices on one network
+              <p className="text-gray-300 mb-2">
+                <strong className="text-white">Important:</strong> The switch itself needs an IP to manage it remotely.
+              </p>
+              <p className="text-gray-300">
+                We give this IP to the VLAN 1 interface (not a physical port).
               </p>
             </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The "no shutdown" Command</h2>
+            <p className="text-gray-300 mb-6">
+              By default, many interfaces on Cisco devices are in "shutdown" state (turned off).
+              The <code>no shutdown</code> command turns the interface on.
+            </p>
+
+            <Diagram title="Interface States">
+              {`Shutdown (default):  Interface is OFF ❌
+                        No traffic flows
+                        
+no shutdown:         Interface is ON ✅
+                        Traffic can flow`}
+            </Diagram>
 
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
-            <p className="text-gray-300 mb-8 text-lg">Give your switch a management IP address:</p>
+            <p className="text-gray-300 mb-8 text-lg">Configure management access on your switch:</p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
-              <li><code>interface vlan 1</code> — Enter the management interface</li>
-              <li><code>ip address 192.168.1.100 255.255.255.0</code> — Assign IP address</li>
-              <li><code>no shutdown</code> — Turn the interface on</li>
-              <li><code>exit</code></li>
-              <li><code>ip default-gateway 192.168.1.1</code> — Set gateway (router's IP)</li>
-              <li><code>end</code></li>
-              <li><code>write memory</code></li>
+              <li><code>interface vlan 1</code> — Enter the management interface configuration</li>
+              <li><code>ip address 192.168.1.100 255.255.255.0</code> — Assign IP address and subnet mask</li>
+              <li><code>no shutdown</code> — Turn the interface on (you'll see a log message!)</li>
+              <li><code>exit</code> — Back to global config mode</li>
+              <li><code>ip default-gateway 192.168.1.1</code> — Set the default gateway</li>
+              <li><code>end</code> — Jump back to privileged mode</li>
+              <li><code>write memory</code> — Save your configuration</li>
             </ol>
 
-            <Terminal terminalId="terminal-5" grammar={grammar} />
+            <Terminal terminalId="terminal-6" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
               <p className="text-gray-300 mb-2">Type: <code>show ip interface brief</code></p>
-              <p className="text-gray-300">You should see VLAN 1 with your IP address and status "up"</p>
+              <p className="text-gray-300">You should see:</p>
+              <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
+                <li>VLAN 1 with IP address 192.168.1.100</li>
+                <li>Status: <code>up</code></li>
+                <li>Protocol: <code>up</code></li>
+              </ul>
             </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300">
+                  <li>The default gateway must be on the same network as your IP address</li>
+                  <li>In this example: 192.168.1.100 (switch) and 192.168.1.1 (gateway) are both on the 192.168.1.0 network</li>
+                  <li>Later, you'll use this IP address to SSH into the switch remotely!</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
-          {/* LESSON 6: VLANs */}
-          <LessonSection lessonNumber={6} title="VLANs: Organizing Your Network">
+          {/* LESSON 8: VLANs */}
+          <LessonSection lessonNumber={8} title="VLANs: Organizing Your Network">
             <p className="text-xl text-gray-200 my-6">
               VLANs let you split one physical switch into multiple virtual networks. It's like having multiple switches in one!
             </p>
@@ -503,7 +787,7 @@ Together: 192.168.1.100`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-6" grammar={grammar} />
+            <Terminal terminalId="terminal-8" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -516,8 +800,8 @@ Together: 192.168.1.100`}
             </div>
           </LessonSection>
 
-          {/* LESSON 7: TRUNK PORTS */}
-          <LessonSection lessonNumber={7} title="Trunk Ports: Connecting Switches">
+          {/* LESSON 9: TRUNK PORTS */}
+          <LessonSection lessonNumber={9} title="Trunk Ports: Connecting Switches">
             <p className="text-xl text-gray-200 my-6">
               What if you have switches in different rooms or buildings? Trunk ports carry multiple VLANs between switches!
             </p>
@@ -580,7 +864,7 @@ Together: 192.168.1.100`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-7" grammar={grammar} />
+            <Terminal terminalId="terminal-9" grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -592,8 +876,8 @@ Together: 192.168.1.100`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 8: SSH */}
-          <LessonSection lessonNumber={8} title="SSH: Secure Remote Access">
+          {/* LESSON 10: SSH */}
+          <LessonSection lessonNumber={10} title="SSH: Secure Remote Access">
             <p className="text-xl text-gray-200 my-6">
               SSH lets network engineers manage devices from anywhere — securely and encrypted!
             </p>
@@ -693,11 +977,11 @@ Hacker sees: gibberish
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-8" grammar={grammar} />
+            <Terminal terminalId="terminal-10" grammar={grammar} />
           </LessonSection>
 
-          {/* LESSON 9: LAYER 3 SWITCHING */}
-          <LessonSection lessonNumber={9} title="Layer 3 Switching: Routed Ports">
+          {/* LESSON 11: LAYER 3 SWITCHING */}
+          <LessonSection lessonNumber={11} title="Layer 3 Switching: Routed Ports">
             <p className="text-xl text-gray-200 my-6">
               Layer 3 switches can both switch AND route! They combine the best of switches and routers.
             </p>
@@ -783,7 +1067,7 @@ g1/0/2 = Routed port (connects to router/internet)`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-9" grammar={grammar} />
+            <Terminal terminalId="terminal-11" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -802,8 +1086,8 @@ g1/0/2 = Routed port (connects to router/internet)`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 10: STATIC ROUTING */}
-          <LessonSection lessonNumber={10} title="Static Routing: Directing Traffic">
+          {/* LESSON 12: STATIC ROUTING */}
+          <LessonSection lessonNumber={12} title="Static Routing: Directing Traffic">
             <p className="text-xl text-gray-200 my-6">
               Routers need to know where to send packets. Static routes are manual instructions you configure.
             </p>
@@ -926,7 +1210,7 @@ Slower backup connection`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-10" grammar={grammar} />
+            <Terminal terminalId="terminal-12" grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -939,8 +1223,8 @@ Slower backup connection`}
             </div>
           </LessonSection>
 
-          {/* LESSON 11: OSPF BASICS */}
-          <LessonSection lessonNumber={11} title="OSPF: Dynamic Routing Protocol">
+          {/* LESSON 13: OSPF BASICS */}
+          <LessonSection lessonNumber={13} title="OSPF: Dynamic Routing Protocol">
             <p className="text-xl text-gray-200 my-6">
               Static routes are manual. OSPF is automatic! Routers talk to each other and figure out the best paths.
             </p>
@@ -1037,7 +1321,7 @@ Traffic flows: A → C → B`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-11" grammar={grammar} />
+            <Terminal terminalId="terminal-13" grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -1051,8 +1335,8 @@ Traffic flows: A → C → B`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 12: OSPF INTERFACE COST */}
-          <LessonSection lessonNumber={12} title="OSPF Interface Cost: Path Preference">
+          {/* LESSON 14: OSPF INTERFACE COST */}
+          <LessonSection lessonNumber={14} title="OSPF Interface Cost: Path Preference">
             <p className="text-xl text-gray-200 my-6">
               OSPF chooses paths based on "cost" — lower cost is better. You can manually set costs to control traffic flow!
             </p>
@@ -1158,7 +1442,7 @@ ip ospf cost 30
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-12" grammar={grammar} />
+            <Terminal terminalId="terminal-14" grammar={grammar} />
           </LessonSection>
 
           {/* COMPLETION SECTION */}
@@ -1169,7 +1453,7 @@ ip ospf cost 30
                 Congratulations!
               </h2>
               <p className="text-xl text-gray-300">
-                You've completed all 12 lessons and learned real networking skills!
+                You've completed all 14 lessons and learned real networking skills!
               </p>
             </div>
 
@@ -1178,7 +1462,9 @@ ip ospf cost 30
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ TAB completion</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Setting hostnames</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Password security</div>
-              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ IP address configuration</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Sub-configuration modes</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Understanding IP addresses</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Management access configuration</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Creating and organizing VLANs</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Trunk ports</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ SSH secure access</div>
@@ -1190,8 +1476,6 @@ ip ospf cost 30
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
