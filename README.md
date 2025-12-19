@@ -1,67 +1,15 @@
-# IOS CLI Typing Trainer
+# Cisco IOS CLI Learning Platform
 
-A **pure static web application** for learning Cisco-style CLI commands with:
-- Mode-aware prompts (`>`, `#`, `(config)#`, `(config-if)#`, etc.)
-- Tab completion (keyword + argument suggestions)
-- IOS-style error messages and abbreviation support
-- Structured exercises that validate **device state**, not just typed strings
-- Real-time exercise validation with hints
-- **No server required** - runs entirely in your browser!
+A **comprehensive, interactive web application** for learning Cisco IOS network configuration - from basic CLI navigation to advanced OSPF routing.
 
-## 🎓 Learning Modes
+🎓 **Perfect for:**
+- CyberPatriot competitors
+- CCNA certification students
+- Network engineering beginners
+- High school/college networking courses
+- Self-learners building home labs
 
-This project offers **three ways to learn** - choose what works best for you:
-
-### 📖 `learn.html` - Integrated Learning (RECOMMENDED FOR BEGINNERS)
-**One long scrollable page** - read concept, practice immediately, scroll down!
-- ✅ No tabs, no clicking around - just scroll
-- ✅ 7 lessons from basics to SSH
-- ✅ Each lesson has embedded terminal
-- ✅ Perfect for first-time students
-- ✅ Great for classroom instruction
-- ✅ Mobile-friendly
-
-### 🎮 `index.html` - Interactive Trainer (FOR PRACTICE & MASTERY)
-**Full-featured trainer** with 10 exercises and progress tracking
-- ✅ All 10 CyberPatriot-style exercises
-- ✅ Progress tracking and achievements
-- ✅ Real-time hints and validation
-- ✅ Perfect for skill mastery
-
-### 📚 `tutorial.html` - Reference Guide (FOR REVIEW)
-**Complete tutorial** with navigation and detailed explanations
-- ✅ Command reference
-- ✅ Visual concept diagrams
-- ✅ Network fundamentals
-- ✅ Perfect for review and lookup
-
----
-
-## Features
-
-### CLI Engine
-- **6 Mode Stack**: USER_EXEC, PRIV_EXEC, GLOBAL_CONFIG, IF_CONFIG, ROUTER_OSPF_CONFIG, LINE_VTY_CONFIG
-- **IOS-style Abbreviation**: `conf t` = `configure terminal`, `int g0/1` = `interface g0/1`
-- **Tab Completion**: Context-aware suggestions for keywords and arguments
-- **Smart Parsing**: Token-based command parsing with argument validation
-
-### Supported Commands
-- **Basic**: `enable`, `configure terminal`, `exit`, `end`, `hostname`, `enable secret`
-- **Interfaces**: `interface`, `ip address`, `no shutdown`, `no switchport`
-- **VLANs**: `vlan`, `name`, `switchport mode`, `switchport access vlan`, `switchport trunk allowed vlan`
-- **Routing**: `ip route` (with floating routes), `router ospf`, `network area`, `ip ospf cost`
-- **SSH**: `ip domain-name`, `crypto key generate rsa`, `ip ssh version`, `username secret`, `line vty`, `login local`, `transport input`
-- **Show Commands**: `show running-config`, `show vlan brief`, `show ip interface brief`, `show ip route`
-
-### Exercise System
-- 9 built-in exercises covering CyberPatriot-style tasks
-- State-based validation (not command string matching)
-- Real-time feedback with unmet requirements
-- Contextual hints for each exercise
-
-## Quick Start
-
-### Installation & Running
+## 🚀 Quick Start
 
 ```bash
 npm install
@@ -69,78 +17,115 @@ npm run build
 npm start
 ```
 
-The static server will start on http://localhost:3000
+Open http://localhost:3000/learn.html - start learning immediately!
 
-### Access the Application
+**It's a static site** - no server required, runs entirely in your browser!
 
-Open your browser to http://localhost:3000 to access the CLI trainer.
+---
 
-**Note:** This is a pure static application - all logic runs in your browser! No backend server needed.
+## 📚 The Learning Experience
 
-## Project Structure
+### `learn.html` - Complete Network Engineering Course (RECOMMENDED)
 
-```
-ios-practice/
-├── commands.yaml          # Command grammar (source)
-├── exercises.yaml         # Exercises (source)
-│
-├── client/                # Browser application source (TypeScript)
-│   ├── terminal-static.ts # Main application
-│   ├── cli/               # CLI engine
-│   ├── exercise/          # Exercise validator
-│   └── *.ts               # UI components
-│
-├── src/                   # Test infrastructure (Node.js)
-│   ├── cli/               # CLI engine (for testing)
-│   ├── server/            # Session management (for testing)
-│   └── __tests__/         # Jest tests
-│
-└── public/                # ⭐ DEPLOY THIS! Static site
-    ├── index.html
-    ├── styles.css
-    ├── commands.json      # 18KB
-    ├── exercises.json     # 10KB
-    └── *.js               # Compiled from client/ (~50KB)
-```
+**11 comprehensive lessons in one scrollable page** - read, practice, master!
 
-**What gets deployed:** Only the `public/` directory (~85KB total)
+#### What You'll Learn
+1. **Lesson 1:** CLI Navigation & Modes
+2. **Lesson 2:** Setting Hostname
+3. **Lesson 3:** Security (Enable Secret)
+4. **Lesson 4:** IP Addressing & Management
+5. **Lesson 5:** VLANs & Network Segmentation
+6. **Lesson 6:** Trunk Ports & Inter-Switch Links
+7. **Lesson 7:** SSH Secure Remote Access
+8. **Lesson 8:** Layer 3 Switching (Routed Ports)
+9. **Lesson 9:** Static Routing & Floating Routes
+10. **Lesson 10:** OSPF Dynamic Routing
+11. **Lesson 11:** OSPF Cost & Traffic Engineering
 
-## Usage Examples
+#### Features
+- ✅ **11 interactive terminals** - practice each concept immediately
+- ✅ **50+ visual diagrams** - understand topology and concepts
+- ✅ **Real-world examples** - ISPs, schools, enterprise networks
+- ✅ **CyberPatriot tips** - competition-specific guidance
+- ✅ **Career guidance** - certifications, salaries, job paths
+- ✅ **100% test coverage** - all 9 core exercises validated
+- ✅ **No tab switching** - scroll to learn, practice inline
+- ✅ **Mobile-friendly** - learn anywhere
+- ✅ **Works offline** - no internet required after loading
+
+**Perfect for:** First-time learners, classroom instruction, self-paced study
+
+---
+
+### `index.html` - Exercise Practice Interface (OPTIONAL)
+
+**Exercise-driven practice** with progress tracking and achievements.
+
+#### Features
+- ✅ **9 CyberPatriot-style exercises**
+- ✅ **Progress tracking & achievements**
+- ✅ **Real-time validation**
+- ✅ **Exercise hints**
+
+**Perfect for:** Skill mastery, deliberate practice, competition prep
+
+---
+
+## ✨ Core Features
+
+### Realistic CLI Engine
+- **6 Modes:** USER_EXEC (`>`), PRIV_EXEC (`#`), GLOBAL_CONFIG, IF_CONFIG, ROUTER_OSPF_CONFIG, LINE_VTY_CONFIG
+- **IOS-style Abbreviations:** `conf t` = `configure terminal`, `int g0/1` = `interface gigabitethernet0/1`
+- **Tab Completion:** Context-aware suggestions for keywords and arguments
+- **Smart Parsing:** Token-based command parsing with argument validation
+- **Error Messages:** Realistic IOS error output
+
+### Comprehensive Command Support
+- **Navigation:** `enable`, `configure terminal`, `exit`, `end`
+- **Basic Config:** `hostname`, `enable secret`, `write memory`
+- **Interfaces:** `interface`, `ip address`, `no shutdown`, `no switchport`
+- **VLANs:** `vlan`, `name`, `switchport mode`, `switchport access vlan`, `switchport trunk allowed vlan`
+- **Routing:** `ip route` (with floating routes), `ip default-gateway`, `router ospf`, `network area`, `ip ospf cost`
+- **SSH:** `ip domain-name`, `crypto key generate rsa`, `ip ssh version`, `username secret`, `line vty`, `login local`, `transport input`
+- **Show Commands:** `show running-config`, `show vlan brief`, `show ip interface brief`, `show ip route`, `show ip protocols`
+
+### State-Based Exercise Validation
+- ✅ **Not string matching** - validates actual device state
+- ✅ **Real-time feedback** - see what requirements remain
+- ✅ **Contextual hints** - get unstuck quickly
+- ✅ **9 built-in exercises** - covering all CyberPatriot scenarios
+
+---
+
+## 📖 Usage Examples
 
 ### Basic Navigation
 ```
 Switch> enable
 Switch# configure terminal
-Switch(config)# hostname Router1
-Router1(config)# end
-Router1#
+Switch(config)# hostname CorporateSwitch
+CorporateSwitch(config)# end
+CorporateSwitch# write memory
 ```
 
 ### Tab Completion
 ```
-Router1# conf<TAB>         → configure
-Router1# configure t<TAB>  → terminal
-Router1(config)# int<TAB>  → interface
-```
-
-### Interface Configuration
-```
-Router1(config)# interface g0/1
-Router1(config-if)# ip address 192.168.1.1 255.255.255.0
-Router1(config-if)# no shutdown
-Router1(config-if)# exit
+CorporateSwitch# conf<TAB>         → configure
+CorporateSwitch# configure t<TAB>  → terminal
+CorporateSwitch(config)# int<TAB>  → interface
 ```
 
 ### VLAN Configuration
 ```
 Switch(config)# vlan 100
-Switch(config)# name Sales
+Switch(config)# name Students
 Switch(config)# interface fa0/2
 Switch(config-if)# switchport mode access
 Switch(config-if)# switchport access vlan 100
+Switch(config-if)# exit
 ```
 
-### OSPF Configuration
+### OSPF Routing
 ```
 Router(config)# router ospf 1
 Router(config-router)# network 192.168.1.0 0.0.0.255 area 0
@@ -149,119 +134,171 @@ Router(config)# interface g0/0
 Router(config-if)# ip ospf cost 10
 ```
 
-## Deployment
+---
 
-This is a **static site** - deploy the `public/` directory to any hosting service!
+## 🏗️ Project Structure
 
-### Quick Deploy Options
+```
+ios-practice/
+├── commands.yaml          # Command grammar (source)
+├── exercises.yaml         # Exercises (source)
+│
+├── client/                # Browser application (TypeScript)
+│   ├── cli/               # CLI engine (parser, completer, handlers)
+│   ├── exercise/          # Exercise validator
+│   └── *.ts               # UI components
+│
+├── src/                   # Test infrastructure (Node.js)
+│   ├── cli/               # CLI engine (for testing)
+│   ├── server/            # Session management (for testing)
+│   └── __tests__/         # Jest tests (159 tests, all passing)
+│
+└── public/                # ⭐ STATIC SITE - Deploy this!
+    ├── learn.html         # 🎓 Complete course (1,561 lines)
+    ├── learn.css          # Styles for learn.html
+    ├── learn.js           # Functionality for learn.html
+    ├── index.html         # Exercise interface (90 lines)
+    ├── styles.css         # Styles for index.html
+    ├── commands.json      # 18KB (generated from commands.yaml)
+    ├── exercises.json     # 10KB (generated from exercises.yaml)
+    └── *.js               # ~50KB (compiled from client/)
+```
 
-**GitHub Pages (FREE):**
+**Total bundle size:** ~85KB (~25KB gzipped)
+
+---
+
+## 🚢 Deployment
+
+This is a **pure static site** - deploy `public/` to any hosting service!
+
+### GitHub Pages (FREE)
 ```bash
 npm run build
 git subtree push --prefix public origin gh-pages
 # Live at: https://yourusername.github.io/ios-practice/
 ```
 
-**Netlify (FREE):**
+### Netlify (FREE)
 ```bash
 npm install -g netlify-cli
 cd public && netlify deploy --prod
 # Or drag-and-drop public/ folder to netlify.com/drop
 ```
 
-**Vercel (FREE):**
+### Any Static Server
 ```bash
-npm install -g vercel
-vercel --prod
-```
-
-**Any Static Server:**
-```bash
-# Just serve the public/ directory
+# Serve the public/ directory
 python3 -m http.server 8080 --directory public
-# Or copy to your web server
+
+# Or copy to web server
 cp -r public/* /var/www/html/ios-trainer/
 ```
 
-**Bundle Size:** ~85KB total (~25KB gzipped)
+**No server-side code!** Everything runs in the browser for instant response and offline capability.
 
-## Development
+---
+
+## 💻 Development
 
 ### Build
 ```bash
 npm run build
 ```
 
-### Development Mode
-```bash
-npm run dev
-```
-Builds once and starts the server.
-
-### Watch Mode (Recommended for Development)
+### Watch Mode (Recommended)
 ```bash
 npm run watch
 ```
-Automatically rebuilds TypeScript files on every save:
-- 🔨 Watches `client/` and `src/` directories
-- ✅ Compiles TypeScript to JavaScript in `public/`
-- ✅ Runs import fixer after each build
-- ✅ Shows build status (building, success, error)
-- ✅ Debounced to prevent multiple rebuilds
+Automatically rebuilds on every TypeScript file change.
 
-**Tip:** Run watch mode in one terminal, and the dev server in another:
+**Tip:** Run watch + dev server in two terminals:
 ```bash
-# Terminal 1
+# Terminal 1: Auto-rebuild on save
 npm run watch
 
-# Terminal 2
+# Terminal 2: Serve the site
 npm start
 ```
 
 ### Testing
 ```bash
-# Run all tests (71 tests)
+# Run all tests (8 suites, 159 tests)
 npm test
 
-# Run tests in watch mode
+# Watch mode for TDD
 npm run test:watch
 
-# Run tests with coverage report
+# Coverage report
 npm run test:coverage
 ```
 
-**Test Suite**: 130 tests with 98.5% pass rate. See [TESTING.md](TESTING.md) for details.
+**Test Coverage:** All 9 core exercises validated, 159 tests passing.
 
-## Architecture
+---
 
-This is a **pure static web application** - all logic runs in the browser:
+## 🎯 What Makes This Special
 
-**Browser-Based (TypeScript → JavaScript)**
-- xterm.js for terminal UI
-- CLI engine with parser, completer, and command handlers
-- Exercise validation engine
-- Session management (in-memory)
-- Exercise status panel with real-time feedback
+### 1. Comprehensive & Standalone
+- **All-in-one:** From basic CLI to advanced OSPF in one resource
+- **No tab switching:** Read → Practice → Continue in one flow
+- **Self-contained:** No external dependencies after loading
 
-**No server required!** Everything runs client-side for instant response and offline capability.
+### 2. Pedagogically Sound
+- **Progressive difficulty:** Basics first, advanced topics later
+- **Immediate practice:** Every concept has a terminal right below it
+- **Visual learning:** 50+ diagrams showing real network topologies
+- **Real-world context:** ISP networks, schools, enterprise examples
 
-## Grammar Files
+### 3. Competition & Career Ready
+- **CyberPatriot aligned:** All common scenarios covered
+- **CCNA concepts:** Routing, switching, security fundamentals
+- **Professional skills:** Commands and workflows used in production
+- **Career guidance:** Certifications, salaries, next steps
 
-### `commands.yaml`
-Defines CLI modes, command grammar, argument types, and output templates.
+### 4. Modern Development
+- **TypeScript:** Type-safe, maintainable code
+- **159 tests:** Comprehensive test coverage
+- **Git hooks:** Pre-commit validation
+- **Clean architecture:** Separation of concerns
 
-Key features:
-- Token-based command definitions
-- Typed arguments (IP, IFNAME, VLAN_ID, etc.)
-- Action handlers for state mutations
-- Template-based output rendering
+---
 
-### `exercises.yaml`
-Defines device profiles and exercises with:
-- Initial device state
-- Requirements (state-based validation)
-- Instructions and hints
+## 📚 Additional Documentation
 
-## License
+- **`.claude.md`** - AI assistant guidelines and git policies
+- **`HOOKS.md`** - Git hooks documentation
+- **`ARCHITECTURE.md`** - Technical architecture details
+- **`TESTING.md`** - Test suite documentation
+- **`CLEANUP_PLAN.md`** - Rationale for file organization
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! This project follows:
+- **TypeScript** for type safety
+- **Jest** for testing (maintain 100% test coverage)
+- **Git hooks** for quality (never bypass with --no-verify)
+- **State-based validation** (not string matching)
+
+See `.claude.md` for detailed development guidelines.
+
+---
+
+## 📜 License
 
 MIT
+
+---
+
+## 🎓 Educational Impact
+
+This platform teaches the skills needed for:
+- **CyberPatriot Cisco Networking Challenge**
+- **Cisco CCNA Certification**
+- **CompTIA Network+ Certification**
+- **Junior Network Administrator roles** ($70k-$120k+)
+- **Understanding how the internet actually works**
+
+**Every network engineer started where you are now. Start your journey!** 🚀
