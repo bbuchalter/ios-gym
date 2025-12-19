@@ -31,7 +31,9 @@ export function createInitialState(): DeviceState {
         login: null,
         transport: []
       }
-    }
+    },
+    configSaved: false,
+    savedState: null
   };
 }
 

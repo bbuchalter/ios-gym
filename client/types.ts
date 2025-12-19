@@ -19,6 +19,8 @@ export interface DeviceState {
   routes: RouteEntry[];
   ospf: OspfConfig;
   ssh: SshConfig;
+  configSaved: boolean;
+  savedState: Partial<DeviceState> | null;
 }
 
 export interface InterfaceConfig {

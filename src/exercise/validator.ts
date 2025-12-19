@@ -18,7 +18,7 @@ export class ExerciseValidator {
     const unmetRequirements: UnmetRequirement[] = [];
     
     for (const req of exercise.requirements) {
-      if (!this.checkRequirement(state, req)) {
+      if (!this.checkRequirement(state, req, exercise)) {
         unmetRequirements.push(this.describeUnmetRequirement(req));
       }
     }
@@ -32,7 +32,7 @@ export class ExerciseValidator {
   /**
    * Check a single requirement
    */
-  private checkRequirement(state: DeviceState, req: Requirement): boolean {
+  private checkRequirement(state: DeviceState, req: Requirement, exercise: Exercise): boolean {
     switch (req.type) {
       case "state_equals":
         return this.checkStateEquals(state, req);
@@ -72,6 +72,9 @@ export class ExerciseValidator {
       
       case "ssh_user_secret_equals":
         return this.checkSshUserSecretEquals(state, req);
+      
+      case "config_saved":
+        return this.checkConfigSaved(state, exercise);
       
       default:
         console.warn(`Unknown requirement type: ${req.type}`);
@@ -189,6 +192,38 @@ export class ExerciseValidator {
     return user.secret === req.secret;
   }
   
+  private checkConfigSaved(state: DeviceState, exercise: Exercise): boolean {
+    // Check if a saved state exists
+    if (!state.savedState || !state.configSaved) {
+      return false;
+    }
+    
+    // Validate that the saved state meets all OTHER requirements (excluding config_saved itself)
+    const otherRequirements = exercise.requirements.filter(req => req.type !== "config_saved");
+    
+    // Create a temporary state object from savedState for validation
+    const savedStateForValidation = {
+      ...state.savedState,
+      configSaved: false,
+      savedState: null
+    } as DeviceState;
+    
+    // Create a temporary exercise without config_saved requirement to avoid recursion
+    const tempExercise: Exercise = {
+      ...exercise,
+      requirements: otherRequirements
+    };
+    
+    // Check all other requirements against the saved state
+    for (const req of otherRequirements) {
+      if (!this.checkRequirement(savedStateForValidation, req, tempExercise)) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
   /**
    * Generate a human-readable description of an unmet requirement
    */
@@ -270,6 +305,12 @@ export class ExerciseValidator {
         return {
           type: req.type,
           description: `SSH user ${req.user} should exist with correct secret`
+        };
+      
+      case "config_saved":
+        return {
+          type: req.type,
+          description: `Configuration must be saved (use 'write memory' or 'copy running-config startup-config')`
         };
       
       default:

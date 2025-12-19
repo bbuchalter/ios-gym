@@ -290,5 +290,276 @@ describe("ExerciseValidator", () => {
       expect(result.unmetRequirements[0].type).toBe("vlan_exists");
     });
   });
+
+  describe("config_saved requirement", () => {
+    test("should fail when config has not been saved", () => {
+      const state = createInitialState();
+      state.hostname = "CorporateSwitch";
+      state.enableSecret = "cisco123";
+      
+      const exercise: Exercise = {
+        id: "test",
+        title: "Test",
+        device_profile: "L2_SWITCH",
+        instructions: "",
+        requirements: [
+          { type: "state_equals", path: "hostname", value: "CorporateSwitch" },
+          { type: "state_equals", path: "enableSecret", value: "cisco123" },
+          { type: "config_saved" }
+        ],
+        hints: []
+      };
+      
+      const result = validator.validate(state, exercise);
+      expect(result.passed).toBe(false);
+      expect(result.unmetRequirements).toHaveLength(1);
+      expect(result.unmetRequirements[0].type).toBe("config_saved");
+    });
+
+    test("should fail when saved state doesn't meet requirements", () => {
+      const state = createInitialState();
+      // Current state meets requirements
+      state.hostname = "CorporateSwitch";
+      state.enableSecret = "cisco123";
+      
+      // But saved state has old values (saved before configuration)
+      state.configSaved = true;
+      state.savedState = {
+        hostname: "Switch",
+        enableSecret: null,
+        interfaces: {},
+        vlans: { "1": { name: "default" } },
+        svis: {},
+        ipDefaultGateway: null,
+        routes: [],
+        ospf: { processId: null, networks: [], ifCosts: {} },
+        ssh: {
+          domainName: null,
+          rsaModulus: null,
+          sshVersion: null,
+          users: {},
+          vty: { range: null, login: null, transport: [] }
+        }
+      };
+      
+      const exercise: Exercise = {
+        id: "test",
+        title: "Test",
+        device_profile: "L2_SWITCH",
+        instructions: "",
+        requirements: [
+          { type: "state_equals", path: "hostname", value: "CorporateSwitch" },
+          { type: "state_equals", path: "enableSecret", value: "cisco123" },
+          { type: "config_saved" }
+        ],
+        hints: []
+      };
+      
+      const result = validator.validate(state, exercise);
+      expect(result.passed).toBe(false);
+      expect(result.unmetRequirements).toHaveLength(1);
+      expect(result.unmetRequirements[0].type).toBe("config_saved");
+    });
+
+    test("should pass when saved state meets all requirements", () => {
+      const state = createInitialState();
+      // Current state meets requirements
+      state.hostname = "CorporateSwitch";
+      state.enableSecret = "cisco123";
+      
+      // Saved state also meets requirements (saved after configuration)
+      state.configSaved = true;
+      state.savedState = {
+        hostname: "CorporateSwitch",
+        enableSecret: "cisco123",
+        interfaces: {},
+        vlans: { "1": { name: "default" } },
+        svis: {},
+        ipDefaultGateway: null,
+        routes: [],
+        ospf: { processId: null, networks: [], ifCosts: {} },
+        ssh: {
+          domainName: null,
+          rsaModulus: null,
+          sshVersion: null,
+          users: {},
+          vty: { range: null, login: null, transport: [] }
+        }
+      };
+      
+      const exercise: Exercise = {
+        id: "test",
+        title: "Test",
+        device_profile: "L2_SWITCH",
+        instructions: "",
+        requirements: [
+          { type: "state_equals", path: "hostname", value: "CorporateSwitch" },
+          { type: "state_equals", path: "enableSecret", value: "cisco123" },
+          { type: "config_saved" }
+        ],
+        hints: []
+      };
+      
+      const result = validator.validate(state, exercise);
+      expect(result.passed).toBe(true);
+      expect(result.unmetRequirements).toHaveLength(0);
+    });
+
+    test("should require both current state AND saved state to meet requirements", () => {
+      const state = createInitialState();
+      // Current state meets requirements
+      state.hostname = "CorporateSwitch";
+      state.enableSecret = "cisco123";
+      
+      // Saved state also meets requirements
+      state.configSaved = true;
+      state.savedState = {
+        hostname: "CorporateSwitch",
+        enableSecret: "cisco123",
+        interfaces: {},
+        vlans: { "1": { name: "default" } },
+        svis: {},
+        ipDefaultGateway: null,
+        routes: [],
+        ospf: { processId: null, networks: [], ifCosts: {} },
+        ssh: {
+          domainName: null,
+          rsaModulus: null,
+          sshVersion: null,
+          users: {},
+          vty: { range: null, login: null, transport: [] }
+        }
+      };
+      
+      const exercise: Exercise = {
+        id: "test",
+        title: "Test",
+        device_profile: "L2_SWITCH",
+        instructions: "",
+        requirements: [
+          { type: "state_equals", path: "hostname", value: "CorporateSwitch" },
+          { type: "state_equals", path: "enableSecret", value: "cisco123" },
+          { type: "config_saved" }
+        ],
+        hints: []
+      };
+      
+      const result = validator.validate(state, exercise);
+      expect(result.passed).toBe(true);
+      expect(result.unmetRequirements).toHaveLength(0);
+    });
+
+    test("should fail if current state modified after valid save", () => {
+      const state = createInitialState();
+      // Current state has been modified after save
+      state.hostname = "DifferentName";
+      state.enableSecret = "differentpass";
+      
+      // But saved state meets requirements (saved with correct values)
+      state.configSaved = true;
+      state.savedState = {
+        hostname: "CorporateSwitch",
+        enableSecret: "cisco123",
+        interfaces: {},
+        vlans: { "1": { name: "default" } },
+        svis: {},
+        ipDefaultGateway: null,
+        routes: [],
+        ospf: { processId: null, networks: [], ifCosts: {} },
+        ssh: {
+          domainName: null,
+          rsaModulus: null,
+          sshVersion: null,
+          users: {},
+          vty: { range: null, login: null, transport: [] }
+        }
+      };
+      
+      const exercise: Exercise = {
+        id: "test",
+        title: "Test",
+        device_profile: "L2_SWITCH",
+        instructions: "",
+        requirements: [
+          { type: "state_equals", path: "hostname", value: "CorporateSwitch" },
+          { type: "state_equals", path: "enableSecret", value: "cisco123" },
+          { type: "config_saved" }
+        ],
+        hints: []
+      };
+      
+      const result = validator.validate(state, exercise);
+      // Should fail because current state doesn't match
+      expect(result.passed).toBe(false);
+      expect(result.unmetRequirements.length).toBeGreaterThan(0);
+    });
+
+    test("should work with complex requirements (VLANs, interfaces)", () => {
+      const state = createInitialState();
+      state.hostname = "Switch1";
+      state.vlans["100"] = { name: "Sales" };
+      state.vlans["200"] = { name: "Engineering" };
+      state.interfaces["fa0/1"] = {
+        adminUp: true,
+        l2mode: "access",
+        accessVlan: "100",
+        trunkAllowed: null,
+        ip: null,
+        mask: null
+      };
+      
+      // Saved state matches
+      state.configSaved = true;
+      state.savedState = {
+        hostname: "Switch1",
+        enableSecret: null,
+        interfaces: {
+          "fa0/1": {
+            adminUp: true,
+            l2mode: "access",
+            accessVlan: "100",
+            trunkAllowed: null,
+            ip: null,
+            mask: null
+          }
+        },
+        vlans: {
+          "1": { name: "default" },
+          "100": { name: "Sales" },
+          "200": { name: "Engineering" }
+        },
+        svis: {},
+        ipDefaultGateway: null,
+        routes: [],
+        ospf: { processId: null, networks: [], ifCosts: {} },
+        ssh: {
+          domainName: null,
+          rsaModulus: null,
+          sshVersion: null,
+          users: {},
+          vty: { range: null, login: null, transport: [] }
+        }
+      };
+      
+      const exercise: Exercise = {
+        id: "test",
+        title: "Test",
+        device_profile: "L2_SWITCH",
+        instructions: "",
+        requirements: [
+          { type: "state_equals", path: "hostname", value: "Switch1" },
+          { type: "vlan_exists", vlan: "100" },
+          { type: "vlan_exists", vlan: "200" },
+          { type: "if_access_vlan_equals", ifname: "fa0/1", vlan: "100" },
+          { type: "config_saved" }
+        ],
+        hints: []
+      };
+      
+      const result = validator.validate(state, exercise);
+      expect(result.passed).toBe(true);
+      expect(result.unmetRequirements).toHaveLength(0);
+    });
+  });
 });
 

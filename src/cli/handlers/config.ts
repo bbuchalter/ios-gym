@@ -36,8 +36,11 @@ export function handlePersist(
   args: Record<string, string>,
   action: any
 ): ExecutionResult {
-  // In a real system, this would save to persistent storage
-  // For MVP, just acknowledge
+  // Capture a snapshot of the current state (excluding savedState to avoid recursion)
+  const { savedState, configSaved, ...stateToSave } = session.deviceState;
+  session.deviceState.savedState = JSON.parse(JSON.stringify(stateToSave));
+  session.deviceState.configSaved = true;
+  
   const output = action.output || "Building configuration...\n[OK]";
   
   return { output: output.split("\n") };

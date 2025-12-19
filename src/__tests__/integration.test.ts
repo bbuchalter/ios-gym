@@ -223,5 +223,195 @@ describe("CLI Integration Tests", () => {
       expect(session.getPrompt()).toBe("Switch(config-if)# ");
     });
   });
+
+  describe("Save Valid Config Workflow", () => {
+    test("should fail exercise when config not saved", () => {
+      const { ExerciseValidator } = require("../exercise/validator");
+      const validator = new ExerciseValidator();
+      
+      // Load exercise
+      session.loadExercise("ex-001-basics-hostname-enable-secret");
+      
+      // Configure device correctly
+      engine.executeCommand(session, "enable");
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "hostname CorporateSwitch2");
+      engine.executeCommand(session, "enable secret C1sc0R0ck$");
+      engine.executeCommand(session, "end");
+      
+      // Verify state is correct
+      expect(session.deviceState.hostname).toBe("CorporateSwitch2");
+      expect(session.deviceState.enableSecret).toBe("C1sc0R0ck$");
+      
+      // But exercise should fail because config not saved
+      const exercise = session.getActiveExercise();
+      const result = validator.validate(session.deviceState, exercise);
+      
+      expect(result.passed).toBe(false);
+      expect(result.unmetRequirements.some((r: any) => r.type === "config_saved")).toBe(true);
+    });
+
+    test("should fail exercise when saved before configuration", () => {
+      const { ExerciseValidator } = require("../exercise/validator");
+      const validator = new ExerciseValidator();
+      
+      // Load exercise
+      session.loadExercise("ex-001-basics-hostname-enable-secret");
+      
+      // Save BEFORE configuring (wrong order)
+      engine.executeCommand(session, "enable");
+      engine.executeCommand(session, "write memory");
+      
+      // Then configure
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "hostname CorporateSwitch2");
+      engine.executeCommand(session, "enable secret C1sc0R0ck$");
+      engine.executeCommand(session, "end");
+      
+      // Exercise should fail because saved state doesn't meet requirements
+      const exercise = session.getActiveExercise();
+      const result = validator.validate(session.deviceState, exercise);
+      
+      expect(result.passed).toBe(false);
+      expect(result.unmetRequirements.some((r: any) => r.type === "config_saved")).toBe(true);
+    });
+
+    test("should pass exercise when configured then saved correctly", () => {
+      const { ExerciseValidator } = require("../exercise/validator");
+      const validator = new ExerciseValidator();
+      
+      // Load exercise
+      session.loadExercise("ex-001-basics-hostname-enable-secret");
+      
+      // Configure device correctly
+      engine.executeCommand(session, "enable");
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "hostname CorporateSwitch2");
+      engine.executeCommand(session, "enable secret C1sc0R0ck$");
+      engine.executeCommand(session, "end");
+      
+      // Save configuration (correct order)
+      engine.executeCommand(session, "write memory");
+      
+      // Exercise should pass
+      const exercise = session.getActiveExercise();
+      const result = validator.validate(session.deviceState, exercise);
+      
+      expect(result.passed).toBe(true);
+      expect(result.unmetRequirements).toHaveLength(0);
+    });
+
+    test("should fail if config modified after valid save", () => {
+      const { ExerciseValidator } = require("../exercise/validator");
+      const validator = new ExerciseValidator();
+      
+      // Load exercise
+      session.loadExercise("ex-001-basics-hostname-enable-secret");
+      
+      // Configure and save correctly
+      engine.executeCommand(session, "enable");
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "hostname CorporateSwitch2");
+      engine.executeCommand(session, "enable secret C1sc0R0ck$");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
+      
+      // Modify config after save
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "hostname DifferentName");
+      engine.executeCommand(session, "end");
+      
+      // Exercise should fail (current state doesn't match even though saved state was valid)
+      const exercise = session.getActiveExercise();
+      const result = validator.validate(session.deviceState, exercise);
+      
+      expect(result.passed).toBe(false);
+      expect(result.unmetRequirements.length).toBeGreaterThan(0);
+    });
+
+    test("should use copy running-config startup-config as alternative save command", () => {
+      const { ExerciseValidator } = require("../exercise/validator");
+      const validator = new ExerciseValidator();
+      
+      // Load exercise
+      session.loadExercise("ex-001-basics-hostname-enable-secret");
+      
+      // Configure device correctly
+      engine.executeCommand(session, "enable");
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "hostname CorporateSwitch2");
+      engine.executeCommand(session, "enable secret C1sc0R0ck$");
+      engine.executeCommand(session, "end");
+      
+      // Save using alternative command
+      engine.executeCommand(session, "copy running-config startup-config");
+      
+      // Exercise should pass
+      const exercise = session.getActiveExercise();
+      const result = validator.validate(session.deviceState, exercise);
+      
+      expect(result.passed).toBe(true);
+      expect(result.unmetRequirements).toHaveLength(0);
+    });
+
+    test("should fail if partial config saved", () => {
+      const { ExerciseValidator } = require("../exercise/validator");
+      const validator = new ExerciseValidator();
+      
+      // Load exercise
+      session.loadExercise("ex-001-basics-hostname-enable-secret");
+      
+      // Configure only hostname
+      engine.executeCommand(session, "enable");
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "hostname CorporateSwitch2");
+      engine.executeCommand(session, "end");
+      
+      // Save partial config
+      engine.executeCommand(session, "write memory");
+      
+      // Complete configuration after save
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "enable secret C1sc0R0ck$");
+      engine.executeCommand(session, "end");
+      
+      // Exercise should fail (saved state missing enable secret)
+      const exercise = session.getActiveExercise();
+      const result = validator.validate(session.deviceState, exercise);
+      
+      expect(result.passed).toBe(false);
+      expect(result.unmetRequirements.some((r: any) => r.type === "config_saved")).toBe(true);
+    });
+
+    test("should pass when resaving after fixing config", () => {
+      const { ExerciseValidator } = require("../exercise/validator");
+      const validator = new ExerciseValidator();
+      
+      // Load exercise
+      session.loadExercise("ex-001-basics-hostname-enable-secret");
+      
+      // Configure only hostname and save (incomplete)
+      engine.executeCommand(session, "enable");
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "hostname CorporateSwitch2");
+      engine.executeCommand(session, "end");
+      engine.executeCommand(session, "write memory");
+      
+      // Complete configuration
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "enable secret C1sc0R0ck$");
+      engine.executeCommand(session, "end");
+      
+      // Save again with complete config
+      engine.executeCommand(session, "write memory");
+      
+      // Exercise should now pass
+      const exercise = session.getActiveExercise();
+      const result = validator.validate(session.deviceState, exercise);
+      
+      expect(result.passed).toBe(true);
+      expect(result.unmetRequirements).toHaveLength(0);
+    });
+  });
 });
 

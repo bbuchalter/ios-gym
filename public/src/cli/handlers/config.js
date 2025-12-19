@@ -20,8 +20,10 @@ export function handleSet(session, args, action) {
     return { output: [] };
 }
 export function handlePersist(session, args, action) {
-    // In a real system, this would save to persistent storage
-    // For MVP, just acknowledge
+    // Capture a snapshot of the current state (excluding savedState to avoid recursion)
+    const { savedState, configSaved, ...stateToSave } = session.deviceState;
+    session.deviceState.savedState = JSON.parse(JSON.stringify(stateToSave));
+    session.deviceState.configSaved = true;
     const output = action.output || "Building configuration...\n[OK]";
     return { output: output.split("\n") };
 }

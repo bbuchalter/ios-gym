@@ -119,7 +119,7 @@
       "id": "ex-001-basics-hostname-enable-secret",
       "title": "Basics: hostname + enable secret",
       "device_profile": "L2_SWITCH",
-      "instructions": "Configure the device:\n- Set hostname to \"CorporateSwitch2\"\n- Set enable secret to \"C1sc0R0ck$\" (note: 0 is zero)\n",
+      "instructions": "Configure the device:\n- Set hostname to \"CorporateSwitch2\"\n- Set enable secret to \"C1sc0R0ck$\" (note: 0 is zero)\n- Save the VALID configuration (configuration must be correct before saving)\n",
       "requirements": [
         {
           "type": "state_equals",
@@ -130,18 +130,22 @@
           "type": "state_equals",
           "path": "enableSecret",
           "value": "C1sc0R0ck$"
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "Use: enable → configure terminal → hostname …",
-        "Then: enable secret …"
+        "Then: enable secret …",
+        "Finally: end → write memory (IMPORTANT: save AFTER configuring correctly)"
       ]
     },
     {
       "id": "ex-002-l2-mgmt-ip-default-gateway",
       "title": "L2 switch management: SVI + ip default-gateway",
       "device_profile": "L2_SWITCH",
-      "instructions": "Configure switch management:\n- Set VLAN 1 SVI IP to 172.16.16.3 255.255.255.0\n- Set ip default-gateway to 172.16.16.1\n",
+      "instructions": "Configure switch management:\n- Set VLAN 1 SVI IP to 172.16.16.3 255.255.255.0\n- Set ip default-gateway to 172.16.16.1\n- Save the VALID configuration (save AFTER configuring correctly)\n",
       "requirements": [
         {
           "type": "svi_ip_equals",
@@ -153,19 +157,23 @@
           "type": "state_equals",
           "path": "ipDefaultGateway",
           "value": "172.16.16.1"
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "Use: interface vlan 1",
         "Then: ip address … and no shutdown",
-        "Then: ip default-gateway … in global config"
+        "Then: ip default-gateway … in global config",
+        "Finally: write memory to save (must save AFTER completing all config)"
       ]
     },
     {
       "id": "ex-003-vlan-db-and-access-ports",
       "title": "VLAN database + access ports",
       "device_profile": "L2_SWITCH",
-      "instructions": "Configure VLANs and access ports:\n- Create VLAN 100 and VLAN 200\n- Set Fa0/2 as access VLAN 100\n- Set Fa0/3 as access VLAN 200\n",
+      "instructions": "Configure VLANs and access ports:\n- Create VLAN 100 and VLAN 200\n- Set Fa0/2 as access VLAN 100\n- Set Fa0/3 as access VLAN 200\n- Save the VALID configuration (all VLANs and ports must be configured first)\n",
       "requirements": [
         {
           "type": "vlan_exists",
@@ -184,19 +192,23 @@
           "type": "if_access_vlan_equals",
           "ifname": "fa0/3",
           "vlan": "200"
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "Use: vlan 100, vlan 200",
         "Use: interface fa0/2 and switchport mode access",
-        "Use: switchport access vlan …"
+        "Use: switchport access vlan …",
+        "Finally: write memory to save"
       ]
     },
     {
       "id": "ex-004-trunk-allowed-vlans",
       "title": "Trunking: restrict allowed VLANs",
       "device_profile": "L2_SWITCH",
-      "instructions": "Configure trunk ports:\n- Configure Fa0/1 as trunk, allow only VLANs 1,100,200\n- Configure G0/1 as trunk, allow only VLANs 1,100,200\n",
+      "instructions": "Configure trunk ports:\n- Configure Fa0/1 as trunk, allow only VLANs 1,100,200\n- Configure G0/1 as trunk, allow only VLANs 1,100,200\n- Save the VALID configuration (both trunks must be configured before saving)\n",
       "requirements": [
         {
           "type": "if_trunk_allowed_equals",
@@ -215,18 +227,22 @@
             "100",
             "200"
           ]
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "Use: switchport mode trunk",
-        "Then: switchport trunk allowed vlan 1,100,200"
+        "Then: switchport trunk allowed vlan 1,100,200",
+        "Finally: write memory to save"
       ]
     },
     {
       "id": "ex-005-l3-switch-no-switchport-and-ip",
       "title": "Layer 3 switch: routed port with no switchport",
       "device_profile": "L3_SWITCH",
-      "instructions": "Convert a switchport to a routed port and assign an IP:\n- On interface g1/0/2: set no switchport\n- Assign IP 35.72.12.1 255.255.255.252\n- Ensure interface is up (no shutdown)\n",
+      "instructions": "Convert a switchport to a routed port and assign an IP:\n- On interface g1/0/2: set no switchport\n- Assign IP 35.72.12.1 255.255.255.252\n- Ensure interface is up (no shutdown)\n- Save the VALID configuration (interface must be fully configured first)\n",
       "requirements": [
         {
           "type": "if_l2mode_equals",
@@ -242,18 +258,22 @@
         {
           "type": "if_admin_up",
           "ifname": "g1/0/2"
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "In interface config: no switchport",
-        "Then ip address … and no shutdown"
+        "Then ip address … and no shutdown",
+        "Finally: write memory to save"
       ]
     },
     {
       "id": "ex-006-static-default-and-floating-default",
       "title": "Static routing: default + floating backup",
       "device_profile": "ROUTER",
-      "instructions": "Configure two default routes:\n- Primary: ip route 0.0.0.0 0.0.0.0 35.72.13.1\n- Backup (floating): ip route 0.0.0.0 0.0.0.0 35.72.13.2 254\n",
+      "instructions": "Configure two default routes:\n- Primary: ip route 0.0.0.0 0.0.0.0 35.72.13.1\n- Backup (floating): ip route 0.0.0.0 0.0.0.0 35.72.13.2 254\n- Save the VALID configuration (both routes must be configured before saving)\n",
       "requirements": [
         {
           "type": "route_exists",
@@ -268,18 +288,22 @@
           "mask": "0.0.0.0",
           "nextHop": "35.72.13.2",
           "ad": 254
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "Administrative distance makes the backup route less preferred.",
-        "The last number in the backup route is the AD."
+        "The last number in the backup route is the AD.",
+        "Finally: write memory to save"
       ]
     },
     {
       "id": "ex-007-ospf-area0-process1",
       "title": "OSPF: process 1, area 0 (single interface)",
       "device_profile": "ROUTER",
-      "instructions": "Configure OSPF:\n- Use process ID 1\n- Add network 35.72.12.2 with wildcard 0.0.0.0 in area 0\n(Note: use the specific interface IP, not the network address)\n",
+      "instructions": "Configure OSPF:\n- Use process ID 1\n- Add network 35.72.12.2 with wildcard 0.0.0.0 in area 0\n(Note: use the specific interface IP, not the network address)\n- Save the VALID configuration (OSPF must be fully configured first)\n",
       "requirements": [
         {
           "type": "ospf_process_equals",
@@ -290,18 +314,22 @@
           "ip": "35.72.12.2",
           "wildcard": "0.0.0.0",
           "area": 0
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "Use: router ospf 1",
-        "Then: network … area 0"
+        "Then: network … area 0",
+        "Finally: write memory to save"
       ]
     },
     {
       "id": "ex-008-ospf-interface-cost",
       "title": "OSPF: set interface cost",
       "device_profile": "ROUTER",
-      "instructions": "Set OSPF interface costs:\n- On interface g0/0 set ip ospf cost 10\n- On interface g0/2 set ip ospf cost 30\n",
+      "instructions": "Set OSPF interface costs:\n- On interface g0/0 set ip ospf cost 10\n- On interface g0/2 set ip ospf cost 30\n- Save the VALID configuration (both costs must be set before saving)\n",
       "requirements": [
         {
           "type": "ospf_if_cost_equals",
@@ -312,18 +340,22 @@
           "type": "ospf_if_cost_equals",
           "ifname": "g0/2",
           "cost": 30
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "Enter interface configuration mode first.",
-        "Then run: ip ospf cost …"
+        "Then run: ip ospf cost …",
+        "Finally: write memory to save"
       ]
     },
     {
       "id": "ex-009-ssh-setup-vty",
       "title": "SSH: domain, keys, user, vty lines",
       "device_profile": "ROUTER",
-      "instructions": "Configure SSH remote access:\n- ip domain-name cisco.com\n- crypto key generate rsa modulus 1024\n- ip ssh version 2\n- username admin secret Cyb3rPatriot\n- line vty 0 4\n  - login local\n  - transport input ssh\n",
+      "instructions": "Configure SSH remote access:\n- ip domain-name cisco.com\n- crypto key generate rsa modulus 1024\n- ip ssh version 2\n- username admin secret Cyb3rPatriot\n- line vty 0 4\n  - login local\n  - transport input ssh\n- Save the VALID configuration (all SSH settings must be configured first)\n",
       "requirements": [
         {
           "type": "state_equals",
@@ -356,11 +388,15 @@
           "value": [
             "ssh"
           ]
+        },
+        {
+          "type": "config_saved"
         }
       ],
       "hints": [
         "Keys typically require a domain-name first.",
-        "VTY settings live under: line vty 0 4"
+        "VTY settings live under: line vty 0 4",
+        "Finally: write memory to save"
       ]
     }
   ]

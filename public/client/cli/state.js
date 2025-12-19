@@ -29,7 +29,9 @@ export function createInitialState() {
                 login: null,
                 transport: []
             }
-        }
+        },
+        configSaved: false,
+        savedState: null
     };
 }
 /**

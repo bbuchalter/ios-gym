@@ -24,7 +24,9 @@ export class CLISession {
         // Merge profile start_state into device state
         this.deviceState = {
             ...createInitialState(),
-            ...profile.start_state
+            ...profile.start_state,
+            configSaved: false, // Reset config saved flag when loading exercise
+            savedState: null // Reset saved state when loading exercise
         };
         this.activeExerciseId = exerciseId;
         this.modeStack.reset();
