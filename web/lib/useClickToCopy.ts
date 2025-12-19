@@ -10,10 +10,13 @@ export function useClickToCopy() {
           await navigator.clipboard.writeText(text);
           // Visual feedback
           const originalBg = target.style.backgroundColor;
-          target.style.backgroundColor = '#4ec9b0';
+          const originalColor = target.style.color;
+          target.style.backgroundColor = '#22d3ee';
+          target.style.color = '#0f172a';
           target.style.cursor = 'pointer';
           setTimeout(() => {
             target.style.backgroundColor = originalBg;
+            target.style.color = originalColor;
           }, 200);
         } catch (err) {
           console.error('Failed to copy:', err);

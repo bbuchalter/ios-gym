@@ -1,24 +1,5 @@
 @import "tailwindcss";
 
-@theme inline {
-  /* Color palette from learn.css */
-  --color-primary: #007acc;
-  --color-secondary: #4ec9b0;
-  --color-success: #4ec9b0;
-  --color-warning: #ce9178;
-  --color-danger: #f48771;
-  --color-dark-bg: #1e1e1e;
-  --color-medium-bg: #252526;
-  --color-light-bg: #2d2d30;
-  --color-border: #3e3e42;
-  --color-text-primary: #d4d4d4;
-  --color-text-secondary: #858585;
-  --color-text-bright: #ffffff;
-  
-  /* Font family */
-  --font-mono: 'Courier New', Courier, monospace;
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -26,14 +7,21 @@
 }
 
 body {
-  background-color: var(--color-dark-bg);
-  color: var(--color-text-primary);
-  line-height: 1.7;
+  @apply bg-slate-950 text-slate-100;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Code styling */
+code {
+  @apply bg-slate-800/50 px-2 py-0.5 rounded text-cyan-400 font-mono text-sm;
+}
+
+kbd {
+  @apply bg-slate-700 border border-slate-600 rounded px-2 py-1 font-mono text-xs shadow-sm;
 }
 
 /* XTerm specific styles */

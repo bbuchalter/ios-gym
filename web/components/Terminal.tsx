@@ -31,16 +31,17 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
   useEffect(() => {
     if (!containerRef.current || terminalRef.current) return;
     
-    // Initialize XTerm
+    // Initialize XTerm with modern theme
     const terminal = new XTerm({
       cursorBlink: true,
       fontSize: 14,
       fontFamily: '"Courier New", Courier, monospace',
       theme: {
-        background: '#1e1e1e',
-        foreground: '#d4d4d4',
-        cursor: '#4ec9b0',
-        selectionBackground: '#264f78'
+        background: '#0f172a',  // slate-950
+        foreground: '#e2e8f0',  // slate-200
+        cursor: '#22d3ee',      // cyan-400
+        cursorAccent: '#0f172a',
+        selectionBackground: '#1e40af88'  // blue-800 with transparency
       },
       cols: 80,
       rows: 20,
@@ -247,17 +248,24 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
   }, [grammar, terminalId]);
   
   return (
-    <div className="bg-[#1e1e1e] rounded-lg overflow-hidden my-8 border-2 border-primary shadow-xl">
-      <div className="bg-gradient-to-r from-primary to-secondary text-text-bright p-3 font-semibold text-sm">
-        Practice Terminal - {terminalId}
+    <div className="bg-slate-950 rounded-xl overflow-hidden my-8 border border-slate-700/50 shadow-2xl shadow-cyan-500/10">
+      <div className="bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700/50 px-4 py-3 flex items-center gap-2">
+        <div className="flex gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+          <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+          <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+        </div>
+        <div className="text-slate-400 text-sm font-mono ml-2">
+          {terminalId}
+        </div>
       </div>
       <div 
         ref={containerRef} 
-        className="terminal-embed" 
+        className="terminal-embed cursor-text" 
         style={{ 
           minHeight: '400px',
           width: '100%',
-          backgroundColor: '#1e1e1e'
+          backgroundColor: '#0f172a'
         }}
         onClick={() => terminalRef.current?.focus()}
       />

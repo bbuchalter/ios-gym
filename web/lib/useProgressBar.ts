@@ -9,7 +9,8 @@ export function useProgressBar() {
       top: 0;
       left: 0;
       height: 3px;
-      background: linear-gradient(90deg, #007acc, #4ec9b0);
+      background: linear-gradient(90deg, #3b82f6, #22d3ee, #14b8a6);
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
       z-index: 1000;
       transition: width 0.3s ease;
       width: 0%;
