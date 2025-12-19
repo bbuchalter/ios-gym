@@ -437,10 +437,10 @@ Together: 192.168.1.100`}
               {`┌────────────────────────┐
 │   ONE BIG NETWORK      │
 │                        │
-│  👨‍🎓 Students          │
-│  👨‍🏫 Teachers          │
-│  👔 Admin              │
-│  📹 Cameras            │
+│  Students              │
+│  Teachers              │
+│  Admin                 │
+│  Cameras               │
 │                        │
 │  All mixed together!   │
 └────────────────────────┘
@@ -452,11 +452,11 @@ Together: 192.168.1.100`}
             <Diagram title="✅ With VLANs - Organized & Secure!">
               {`┌───────────────────────────────────┐
 │         SWITCH                    │
-│  ┌──────────┐    ┌──────────┐    │
-│  │ VLAN 100 │    │ VLAN 200 │    │
-│  │ Students │    │ Teachers │    │
-│  │  👨‍🎓👨‍🎓   │    │  👨‍🏫👨‍🏫   │    │
-│  └──────────┘    └──────────┘    │
+│  ┌──────────┐    ┌──────────┐     │
+│  │ VLAN 100 │    │ VLAN 200 │     │
+│  │ Students │    │ Teachers │     │
+│  │          │    │          │     │
+│  └──────────┘    └──────────┘     │
 │      ↕               ↕            │
 │   Fa0/2-5        Fa0/6-10         │
 └───────────────────────────────────┘
@@ -713,10 +713,10 @@ Hacker sees: gibberish
                 <h4 className="text-white font-semibold mb-3">Layer 2 Port (Default)</h4>
                 <Diagram>
                   {`[Computer] ──── [Switch Port]
-               Layer 2
-               MAC: aa:bb:cc...
-               VLAN: 100
-               Works with VLANs`}
+                 Layer 2
+                 MAC: aa:bb:cc...
+                 VLAN: 100
+                 Works with VLANs`}
                 </Diagram>
                 <p className="text-gray-400 mt-3"><strong>Used for:</strong> Connecting end devices</p>
               </div>
@@ -724,10 +724,10 @@ Hacker sees: gibberish
                 <h4 className="text-white font-semibold mb-3">Layer 3 Port (Routed)</h4>
                 <Diagram>
                   {`[Router] ──── [Routed Port]
-              Layer 3
-              IP: 35.72.12.1
-              No VLAN!
-              Routes packets`}
+               Layer 3
+               IP: 35.72.12.1
+               No VLAN!
+               Routes packets`}
                 </Diagram>
                 <p className="text-gray-400 mt-3"><strong>Used for:</strong> Connecting to routers</p>
               </div>
@@ -749,11 +749,11 @@ Hacker sees: gibberish
               {`┌──────────────────────┐        ┌──────────────────────┐
 │   Layer 3 Switch     │        │      Router          │
 │                      │        │                      │
-│   g1/0/1 (L2) ──┐   │        │                      │
-│   VLAN 100       │   │        │                      │
-│                  │   │        │                      │
-│   g1/0/2 (L3) ══╪════╪════════╪══► To ISP           │
-│   IP: 35.72.12.1│   │        │   IP: 35.72.12.2     │
+│   g1/0/1 (L2) ──┐    │        │                      │
+│   VLAN 100      │    │        │                      │
+│                 │    │        │                      │
+│   g1/0/2 (L3) ══╪════╪════════╪══► To ISP            │
+│   IP: 35.72.12.1│    │        │   IP: 35.72.12.2     │
 └──────────────────────┘        └──────────────────────┘
 
 g1/0/1 = Switchport (connects to computers)
@@ -822,13 +822,13 @@ g1/0/2 = Routed port (connects to router/internet)`}
 
             <Diagram title="Default Route - The Internet Exit">
               {`Your Network          Your Router         The Internet
-┌──────────┐         ┌──────────┐        ┌──────────┐
-│ Computer │ ─────► │  Router  │ ─────► │   ISP    │
-│          │         │          │        │          │
-│ Wants to │         │ "Send    │        │ Forward  │
-│ reach    │         │ everything│        │ to final │
-│ Google   │         │ to ISP!" │        │ destination│
-└──────────┘         └──────────┘        └──────────┘
+┌──────────┐         ┌───────────┐        ┌────────────┐
+│ Computer │ ─────►  │  Router   │ ─────► │   ISP      │
+│          │         │           │        │            │
+│ Wants to │         │ "Send     │        │ Forward    │
+│ reach    │         │ everything│        │ to final   │
+│ Google   │         │ to ISP!"  │        │ destination│
+└──────────┘         └───────────┘        └────────────┘
                          │
                  ip route 0.0.0.0 0.0.0.0 [ISP IP]
                  └── This means "all traffic"`}
