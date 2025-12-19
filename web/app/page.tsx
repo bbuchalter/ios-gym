@@ -269,8 +269,26 @@ export default function LearnPage() {
               <ul className="ml-6 space-y-2 text-gray-300">
                 <li>The prompt shows your new hostname instead of "Switch"</li>
                 <li>You see <code className="text-emerald-400">[OK]</code> after running <code>write memory</code></li>
+                <li>
+                  <strong className="text-cyan-300">Verify:</strong> Type <code>show running-config</code> and confirm you see your hostname near the top:
+                  <div className="bg-gray-800 rounded-lg p-3 mt-2 ml-4 font-mono text-sm">
+                    Building configuration...<br />
+                    !<br />
+                    <span className="text-yellow-300">hostname MyFirstSwitch</span><br />
+                    !
+                  </div>
+                </li>
               </ul>
             </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300">
+                  The <code>show running-config</code> command displays ALL configuration on your device. 
+                  It's one of the most important commands you'll use — network engineers check it constantly to verify their work!
+                </p>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
           {/* LESSON 4: ENABLE SECRET */}
@@ -480,8 +498,28 @@ Attacker sees: "Could be any length!"
                 <li>You can successfully enter privileged mode by typing the password without seeing it</li>
                 <li>You understand this is normal CLI behavior, not a bug</li>
                 <li>You've seen what happens when you enter the wrong password</li>
+                <li>
+                  <strong className="text-cyan-300">Verify:</strong> Type <code>show running-config</code> and confirm you see your password configured:
+                  <div className="bg-gray-800 rounded-lg p-3 mt-2 ml-4 font-mono text-sm">
+                    enable secret C1sc0R0ck$
+                  </div>
+                  <p className="text-gray-400 text-sm mt-2 ml-4">
+                    (In a real Cisco device, this would show as an encrypted hash for security)
+                  </p>
+                </li>
               </ul>
             </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2">
+                  <strong>Get in the habit:</strong> After configuring any security feature, use <code>show running-config</code> to verify it was applied correctly.
+                </p>
+                <p className="text-gray-300">
+                  Professional network engineers verify everything before moving on to the next task!
+                </p>
+              </ProTip>
+            </InfoBox>
 
             <InfoBox variant="real-world">
               <h4 className="text-blue-300 font-semibold mb-2">🌍 Real World Note</h4>
@@ -628,7 +666,7 @@ Router1(config)# no enable secret`}
               <span className="text-4xl">👉</span> Your Task
             </h3>
             <p className="text-gray-300 mb-8 text-lg">
-              Practice the complete configuration lifecycle — set something, then remove it:
+              Practice the complete configuration lifecycle — set something, verify it, then remove it:
             </p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code> — Enter privileged mode</li>
@@ -636,6 +674,7 @@ Router1(config)# no enable secret`}
               <li><code>hostname TestLab</code> — Set a hostname (watch the prompt change!)</li>
               <li><code>enable secret Practice123</code> — Set a password</li>
               <li><code>end</code> — Exit to privileged mode to see your changes</li>
+              <li><strong className="text-cyan-300">Checkpoint: </strong><code>show running-config</code> — See both hostname and password in config</li>
               <li>Notice your prompt shows <code>TestLab#</code></li>
               <li><code>disable</code> — Go to user mode (you'll see <code>TestLab&gt;</code>)</li>
               <li><code>enable</code> — Try to enter privileged mode (password prompt appears)</li>
@@ -645,7 +684,9 @@ Router1(config)# no enable secret`}
               <li><code>no enable secret</code> — Remove the password</li>
               <li><code>no hostname</code> — Reset hostname to default</li>
               <li>Notice the prompt changed back to <code>Switch(config)#</code></li>
-              <li><code>end</code> then <code>disable</code> — Exit to user mode</li>
+              <li><code>end</code> — Exit to privileged mode</li>
+              <li><strong className="text-cyan-300">Verify removal: </strong><code>show running-config</code> — Confirm both are gone!</li>
+              <li><code>disable</code> — Exit to user mode</li>
               <li><code>enable</code> — Try again (no password needed now!)</li>
             </ol>
 
@@ -655,11 +696,23 @@ Router1(config)# no enable secret`}
               <p className="text-green-300 font-semibold mb-3">✓ You succeeded when:</p>
               <ul className="ml-6 space-y-2 text-gray-300">
                 <li>You can set a hostname and password, then remove both</li>
+                <li>You used <code>show running-config</code> to verify configuration before and after using <code>no</code> commands</li>
                 <li>You understand that <code>no hostname</code> resets to "Switch" (default)</li>
                 <li>You understand that <code>no enable secret</code> removes password protection</li>
                 <li>You verified the password was removed by using <code>enable</code> without being prompted</li>
               </ul>
             </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2">
+                  <strong>Professional Workflow:</strong> Network engineers always verify their changes with <code>show</code> commands before moving on.
+                </p>
+                <p className="text-gray-300">
+                  Make it a habit: Configure → Show → Verify → Save!
+                </p>
+              </ProTip>
+            </InfoBox>
 
             <InfoBox variant="real-world">
               <h4 className="text-blue-300 font-semibold mb-2">🌍 Real World Application</h4>
@@ -1023,13 +1076,12 @@ Takes 1 command! ✅`}
               <span className="text-4xl">👉</span> Explore Your Switch
             </h3>
             <p className="text-gray-300 mb-8 text-lg">
-              Let's look at the interfaces on a switch! These commands show you information about the physical hardware.
+              Let's look at the interfaces on a switch! These commands show you information about the network interfaces.
             </p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code> — Enter privileged mode</li>
-              <li><code>show interfaces status</code> — See a list of all interfaces and their status</li>
-              <li>Look at the interface names — do you see FastEthernet or GigabitEthernet ports?</li>
-              <li><code>show version</code> — View hardware information about the switch itself</li>
+              <li><code>show ip interface brief</code> — View IP addresses on interfaces (there won't be any configured yet!)</li>
+              <li>Look at the output — you'll see interface names and their status</li>
             </ol>
 
             <Terminal grammar={grammar} />
@@ -1037,10 +1089,11 @@ Takes 1 command! ✅`}
             <InfoBox variant="info">
               <ProTip>
                 <p className="text-gray-300 mb-2">
-                  Notice the interface names in the output! Each physical port has a name like <code>FastEthernet0/1</code> or <code>GigabitEthernet1/0/1</code>.
+                  Notice the interface names in the output! Each interface has a name that indicates what it is.
+                  For example, <code>Vlan1</code> is a virtual management interface, while physical ports would be named like <code>FastEthernet0/1</code> or <code>GigabitEthernet1/0/1</code>.
                 </p>
                 <p className="text-gray-300">
-                  The <code>show version</code> command tells you what model switch you have and how many ports it has.
+                  The "Status" column shows if the interface is up or down, and "Protocol" shows if it's working properly.
                 </p>
               </ProTip>
             </InfoBox>
@@ -1334,11 +1387,34 @@ no shutdown:         Interface is ON ✅
 
             <Terminal grammar={grammar} />
 
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ You succeeded when:</p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>You configured both g0/1 and fa0/1 as trunk ports</li>
+                <li>You restricted allowed VLANs to only 1,100,200</li>
+                <li>You saved your configuration with <code>write memory</code></li>
+                <li>
+                  <strong className="text-cyan-300">Verify:</strong> Type <code>show running-config</code> and confirm you see:
+                  <div className="bg-gray-800 rounded-lg p-3 mt-2 ml-4 font-mono text-sm">
+                    interface GigabitEthernet0/1<br />
+                    &nbsp;switchport mode trunk<br />
+                    &nbsp;<span className="text-yellow-300">switchport trunk allowed vlan 1,100,200</span><br />
+                    !<br />
+                    interface FastEthernet0/1<br />
+                    &nbsp;switchport mode trunk<br />
+                    &nbsp;<span className="text-yellow-300">switchport trunk allowed vlan 1,100,200</span><br />
+                    !
+                  </div>
+                </li>
+              </ul>
+            </div>
+
             <InfoBox variant="info">
               <ProTip>
                 <ul className="ml-6 space-y-2 text-gray-300 list-disc">
                   <li>VLAN 1 is included because it's the management VLAN</li>
                   <li>Use commas to separate VLANs: <code>1,100,200</code> (no spaces!)</li>
+                  <li>You can also use <code>show vlan brief</code> to see VLAN assignments, but trunk configuration is best viewed in <code>show running-config</code></li>
                 </ul>
               </ProTip>
             </InfoBox>
@@ -1446,6 +1522,43 @@ Hacker sees: gibberish
             </ol>
 
             <Terminal grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ You succeeded when:</p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>You configured all 5 SSH components (domain name, RSA keys, SSH v2, user account, VTY lines)</li>
+                <li>You saw the "Generating RSA keys" success message</li>
+                <li>You saved your configuration with <code>write memory</code></li>
+                <li>
+                  <strong className="text-cyan-300">Verify:</strong> Type <code>show running-config</code> and confirm you see all SSH settings:
+                  <div className="bg-gray-800 rounded-lg p-3 mt-2 ml-4 font-mono text-sm">
+                    <span className="text-yellow-300">hostname SecureRouter</span><br />
+                    <span className="text-yellow-300">ip domain-name cisco.com</span><br />
+                    <span className="text-yellow-300">ip ssh version 2</span><br />
+                    !<br />
+                    <span className="text-yellow-300">username admin secret Cyb3rPatriot</span><br />
+                    !<br />
+                    line vty 0 4<br />
+                    &nbsp;<span className="text-yellow-300">login local</span><br />
+                    &nbsp;<span className="text-yellow-300">transport input ssh</span><br />
+                    !
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2">
+                  <strong>Security Check:</strong> When configuring SSH in the real world, always verify:
+                </p>
+                <ul className="ml-6 space-y-1 text-gray-300 list-disc">
+                  <li><code>show running-config</code> confirms all SSH settings</li>
+                  <li><code>show ip ssh</code> would show SSH status (not implemented in this practice environment)</li>
+                  <li>VTY lines only allow SSH (transport input ssh) — no Telnet!</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
           </LessonSection>
 
           {/* LESSON 13: LAYER 3 SWITCHING */}
