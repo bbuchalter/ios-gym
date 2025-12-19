@@ -9,13 +9,16 @@ import '@xterm/xterm/css/xterm.css';
 import { CLIEngine } from '@src/cli/engine';
 import { CLISession } from '@src/cli-session';
 import type { CommandGrammar } from '@src/types';
+import { useLessonCounter } from '@/lib/LessonCounterContext';
 
 interface TerminalProps {
-  terminalId: string;
+  terminalId?: string;
   grammar: CommandGrammar;
 }
 
 export default function Terminal({ terminalId, grammar }: TerminalProps) {
+  const counter = useLessonCounter();
+  const finalTerminalId = terminalId || counter.getTerminalId();
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
@@ -60,7 +63,7 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
       try {
         fitAddon.fit();
       } catch (e) {
-        console.error(`Terminal ${terminalId} - Fit error:`, e);
+        console.error(`Terminal ${finalTerminalId} - Fit error:`, e);
       }
     }, 100);
     
@@ -245,7 +248,7 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
         terminalRef.current = null;
       }
     };
-  }, [grammar, terminalId]);
+  }, [grammar, finalTerminalId]);
   
   return (
     <div className="my-8 border border-gray-700 bg-gray-800 rounded-lg">
@@ -254,7 +257,7 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
           <span className="h-2 w-2 rounded-full bg-red-500" />
           <span className="h-2 w-2 rounded-full bg-yellow-500" />
           <span className="h-2 w-2 rounded-full bg-green-500" />
-          <span className="ml-4 text-gray-300">{terminalId}</span>
+          <span className="ml-4 text-gray-300">{finalTerminalId}</span>
         </div>
         <span className="text-gray-500">Practice sandbox</span>
       </div>

@@ -16,6 +16,7 @@ import { InfoBox } from '@/components/InfoBox';
 import { ProTip } from '@/components/ProTip';
 import { SkillCard } from '@/components/SkillCard';
 import { Diagram } from '@/components/Diagram';
+import { LessonCounterProvider } from '@/lib/LessonCounterContext';
 
 // Dynamically import Terminal to avoid SSR issues with XTerm
 const Terminal = dynamic(() => import('@/components/Terminal'), {
@@ -48,6 +49,7 @@ export default function LearnPage() {
     <div id="top" className="min-h-screen bg-gray-900">
       <main className="max-w-6xl mx-auto px-6 pb-24">
         <div id="lessons">
+          <LessonCounterProvider>
           {/* INTRODUCTION */}
           <LessonSection title="Welcome, Future Network Engineer! 👋" isIntro>
             <p className="text-2xl text-white my-6">
@@ -85,7 +87,7 @@ export default function LearnPage() {
           </LessonSection>
 
           {/* LESSON 1: NAVIGATING MODES */}
-          <LessonSection lessonNumber={1} title="Navigating Between Modes">
+          <LessonSection title="Navigating Between Modes">
             <p className="text-xl text-gray-200 my-6">
               Let's start with the basics. Every network device has different <strong className="text-white">"modes"</strong> — like different levels of access.
             </p>
@@ -140,7 +142,7 @@ export default function LearnPage() {
               <li>Type <code>exit</code> again to return to privileged mode</li>
             </ol>
 
-            <Terminal terminalId="terminal-1" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -153,7 +155,7 @@ export default function LearnPage() {
           </LessonSection>
 
           {/* LESSON 2: TAB COMPLETION */}
-          <LessonSection lessonNumber={2} title="The Magic TAB Key ✨">
+          <LessonSection title="The Magic TAB Key ✨">
             <p className="text-xl text-gray-200 my-6">
               One of the most powerful tools in your CLI toolkit is the <kbd>TAB</kbd> key. It saves time and prevents mistakes!
             </p>
@@ -202,7 +204,7 @@ export default function LearnPage() {
               <li>Press Enter to enter configuration mode</li>
             </ol>
 
-            <Terminal terminalId="terminal-2" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -215,7 +217,7 @@ export default function LearnPage() {
           </LessonSection>
 
           {/* LESSON 3: SETTING HOSTNAME */}
-          <LessonSection lessonNumber={3} title="Giving Your Device a Name">
+          <LessonSection title="Giving Your Device a Name">
             <p className="text-xl text-gray-200 my-6">
               Just like you name your phone "Brian's iPhone", network devices need names too!
             </p>
@@ -260,7 +262,7 @@ export default function LearnPage() {
               <li><code>write memory</code> — <strong className="text-yellow-300">SAVE YOUR WORK!</strong></li>
             </ol>
 
-            <Terminal terminalId="terminal-3" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3 text-lg">✓ You succeeded when:</p>
@@ -272,7 +274,7 @@ export default function LearnPage() {
           </LessonSection>
 
           {/* LESSON 4: ENABLE SECRET */}
-          <LessonSection lessonNumber={4} title="Security: Adding a Password">
+          <LessonSection title="Security: Adding a Password">
             <p className="text-xl text-gray-200 my-6">
               Without a password, anyone can access and change your device. Let's lock it down!
             </p>
@@ -334,7 +336,7 @@ export default function LearnPage() {
               <li><code>write memory</code> — Save your work</li>
             </ol>
 
-            <Terminal terminalId="terminal-4" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -347,7 +349,7 @@ export default function LearnPage() {
           </LessonSection>
 
           {/* LESSON 5: PASSWORD ENTRY EXPERIENCE */}
-          <LessonSection lessonNumber={5} title="Understanding Password Entry in IOS">
+          <LessonSection title="Understanding Password Entry in IOS">
             <p className="text-xl text-gray-200 my-6">
               Now that you've set a password, let's experience what it's like to use it. This is where many students get confused!
             </p>
@@ -470,7 +472,7 @@ Attacker sees: "Could be any length!"
               <li>Try one more time with the correct password: <code>C1sc0R0ck$</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-5" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ You succeeded when:</p>
@@ -500,7 +502,7 @@ Attacker sees: "Could be any length!"
           </LessonSection>
 
           {/* LESSON 6: SUB-CONFIGURATION MODES */}
-          <LessonSection lessonNumber={6} title="Working with Sub-Configuration Modes">
+          <LessonSection title="Working with Sub-Configuration Modes">
             <p className="text-xl text-gray-200 my-6">
               So far you've worked with two modes: privileged (<code>#</code>) and global config (<code>(config)#</code>).
               Now you'll learn about <strong className="text-white">sub-configuration modes</strong> — configurations within configurations!
@@ -583,7 +585,7 @@ Takes 1 command! ✅`}
               <li><code>end</code> — Jump directly back to <code>#</code> (compare how fast this is!)</li>
             </ol>
 
-            <Terminal terminalId="terminal-6" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -597,7 +599,7 @@ Takes 1 command! ✅`}
           </LessonSection>
 
           {/* LESSON 7: IP ADDRESSING BASICS */}
-          <LessonSection lessonNumber={7} title="Understanding IP Addresses">
+          <LessonSection title="Understanding IP Addresses">
             <p className="text-xl text-gray-200 my-6">
               Every device on a network needs an address so others can find it. This is called an IP address.
             </p>
@@ -676,7 +678,7 @@ Takes 1 command! ✅`}
               <li>Look at the output — you'll see interface names and their status</li>
             </ol>
 
-            <Terminal terminalId="terminal-7" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -696,7 +698,7 @@ Takes 1 command! ✅`}
           </LessonSection>
 
           {/* LESSON 8: NETWORK HARDWARE BASICS */}
-          <LessonSection lessonNumber={8} title="Network Hardware: Switches and Interfaces">
+          <LessonSection title="Network Hardware: Switches and Interfaces">
             <p className="text-xl text-gray-200 my-6">
               Before we configure a switch, let's look at what one actually looks like and understand its physical parts!
             </p>
@@ -845,7 +847,7 @@ Takes 1 command! ✅`}
               <li><code>show version</code> — View hardware information about the switch itself</li>
             </ol>
 
-            <Terminal terminalId="terminal-8" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -868,7 +870,7 @@ Takes 1 command! ✅`}
           </LessonSection>
 
           {/* LESSON 9: MANAGEMENT ACCESS */}
-          <LessonSection lessonNumber={9} title="Configuring Management Access">
+          <LessonSection title="Configuring Management Access">
             <p className="text-xl text-gray-200 my-6">
               Now that you understand IP addresses, let's put that knowledge to use by configuring remote management access on a switch!
             </p>
@@ -964,7 +966,7 @@ no shutdown:         Interface is ON ✅
               <li><code>write memory</code> — Save your configuration</li>
             </ol>
 
-            <Terminal terminalId="terminal-9" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -990,7 +992,7 @@ no shutdown:         Interface is ON ✅
           </LessonSection>
 
           {/* LESSON 10: VLANs */}
-          <LessonSection lessonNumber={10} title="VLANs: Organizing Your Network">
+          <LessonSection title="VLANs: Organizing Your Network">
             <p className="text-xl text-gray-200 my-6">
               VLANs let you split one physical switch into multiple virtual networks. It's like having multiple switches in one!
             </p>
@@ -1068,7 +1070,7 @@ no shutdown:         Interface is ON ✅
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-10" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -1082,7 +1084,7 @@ no shutdown:         Interface is ON ✅
           </LessonSection>
 
           {/* LESSON 11: TRUNK PORTS */}
-          <LessonSection lessonNumber={11} title="Trunk Ports: Connecting Switches">
+          <LessonSection title="Trunk Ports: Connecting Switches">
             <p className="text-xl text-gray-200 my-6">
               What if you have switches in different rooms or buildings? Trunk ports carry multiple VLANs between switches!
             </p>
@@ -1145,7 +1147,7 @@ no shutdown:         Interface is ON ✅
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-11" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -1158,7 +1160,7 @@ no shutdown:         Interface is ON ✅
           </LessonSection>
 
           {/* LESSON 12: SSH */}
-          <LessonSection lessonNumber={12} title="SSH: Secure Remote Access">
+          <LessonSection title="SSH: Secure Remote Access">
             <p className="text-xl text-gray-200 my-6">
               SSH lets network engineers manage devices from anywhere — securely and encrypted!
             </p>
@@ -1258,11 +1260,11 @@ Hacker sees: gibberish
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-12" grammar={grammar} />
+            <Terminal grammar={grammar} />
           </LessonSection>
 
           {/* LESSON 13: LAYER 3 SWITCHING */}
-          <LessonSection lessonNumber={13} title="Layer 3 Switching: Routed Ports">
+          <LessonSection title="Layer 3 Switching: Routed Ports">
             <p className="text-xl text-gray-200 my-6">
               Layer 3 switches can both switch AND route! They combine the best of switches and routers.
             </p>
@@ -1348,7 +1350,7 @@ g1/0/2 = Routed port (connects to router/internet)`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-13" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -1368,7 +1370,7 @@ g1/0/2 = Routed port (connects to router/internet)`}
           </LessonSection>
 
           {/* LESSON 14: STATIC ROUTING */}
-          <LessonSection lessonNumber={14} title="Static Routing: Directing Traffic">
+          <LessonSection title="Static Routing: Directing Traffic">
             <p className="text-xl text-gray-200 my-6">
               Routers need to know where to send packets. Static routes are manual instructions you configure.
             </p>
@@ -1491,7 +1493,7 @@ Slower backup connection`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-14" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -1505,7 +1507,7 @@ Slower backup connection`}
           </LessonSection>
 
           {/* LESSON 15: OSPF BASICS */}
-          <LessonSection lessonNumber={15} title="OSPF: Dynamic Routing Protocol">
+          <LessonSection title="OSPF: Dynamic Routing Protocol">
             <p className="text-xl text-gray-200 my-6">
               Static routes are manual. OSPF is automatic! Routers talk to each other and figure out the best paths.
             </p>
@@ -1602,7 +1604,7 @@ Traffic flows: A → C → B`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-15" grammar={grammar} />
+            <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
@@ -1617,7 +1619,7 @@ Traffic flows: A → C → B`}
           </LessonSection>
 
           {/* LESSON 16: OSPF INTERFACE COST */}
-          <LessonSection lessonNumber={16} title="OSPF Interface Cost: Path Preference">
+          <LessonSection title="OSPF Interface Cost: Path Preference">
             <p className="text-xl text-gray-200 my-6">
               OSPF chooses paths based on "cost" — lower cost is better. You can manually set costs to control traffic flow!
             </p>
@@ -1723,8 +1725,9 @@ ip ospf cost 30
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal terminalId="terminal-16" grammar={grammar} />
+            <Terminal grammar={grammar} />
           </LessonSection>
+          </LessonCounterProvider>
 
           {/* COMPLETION SECTION */}
           <div className="bg-green-900 border-2 border-green-600 rounded-lg p-12 my-20">
@@ -1734,7 +1737,7 @@ ip ospf cost 30
                 Congratulations!
               </h2>
               <p className="text-xl text-gray-300">
-                You've completed all 16 lessons and learned real networking skills!
+                You've completed the entire course and learned real networking skills!
               </p>
             </div>
 
