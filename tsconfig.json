@@ -15,7 +15,7 @@
     "declarationMap": true,
     "sourceMap": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "client"]
+  "include": ["src/cli/**/*", "src/grammar/**/*", "src/types.ts", "src/cli-session.ts"],
+  "exclude": ["node_modules", "dist", "web"]
 }
 

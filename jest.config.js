@@ -5,12 +5,9 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.test.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   collectCoverageFrom: [
-    'src/**/*.ts',
-    'client/**/*.ts',
+    'src/cli/**/*.ts',
+    'src/cli-session.ts',
     '!src/**/*.d.ts',
-    '!client/**/*.d.ts',
-    '!src/server/index.ts',
-    '!client/**/*.test.ts',
-    '!client/__tests__/**'
+    '!src/**/*.test.ts'
   ]
 };
