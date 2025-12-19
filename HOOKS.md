@@ -27,11 +27,14 @@ Runs automatically before every commit to validate:
 ✓ All pre-commit checks passed! 🎉
 ```
 
-### Bypassing (not recommended):
-If you absolutely need to commit without running checks:
-```bash
-git commit --no-verify -m "your message"
-```
+### If Checks Fail:
+**DO NOT bypass with `--no-verify`!** Instead:
+1. Run `npm test` to see detailed test failures
+2. Run `npm run build` to see build errors
+3. Fix the issues
+4. Commit again normally
+
+See `.claude.md` for full git commit policy.
 
 ## Pre-Push Hook
 
@@ -60,11 +63,14 @@ Tests:       58 passed, 58 total
 ✓ All pre-push checks passed! Ready to push 🚀
 ```
 
-### Bypassing (not recommended):
-If you absolutely need to push without running checks:
-```bash
-git push --no-verify
-```
+### If Checks Fail:
+**DO NOT bypass with `--no-verify`!** Instead:
+1. Run `npm test` to see full test output
+2. Run `npm run build` to check build
+3. Fix all failures
+4. Push again normally
+
+See `.claude.md` for full git commit policy.
 
 ## Installation
 
@@ -113,4 +119,5 @@ if ! npm run lint > /dev/null 2>&1; then
 fi
 print_success "Code style checks passed"
 ```
+
 

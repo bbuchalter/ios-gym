@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learn Network Commands - Interactive Tutorial</title>
+  <title>Complete Network Engineering Course - Interactive Learning</title>
   <link rel="stylesheet" href="learn.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
 </head>
 <body>
   <div class="tutorial-container">
     <header class="tutorial-header">
-      <h1>🎮 Learn Network Commands</h1>
-      <p class="subtitle">Read, practice, master - all in one place</p>
+      <h1>🎮 Complete Network Engineering Course</h1>
+      <p class="subtitle">From basics to advanced routing - read, practice, and master everything in one place</p>
     </header>
 
     <main class="tutorial-main">
@@ -40,27 +40,47 @@
             </ul>
           </div>
           
-          <h2>What You'll Learn</h2>
+          <h2>What You'll Master (11 Complete Lessons)</h2>
           <div class="skills-grid">
             <div class="skill-card">
+              <div class="skill-icon">🎯</div>
+              <h4>CLI Navigation</h4>
+              <p>Modes, commands, tab completion</p>
+            </div>
+            <div class="skill-card">
               <div class="skill-icon">🔐</div>
-              <h4>Security Basics</h4>
-              <p>Passwords and protection</p>
+              <h4>Security</h4>
+              <p>Passwords, SSH, encryption</p>
             </div>
             <div class="skill-card">
               <div class="skill-icon">🌐</div>
-              <h4>IP Addresses</h4>
-              <p>How devices find each other</p>
+              <h4>IP Addressing</h4>
+              <p>IPv4, subnets, gateways</p>
             </div>
             <div class="skill-card">
               <div class="skill-icon">🏢</div>
-              <h4>VLANs</h4>
-              <p>Organizing networks</p>
+              <h4>VLANs & Switching</h4>
+              <p>Access ports, trunks, Layer 2</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">⚡</div>
+              <h4>Layer 3 Switching</h4>
+              <p>Routed ports, no switchport</p>
             </div>
             <div class="skill-card">
               <div class="skill-icon">🗺️</div>
-              <h4>Routing</h4>
-              <p>How data travels</p>
+              <h4>Static Routing</h4>
+              <p>Default routes, floating backup</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">🔄</div>
+              <h4>Dynamic Routing</h4>
+              <p>OSPF protocol, areas</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">⚙️</div>
+              <h4>Path Control</h4>
+              <p>OSPF costs, traffic engineering</p>
             </div>
           </div>
         </div>
@@ -700,65 +720,826 @@ Hacker sees: gibberish
         </div>
       </section>
 
+      <!-- LESSON 8: LAYER 3 SWITCH - ROUTED PORTS -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 8</div>
+          <h1>Layer 3 Switching: Routed Ports</h1>
+          
+          <p class="big-text">
+            Layer 3 switches can both switch AND route! They combine the best of switches and routers.
+          </p>
+          
+          <h2>Understanding Switch vs Router Ports</h2>
+          
+          <p>
+            By default, all switch ports operate at Layer 2 - they handle MAC addresses and VLANs.
+            But Layer 3 switches have a special power: you can convert ports to work like router interfaces!
+          </p>
+          
+          <div class="comparison">
+            <div class="item">
+              <h4>Layer 2 Port (Default)</h4>
+              <pre>
+[Computer] ──── [Switch Port]
+               Layer 2
+               MAC: aa:bb:cc...
+               VLAN: 100
+               Works with VLANs
+              </pre>
+              <p><strong>Used for:</strong> Connecting end devices</p>
+            </div>
+            
+            <div class="item">
+              <h4>Layer 3 Port (Routed)</h4>
+              <pre>
+[Router] ──── [Routed Port]
+              Layer 3
+              IP: 35.72.12.1
+              No VLAN!
+              Routes packets
+              </pre>
+              <p><strong>Used for:</strong> Connecting to routers</p>
+            </div>
+          </div>
+          
+          <h2>The Magic: "no switchport"</h2>
+          
+          <p>
+            The command <code>no switchport</code> transforms a switch port into a routed port.
+            After this command:
+          </p>
+          <ul>
+            <li>✅ Port works at Layer 3 (can route packets)</li>
+            <li>✅ Can assign an IP address directly</li>
+            <li>✅ Can run routing protocols (OSPF, etc.)</li>
+            <li>❌ No longer works with VLANs</li>
+            <li>❌ Can't connect end-user devices</li>
+          </ul>
+          
+          <div class="diagram">
+            <h4>Real-World Scenario:</h4>
+            <pre>
+┌──────────────────────┐        ┌──────────────────────┐
+│   Layer 3 Switch     │        │      Router          │
+│                      │        │                      │
+│   g1/0/1 (L2) ──┐   │        │                      │
+│   VLAN 100       │   │        │                      │
+│                  │   │        │                      │
+│   g1/0/2 (L3) ══╪════╪════════╪══► To ISP           │
+│   IP: 35.72.12.1│   │        │   IP: 35.72.12.2     │
+└──────────────────────┘        └──────────────────────┘
+
+g1/0/1 = Switchport (connects to computers)
+g1/0/2 = Routed port (connects to router/internet)
+            </pre>
+          </div>
+          
+          <h2>Why Use Routed Ports?</h2>
+          
+          <div class="real-world">
+            <h4>🌍 Real World Example:</h4>
+            <p>
+              Your company has a building with a Layer 3 switch. Most ports connect to employee computers (Layer 2),
+              but one port connects directly to your ISP's router. That uplink needs to be a routed port (Layer 3)
+              so it can route traffic to the internet!
+            </p>
+          </div>
+          
+          <div class="tip-box">
+            <p><strong>Remember:</strong> Layer 3 switches save money! Instead of buying a switch AND a router, 
+            you buy one device that does both jobs.</p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Configure a routed port on a Layer 3 switch:</p>
+          <ol class="command-steps">
+            <li><code>enable</code></li>
+            <li><code>configure terminal</code></li>
+            <li><code>interface g1/0/2</code> - Enter the interface</li>
+            <li><code>no switchport</code> - Convert to routed port (this is the key!)</li>
+            <li><code>ip address 35.72.12.1 255.255.255.252</code> - Assign IP address</li>
+            <li><code>no shutdown</code> - Turn the interface on</li>
+            <li><code>end</code></li>
+            <li><code>write memory</code></li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 8</div>
+            <div id="terminal-8" class="terminal-embed"></div>
+          </div>
+          
+          <div class="success-criteria">
+            <p><strong>✓ Verify your work:</strong></p>
+            <p>Type: <code>show ip interface brief</code></p>
+            <p>You should see g1/0/2 with IP 35.72.12.1 and status "up"</p>
+          </div>
+          
+          <div class="help-box">
+            <p><strong>💡 Notice:</strong></p>
+            <ul>
+              <li>The subnet mask is /30 (255.255.255.252) - this gives only 2 usable IPs</li>
+              <li>Perfect for point-to-point links between routers!</li>
+              <li>After "no switchport", you'll see: "Interface will be in routed mode"</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 9: STATIC ROUTING -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 9</div>
+          <h1>Static Routing: Directing Traffic</h1>
+          
+          <p class="big-text">
+            Routers need to know where to send packets. Static routes are manual instructions you configure.
+          </p>
+          
+          <h2>What is Routing?</h2>
+          
+          <p>
+            Imagine you're at a massive mall with thousands of stores. You want to find the food court.
+            Without directions, you're lost! Routing is like having a map that tells you:
+          </p>
+          <ul>
+            <li>"To reach the food court, go through Exit 3"</li>
+            <li>"To reach parking lot B, go through Exit 1"</li>
+            <li>"For everything else, go to the information desk"</li>
+          </ul>
+          
+          <p>Routers need the same kind of directions for network traffic!</p>
+          
+          <div class="diagram">
+            <h4>Default Route - "The Internet Exit"</h4>
+            <pre>
+Your Network          Your Router         The Internet
+┌──────────┐         ┌──────────┐        ┌──────────┐
+│ Computer │ ─────► │  Router  │ ─────► │   ISP    │
+│          │         │          │        │          │
+│ Wants to │         │ "Send    │        │ Forward  │
+│ reach    │         │ everything│        │ to final │
+│ Google   │         │ to ISP!" │        │ destination│
+└──────────┘         └──────────┘        └──────────┘
+                          │
+                  ip route 0.0.0.0 0.0.0.0 [ISP IP]
+                  └── This means "all traffic"
+            </pre>
+          </div>
+          
+          <h2>What is 0.0.0.0 0.0.0.0?</h2>
+          
+          <p>
+            <code>0.0.0.0 0.0.0.0</code> is the "catch-all" route, also called a <strong>default route</strong>.
+            Think of it as: "If you don't know where to send a packet, send it here!"
+          </p>
+          
+          <div class="tip-box">
+            <p><strong>Translation:</strong></p>
+            <p><code>ip route 0.0.0.0 0.0.0.0 35.72.13.1</code></p>
+            <p>Means: "For ANY destination we don't have a specific route for, send it to 35.72.13.1"</p>
+          </div>
+          
+          <h2>Floating Static Routes: The Backup Plan</h2>
+          
+          <p>
+            What happens if your primary internet connection fails? You need a backup!
+            This is where <strong>floating static routes</strong> come in.
+          </p>
+          
+          <div class="diagram">
+            <h4>Dual ISP Redundancy:</h4>
+            <pre>
+                    ┌──────────────┐
+                    │  ISP 1       │  ← Primary (Fast fiber)
+                    │  35.72.13.1  │     AD = 1 (default)
+                    └──────────────┘
+                           ▲
+                           │ Normal traffic ✅
+                           │
+                    ┌──────────────┐
+                    │ Your Router  │
+                    └──────────────┘
+                           │
+                           │ Backup (only if ISP 1 fails) 🔄
+                           ▼
+                    ┌──────────────┐
+                    │  ISP 2       │  ← Backup (Slower DSL)
+                    │  35.72.13.2  │     AD = 254 (backup)
+                    └──────────────┘
+            </pre>
+          </div>
+          
+          <h2>Administrative Distance (AD)</h2>
+          
+          <p>
+            AD is the "trust level" of a route. Lower number = more trusted = preferred.
+          </p>
+          
+          <div class="comparison">
+            <div class="item">
+              <h4>Primary Route (AD = 1)</h4>
+              <pre>
+ip route 0.0.0.0 0.0.0.0 35.72.13.1
+
+AD 1 is default
+Router uses this route first
+Fast, reliable connection
+              </pre>
+            </div>
+            
+            <div class="item">
+              <h4>Backup Route (AD = 254)</h4>
+              <pre>
+ip route 0.0.0.0 0.0.0.0 35.72.13.2 254
+
+AD 254 = "only if needed"
+Router ignores unless primary fails
+Slower backup connection
+              </pre>
+            </div>
+          </div>
+          
+          <div class="real-world">
+            <h4>🌍 Business Continuity Example:</h4>
+            <p>
+              A hospital MUST stay online - patients' lives depend on it! They have:
+            </p>
+            <ul>
+              <li><strong>Primary:</strong> Fast fiber connection (AD 1)</li>
+              <li><strong>Backup:</strong> Slower cable connection (AD 254)</li>
+              <li><strong>Last Resort:</strong> Cellular modem (AD 253)</li>
+            </ul>
+            <p>If fiber fails, cable automatically takes over. If both fail, cellular kicks in!</p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Configure a primary default route with a floating backup:</p>
+          <ol class="command-steps">
+            <li><code>enable</code></li>
+            <li><code>configure terminal</code></li>
+            <li><code>ip route 0.0.0.0 0.0.0.0 35.72.13.1</code> - Primary route (AD defaults to 1)</li>
+            <li><code>ip route 0.0.0.0 0.0.0.0 35.72.13.2 254</code> - Backup route (AD 254)</li>
+            <li><code>end</code></li>
+            <li><code>write memory</code></li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 9</div>
+            <div id="terminal-9" class="terminal-embed"></div>
+          </div>
+          
+          <div class="success-criteria">
+            <p><strong>✓ Verify your work:</strong></p>
+            <p>Type: <code>show ip route</code></p>
+            <p>You should see two default routes (0.0.0.0/0):</p>
+            <ul>
+              <li>One via 35.72.13.1 with AD 1</li>
+              <li>One via 35.72.13.2 with AD 254</li>
+            </ul>
+          </div>
+          
+          <div class="help-box">
+            <p><strong>💡 Key Concept:</strong></p>
+            <p>The router will ONLY use the backup route (AD 254) if the primary (AD 1) becomes unavailable.</p>
+            <p>This is automatic failover - no manual intervention needed!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 10: OSPF BASICS -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 10</div>
+          <h1>OSPF: Dynamic Routing Protocol</h1>
+          
+          <p class="big-text">
+            Static routes are manual. OSPF is automatic! Routers talk to each other and figure out the best paths.
+          </p>
+          
+          <h2>Static vs Dynamic Routing</h2>
+          
+          <div class="comparison">
+            <div class="item">
+              <h4>❌ Static Routing (Manual)</h4>
+              <ul>
+                <li>You configure every route by hand</li>
+                <li>If a link fails, routes don't update</li>
+                <li>Hard to manage in large networks</li>
+                <li>Simple but not scalable</li>
+              </ul>
+              <p><strong>Best for:</strong> Small networks, backup routes</p>
+            </div>
+            
+            <div class="item">
+              <h4>✅ Dynamic Routing (Automatic)</h4>
+              <ul>
+                <li>Routers automatically share information</li>
+                <li>Routes update when topology changes</li>
+                <li>Calculates best paths automatically</li>
+                <li>Scales to huge networks</li>
+              </ul>
+              <p><strong>Best for:</strong> Medium to large networks</p>
+            </div>
+          </div>
+          
+          <h2>What is OSPF?</h2>
+          
+          <p>
+            <strong>OSPF</strong> = Open Shortest Path First
+          </p>
+          <ul>
+            <li><strong>Open:</strong> Industry standard (not proprietary)</li>
+            <li><strong>Shortest Path:</strong> Calculates fastest route</li>
+            <li><strong>First:</strong> Uses best path first</li>
+          </ul>
+          
+          <div class="diagram">
+            <h4>OSPF in Action:</h4>
+            <pre>
+NORMAL OPERATION:
+                    Cost 10 (Fast!)
+[Router A] ═══════════════════════ [Router B]
+    │                                   │
+    │                                   │
+    └────── [Router C] ─────────────────┘
+              Cost 30 (Backup)
+
+OSPF chooses top path (Cost 10)
+Traffic flows: A → B directly
+
+IF TOP LINK FAILS:
+[Router A] ══════ ❌ LINK DOWN ═══ [Router B]
+    │                                   │
+    │         OSPF recalculates!        │
+    └────── [Router C] ─────────────────┘
+              Cost 30 (Now used!)
+
+OSPF automatically switches to backup path
+Traffic flows: A → C → B
+            </pre>
+          </div>
+          
+          <h2>OSPF Key Concepts</h2>
+          
+          <div class="numbered-steps">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <h4>Process ID</h4>
+                <p>A number (1-65535) to identify this OSPF process. Must be consistent on the router.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <h4>Network Statement</h4>
+                <p>Tells OSPF which networks to advertise</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <h4>Wildcard Mask</h4>
+                <p>Opposite of subnet mask - tells OSPF what to match</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-content">
+                <h4>Area</h4>
+                <p>OSPF divides networks into areas. Area 0 is the backbone.</p>
+              </div>
+            </div>
+          </div>
+          
+          <h2>Wildcard Masks Explained</h2>
+          
+          <p>
+            Wildcard masks are the OPPOSITE of subnet masks:
+          </p>
+          
+          <div class="tip-box">
+            <p><strong>Quick Guide:</strong></p>
+            <ul>
+              <li><code>0.0.0.0</code> = Match this EXACT IP address (one host)</li>
+              <li><code>0.0.0.255</code> = Match this network (all hosts in /24)</li>
+              <li><code>0.0.255.255</code> = Match this major network (all hosts in /16)</li>
+            </ul>
+            <p>In wildcard: 0 = must match, 255 = don't care</p>
+          </div>
+          
+          <div class="real-world">
+            <h4>🌍 Real ISP Network:</h4>
+            <p>
+              Internet Service Providers use OSPF to manage thousands of routers.
+              When a fiber cable gets cut, OSPF automatically reroutes traffic around the problem.
+              Users never notice because it happens in milliseconds!
+            </p>
+          </div>
+          
+          <div class="important-box">
+            <p><strong>⚠️ Area 0 is Special:</strong></p>
+            <p>
+              Area 0 is called the "backbone area". All other areas must connect to Area 0.
+              For most basic configurations, everything is in Area 0.
+            </p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Configure OSPF to advertise a network:</p>
+          <ol class="command-steps">
+            <li><code>enable</code></li>
+            <li><code>configure terminal</code></li>
+            <li><code>router ospf 1</code> - Enable OSPF with process ID 1</li>
+            <li><code>network 35.72.12.2 0.0.0.0 area 0</code> - Advertise this specific IP in area 0</li>
+            <li><code>end</code></li>
+            <li><code>write memory</code></li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 10</div>
+            <div id="terminal-10" class="terminal-embed"></div>
+          </div>
+          
+          <div class="success-criteria">
+            <p><strong>✓ Verify your work:</strong></p>
+            <p>Type: <code>show ip protocols</code></p>
+            <p>You should see:</p>
+            <ul>
+              <li>Routing Protocol is "ospf 1"</li>
+              <li>Your network statement appears</li>
+            </ul>
+          </div>
+          
+          <div class="help-box">
+            <p><strong>💡 Understanding the Command:</strong></p>
+            <p><code>network 35.72.12.2 0.0.0.0 area 0</code> breaks down to:</p>
+            <ul>
+              <li><strong>35.72.12.2</strong> = The IP address to match</li>
+              <li><strong>0.0.0.0</strong> = Wildcard mask (match exactly)</li>
+              <li><strong>area 0</strong> = Put this network in area 0</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 11: OSPF INTERFACE COST -->
+      <section class="lesson-section">
+        <div class="content">
+          <div class="lesson-number">Lesson 11</div>
+          <h1>OSPF Interface Cost: Path Preference</h1>
+          
+          <p class="big-text">
+            OSPF chooses paths based on "cost" - lower cost is better. You can manually set costs to control traffic flow!
+          </p>
+          
+          <h2>What is OSPF Cost?</h2>
+          
+          <p>
+            OSPF assigns a "cost" to each link based on its bandwidth. Think of cost as:
+          </p>
+          <ul>
+            <li><strong>Low cost</strong> = Fast, preferred path (like a highway)</li>
+            <li><strong>High cost</strong> = Slow, avoid if possible (like a dirt road)</li>
+          </ul>
+          
+          <div class="diagram">
+            <h4>Path Selection Example:</h4>
+            <pre>
+                     Cost 10 (Fiber - Fast!)
+        [Router A] ════════════════════ [Router B]
+            │                               │
+            │                               │
+            │ Cost 30                       │
+            │ (Copper - Medium)             │
+            │                               │
+        [Router C] ─────────────────────────┘
+                    Cost 50 (DSL - Slow)
+
+OSPF adds costs along path:
+- Path 1: A → B = Cost 10 ✅ BEST!
+- Path 2: A → C → B = Cost 80 (30 + 50)
+
+OSPF always chooses Path 1 (lowest total cost)
+            </pre>
+          </div>
+          
+          <h2>Default OSPF Cost Calculation</h2>
+          
+          <p>
+            By default, OSPF calculates cost based on bandwidth:
+          </p>
+          
+          <div class="tip-box">
+            <p><strong>Formula:</strong> Cost = 100,000,000 / bandwidth in bps</p>
+            <ul>
+              <li><strong>10 Gbps link:</strong> Cost = 1</li>
+              <li><strong>1 Gbps link:</strong> Cost = 1</li>
+              <li><strong>100 Mbps link:</strong> Cost = 1</li>
+              <li><strong>10 Mbps link:</strong> Cost = 10</li>
+            </ul>
+            <p>Higher bandwidth = Lower cost = Preferred path!</p>
+          </div>
+          
+          <h2>Why Manually Set Cost?</h2>
+          
+          <p>
+            Sometimes you want to override the automatic calculation:
+          </p>
+          
+          <div class="real-world">
+            <h4>🌍 Real-World Scenarios:</h4>
+            <ul>
+              <li><strong>Traffic Engineering:</strong> Force traffic through specific paths</li>
+              <li><strong>Load Balancing:</strong> Distribute traffic across multiple links</li>
+              <li><strong>Backup Links:</strong> Make backup paths less preferred</li>
+              <li><strong>Cost Considerations:</strong> Expensive satellite link = high cost even if fast</li>
+            </ul>
+          </div>
+          
+          <div class="diagram">
+            <h4>Practical Example - Prefer Fiber over Satellite:</h4>
+            <pre>
+                  Cost 10 (Fiber - Reliable)
+    [Branch] ═══════════════════════ [HQ]
+        │                              │
+        │                              │
+        └───── Cost 100 (Satellite) ───┘
+               (Fast but expensive!)
+
+Set satellite to Cost 100 so it's only used as backup
+Even though satellite is fast, we prefer cheaper fiber
+            </pre>
+          </div>
+          
+          <h2>Setting Interface Cost</h2>
+          
+          <p>
+            You can set OSPF cost on a per-interface basis using:
+            <code>ip ospf cost &lt;value&gt;</code>
+          </p>
+          
+          <div class="comparison">
+            <div class="item">
+              <h4>Low Cost Interface</h4>
+              <pre>
+interface g0/0
+ip ospf cost 10
+
+✅ Primary path
+✅ Fast link
+✅ Use this first
+              </pre>
+            </div>
+            
+            <div class="item">
+              <h4>High Cost Interface</h4>
+              <pre>
+interface g0/2
+ip ospf cost 30
+
+⚠️ Backup path
+⚠️ Slower link
+⚠️ Use if primary fails
+              </pre>
+            </div>
+          </div>
+          
+          <div class="important-box">
+            <p><strong>🏆 CyberPatriot Tip:</strong></p>
+            <p>
+              Scenarios often require setting specific OSPF costs to control traffic flow.
+              Pay attention to requirements like "prefer path through Router A" - you'll need to adjust costs!
+            </p>
+          </div>
+        </div>
+        
+        <div class="practice-section">
+          <h3>👉 Your Task</h3>
+          <p>Configure OSPF costs on two interfaces to control path preference:</p>
+          <ol class="command-steps">
+            <li><code>enable</code></li>
+            <li><code>configure terminal</code></li>
+            <li><code>interface g0/0</code> - Primary interface</li>
+            <li><code>ip ospf cost 10</code> - Set low cost (preferred path)</li>
+            <li><code>exit</code></li>
+            <li><code>interface g0/2</code> - Backup interface</li>
+            <li><code>ip ospf cost 30</code> - Set higher cost (backup path)</li>
+            <li><code>end</code></li>
+            <li><code>write memory</code></li>
+          </ol>
+          
+          <div class="terminal-wrapper">
+            <div class="terminal-header">Practice Terminal - Lesson 11</div>
+            <div id="terminal-11" class="terminal-embed"></div>
+          </div>
+          
+          <div class="success-criteria">
+            <p><strong>✓ Verify your work:</strong></p>
+            <p>Type: <code>show ip ospf interface brief</code></p>
+            <p>You should see:</p>
+            <ul>
+              <li>g0/0 with Cost: 10</li>
+              <li>g0/2 with Cost: 30</li>
+            </ul>
+          </div>
+          
+          <div class="help-box">
+            <p><strong>💡 Remember:</strong></p>
+            <ul>
+              <li>Cost range: 1-65535</li>
+              <li>Lower cost = better path</li>
+              <li>OSPF sums costs along the entire path</li>
+              <li>Manual costs override automatic calculation</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <!-- CONGRATULATIONS -->
       <section class="lesson-section final">
         <div class="content">
-          <h1>🎉 Congratulations!</h1>
+          <h1>🎉 Congratulations, Network Engineer!</h1>
           
           <p class="big-text">
-            You've completed the fundamentals of network device configuration!
+            You've completed a comprehensive network engineering course covering everything from basic CLI to advanced routing!
           </p>
           
-          <h2>What You've Mastered</h2>
+          <h2>What You've Mastered - All 11 Lessons</h2>
           
           <div class="skills-checklist">
-            <div class="skill-check">✅ Command line navigation</div>
-            <div class="skill-check">✅ Setting hostnames and passwords</div>
-            <div class="skill-check">✅ IP address configuration</div>
-            <div class="skill-check">✅ Creating and using VLANs</div>
-            <div class="skill-check">✅ Trunk port configuration</div>
-            <div class="skill-check">✅ SSH secure remote access</div>
+            <div class="skill-check">✅ Lesson 1: Command line navigation and modes</div>
+            <div class="skill-check">✅ Lesson 2: Setting hostnames</div>
+            <div class="skill-check">✅ Lesson 3: Password security (enable secret)</div>
+            <div class="skill-check">✅ Lesson 4: IP address configuration and management</div>
+            <div class="skill-check">✅ Lesson 5: Creating and organizing VLANs</div>
+            <div class="skill-check">✅ Lesson 6: Trunk ports and inter-switch links</div>
+            <div class="skill-check">✅ Lesson 7: SSH secure remote access</div>
+            <div class="skill-check">✅ Lesson 8: Layer 3 switching with routed ports</div>
+            <div class="skill-check">✅ Lesson 9: Static routing with backup routes</div>
+            <div class="skill-check">✅ Lesson 10: OSPF dynamic routing protocol</div>
+            <div class="skill-check">✅ Lesson 11: OSPF cost manipulation and path control</div>
           </div>
           
-          <h2>Next Steps</h2>
+          <h2>Your Knowledge Now Includes</h2>
+          
+          <div class="skills-grid">
+            <div class="skill-card">
+              <div class="skill-icon">⚡</div>
+              <h4>Layer 2 Switching</h4>
+              <p>VLANs, access ports, trunk configuration, MAC addressing</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">🌐</div>
+              <h4>Layer 3 Routing</h4>
+              <p>Static routes, OSPF, routed ports, path selection</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">🔒</div>
+              <h4>Security</h4>
+              <p>Passwords, SSH encryption, secure remote access</p>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon">🛠️</div>
+              <h4>Real-World Skills</h4>
+              <p>Everything needed for CyberPatriot and IT careers</p>
+            </div>
+          </div>
+          
+          <h2>You're Ready For</h2>
           
           <div class="next-steps-grid">
             <div class="next-step-card">
-              <h3>🏃 Practice More</h3>
-              <p>Try the advanced exercises in the full trainer</p>
-              <a href="index.html" class="button">Open Full Trainer</a>
-            </div>
-            
-            <div class="next-step-card">
-              <h3>🏆 CyberPatriot</h3>
-              <p>Apply your skills in competition</p>
+              <h3>🏆 CyberPatriot Competition</h3>
+              <p>You now have the core skills for the Cisco Networking Challenge!</p>
+              <ul>
+                <li>Device hardening</li>
+                <li>VLAN configuration</li>
+                <li>Routing setup</li>
+                <li>SSH security</li>
+              </ul>
               <p>Visit <strong>uscyberpatriot.org</strong></p>
             </div>
             
             <div class="next-step-card">
-              <h3>📚 Keep Learning</h3>
-              <p>Explore these topics next:</p>
+              <h3>📜 IT Certifications</h3>
+              <p>You've learned concepts covered in:</p>
               <ul>
-                <li>Static routing</li>
-                <li>OSPF dynamic routing</li>
-                <li>Access Control Lists (ACLs)</li>
-                <li>DHCP and NAT</li>
+                <li><strong>Cisco CCNA:</strong> Routing & Switching</li>
+                <li><strong>CompTIA Network+:</strong> Infrastructure</li>
+                <li><strong>Junior Network Admin:</strong> Entry-level roles</li>
+              </ul>
+              <p>Keep studying and get certified!</p>
+            </div>
+            
+            <div class="next-step-card">
+              <h3>💼 Career Paths</h3>
+              <p>These skills open doors to:</p>
+              <ul>
+                <li>Network Administrator</li>
+                <li>Network Engineer</li>
+                <li>Systems Administrator</li>
+                <li>Cybersecurity Analyst</li>
+                <li>IT Support Specialist</li>
+              </ul>
+              <p><strong>Median Salary:</strong> $70,000-$120,000+</p>
+            </div>
+          </div>
+          
+          <h2>Continue Your Journey</h2>
+          
+          <div class="real-world">
+            <h4>🌍 Advanced Topics to Explore Next:</h4>
+            <ul>
+              <li><strong>Access Control Lists (ACLs):</strong> Filter network traffic for security</li>
+              <li><strong>NAT (Network Address Translation):</strong> How private IPs access the internet</li>
+              <li><strong>DHCP:</strong> Automatic IP address assignment</li>
+              <li><strong>Port Security:</strong> Lock down switch ports</li>
+              <li><strong>EIGRP:</strong> Another dynamic routing protocol</li>
+              <li><strong>BGP:</strong> The protocol that runs the internet</li>
+              <li><strong>IPv6:</strong> The future of IP addressing</li>
+              <li><strong>Quality of Service (QoS):</strong> Prioritize important traffic</li>
+            </ul>
+          </div>
+          
+          <h2>Practice Resources</h2>
+          
+          <div class="next-steps-grid">
+            <div class="next-step-card">
+              <h3>🔧 Cisco Packet Tracer</h3>
+              <p>Free network simulation tool from Cisco</p>
+              <p>Build complex topologies and practice configurations</p>
+              <a href="https://www.netacad.com/courses/packet-tracer" target="_blank" class="button">Download Free</a>
+            </div>
+            
+            <div class="next-step-card">
+              <h3>📚 Cisco NetAcad</h3>
+              <p>Free online courses from Cisco</p>
+              <ul>
+                <li>Introduction to Networks</li>
+                <li>Routing & Switching</li>
+                <li>Cybersecurity</li>
+              </ul>
+              <a href="https://www.netacad.com" target="_blank" class="button">Start Learning</a>
+            </div>
+            
+            <div class="next-step-card">
+              <h3>🏠 Home Lab</h3>
+              <p>Build your own practice network</p>
+              <ul>
+                <li>Buy used Cisco switches on eBay ($20-50)</li>
+                <li>Use old computers as servers</li>
+                <li>Practice real configurations</li>
+                <li>Learn by breaking (and fixing!) things</li>
               </ul>
             </div>
           </div>
           
           <div class="motivation-final">
-            <h2>Remember</h2>
+            <h2>You Did It! 🌟</h2>
             <p class="big-text">
-              Every network engineer started exactly where you are right now.
+              From knowing nothing about networking to configuring switches, VLANs, routing protocols, and secure access - 
+              you've come incredibly far!
             </p>
             <p>
-              The internet wasn't built in a day, and mastering networking takes time. 
-              Be patient, keep practicing, and celebrate your progress!
+              <strong>Remember:</strong> Every expert was once a beginner. Every network engineer started exactly where you started today.
+              The difference between them and others? They kept going.
             </p>
             <p>
-              <strong>You're on your way to becoming a network professional. Keep going! 🚀</strong>
+              The internet connects billions of devices across the planet. Data travels thousands of miles in milliseconds.
+              People can video chat with family on the other side of the world. Hospitals save lives using connected medical equipment.
+              Businesses operate globally because networks work.
             </p>
+            <p class="big-text">
+              <strong>And now YOU know how it all works. That's powerful. 💪</strong>
+            </p>
+            <p>
+              Whether you compete in CyberPatriot, pursue IT certifications, or start a career in networking - 
+              you have a solid foundation. Keep building on it!
+            </p>
+            <p>
+              <strong>The world needs skilled network engineers. Welcome to the profession! 🚀</strong>
+            </p>
+          </div>
+          
+          <div class="important-box">
+            <h3>📖 Additional Learning Materials</h3>
+            <p>This course covered everything from the comprehensive curriculum including:</p>
+            <ul>
+              <li>All 9 core exercises from the training program</li>
+              <li>Visual diagrams and real-world examples</li>
+              <li>CyberPatriot competition tips and tricks</li>
+              <li>Best practices for network security</li>
+              <li>Hands-on practice with every concept</li>
+            </ul>
+            <p><strong>Keep this page bookmarked as a reference!</strong> You can always come back to review concepts.</p>
           </div>
         </div>
       </section>
@@ -767,7 +1548,8 @@ Hacker sees: gibberish
 
     <footer class="tutorial-footer">
       <p>Created with ❤️ for students learning networking</p>
-      <p><a href="index.html">Full Interactive Trainer</a> | <a href="tutorial.html">Detailed Tutorial</a></p>
+      <p>Complete Network Engineering Course - 11 Comprehensive Lessons</p>
+      <p>From CLI Basics to Advanced OSPF Routing | CyberPatriot Ready</p>
     </footer>
   </div>
 
