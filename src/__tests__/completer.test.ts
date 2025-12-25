@@ -102,14 +102,31 @@ describe("TabCompleter", () => {
       expect(result.value).toBe("erface");
     });
 
-    test("should show interface options after 'interface '", () => {
+    test("should show nothing after 'interface ' (IOS doesn't autocomplete interface names)", () => {
       const result = completer.complete("interface ", 10, ModeType.GLOBAL_CONFIG, state);
       
       expect(result.type).toBe("list");
       expect(result.options).toBeDefined();
-      expect(result.options?.length).toBeGreaterThan(0);
-      // Should include default interface suggestions
-      expect(result.options).toEqual(expect.arrayContaining(["g0/0", "g0/1", "g0/2"]));
+      // IOS doesn't autocomplete interface names - user must type them
+      expect(result.options).toEqual([]);
+    });
+
+    test("should complete 'interface v' to 'interface vlan'", () => {
+      const result = completer.complete("interface v", 11, ModeType.GLOBAL_CONFIG, state);
+      
+      // Should complete just the keyword 'vlan', not suggest specific VLAN IDs
+      expect(result.type).toBe("complete");
+      expect(result.value).toBe("lan");
+    });
+
+    test("should show nothing after 'interface vlan '", () => {
+      const result = completer.complete("interface vlan ", 15, ModeType.GLOBAL_CONFIG, state);
+      
+      expect(result.type).toBe("list");
+      expect(result.options).toBeDefined();
+      // IOS doesn't show anything - no placeholders, no suggestions
+      // User must type the VLAN number manually
+      expect(result.options).toEqual([]);
     });
 
     test("should complete 'vl' to 'vlan'", () => {

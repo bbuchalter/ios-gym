@@ -72,6 +72,25 @@ describe("CLI Integration Tests", () => {
       expect(iface.mask).toBe("255.255.255.0");
       expect(iface.adminUp).toBe(true);
     });
+
+    test("should configure VLAN interface (multi-word interface name)", () => {
+      engine.executeCommand(session, "enable");
+      engine.executeCommand(session, "configure terminal");
+      engine.executeCommand(session, "interface vlan 1");
+      
+      expect(session.getPrompt()).toBe("Switch(config-if)# ");
+      // Interface names are normalized internally (vlan 1 -> vlan1)
+      expect(session.modeStack.currentInterface).toBe("vlan1");
+      
+      engine.executeCommand(session, "ip address 192.168.1.254 255.255.255.0");
+      engine.executeCommand(session, "no shutdown");
+      
+      const iface = session.deviceState.interfaces["vlan1"];
+      expect(iface).toBeDefined();
+      expect(iface.ip).toBe("192.168.1.254");
+      expect(iface.mask).toBe("255.255.255.0");
+      expect(iface.adminUp).toBe(true);
+    });
   });
 
   describe("VLAN Configuration Workflow", () => {

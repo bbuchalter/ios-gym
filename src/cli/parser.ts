@@ -176,6 +176,7 @@ export class CommandParser {
       
       const token = tokens[tokenIndex];
       
+      // Try single token first
       if (this.validateArgType(token, argType)) {
         args[argToken.name] = token;
         
@@ -184,11 +185,40 @@ export class CommandParser {
         
         tokenIndex++;
         defIndex++;
-      } else if (isOptional) {
-        defIndex++;
       } else {
-        // Invalid argument - point to this token
-        return { success: false, matchedLength: tokenPositions[tokenIndex] };
+        // Try combining with next token(s) for multi-word arguments like "vlan 1"
+        let combined = token;
+        let tokensConsumed = 1;
+        let matchFound = false;
+        
+        // Try combining up to 3 tokens (e.g., "vlan 1", "fast ethernet 0/1")
+        const maxLookahead = Math.min(3, tokens.length - tokenIndex);
+        
+        for (let lookahead = 1; lookahead < maxLookahead; lookahead++) {
+          combined += " " + tokens[tokenIndex + lookahead];
+          
+          if (this.validateArgType(combined, argType)) {
+            args[argToken.name] = combined;
+            
+            // Update character position to end of last consumed token
+            const lastTokenIdx = tokenIndex + lookahead;
+            charPosition = tokenPositions[lastTokenIdx] + tokens[lastTokenIdx].length;
+            
+            tokenIndex += lookahead + 1;
+            tokensConsumed = lookahead + 1;
+            matchFound = true;
+            break;
+          }
+        }
+        
+        if (matchFound) {
+          defIndex++;
+        } else if (isOptional) {
+          defIndex++;
+        } else {
+          // Invalid argument - point to this token
+          return { success: false, matchedLength: tokenPositions[tokenIndex] };
+        }
       }
     }
     
