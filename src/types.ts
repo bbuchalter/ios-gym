@@ -169,6 +169,7 @@ export interface ExecutionResult {
   output: string[];
   newMode?: ModeType;
   sessionEnd?: boolean;
+  paginated?: boolean; // If true, output should be shown one page at a time with --More--
   passwordPrompt?: {
     prompt: string;
     handler: string; // Handler type to invoke after password is entered

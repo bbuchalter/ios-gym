@@ -4,10 +4,53 @@ import { DeviceState } from "../types";
  * Create initial device state matching the schema from commands.yaml
  */
 export function createInitialState(): DeviceState {
+  // Create default interfaces like a real 2960 switch
+  const interfaces: DeviceState["interfaces"] = {};
+  
+  // Add 24 FastEthernet interfaces (fa0/1 through fa0/24)
+  for (let i = 1; i <= 24; i++) {
+    interfaces[`fa0/${i}`] = {
+      adminUp: false,
+      l2mode: null,
+      accessVlan: null,
+      trunkAllowed: null,
+      ip: null,
+      mask: null
+    };
+  }
+  
+  // Add 2 GigabitEthernet interfaces (g0/1 and g0/2)
+  interfaces["g0/1"] = {
+    adminUp: false,
+    l2mode: null,
+    accessVlan: null,
+    trunkAllowed: null,
+    ip: null,
+    mask: null
+  };
+  interfaces["g0/2"] = {
+    adminUp: false,
+    l2mode: null,
+    accessVlan: null,
+    trunkAllowed: null,
+    ip: null,
+    mask: null
+  };
+  
+  // Add Vlan1 interface (shutdown by default)
+  interfaces["vlan1"] = {
+    adminUp: false,
+    l2mode: "routed",
+    accessVlan: null,
+    trunkAllowed: null,
+    ip: null,
+    mask: null
+  };
+  
   return {
     hostname: "Switch",
     enableSecret: null,
-    interfaces: {},
+    interfaces,
     vlans: {
       "1": {
         name: "default"

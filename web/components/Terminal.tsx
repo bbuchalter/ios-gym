@@ -33,6 +33,11 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
   const passwordModeRef = useRef(false);
   const nameLookupTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const inNameLookupRef = useRef(false);
+  const paginationRef = useRef<{
+    lines: string[];
+    currentIndex: number;
+    linesPerPage: number;
+  } | null>(null);
   
   useEffect(() => {
     if (!containerRef.current || terminalRef.current) return;
@@ -136,6 +141,37 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
       currentLineRef.current = newLine;
     };
     
+    const showPaginatedLines = (count: number) => {
+      if (!paginationRef.current) return false;
+      
+      const { lines, currentIndex } = paginationRef.current;
+      const endIndex = Math.min(currentIndex + count, lines.length);
+      
+      // Clear the --More-- prompt
+      terminal.write('\r' + ' '.repeat(8) + '\r');
+      
+      // Show lines
+      for (let i = currentIndex; i < endIndex; i++) {
+        if (i > currentIndex) terminal.write('\r\n');
+        terminal.write(lines[i]);
+      }
+      
+      paginationRef.current.currentIndex = endIndex;
+      
+      // Check if we have more lines
+      if (endIndex < lines.length) {
+        terminal.write('\r\n--More--');
+        return true; // Still in pagination mode
+      } else {
+        // Done with pagination
+        terminal.write('\r\n');
+        terminal.write(sessionRef.current!.getPrompt());
+        paginationRef.current = null;
+        scrollToBottom();
+        return false; // Exit pagination mode
+      }
+    };
+    
     // Track keyboard event for CTRL+SHIFT+6 detection
     let lastKeyboardEvent: KeyboardEvent | null = null;
     
@@ -161,6 +197,36 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
     const handleData = (data: string) => {
       // Clear the keyboard event tracker after handling
       lastKeyboardEvent = null;
+      
+      // Handle pagination mode
+      if (paginationRef.current) {
+        const lowerData = data.toLowerCase();
+        
+        // Space bar - show next page
+        if (data === ' ') {
+          showPaginatedLines(paginationRef.current.linesPerPage);
+          return;
+        }
+        
+        // Enter key - show next line
+        if (data.charCodeAt(0) === 13) {
+          showPaginatedLines(1);
+          return;
+        }
+        
+        // Q or q - quit pagination
+        if (lowerData === 'q') {
+          // Clear the --More-- prompt
+          terminal.write('\r' + ' '.repeat(8) + '\r\n');
+          terminal.write(sessionRef.current!.getPrompt());
+          paginationRef.current = null;
+          scrollToBottom();
+          return;
+        }
+        
+        // Ignore other input in pagination mode
+        return;
+      }
       
       if (sessionEndedRef.current && data.charCodeAt(0) === 13) {
         // Restart session on Enter
@@ -237,6 +303,25 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
           
           if (result.output && result.output.length > 0) {
             const prompt = sessionRef.current!.getPrompt();
+            
+            // Check if output should be paginated
+            if (result.paginated) {
+              // Initialize pagination
+              const linesPerPage = 20; // Show 20 lines at a time
+              paginationRef.current = {
+                lines: result.output,
+                currentIndex: 0,
+                linesPerPage
+              };
+              
+              // Show first page
+              showPaginatedLines(linesPerPage);
+              currentLineRef.current = '';
+              scrollToBottom();
+              return;
+            }
+            
+            // Non-paginated output
             result.output.forEach((outputLine, index) => {
               if (index === 0 && outputLine.match(/^\s*\^/)) {
                 terminal.writeln(' '.repeat(prompt.length) + outputLine);

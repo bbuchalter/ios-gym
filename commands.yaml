@@ -400,41 +400,58 @@ templates:
   show_running_config: |
     Building configuration...
 
-    Current configuration : 1234 bytes
+    Current configuration : 1080 bytes
+    !
+    version 15.0
+    no service timestamps log datetime msec
+    no service timestamps debug datetime msec
+    no service password-encryption
     !
     hostname {hostname}
-    {#if enableSecret}
-    enable secret {enableSecret}
-    {#endif}
+    {#if enableSecret}!
+    enable secret 5 {enableSecret}
+    {#endif}!
     !
-    {#vlans}
-    vlan {id}
-     {#if name}name {name}{#endif}
-    {#endvlans}
     !
-    {#interfaces}
-    interface {name}
-     {#if l2mode == "routed"}no switchport{#endif}
-     {#if l2mode == "access"}switchport mode access{#endif}
-     {#if l2mode == "trunk"}switchport mode trunk{#endif}
-     {#if accessVlan}switchport access vlan {accessVlan}{#endif}
-     {#if trunkAllowed}switchport trunk allowed vlan {trunkAllowed}{#endif}
-     {#if ip}ip address {ip} {mask}{#endif}
-     {#if adminUp}no shutdown{#endif}
     !
-    {#endifaces_end}
-    {#if ipDefaultGateway}
-    ip default-gateway {ipDefaultGateway}
-    {#endif}
-    {#routes}
-    ip route {dest} {mask} {nextHop} {ad}
-    {#endroutes}
-    {#if ospf.processId}
-    router ospf {ospf.processId}
-     {#ospf.networks}
-     network {ip} {wildcard} area {area}
-     {#end}
-    {#endif}
+    !
+    !
+    spanning-tree mode pvst
+    spanning-tree extend system-id
+    !
+    {#vlans}vlan {id}
+     name {name}
+    !
+    {#endvlans}{#interfaces}interface {name_full}{#if l2mode == "access"}
+     switchport mode access{#endif}{#if accessVlan}
+     switchport access vlan {accessVlan}{#endif}{#if l2mode == "trunk"}
+     switchport mode trunk{#endif}{#if trunkAllowed}
+     switchport trunk allowed vlan {trunkAllowed}{#endif}{#if l2mode == "routed"}
+     no switchport{#endif}{#if ip}
+     ip address {ip} {mask}{#endif}{#if name == "vlan1"}
+     no ip address
+     shutdown{#endif}{#if adminUp}{#if name != "vlan1"}
+     no shutdown{#endif}{#endif}
+    !
+    {#endifaces_end}{#if ipDefaultGateway}ip default-gateway {ipDefaultGateway}
+    !
+    {#endif}{#routes}ip route {dest} {mask} {nextHop}
+    !
+    {#endroutes}{#if ospf.processId}router ospf {ospf.processId}
+     {#ospf.networks}network {ip} {wildcard} area {area}
+     {#end}!
+    {#endif}!
+    !
+    !
+    line con 0
+    !
+    line vty 0 4
+     login
+    line vty 5 15
+     login
+    !
+    !
+    !
     !
     end
 

@@ -14,7 +14,17 @@ describe("Device State Management", () => {
       
       expect(state.hostname).toBe("Switch");
       expect(state.enableSecret).toBeNull();
-      expect(state.interfaces).toEqual({});
+      
+      // Should have default interfaces like a 2960 switch
+      // 24 FastEthernet (fa0/1-24) + 2 GigabitEthernet (g0/1-2) + 1 Vlan1 = 27 interfaces
+      expect(Object.keys(state.interfaces).length).toBe(27);
+      expect(state.interfaces["fa0/1"]).toBeDefined();
+      expect(state.interfaces["fa0/24"]).toBeDefined();
+      expect(state.interfaces["g0/1"]).toBeDefined();
+      expect(state.interfaces["g0/2"]).toBeDefined();
+      expect(state.interfaces["vlan1"]).toBeDefined();
+      expect(state.interfaces["vlan1"].l2mode).toBe("routed");
+      
       expect(state.vlans["1"]).toEqual({ name: "default" });
       expect(state.routes).toEqual([]);
       expect(state.ospf.processId).toBeNull();
@@ -107,17 +117,18 @@ describe("Device State Management", () => {
     test("should create interface if it doesn't exist", () => {
       const state = createInitialState();
       
-      ensureInterface(state, "g0/1");
+      // Use a non-standard interface that doesn't exist by default
+      ensureInterface(state, "g1/0/1");
       
-      expect(state.interfaces["g0/1"]).toBeDefined();
-      expect(state.interfaces["g0/1"].adminUp).toBe(false);
-      expect(state.interfaces["g0/1"].l2mode).toBeNull();
+      expect(state.interfaces["g1/0/1"]).toBeDefined();
+      expect(state.interfaces["g1/0/1"].adminUp).toBe(false);
+      expect(state.interfaces["g1/0/1"].l2mode).toBeNull();
     });
 
     test("should not overwrite existing interface", () => {
       const state = createInitialState();
       
-      ensureInterface(state, "g0/1");
+      // g0/1 already exists in initial state
       state.interfaces["g0/1"].adminUp = true;
       state.interfaces["g0/1"].ip = "192.168.1.1";
       

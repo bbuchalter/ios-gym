@@ -19,8 +19,40 @@ export function handleRender(
   }
   
   const rendered = renderTemplate(template, session);
+  let lines = rendered.split("\n");
   
-  return { output: rendered.split("\n") };
+  // Remove trailing empty lines (YAML pipe syntax adds trailing newline)
+  while (lines.length > 0 && lines[lines.length - 1] === "") {
+    lines.pop();
+  }
+  
+  // Mark output as paginated if it's longer than 20 lines
+  // This matches typical IOS behavior where long show commands trigger pagination
+  const paginated = lines.length > 20;
+  
+  return { output: lines, paginated };
+}
+
+/**
+ * Expand abbreviated interface name to full form for display
+ * fa0/1 -> FastEthernet0/1
+ * g0/1 -> GigabitEthernet0/1
+ * vlan1 -> Vlan1
+ */
+function expandInterfaceName(name: string): string {
+  // Handle FastEthernet
+  if (name.startsWith('fa')) {
+    return 'FastEthernet' + name.substring(2);
+  }
+  // Handle GigabitEthernet
+  if (name.startsWith('g') && name.match(/^g\d/)) {
+    return 'GigabitEthernet' + name.substring(1);
+  }
+  // Handle Vlan
+  if (name.startsWith('vlan')) {
+    return 'Vlan' + name.substring(4);
+  }
+  return name;
 }
 
 /**
@@ -55,11 +87,16 @@ function renderTemplate(template: string, session: CLISession): string {
     return state.ospf.processId ? content : "";
   });
   
-  // Handle VLAN loop
+  // Handle VLAN loop (skip VLAN 1 as it's implicit in show running-config)
   result = result.replace(/{#vlans}([\s\S]*?){#endvlans}/g, (match, content) => {
     const vlanLines: string[] = [];
     
     for (const [id, vlan] of Object.entries(state.vlans)) {
+      // Skip VLAN 1 in show running-config (it's implicit)
+      if (id === "1") {
+        continue;
+      }
+      
       let line = content;
       line = line.replace(/{id}/g, id);
       line = line.replace(/{name}/g, vlan.name || "");
@@ -76,6 +113,8 @@ function renderTemplate(template: string, session: CLISession): string {
     
     for (const [name, iface] of Object.entries(state.interfaces)) {
       let line = content;
+      const fullName = expandInterfaceName(name);
+      line = line.replace(/{name_full}/g, fullName);
       line = line.replace(/{name}/g, name);
       line = line.replace(/{name_padded}/g, name.padEnd(22));
       line = line.replace(/{ip}/g, iface.ip || "");
@@ -87,27 +126,34 @@ function renderTemplate(template: string, session: CLISession): string {
       line = line.replace(/{status}/g, iface.adminUp ? "up".padEnd(20) : "administratively down".padEnd(20));
       line = line.replace(/{protocol}/g, iface.adminUp ? "up" : "down");
       
-      // Handle nested conditionals
-      line = line.replace(/{#if\s+l2mode\s+==\s+"routed"}(.*?)(?={#endif|$)/g, (_m: string, c: string) => {
-        return iface.l2mode === "routed" ? c : "";
+      // Handle nested conditionals (use [\s\S] to match newlines)
+      // Note: Vlan interfaces are L3 by default, don't show "no switchport" for them
+      line = line.replace(/{#if\s+l2mode\s+==\s+"routed"}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
+        return (iface.l2mode === "routed" && !name.startsWith("vlan")) ? c : "";
       });
-      line = line.replace(/{#if\s+l2mode\s+==\s+"access"}(.*?)(?={#endif|$)/g, (_m: string, c: string) => {
+      line = line.replace(/{#if\s+l2mode\s+==\s+"access"}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
         return iface.l2mode === "access" ? c : "";
       });
-      line = line.replace(/{#if\s+l2mode\s+==\s+"trunk"}(.*?)(?={#endif|$)/g, (_m: string, c: string) => {
+      line = line.replace(/{#if\s+l2mode\s+==\s+"trunk"}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
         return iface.l2mode === "trunk" ? c : "";
       });
-      line = line.replace(/{#if\s+accessVlan}(.*?)(?={#endif|$)/g, (_m: string, c: string) => {
+      line = line.replace(/{#if\s+accessVlan}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
         return iface.accessVlan ? c : "";
       });
-      line = line.replace(/{#if\s+trunkAllowed}(.*?)(?={#endif|$)/g, (_m: string, c: string) => {
+      line = line.replace(/{#if\s+trunkAllowed}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
         return iface.trunkAllowed ? c : "";
       });
-      line = line.replace(/{#if\s+ip}(.*?)(?={#endif|$)/g, (_m: string, c: string) => {
+      line = line.replace(/{#if\s+ip}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
         return iface.ip ? c : "";
       });
-      line = line.replace(/{#if\s+adminUp}(.*?)(?={#endif|$)/g, (_m: string, c: string) => {
+      line = line.replace(/{#if\s+adminUp}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
         return iface.adminUp ? c : "";
+      });
+      line = line.replace(/{#if\s+name\s+==\s+"vlan1"}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
+        return name === "vlan1" ? c : "";
+      });
+      line = line.replace(/{#if\s+name\s+!=\s+"vlan1"}([\s\S]*?)(?={#endif)/g, (_m: string, c: string) => {
+        return name !== "vlan1" ? c : "";
       });
       line = line.replace(/{#endif}/g, "");
       

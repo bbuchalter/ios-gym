@@ -317,7 +317,192 @@ export default function LearnPage() {
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 3: SETTING HOSTNAME */}
+          {/* LESSON 3: PAGINATION IN SHOW COMMANDS */}
+          <LessonSection title="Understanding Paginated Output 📄">
+            <p className="text-xl text-gray-200 my-6">
+              Some commands display a lot of information — so much that it would scroll off your screen! 
+              IOS has a built-in feature called <strong className="text-blue-300">pagination</strong> to help you read long output one page at a time.
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What is Pagination?</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              When a command has more than one screen's worth of output, IOS automatically pauses and shows <code>--More--</code> at the bottom. 
+              This gives you time to read before continuing.
+            </p>
+
+            <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 my-8">
+              <p className="text-gray-400 mb-4 font-semibold">Example: Running a long command</p>
+              <div className="bg-black p-4 rounded font-mono text-sm">
+                <p className="text-green-400">Switch# show running-config</p>
+                <p className="text-gray-300 mt-2">Building configuration...</p>
+                <p className="text-gray-300">!</p>
+                <p className="text-gray-300">hostname Switch</p>
+                <p className="text-gray-300">!</p>
+                <p className="text-gray-300">vlan 1</p>
+                <p className="text-gray-500 italic">...many more lines...</p>
+                <p className="text-gray-300">interface g0/1</p>
+                <p className="text-gray-300"> switchport mode access</p>
+                <p className="text-gray-500 italic">...many more lines...</p>
+                <p className="text-yellow-400 font-bold mt-2">--More--</p>
+              </div>
+              <p className="text-gray-400 mt-4 italic">
+                The <code className="text-yellow-400">--More--</code> prompt means: "There's more to see! What would you like to do?"
+              </p>
+            </div>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Controlling Pagination</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              When you see <code>--More--</code>, you have three options:
+            </p>
+
+            <div className="space-y-4 my-8">
+              <div className="bg-gray-800 p-6 rounded-lg border border-blue-500/50">
+                <h4 className="text-blue-400 font-semibold mb-3 text-lg flex items-center gap-2">
+                  <kbd className="bg-gray-700 px-3 py-1 rounded">SPACE</kbd> Show Next Page
+                </h4>
+                <p className="text-gray-300">
+                  Press the <kbd>SPACE</kbd> bar to display the next full page of output (about 20 lines).
+                  This is the most common option — you're basically saying "show me more!"
+                </p>
+              </div>
+
+              <div className="bg-gray-800 p-6 rounded-lg border border-green-500/50">
+                <h4 className="text-green-400 font-semibold mb-3 text-lg flex items-center gap-2">
+                  <kbd className="bg-gray-700 px-3 py-1 rounded">ENTER</kbd> Show Next Line
+                </h4>
+                <p className="text-gray-300">
+                  Press <kbd>ENTER</kbd> to display just one more line of output.
+                  Use this when you want to read slowly, line by line.
+                </p>
+              </div>
+
+              <div className="bg-gray-800 p-6 rounded-lg border border-red-500/50">
+                <h4 className="text-red-400 font-semibold mb-3 text-lg flex items-center gap-2">
+                  <kbd className="bg-gray-700 px-3 py-1 rounded">Q</kbd> Quit (Cancel)
+                </h4>
+                <p className="text-gray-300">
+                  Press <kbd>Q</kbd> to quit and return to the command prompt immediately.
+                  This is useful when you've already found what you're looking for and don't need to see the rest.
+                </p>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-3">
+                  <strong className="text-white">Pro Tip:</strong> The <kbd>SPACE</kbd> bar is your best friend when reading long output!
+                </p>
+                <p className="text-gray-300">
+                  Think of pagination like flipping through pages in a book — you control the pace and can stop whenever you want.
+                </p>
+              </ProTip>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Your First Paginated Command</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              The <code>show running-config</code> command displays your device's complete configuration.
+              It's one of the most important commands in IOS — and it's usually long enough to trigger pagination!
+            </p>
+
+            <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-6 my-8">
+              <h4 className="text-blue-300 font-semibold mb-4 text-lg flex items-center gap-2">
+                <span>💡</span> What You'll See
+              </h4>
+              <p className="text-gray-300 mb-4">
+                When you run <code>show running-config</code>, IOS displays:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                <li>Your device's hostname</li>
+                <li>Any passwords you've configured</li>
+                <li>All VLANs and their settings</li>
+                <li>All interface configurations</li>
+                <li>Routing settings (if any)</li>
+                <li>...and much more!</li>
+              </ul>
+              <p className="text-gray-300 mt-4">
+                Right now, your device doesn't have much configuration yet, but the output will still be long enough to see pagination in action.
+              </p>
+            </div>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Try It Now
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Practice navigating paginated output:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li>Type <code>enable</code> to enter privileged mode (you should see <code>Switch#</code>)</li>
+              <li>Type <code>show running-config</code> and press <kbd>ENTER</kbd></li>
+              <li>Watch the output scroll and stop at <code className="text-yellow-400">--More--</code></li>
+              <li><strong>Try pressing <kbd>SPACE</kbd></strong> to see the next page</li>
+              <li>If there's more, <strong>try pressing <kbd>ENTER</kbd></strong> to advance one line at a time</li>
+              <li><strong>Press <kbd>Q</kbd></strong> to quit back to the prompt (or let it finish naturally)</li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <InfoBox variant="success">
+              <div className="text-gray-300">
+                <p className="font-semibold text-green-400 mb-3 text-lg">✓ You succeeded when:</p>
+                <ul className="ml-6 space-y-2">
+                  <li>You saw the <code className="text-yellow-400">--More--</code> prompt appear</li>
+                  <li>You were able to control the output using <kbd>SPACE</kbd>, <kbd>ENTER</kbd>, or <kbd>Q</kbd></li>
+                  <li>You understand that pagination helps you read long output without information scrolling away</li>
+                </ul>
+              </div>
+            </InfoBox>
+
+            <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-lg p-6 my-8">
+              <h4 className="text-yellow-300 font-semibold mb-4 text-lg flex items-center gap-2">
+                <span>⚠️</span> Common Confusion
+              </h4>
+              <p className="text-gray-300 mb-3">
+                <strong>Question:</strong> "Why can't I type commands when I see --More--?"
+              </p>
+              <p className="text-gray-300 mb-4">
+                <strong>Answer:</strong> When <code>--More--</code> is displayed, you're in <strong>pagination mode</strong>.
+                The CLI is waiting for you to tell it how to continue (SPACE, ENTER, or Q).
+                You can't type regular commands until you exit pagination mode — either by pressing <kbd>Q</kbd> or by viewing all the output.
+              </p>
+              <p className="text-gray-300 italic">
+                Think of it like watching a video: you can pause, play, or skip, but you can't do other things until you're done or you press stop!
+              </p>
+            </div>
+
+            <div className="bg-orange-900/30 border border-orange-500/50 rounded-lg p-6 my-8">
+              <h4 className="text-orange-300 font-semibold mb-4 text-lg flex items-center gap-2">
+                <span>🖱️</span> Important: No Keyboard Shortcut to Scroll Up!
+              </h4>
+              <p className="text-gray-300 mb-4">
+                <strong>There's no keyboard shortcut to scroll back up</strong> in the terminal once text has scrolled past.
+                If you want to review what you've already seen, you'll need to use your <strong>mouse or trackpad</strong> to scroll up in the terminal window.
+              </p>
+              <p className="text-gray-300 mb-4">
+                This is why it's important to advance through paginated output <strong>thoughtfully</strong>:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                <li>Use <kbd>ENTER</kbd> to advance line-by-line when you want to read carefully</li>
+                <li>Use <kbd>SPACE</kbd> for full pages when you're comfortable with the pace</li>
+                <li>If you accidentally scroll too fast, you'll need to use your mouse to scroll back up</li>
+                <li>Or press <kbd>Q</kbd> and run the command again!</li>
+              </ul>
+              <p className="text-gray-300 mt-4 italic">
+                💡 <strong>Pro tip:</strong> When in doubt, go slower with <kbd>ENTER</kbd> rather than faster with <kbd>SPACE</kbd> — 
+                it's easier to speed up than to scroll back!
+              </p>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300">
+                  <li><code>show running-config</code> is your window into what's actually configured on the device</li>
+                  <li>Get in the habit of running it frequently to verify your changes</li>
+                  <li>Many show commands trigger pagination — now you know how to navigate them!</li>
+                  <li>If output is too long and annoying, just press <kbd>Q</kbd> to quit</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
+          </LessonSection>
+
+          {/* LESSON 4: SETTING HOSTNAME */}
           <LessonSection title="Giving Your Device a Name">
             <p className="text-xl text-gray-200 my-6">
               Just like you name your phone "Brian's iPhone", network devices need names too!
