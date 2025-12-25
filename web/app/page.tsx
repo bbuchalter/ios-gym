@@ -1656,45 +1656,6 @@ Switch#show running-config
                 Don't worry about what it means yet — you'll use it when configuring devices in the next lesson!
               </p>
             </InfoBox>
-
-            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">Checking IP Addresses on Devices</h2>
-            <p className="text-gray-300 mb-6 text-lg">
-              When you want to see what IP addresses are configured on a device, you'll use the <code>show ip interface brief</code> command.
-              This command displays a quick summary of all interfaces and their IP addresses.
-            </p>
-
-            <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 my-8">
-              <p className="text-gray-400 mb-4 font-semibold">Example output:</p>
-              <div className="bg-black p-4 rounded font-mono text-sm">
-                <p className="text-gray-300">Interface              IP-Address      OK? Method Status                Protocol</p>
-                <p className="text-gray-300">Vlan1                  192.168.1.100   YES manual up                    up</p>
-                <p className="text-gray-300">GigabitEthernet0/1     10.0.0.1        YES manual up                    up</p>
-                <p className="text-gray-300">FastEthernet0/1        unassigned      YES manual down                  down</p>
-              </div>
-              <p className="text-gray-400 mt-4 italic">
-                This shows you at a glance which interfaces have IPs and which are up or down!
-              </p>
-            </div>
-
-            <InfoBox variant="info">
-              <ProTip>
-                <p className="text-gray-300 mb-3">
-                  <strong className="text-white">Important:</strong> <code>show ip interface brief</code> is THE command to quickly check interface status and IP addresses. 
-                  It's much faster than <code>show running-config</code> when you just want to see which interfaces are up and what IPs they have!
-                </p>
-                <p className="text-gray-300">
-                  You'll use this command constantly to verify your IP address configurations in the upcoming lessons.
-                </p>
-              </ProTip>
-            </InfoBox>
-
-            <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
-              <p className="text-blue-200 font-semibold mb-3">💡 Coming Up Next</p>
-              <p className="text-gray-300">
-                Now that you understand what IP addresses are, let's learn about the physical parts of a network switch.
-                Then you'll be ready to configure your first IP address!
-              </p>
-            </div>
           </LessonSection>
 
           {/* LESSON 8: NETWORK HARDWARE BASICS */}
