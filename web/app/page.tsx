@@ -5,7 +5,6 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { TerminalManager } from '@/lib/terminal-manager';
-import { useScrollAnimations } from '@/lib/useScrollAnimations';
 import { useProgressBar } from '@/lib/useProgressBar';
 import type { CommandGrammar } from '@src/types';
 
@@ -42,11 +41,9 @@ const SCROLL_POSITION_KEY = 'ios-practice-scroll-position';
 
 function PageContent({ grammar }: { grammar: CommandGrammar }) {
   const registry = useTerminalRegistry();
-  const [animationsEnabled, setAnimationsEnabled] = useState(false);
   const [contentVisible, setContentVisible] = useState(false);
 
   // Enable interactivity features
-  useScrollAnimations(animationsEnabled);
   useProgressBar();
 
   // Save scroll position before unload
@@ -83,15 +80,13 @@ function PageContent({ grammar }: { grammar: CommandGrammar }) {
           window.scrollTo(0, position);
           sessionStorage.removeItem(SCROLL_POSITION_KEY);
           
-          // Show content and enable animations
+          // Show content
           setContentVisible(true);
-          setAnimationsEnabled(true);
         });
       });
     } else {
-      // No saved position, show content and enable animations
+      // No saved position, show content
       setContentVisible(true);
-      setAnimationsEnabled(true);
     }
   }, [registry.isAllTerminalsReady, grammar]);
 
@@ -100,7 +95,7 @@ function PageContent({ grammar }: { grammar: CommandGrammar }) {
       {/* Loading overlay - shown while content is not ready */}
       {!contentVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-500"></div>
+          <div className="text-gray-400">Loading terminal...</div>
         </div>
       )}
 
@@ -562,6 +557,7 @@ function PageContent({ grammar }: { grammar: CommandGrammar }) {
                   <li>Get in the habit of running it frequently to verify your changes</li>
                   <li>Many show commands trigger pagination — now you know how to navigate them!</li>
                   <li>If output is too long and annoying, just press <kbd>Q</kbd> to quit</li>
+                  <li><strong>Quick tip:</strong> Use <code>show ip interface brief</code> when you just need to check interface IPs and status without all the config details!</li>
                 </ul>
               </ProTip>
             </InfoBox>
@@ -1677,9 +1673,13 @@ Switch#show running-config
 
             <InfoBox variant="info">
               <ProTip>
-                <p className="text-gray-300">
+                <p className="text-gray-300 mb-3">
                   The output might look confusing now, but you're seeing the same format you'll use later: 
                   four numbers separated by dots! Notice how interfaces can have IP addresses assigned to them.
+                </p>
+                <p className="text-gray-300">
+                  <strong className="text-white">Important:</strong> <code>show ip interface brief</code> is THE command to quickly check interface status and IP addresses. 
+                  It's much faster than <code>show running-config</code> when you just want to see which interfaces are up and what IPs they have!
                 </p>
               </ProTip>
             </InfoBox>
@@ -1969,9 +1969,12 @@ no shutdown:         Interface is ON ✅
               <p className="text-gray-300">You should see:</p>
               <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
                 <li>An interface named <code>Vlan1</code> with IP address 192.168.1.100</li>
-                <li>Status: <code>up</code></li>
-                <li>Protocol: <code>up</code></li>
+                <li>Status: <code>up</code> (meaning interface is enabled)</li>
+                <li>Protocol: <code>up</code> (meaning interface is working)</li>
               </ul>
+              <p className="text-gray-400 mt-3 text-sm italic">
+                💡 Tip: <code>show ip interface brief</code> is much faster than <code>show running-config</code> when you just want to verify IP addresses and interface status!
+              </p>
             </div>
 
             <InfoBox variant="info">
@@ -2226,6 +2229,9 @@ Purpose: Gateway for computers in VLAN 100`}
                 <li>Vlan100 with IP 35.72.10.1 — Status: up, Protocol: up</li>
                 <li>Vlan200 with IP 33.2.169.1 — Status: up, Protocol: up</li>
               </ul>
+              <p className="text-gray-400 mt-3 text-sm italic">
+                This command gives you a quick overview of all interfaces and their IP addresses at a glance!
+              </p>
             </div>
 
             <InfoBox variant="real-world">
@@ -2793,8 +2799,15 @@ Only 2 devices, so only need 2 IPs!`}
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
-              <p className="text-gray-300">Type: <code>show ip interface brief</code></p>
-              <p className="text-gray-300 mt-2">You should see g1/0/2 with IP 35.72.12.1 and status "up"</p>
+              <p className="text-gray-300 mb-2">Type: <code>show ip interface brief</code></p>
+              <p className="text-gray-300">You should see:</p>
+              <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
+                <li>GigabitEthernet1/0/2 with IP address 35.72.12.1</li>
+                <li>Status: up, Protocol: up</li>
+              </ul>
+              <p className="text-gray-400 mt-3 text-sm italic">
+                Notice how routed ports appear in <code>show ip interface brief</code> just like SVIs — with IP addresses and up/down status!
+              </p>
             </div>
 
             <InfoBox variant="info">
@@ -3538,7 +3551,7 @@ export default function LearnPage() {
   if (!grammar) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-500"></div>
+        <div className="text-gray-400">Loading terminal...</div>
       </div>
     );
   }
