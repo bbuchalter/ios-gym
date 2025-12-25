@@ -1,4 +1,4 @@
-type Variant = 'info' | 'tip' | 'help' | 'important' | 'warning' | 'real-world';
+type Variant = 'info' | 'tip' | 'help' | 'important' | 'warning' | 'real-world' | 'success';
 
 const variantStyles: Record<Variant, { bg: string; border: string }> = {
   info: {
@@ -24,6 +24,10 @@ const variantStyles: Record<Variant, { bg: string; border: string }> = {
   'real-world': {
     bg: 'bg-blue-900',
     border: 'border-blue-600',
+  },
+  success: {
+    bg: 'bg-green-900',
+    border: 'border-green-600',
   },
 };
 

@@ -22,6 +22,8 @@ modes:
     prompt: "{hostname}(config-router)#"
   LINE_VTY_CONFIG:
     prompt: "{hostname}(config-line)#"
+  LINE_CONSOLE_CONFIG:
+    prompt: "{hostname}(config-line)#"
 
 # Argument types your parser should support (validate + suggest)
 arg_types:
@@ -271,6 +273,11 @@ commands:
         mode: "LINE_VTY_CONFIG"
       help: "Enter VTY line configuration mode"
 
+    - name: line_console
+      tokens: ["line", "console", "0"]
+      action: {type: "mode_push", mode: "LINE_CONSOLE_CONFIG"}
+      help: "Enter console line configuration mode"
+
   IF_CONFIG:
     - name: exit
       tokens: ["exit"]
@@ -367,6 +374,27 @@ commands:
       tokens: ["transport", "input", "ssh"]
       action: {type: "set", path: "ssh.vty.transport", value: ["ssh"]}
       help: "Allow SSH only"
+
+  LINE_CONSOLE_CONFIG:
+    - name: exit
+      tokens: ["exit"]
+      action: {type: "mode_pop"}
+      help: "Exit line config"
+
+    - name: end
+      tokens: ["end"]
+      action: {type: "mode_pop_to", mode: "PRIV_EXEC"}
+      help: "Exit to privileged EXEC"
+
+    - name: logging_synchronous
+      tokens: ["logging", "synchronous"]
+      action: {type: "set", path: "line.console.loggingSynchronous", value: true}
+      help: "Synchronize console messages with command input"
+
+    - name: no_logging_synchronous
+      tokens: ["no", "logging", "synchronous"]
+      action: {type: "set", path: "line.console.loggingSynchronous", value: false}
+      help: "Disable logging synchronous"
 
 templates:
   show_running_config: |

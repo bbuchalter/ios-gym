@@ -1115,7 +1115,170 @@ Takes 1 command! ✅`}
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 7: IP ADDRESSING BASICS */}
+          {/* LESSON 7: MANAGING CONSOLE MESSAGES */}
+          <LessonSection title="Managing Console Messages">
+            <p className="text-xl text-gray-200 my-6">
+              You may have noticed something annoying when using the <code>end</code> command — a system message appears!
+              Let's learn how to manage these messages so they don't interrupt your work.
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What Are System Messages?</h2>
+            <p className="text-gray-300 mb-6">
+              When you exit configuration mode using <code>end</code>, Cisco IOS displays a system message like this:
+            </p>
+
+            <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 my-8">
+              <Diagram>
+                {`Switch(config-if)#end
+%SYS-5-CONFIG_I: Configured from console by console
+Switch#`}
+              </Diagram>
+            </div>
+
+            <InfoBox variant="info">
+              <p className="text-gray-300 mb-3">
+                <strong className="text-white">What does this message mean?</strong>
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li><code>%SYS-5-CONFIG_I</code> — System message, severity level 5 (notification)</li>
+                <li><code>Configured from console by console</code> — Someone made configuration changes from the console</li>
+              </ul>
+              <p className="text-gray-300 mt-4">
+                These messages are helpful for tracking what's happening on your device, but they can be disruptive
+                when you're typing commands!
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The Problem: Interrupted Commands</h2>
+            <p className="text-gray-300 mb-6">
+              Without proper configuration, system messages can appear <strong className="text-white">while you're typing</strong>,
+              breaking up your command and making it hard to see what you're doing.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-red-900 border border-red-600 rounded-lg p-6">
+                <h4 className="text-red-300 font-semibold mb-3">❌ Without logging synchronous</h4>
+                <Diagram>
+                  {`Switch#show ru
+%SYS-5-CONFIG_I: Configured from console by console
+nning-config
+                ^ Your typing gets interrupted!`}
+                </Diagram>
+                <p className="text-gray-400 mt-3">Message appears mid-command, confusing!</p>
+              </div>
+              <div className="bg-green-900 border border-green-600 rounded-lg p-6">
+                <h4 className="text-green-300 font-semibold mb-3">✅ With logging synchronous</h4>
+                <Diagram>
+                  {`Switch#show running-config
+%SYS-5-CONFIG_I: Configured from console by console
+Switch#show running-config
+                ^ Your command is redisplayed!`}
+                </Diagram>
+                <p className="text-gray-400 mt-3">Message appears, but your command stays intact</p>
+              </div>
+            </div>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The Solution: logging synchronous</h2>
+            <p className="text-gray-300 mb-6">
+              The <code>logging synchronous</code> command tells the device to <strong className="text-white">redisplay your command</strong> after
+              a system message appears. This keeps your typing organized and readable!
+            </p>
+
+            <div className="bg-gray-900 border border-gray-700 rounded-lg p-8 my-8">
+              <h4 className="text-blue-300 font-semibold mb-6 text-center">How to Configure logging synchronous</h4>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="bg-blue-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">1</div>
+                  <div>
+                    <p className="text-white font-mono mb-2">Switch#configure terminal</p>
+                    <p className="text-gray-400 text-sm">Enter global configuration mode</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <div className="bg-blue-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">2</div>
+                  <div>
+                    <p className="text-white font-mono mb-2">Switch(config)#line console 0</p>
+                    <p className="text-gray-400 text-sm">Enter console line configuration mode</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <div className="bg-blue-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">3</div>
+                  <div>
+                    <p className="text-white font-mono mb-2">Switch(config-line)#logging synchronous</p>
+                    <p className="text-gray-400 text-sm">Enable synchronized logging</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <div className="bg-blue-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">4</div>
+                  <div>
+                    <p className="text-white font-mono mb-2">Switch(config-line)#end</p>
+                    <p className="text-gray-400 text-sm">Return to privileged mode (and see the system message!)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2">
+                  <strong className="text-white">What is "line console 0"?</strong>
+                </p>
+                <p className="text-gray-300 mb-4">
+                  The console is the physical or virtual connection you use to configure the device.
+                  "Line console 0" is the first (and usually only) console connection.
+                </p>
+                <p className="text-gray-300">
+                  Think of it like configuring the settings for your keyboard and monitor connection!
+                </p>
+              </ProTip>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure logging synchronous and observe the difference:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode</li>
+              <li><code>configure terminal</code> — Enter global config</li>
+              <li><code>interface vlan 1</code> — Enter interface config (to go deep)</li>
+              <li><code>end</code> — Exit to privileged mode (watch for the system message!)</li>
+              <li><code>configure terminal</code> — Enter global config again</li>
+              <li><code>line console 0</code> — Enter console line configuration mode</li>
+              <li><code>logging synchronous</code> — Enable synchronized logging</li>
+              <li><code>end</code> — Exit and see the message appear cleanly</li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <InfoBox variant="success">
+              <h3 className="text-lg font-semibold mb-4 text-green-300">🎉 What You Learned</h3>
+              <ul className="ml-6 space-y-3 text-gray-300">
+                <li><strong className="text-white">System messages</strong> appear when important events happen (like configuration changes)</li>
+                <li><strong className="text-white">logging synchronous</strong> prevents messages from interrupting your typing</li>
+                <li><strong className="text-white">line console 0</strong> configures the console connection settings</li>
+                <li>This is a <strong className="text-white">best practice</strong> configuration for all Cisco devices!</li>
+              </ul>
+            </InfoBox>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300 mb-2">
+                  <strong className="text-white">Real-world tip:</strong>
+                </p>
+                <p className="text-gray-300">
+                  Network engineers almost always configure <code>logging synchronous</code> on console and VTY lines
+                  (remote access lines) as one of the first steps when setting up a new device. It makes troubleshooting
+                  and configuration much easier!
+                </p>
+              </ProTip>
+            </InfoBox>
+          </LessonSection>
+
+          {/* LESSON 8: IP ADDRESSING BASICS */}
           <LessonSection title="Understanding IP Addresses">
             <p className="text-xl text-gray-200 my-6">
               Every device on a network needs an address so others can find it. This is called an IP address.

@@ -31,7 +31,24 @@ export function handleModePopTo(
   action: any
 ): ExecutionResult {
   const targetMode = action.mode as ModeType;
+  const wasInConfigMode = session.modeStack.getCurrentMode() !== ModeType.PRIV_EXEC;
   session.modeStack.popTo(targetMode);
+  
+  // If exiting from config mode to PRIV_EXEC with 'end', show system message
+  if (targetMode === ModeType.PRIV_EXEC && wasInConfigMode) {
+    const output: string[] = [];
+    
+    // Check if logging synchronous is enabled
+    if (session.deviceState.line.console.loggingSynchronous) {
+      // With logging synchronous, message appears but is synchronized
+      output.push("%SYS-5-CONFIG_I: Configured from console by console");
+    } else {
+      // Without logging synchronous, message might interrupt (but we just show it)
+      output.push("%SYS-5-CONFIG_I: Configured from console by console");
+    }
+    
+    return { output };
+  }
   
   return { output: [] };
 }

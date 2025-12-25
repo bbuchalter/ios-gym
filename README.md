@@ -13,8 +13,8 @@ A **comprehensive, interactive web application** for learning Cisco IOS network 
 
 ```bash
 npm install
-npm run build
-npm start
+npm run web:build
+npm run web:start
 ```
 
 Open http://localhost:3000 - start learning immediately!
@@ -125,56 +125,59 @@ Router(config-if)# ip ospf cost 10
 ```
 ios-practice/
 ├── commands.yaml          # Command grammar (source)
-├── exercises.yaml         # Exercises (source)
 │
-├── client/                # Browser application (TypeScript)
-│   ├── cli/               # CLI engine (parser, completer, handlers)
-│   ├── exercise/          # Exercise validator
-│   └── *.ts               # Core components
-│
-├── src/                   # Test infrastructure (Node.js)
-│   ├── cli/               # CLI engine (for testing)
-│   ├── server/            # Session management (for testing)
+├── src/                   # CLI engine & tests (Node.js/TypeScript)
+│   ├── cli/               # CLI engine (parser, completer, handlers, state)
+│   ├── grammar/           # YAML loader
+│   ├── cli-session.ts     # Session management
 │   └── __tests__/         # Jest tests (159 tests, all passing)
 │
-└── public/                # ⭐ STATIC SITE - Deploy this!
-    ├── learn.html         # 🎓 Complete course (1,561 lines)
-    ├── learn.css          # Styles
-    ├── learn.js           # Functionality
-    ├── commands.json      # 18KB (generated from commands.yaml)
-    ├── exercises.json     # 10KB (generated from exercises.yaml)
-    └── cli/*, src/*       # ~40KB (compiled CLI engine)
+├── web/                   # Next.js web application
+│   ├── app/               # Next.js app (page.tsx, layout.tsx)
+│   ├── components/        # React components (Terminal, LessonSection, etc.)
+│   ├── lib/               # Client utilities (terminal manager, hooks)
+│   ├── public/            # Static assets
+│   │   └── commands.json  # Generated from commands.yaml
+│   └── out/               # ⭐ STATIC BUILD - Deploy this!
+│       └── index.html     # Complete course with embedded terminals
+│
+└── scripts/               # Build scripts
+    └── dev-with-grammar.js # Dev server with grammar auto-rebuild
 ```
 
-**Total bundle size:** ~70KB (~20KB gzipped)
+**Production bundle:** Optimized Next.js static export in `web/out/`
 
 ---
 
 ## 🚢 Deployment
 
-This is a **pure static site** - deploy `public/` to any hosting service!
+This is a **pure static site** - deploy `web/out/` to any hosting service!
 
 ### GitHub Pages (FREE)
 ```bash
-npm run build
-git subtree push --prefix public origin gh-pages
+npm run web:build
+git subtree push --prefix web/out origin gh-pages
 # Live at: https://yourusername.github.io/ios-practice/
 ```
 
 ### Netlify (FREE)
 ```bash
 npm install -g netlify-cli
-cd public && netlify deploy --prod
-# Or drag-and-drop public/ folder to netlify.com/drop
+npm run web:build
+cd web/out && netlify deploy --prod
+# Or drag-and-drop web/out/ folder to netlify.com/drop
 ```
 
 ### Any Static Server
 ```bash
-# Serve the public/ directory
-python3 -m http.server 8080 --directory public
+# Build first
+npm run web:build
+
+# Serve the web/out/ directory
+python3 -m http.server 8080 --directory web/out
 
 # Or copy to web server
-cp -r public/* /var/www/html/ios-trainer/
+cp -r web/out/* /var/www/html/ios-trainer/
 ```
 
 **No server-side code!** Everything runs in the browser for instant response and offline capability.
@@ -183,33 +186,39 @@ cp -r public/* /var/www/html/ios-trainer/
 
 ## 💻 Development
 
-### Build
-```bash
-npm run build
-```
+### Development Commands
 
-### Grammar Files
-When you modify `commands.yaml`, you need to regenerate the JSON file:
+#### Development Server (Recommended)
+```bash
+npm run web:dev
+```
+- 🔥 **Hot reload:** Automatically restarts when CLI code changes
+- 🔄 **Auto-rebuild grammar:** Watches `commands.yaml` and `src/` for changes
+- ⚡ **Fast feedback:** See changes in seconds
+- 🎯 **Use this for:** Day-to-day development
+
+#### Production Build
+```bash
+npm run web:build
+```
+- 📦 **Builds grammar:** Converts `commands.yaml` → `web/public/commands.json`
+- 🏗️ **Optimizes Next.js:** Creates production-ready static export
+- 📊 **Output:** Generates optimized files in `web/out/`
+- 🎯 **Use this for:** Deployment preparation
+
+#### Production Server
+```bash
+npm run web:start
+```
+- 🚀 **Serves production build:** Runs the optimized static site
+- 🔒 **No hot reload:** Requires rebuild to see changes
+- 🎯 **Use this for:** Testing the production build locally
+
+### Manual Grammar Build
 ```bash
 npm run build:grammar
 ```
-
-This converts `commands.yaml` → `web/public/commands.json`. The pre-commit hook automatically ensures these files stay synchronized.
-
-### Watch Mode (Recommended)
-```bash
-npm run watch
-```
-Automatically rebuilds on every TypeScript file change.
-
-**Tip:** Run watch + dev server in two terminals:
-```bash
-# Terminal 1: Auto-rebuild on save
-npm run watch
-
-# Terminal 2: Serve the site
-npm start
-```
+Manually converts `commands.yaml` → `web/public/commands.json` (usually not needed - `web:dev` and `web:build` do this automatically).
 
 ### Testing
 ```bash

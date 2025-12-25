@@ -6,7 +6,8 @@ export enum ModeType {
   GLOBAL_CONFIG = "GLOBAL_CONFIG",
   IF_CONFIG = "IF_CONFIG",
   ROUTER_OSPF_CONFIG = "ROUTER_OSPF_CONFIG",
-  LINE_VTY_CONFIG = "LINE_VTY_CONFIG"
+  LINE_VTY_CONFIG = "LINE_VTY_CONFIG",
+  LINE_CONSOLE_CONFIG = "LINE_CONSOLE_CONFIG"
 }
 
 export interface DeviceState {
@@ -19,6 +20,9 @@ export interface DeviceState {
   routes: RouteEntry[];
   ospf: OspfConfig;
   ssh: SshConfig;
+  line: {
+    console: LineConfig;
+  };
   configSaved: boolean;
   savedState: Partial<DeviceState> | null;
 }
@@ -77,6 +81,10 @@ export interface VtyConfig {
   range: string | null;
   login: string | null;
   transport: string[];
+}
+
+export interface LineConfig {
+  loggingSynchronous: boolean;
 }
 
 // Grammar types from commands.yaml

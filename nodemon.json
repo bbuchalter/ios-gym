@@ -1,0 +1,8 @@
+{
+  "watch": ["src/**/*", "commands.yaml"],
+  "ext": "ts,js,yaml",
+  "ignore": ["src/**/*.test.ts"],
+  "delay": 500,
+  "exec": "node ./scripts/dev-with-grammar.js"
+}
+

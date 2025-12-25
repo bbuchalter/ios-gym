@@ -32,6 +32,11 @@ export function createInitialState(): DeviceState {
         transport: []
       }
     },
+    line: {
+      console: {
+        loggingSynchronous: false
+      }
+    },
     configSaved: false,
     savedState: null
   };
