@@ -7,7 +7,6 @@ import dynamic from 'next/dynamic';
 import { TerminalManager } from '@/lib/terminal-manager';
 import { useScrollAnimations } from '@/lib/useScrollAnimations';
 import { useProgressBar } from '@/lib/useProgressBar';
-import { useClickToCopy } from '@/lib/useClickToCopy';
 import type { CommandGrammar } from '@src/types';
 
 
@@ -30,7 +29,6 @@ export default function LearnPage() {
   // Enable interactivity features
   useScrollAnimations();
   useProgressBar();
-  useClickToCopy();
 
   useEffect(() => {
     const manager = new TerminalManager();
