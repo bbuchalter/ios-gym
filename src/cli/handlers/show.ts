@@ -115,6 +115,7 @@ function renderTemplate(template: string, session: CLISession): string {
       let line = content;
       const fullName = expandInterfaceName(name);
       line = line.replace(/{name_full}/g, fullName);
+      line = line.replace(/{name_full_padded}/g, fullName.padEnd(22));
       line = line.replace(/{name}/g, name);
       line = line.replace(/{name_padded}/g, name.padEnd(22));
       line = line.replace(/{ip}/g, iface.ip || "");
@@ -123,7 +124,21 @@ function renderTemplate(template: string, session: CLISession): string {
       line = line.replace(/{l2mode}/g, iface.l2mode || "");
       line = line.replace(/{accessVlan}/g, iface.accessVlan || "");
       line = line.replace(/{trunkAllowed}/g, iface.trunkAllowed || "");
-      line = line.replace(/{status}/g, iface.adminUp ? "up".padEnd(20) : "administratively down".padEnd(20));
+      
+      // Status field: "administratively down" only for explicitly shutdown interfaces (like Vlan1)
+      // Regular interfaces that are just down show "down"
+      // Status column is 20 chars wide, followed by 2 spaces before Protocol
+      // But "administratively down" is 21 chars (overflows by 1), so only 1 space before Protocol
+      let status: string;
+      if (iface.adminUp) {
+        status = "up".padEnd(20) + "  "; // 20 chars + 2 spaces
+      } else if (name === "vlan1") {
+        // "administratively down" is 21 chars + 1 space (overflows column by 1)
+        status = "administratively down ";
+      } else {
+        status = "down".padEnd(20) + "  "; // 20 chars + 2 spaces
+      }
+      line = line.replace(/{status}/g, status);
       line = line.replace(/{protocol}/g, iface.adminUp ? "up" : "down");
       
       // Handle nested conditionals (use [\s\S] to match newlines)

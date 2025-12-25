@@ -97,6 +97,11 @@ commands:
       action: {type: "render", template: "show_running_config"}
       help: "Show running configuration (read-only in user EXEC)"
 
+    - name: show_ip_interface_brief_user
+      tokens: ["show", "ip", "interface", "brief"]
+      action: {type: "render", template: "show_ip_interface_brief"}
+      help: "Show IP interface status"
+
   PRIV_EXEC:
     - name: disable
       tokens: ["disable"]
@@ -464,9 +469,8 @@ templates:
 
   show_ip_interface_brief: |
     Interface              IP-Address      OK? Method Status                Protocol
-    {#interfaces}
-    {name_padded} {ip_or_unassigned} YES unset  {status}             {protocol}
-    {#end}
+    {#interfaces}{name_full_padded} {ip_or_unassigned} YES manual {status}{protocol}
+    {#endifaces_end}
 
   show_ip_route: |
     Codes: C - connected, S - static, O - OSPF
