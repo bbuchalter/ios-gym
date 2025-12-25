@@ -1387,10 +1387,10 @@ Router1(config)# no enable secret`}
                 <strong className="text-white">Think of it like folders on your computer:</strong>
               </p>
               <Diagram>
-                {`💻 Computer (Privileged Mode)
-   └─ 📁 Settings (Global Config)
-       └─ 📁 Network Adapter (Interface Config)
-           └─ 🔧 IP Address Settings (You configure here!)`}
+                {`[Computer] (Privileged Mode)
+   └─ [Settings] (Global Config)
+       └─ [Network Adapter] (Interface Config)
+           └─ [IP Address Settings] (You configure here!)`}
               </Diagram>
               <p className="text-gray-300 mt-4">
                 The prompt <strong className="text-white">ALWAYS</strong> tells you exactly which "folder" (layer) you're in:
@@ -1478,7 +1478,7 @@ Takes 2 exits to get back`}
                   {`Switch(config-if)# end
 Switch#
 
-Takes 1 command! ✅`}
+Takes 1 command! [✓]`}
                 </Diagram>
                 <p className="text-gray-400 mt-3"><strong>Use when:</strong> You want to jump straight to privileged mode</p>
               </div>
@@ -1924,13 +1924,13 @@ IT Person must walk there! 👟`}
               <div className="bg-green-900 border border-green-600 rounded-lg p-6">
                 <h4 className="text-green-300 font-semibold mb-3">✅ With Management IP</h4>
                 <Diagram>
-                  {`🏢 Building A          🏢 Building B
+                  {`[Building A]          [Building B]
      │                      │
      │   Network Cable      │
    [IT PC] ═══════════ [Switch]
                        IP: 192.168.1.100
                             
-Manage from anywhere! 💻`}
+Manage from anywhere remotely!`}
                 </Diagram>
               </div>
             </div>
@@ -1966,10 +1966,10 @@ Manage from anywhere! 💻`}
             </p>
 
             <Diagram title="Interface States">
-              {`Shutdown (default):  Interface is OFF ❌
+              {`Shutdown (default):  Interface is OFF [X]
                         No traffic flows
                         
-no shutdown:         Interface is ON ✅
+no shutdown:         Interface is ON [✓]
                         Traffic can flow`}
             </Diagram>
 
@@ -2026,7 +2026,7 @@ no shutdown:         Interface is ON ✅
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Why Use VLANs?</h2>
             <p className="text-gray-300 mb-6">Imagine your school network without VLANs:</p>
 
-            <Diagram title="❌ Without VLANs - Everyone sees everything!">
+            <Diagram title="Without VLANs - Everyone sees everything! (INVALID)" variant="error">
               {`┌────────────────────────┐
 │   ONE BIG NETWORK      │
 │                        │
@@ -2037,12 +2037,12 @@ no shutdown:         Interface is ON ✅
 │                        │
 │  All mixed together!   │
 └────────────────────────┘
-⚠️ Privacy & Security Risk!`}
+[!] Privacy & Security Risk!`}
             </Diagram>
 
             <p className="text-gray-300 my-6">With VLANs, you can separate them:</p>
 
-            <Diagram title="✅ With VLANs - Organized & Secure!">
+            <Diagram title="With VLANs - Organized & Secure! (VALID)" variant="success">
               {`┌───────────────────────────────────┐
 │         SWITCH                    │
 │  ┌──────────┐    ┌──────────┐     │
@@ -2053,7 +2053,7 @@ no shutdown:         Interface is ON ✅
 │      ↕               ↕            │
 │   Fa0/2-5        Fa0/6-10         │
 └───────────────────────────────────┘
-✅ Students can't see teacher files!`}
+[✓] Students can't see teacher files!`}
             </Diagram>
 
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Creating VLANs</h2>
@@ -2122,30 +2122,30 @@ no shutdown:         Interface is ON ✅
               Think of it like giving each VLAN its own "phone number" so it can communicate with the outside world.
             </p>
 
-            <Diagram title="VLANs Without SVIs - Can't Talk to Each Other!">
-              {`┌─────────────────────────────────────────┐
-│           Layer 3 Switch                │
-│                                         │
-│   VLAN 100 (Students)   VLAN 200 (Teachers)
-│   Computers: A, B, C    Computers: X, Y, Z
-│        🚫                    🚫          │
-│    No IP Address         No IP Address  │
-│                                         │
-│   Students can't reach Teachers! ❌     │
-└─────────────────────────────────────────┘`}
+            <Diagram title="VLANs Without SVIs - Can't Talk to Each Other! (INVALID)" variant="error">
+              {`┌──────────────────────────────────────────────┐
+│           Layer 3 Switch                     │
+│                                              │
+│   VLAN 100 (Students)   VLAN 200 (Teachers)  │
+│                                              │
+│    No IP Address         No IP Address       │
+│                                              │
+│   [X] No communication between VLANs!        │
+│   [X] Students can't reach Teachers!         │
+└──────────────────────────────────────────────┘`}
             </Diagram>
 
-            <Diagram title="VLANs With SVIs - Now They Can Communicate!">
-              {`┌─────────────────────────────────────────┐
-│           Layer 3 Switch                │
-│                                         │
-│   VLAN 100 (Students)   VLAN 200 (Teachers)
-│   SVI: 35.72.10.1/24    SVI: 33.2.169.1/24
-│        ✅                    ✅          │
-│                                         │
-│   Switch routes between VLANs! ✅       │
-│   Students can reach Teachers!          │
-└─────────────────────────────────────────┘`}
+            <Diagram title="VLANs With SVIs - Now They Can Communicate! (VALID)" variant="success">
+              {`┌──────────────────────────────────────────────┐
+│           Layer 3 Switch                     │
+│                                              │
+│   VLAN 100 (Students)   VLAN 200 (Teachers)  │
+│   SVI: 35.72.10.1/24    SVI: 33.2.169.1/24   │
+│   [IP Configured]        [IP Configured]     │
+│                                              │
+│   [✓] Switch routes between VLANs!           │
+│   [✓] Students can reach Teachers!           │
+└──────────────────────────────────────────────┘`}
             </Diagram>
 
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Why Do VLANs Need IP Addresses?</h2>
@@ -2506,23 +2506,23 @@ All others are BLOCKED!`}
 
             <div className="grid md:grid-cols-2 gap-6 my-8">
               <div className="bg-red-900 border border-red-600 rounded-lg p-6">
-                <h4 className="text-red-300 font-semibold mb-3">🚫 Telnet (Old Way)</h4>
-                <Diagram>
+                <h4 className="text-red-300 font-semibold mb-3">Telnet (Old Way - INSECURE)</h4>
+                <Diagram variant="error">
                   {`You → "password: admin123" → Router
 
-⚠️ UNENCRYPTED!
+[!] UNENCRYPTED!
 Hacker sees: "password: admin123"
-❌ They're in!`}
+[X] They're in!`}
                 </Diagram>
               </div>
               <div className="bg-green-900 border border-green-600 rounded-lg p-6">
-                <h4 className="text-green-300 font-semibold mb-3">✅ SSH (Secure Way)</h4>
-                <Diagram>
-                  {`You → 🔒 %#^&*@!$^&* → Router
+                <h4 className="text-green-300 font-semibold mb-3">SSH (Secure Way - ENCRYPTED)</h4>
+                <Diagram variant="success">
+                  {`You → [ENCRYPTED] %#^&*@!$^&* → Router
 
-✅ ENCRYPTED!
+[✓] ENCRYPTED!
 Hacker sees: gibberish
-✅ Can't break in!`}
+[✓] Can't break in!`}
                 </Diagram>
               </div>
             </div>
@@ -2961,13 +2961,13 @@ Only 2 devices, so only need 2 IPs!`}
                 │  35.72.13.1  │     AD = 1 (default)
                 └──────────────┘
                        ▲
-                       │ Normal traffic ✅
+                       │ Normal traffic [ACTIVE]
                        │
                 ┌──────────────┐
                 │ Your Router  │
                 └──────────────┘
                        │
-                       │ Backup (only if ISP 1 fails) 🔄
+                       │ Backup (only if ISP 1 fails)
                        ▼
                 ┌──────────────┐
                 │  ISP 2       │  ← Backup (Slower DSL)
@@ -3094,7 +3094,7 @@ OSPF chooses top path (Cost 10)
 Traffic flows: A → B directly
 
 IF TOP LINK FAILS:
-[Router A] ══════ ❌ LINK DOWN ═══ [Router B]
+[Router A] ══════ [X] LINK DOWN ═══ [Router B]
     │                                   │
     │         OSPF recalculates!        │
     └────── [Router C] ─────────────────┘
@@ -3268,7 +3268,7 @@ router ospf 1
                 Cost 50 (DSL - Slow)
 
 OSPF adds costs along path:
-- Path 1: A → B = Cost 10 ✅ BEST!
+- Path 1: A → B = Cost 10 [BEST!]
 - Path 2: A → C → B = Cost 80 (30 + 50)
 
 OSPF always chooses Path 1 (lowest total cost)`}
@@ -3303,25 +3303,25 @@ OSPF always chooses Path 1 (lowest total cost)`}
 
             <div className="grid md:grid-cols-2 gap-6 my-8">
               <div className="bg-green-900 border border-green-600 rounded-lg p-6">
-                <h4 className="text-green-300 font-semibold mb-3">Low Cost Interface</h4>
-                <Diagram>
+                <h4 className="text-green-300 font-semibold mb-3">Low Cost Interface (Primary)</h4>
+                <Diagram variant="success">
                   {`interface g0/0
 ip ospf cost 10
 
-✅ Primary path
-✅ Fast link
-✅ Use this first`}
+[✓] Primary path
+[✓] Fast link
+[✓] Use this first`}
                 </Diagram>
               </div>
               <div className="bg-yellow-900 border border-yellow-600 rounded-lg p-6">
-                <h4 className="text-yellow-300 font-semibold mb-3">High Cost Interface</h4>
+                <h4 className="text-yellow-300 font-semibold mb-3">High Cost Interface (Backup)</h4>
                 <Diagram>
                   {`interface g0/2
 ip ospf cost 30
 
-⚠️ Backup path
-⚠️ Slower link
-⚠️ Use if primary fails`}
+[!] Backup path
+[!] Slower link
+[!] Use if primary fails`}
                 </Diagram>
               </div>
             </div>
