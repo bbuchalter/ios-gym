@@ -54,6 +54,18 @@ export function createInitialState(): DeviceState {
     vlans: {
       "1": {
         name: "default"
+      },
+      "1002": {
+        name: "fddi-default"
+      },
+      "1003": {
+        name: "token-ring-default"
+      },
+      "1004": {
+        name: "fddinet-default"
+      },
+      "1005": {
+        name: "trnet-default"
       }
     },
     svis: {},

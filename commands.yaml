@@ -102,6 +102,11 @@ commands:
       action: {type: "render", template: "show_ip_interface_brief"}
       help: "Show IP interface status"
 
+    - name: show_vlan_brief_user
+      tokens: ["show", "vlan", "brief"]
+      action: {type: "render", template: "show_vlan_brief"}
+      help: "Show VLAN summary"
+
   PRIV_EXEC:
     - name: disable
       tokens: ["disable"]
@@ -461,11 +466,11 @@ templates:
     end
 
   show_vlan_brief: |
+    
     VLAN Name                             Status    Ports
     ---- -------------------------------- --------- -------------------------------
-    {#vlans}
-    {id}   {name_or_default}                 active
-    {#end}
+    {#vlans_with_ports}{id} {name_or_default} {status} {ports}
+    {#endvlans_with_ports}
 
   show_ip_interface_brief: |
     Interface              IP-Address      OK? Method Status                Protocol

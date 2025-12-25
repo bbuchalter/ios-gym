@@ -56,6 +56,28 @@ function expandInterfaceName(name: string): string {
 }
 
 /**
+ * Abbreviate interface name for show vlan brief
+ * fa0/1 -> Fa0/1
+ * g0/1 -> Gig0/1
+ * vlan1 -> Vlan1
+ */
+function abbreviateInterfaceForVlan(name: string): string {
+  // Handle FastEthernet
+  if (name.startsWith('fa')) {
+    return 'Fa' + name.substring(2);
+  }
+  // Handle GigabitEthernet
+  if (name.startsWith('g') && name.match(/^g\d/)) {
+    return 'Gig' + name.substring(1);
+  }
+  // Handle Vlan
+  if (name.startsWith('vlan')) {
+    return 'Vlan' + name.substring(4);
+  }
+  return name;
+}
+
+/**
  * Simple template renderer
  * Supports:
  * - {variable} interpolation
@@ -87,13 +109,14 @@ function renderTemplate(template: string, session: CLISession): string {
     return state.ospf.processId ? content : "";
   });
   
-  // Handle VLAN loop (skip VLAN 1 as it's implicit in show running-config)
+  // Handle VLAN loop (skip VLAN 1 and system VLANs 1002-1005 in show running-config)
   result = result.replace(/{#vlans}([\s\S]*?){#endvlans}/g, (match, content) => {
     const vlanLines: string[] = [];
     
     for (const [id, vlan] of Object.entries(state.vlans)) {
       // Skip VLAN 1 in show running-config (it's implicit)
-      if (id === "1") {
+      // Skip system VLANs 1002-1005 (they exist but aren't in running-config)
+      if (id === "1" || (parseInt(id) >= 1002 && parseInt(id) <= 1005)) {
         continue;
       }
       
@@ -101,6 +124,60 @@ function renderTemplate(template: string, session: CLISession): string {
       line = line.replace(/{id}/g, id);
       line = line.replace(/{name}/g, vlan.name || "");
       line = line.replace(/{name_or_default}/g, vlan.name || `VLAN${id.padStart(4, "0")}`);
+      vlanLines.push(line);
+    }
+    
+    return vlanLines.join("");
+  });
+  
+  // Handle VLAN loop with ports (for show vlan brief)
+  result = result.replace(/{#vlans_with_ports}([\s\S]*?){#endvlans_with_ports}/g, (match, content) => {
+    const vlanLines: string[] = [];
+    
+    // Sort VLANs numerically
+    const sortedVlans = Object.entries(state.vlans).sort(([a], [b]) => parseInt(a) - parseInt(b));
+    
+    for (const [id, vlan] of sortedVlans) {
+      // Find all interfaces in this VLAN
+      const portsInVlan: string[] = [];
+      
+      for (const [ifName, iface] of Object.entries(state.interfaces)) {
+        // Skip routed interfaces and vlan interfaces
+        if (iface.l2mode === "routed" || ifName.startsWith("vlan")) {
+          continue;
+        }
+        
+        // Check if interface is in this VLAN
+        const ifVlan = iface.accessVlan || "1"; // Default to VLAN 1 if not assigned
+        if (ifVlan === id) {
+          portsInVlan.push(abbreviateInterfaceForVlan(ifName));
+        }
+      }
+      
+      // Format the ports list with wrapping (4 ports per line to match IOS)
+      let portsFormatted = "";
+      if (portsInVlan.length > 0) {
+        const chunks: string[][] = [];
+        for (let i = 0; i < portsInVlan.length; i += 4) {
+          chunks.push(portsInVlan.slice(i, i + 4));
+        }
+        
+        portsFormatted = chunks.map((chunk, idx) => {
+          if (idx === 0) {
+            return chunk.join(", ");
+          } else {
+            // Continuation lines are indented to align under the Ports column (48 chars)
+            return "\n" + " ".repeat(48) + chunk.join(", ");
+          }
+        }).join("");
+      }
+      
+      let line = content;
+      line = line.replace(/{id}/g, id.padEnd(4));
+      line = line.replace(/{name}/g, (vlan.name || "").padEnd(32));
+      line = line.replace(/{name_or_default}/g, (vlan.name || `VLAN${id.padStart(4, "0")}`).padEnd(32));
+      line = line.replace(/{status}/g, "active".padEnd(9));
+      line = line.replace(/{ports}/g, portsFormatted);
       vlanLines.push(line);
     }
     
