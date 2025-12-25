@@ -1315,6 +1315,7 @@ Router1(config)# no enable secret`}
             <p className="text-xl text-gray-200 my-6">
               So far you've worked with two modes: privileged (<code>#</code>) and global config (<code>(config)#</code>).
               Now you'll learn about <strong className="text-white">sub-configuration modes</strong> — configurations within configurations!
+              There are different kinds of sub-config modes for interfaces, VLANs, routing protocols, and more — each with its own unique prompt.
             </p>
 
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Understanding Configuration Layers</h2>
@@ -1398,8 +1399,60 @@ Router1(config)# no enable secret`}
                 <li><code>#</code> = Top level (Privileged)</li>
                 <li><code>(config)#</code> = Global settings</li>
                 <li><code>(config-if)#</code> = Interface settings</li>
+                <li><code>(config-vlan)#</code> = VLAN settings</li>
                 <li><code>(config-line)#</code> = Line settings (VTY, console)</li>
+                <li><code>(config-router)#</code> = Router protocol settings</li>
               </ul>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Different Types of Sub-Configuration Modes</h2>
+            <p className="text-gray-300 mb-6">
+              Not all sub-configuration modes are the same! Each type has its own purpose and prompt:
+            </p>
+
+            <div className="bg-gray-900 border border-gray-700 rounded-lg p-8 my-8">
+              <div className="space-y-6">
+                <div className="border-l-4 border-purple-500 pl-6">
+                  <h4 className="text-purple-300 font-semibold mb-2 font-mono text-lg">(config-if)#</h4>
+                  <p className="text-white font-semibold">Interface Configuration Mode</p>
+                  <p className="text-gray-400 mt-2">For configuring physical or logical interfaces (like g0/1 or vlan 1)</p>
+                  <p className="text-gray-500 text-sm mt-1">Example: <code>interface vlan 1</code></p>
+                </div>
+
+                <div className="border-l-4 border-blue-500 pl-6">
+                  <h4 className="text-blue-300 font-semibold mb-2 font-mono text-lg">(config-vlan)#</h4>
+                  <p className="text-white font-semibold">VLAN Configuration Mode</p>
+                  <p className="text-gray-400 mt-2">For creating and naming VLANs</p>
+                  <p className="text-gray-500 text-sm mt-1">Example: <code>vlan 100</code></p>
+                </div>
+
+                <div className="border-l-4 border-green-500 pl-6">
+                  <h4 className="text-green-300 font-semibold mb-2 font-mono text-lg">(config-router)#</h4>
+                  <p className="text-white font-semibold">Router Configuration Mode</p>
+                  <p className="text-gray-400 mt-2">For configuring routing protocols like OSPF</p>
+                  <p className="text-gray-500 text-sm mt-1">Example: <code>router ospf 1</code></p>
+                </div>
+
+                <div className="border-l-4 border-yellow-500 pl-6">
+                  <h4 className="text-yellow-300 font-semibold mb-2 font-mono text-lg">(config-line)#</h4>
+                  <p className="text-white font-semibold">Line Configuration Mode</p>
+                  <p className="text-gray-400 mt-2">For configuring console and VTY (remote access) lines</p>
+                  <p className="text-gray-500 text-sm mt-1">Example: <code>line console 0</code></p>
+                </div>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <p className="text-gray-300 mb-3">
+                <strong className="text-white">Notice the difference:</strong>
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li><code>interface vlan 1</code> → <code>(config-if)#</code> — configuring the interface itself (IP address, shutdown status)</li>
+                <li><code>vlan 100</code> → <code>(config-vlan)#</code> — creating/naming the VLAN</li>
+              </ul>
+              <p className="text-gray-300 mt-3">
+                These are different operations with different prompts!
+              </p>
             </InfoBox>
 
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Exit vs End: The Important Difference</h2>
@@ -1441,13 +1494,15 @@ Takes 1 command! ✅`}
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
-            <p className="text-gray-300 mb-8 text-lg">Practice navigating sub-configuration modes:</p>
+            <p className="text-gray-300 mb-8 text-lg">Practice navigating different sub-configuration modes:</p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code> — Enter privileged mode</li>
               <li><code>configure terminal</code> — Enter global config mode</li>
-              <li><code>interface vlan 1</code> — Enter interface configuration mode (notice the prompt changes!)</li>
-              <li><code>exit</code> — Go back one level to <code>(config)#</code></li>
-              <li><code>interface vlan 1</code> — Enter interface config mode again</li>
+              <li><code>vlan 100</code> — Enter VLAN configuration mode (notice prompt becomes <code>(config-vlan)#</code>!)</li>
+              <li><code>exit</code> — Go back to <code>(config)#</code></li>
+              <li><code>interface vlan 1</code> — Enter interface configuration mode (notice prompt becomes <code>(config-if)#</code>!)</li>
+              <li><code>exit</code> — Go back to <code>(config)#</code> again</li>
+              <li><code>vlan 100</code> — Enter VLAN config mode again</li>
               <li><code>end</code> — Jump directly back to <code>#</code> (compare how fast this is!)</li>
             </ol>
 
@@ -1456,8 +1511,9 @@ Takes 1 command! ✅`}
             <InfoBox variant="info">
               <ProTip>
                 <ul className="ml-6 space-y-2 text-gray-300">
-                  <li>Watch how the prompt changes: <code>(config)#</code> → <code>(config-if)#</code></li>
-                  <li>You'll use sub-configuration modes for interfaces, routing protocols, VTY lines, and more</li>
+                  <li>Watch how the prompt changes: <code>(config)#</code> → <code>(config-vlan)#</code> vs <code>(config-if)#</code></li>
+                  <li>Notice that <code>vlan 100</code> and <code>interface vlan 1</code> give you different prompts!</li>
+                  <li>You'll use sub-configuration modes for interfaces, VLANs, routing protocols, VTY lines, and more</li>
                   <li>The deeper you go, the more useful <code>end</code> becomes!</li>
                 </ul>
               </ProTip>
@@ -2024,7 +2080,7 @@ no shutdown:         Interface is ON ✅
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
-              <li><code>vlan 100</code> — Create VLAN 100</li>
+              <li><code>vlan 100</code> — Create VLAN 100 (notice the prompt changes to <code>(config-vlan)#</code>!)</li>
               <li><code>name Students</code> — Give it a name (optional but helpful!)</li>
               <li><code>exit</code></li>
               <li><code>vlan 200</code> — Create VLAN 200</li>

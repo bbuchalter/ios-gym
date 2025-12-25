@@ -21,6 +21,9 @@
     "IF_CONFIG": {
       "prompt": "{hostname}(config-if)#"
     },
+    "CONFIG_VLAN": {
+      "prompt": "{hostname}(config-vlan)#"
+    },
     "ROUTER_OSPF_CONFIG": {
       "prompt": "{hostname}(config-router)#"
     },
@@ -350,28 +353,10 @@
         ],
         "action": {
           "type": "vlan_enter",
-          "vlan_from": "vlan"
+          "vlan_from": "vlan",
+          "mode": "CONFIG_VLAN"
         },
         "help": "Create/select a VLAN and enter VLAN config context"
-      },
-      {
-        "name": "vlan_name",
-        "tokens": [
-          "name",
-          {
-            "arg": "REST_OF_LINE",
-            "name": "vlan_name"
-          }
-        ],
-        "guard": {
-          "requires_cursor": "current_vlan"
-        },
-        "action": {
-          "type": "vlan_set_name",
-          "vlan_cursor": "current_vlan",
-          "name_from": "vlan_name"
-        },
-        "help": "Name the currently selected VLAN"
       },
       {
         "name": "interface",
@@ -733,6 +718,48 @@
           "cost_from": "cost"
         },
         "help": "Set OSPF interface cost"
+      }
+    ],
+    "CONFIG_VLAN": [
+      {
+        "name": "exit",
+        "tokens": [
+          "exit"
+        ],
+        "action": {
+          "type": "mode_pop"
+        },
+        "help": "Exit VLAN configuration"
+      },
+      {
+        "name": "end",
+        "tokens": [
+          "end"
+        ],
+        "action": {
+          "type": "mode_pop_to",
+          "mode": "PRIV_EXEC"
+        },
+        "help": "Exit to privileged EXEC"
+      },
+      {
+        "name": "vlan_name",
+        "tokens": [
+          "name",
+          {
+            "arg": "REST_OF_LINE",
+            "name": "vlan_name"
+          }
+        ],
+        "guard": {
+          "requires_cursor": "current_vlan"
+        },
+        "action": {
+          "type": "vlan_set_name",
+          "vlan_cursor": "current_vlan",
+          "name_from": "vlan_name"
+        },
+        "help": "Name the currently selected VLAN"
       }
     ],
     "ROUTER_OSPF_CONFIG": [

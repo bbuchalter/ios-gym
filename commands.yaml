@@ -18,6 +18,8 @@ modes:
     prompt: "{hostname}(config)#"
   IF_CONFIG:
     prompt: "{hostname}(config-if)#"
+  CONFIG_VLAN:
+    prompt: "{hostname}(config-vlan)#"
   ROUTER_OSPF_CONFIG:
     prompt: "{hostname}(config-router)#"
   LINE_VTY_CONFIG:
@@ -199,19 +201,8 @@ commands:
       action:
         type: "vlan_enter"
         vlan_from: "vlan"
+        mode: "CONFIG_VLAN"
       help: "Create/select a VLAN and enter VLAN config context"
-      # Implementation note: you may either push IF-like VLAN mode or keep in GLOBAL_CONFIG.
-      # For this foundation, we keep it in GLOBAL_CONFIG but set a 'current_vlan' cursor.
-
-    - name: vlan_name
-      tokens: ["name", {arg: "REST_OF_LINE", name: "vlan_name"}]
-      guard:
-        requires_cursor: "current_vlan"
-      action:
-        type: "vlan_set_name"
-        vlan_cursor: "current_vlan"
-        name_from: "vlan_name"
-      help: "Name the currently selected VLAN"
 
     # Interface
     - name: interface
@@ -338,6 +329,27 @@ commands:
       tokens: ["ip", "ospf", "cost", {arg: "INT", name: "cost"}]
       action: {type: "ospf_if_cost_set", cost_from: "cost"}
       help: "Set OSPF interface cost"
+
+  CONFIG_VLAN:
+    - name: exit
+      tokens: ["exit"]
+      action: {type: "mode_pop"}
+      help: "Exit VLAN configuration"
+
+    - name: end
+      tokens: ["end"]
+      action: {type: "mode_pop_to", mode: "PRIV_EXEC"}
+      help: "Exit to privileged EXEC"
+
+    - name: vlan_name
+      tokens: ["name", {arg: "REST_OF_LINE", name: "vlan_name"}]
+      guard:
+        requires_cursor: "current_vlan"
+      action:
+        type: "vlan_set_name"
+        vlan_cursor: "current_vlan"
+        name_from: "vlan_name"
+      help: "Name the currently selected VLAN"
 
   ROUTER_OSPF_CONFIG:
     - name: exit

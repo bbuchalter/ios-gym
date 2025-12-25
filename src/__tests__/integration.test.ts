@@ -101,11 +101,16 @@ describe("CLI Integration Tests", () => {
       
       engine.executeCommand(session, "vlan 100");
       expect(session.deviceState.vlans["100"]).toBeDefined();
+      expect(session.getPrompt()).toBe("Switch(config-vlan)# ");
       
       engine.executeCommand(session, "name Sales");
       expect(session.deviceState.vlans["100"].name).toBe("Sales");
       
+      engine.executeCommand(session, "exit");
+      expect(session.getPrompt()).toBe("Switch(config)# ");
+      
       engine.executeCommand(session, "vlan 200");
+      expect(session.getPrompt()).toBe("Switch(config-vlan)# ");
       engine.executeCommand(session, "name Engineering");
       
       expect(session.deviceState.vlans["200"].name).toBe("Engineering");
@@ -117,6 +122,7 @@ describe("CLI Integration Tests", () => {
       engine.executeCommand(session, "enable");
       engine.executeCommand(session, "configure terminal");
       engine.executeCommand(session, "vlan 100");
+      engine.executeCommand(session, "exit");
       engine.executeCommand(session, "interface fa0/2");
       engine.executeCommand(session, "switchport mode access");
       engine.executeCommand(session, "switchport access vlan 100");

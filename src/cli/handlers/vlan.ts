@@ -1,4 +1,4 @@
-import { ExecutionResult } from "../../types";
+import { ExecutionResult, ModeType } from "../../types";
 import { CLISession } from "../../cli-session";
 
 /**
@@ -21,6 +21,10 @@ export function handleVlanEnter(
   
   // Set current VLAN cursor
   session.modeStack.currentVlan = vlanId;
+  
+  // Push to VLAN config mode
+  const targetMode = action.mode as ModeType;
+  session.modeStack.push(targetMode);
   
   return { output: [] };
 }

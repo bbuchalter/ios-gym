@@ -120,6 +120,10 @@ describe("ModeStack", () => {
       expect(modeStack.getPrompt("R1")).toBe("R1(config-if)# ");
       
       modeStack.pop();
+      modeStack.push(ModeType.CONFIG_VLAN);
+      expect(modeStack.getPrompt("R1")).toBe("R1(config-vlan)# ");
+      
+      modeStack.pop();
       modeStack.push(ModeType.ROUTER_OSPF_CONFIG);
       expect(modeStack.getPrompt("R1")).toBe("R1(config-router)# ");
       
