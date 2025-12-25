@@ -128,16 +128,72 @@ export default function LearnPage() {
               </div>
             </div>
 
+            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">What is CNTL/Z?</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              When you enter configuration mode with <code>configure terminal</code>, Cisco IOS displays:
+            </p>
+            <div className="bg-gray-800 border border-gray-600 rounded-lg p-6 my-6 font-mono text-gray-300">
+              Switch#configure terminal<br />
+              <span className="text-yellow-300">Enter configuration commands, one per line.  End with CNTL/Z.</span><br />
+              Switch(config)#
+            </div>
+            <p className="text-gray-300 mb-6 text-lg">
+              <strong className="text-white">CNTL/Z</strong> (also written as Ctrl+Z) is a keyboard shortcut on real Cisco devices that instantly exits configuration mode
+              and returns you to privileged mode.
+            </p>
+
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-3">⚠️ About CNTL/Z in Simulators</p>
+              <p className="text-gray-300 mb-3">
+                While real Cisco switches support Ctrl+Z, it's <strong className="text-white">NOT supported</strong> in this simulator or in 
+                Cisco Packet Tracer (the most popular network simulator).
+              </p>
+              <p className="text-gray-300">
+                <strong className="text-white">Best Practice:</strong> Use the <code>end</code> command instead. It does the exact same thing 
+                and works everywhere — real devices, Packet Tracer, and this simulator!
+              </p>
+            </InfoBox>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-gray-800 border border-blue-600 rounded-lg p-6">
+                <h4 className="text-blue-300 font-semibold mb-3">Using exit (Step by step)</h4>
+                <div className="font-mono text-sm text-gray-300 space-y-1">
+                  <div>Switch(config)#<span className="text-green-400">exit</span></div>
+                  <div>Switch#</div>
+                </div>
+                <p className="text-gray-400 mt-3">Goes back one level at a time</p>
+              </div>
+              <div className="bg-gray-800 border border-green-600 rounded-lg p-6">
+                <h4 className="text-green-300 font-semibold mb-3">Using end (Recommended ✓)</h4>
+                <div className="font-mono text-sm text-gray-300 space-y-1">
+                  <div>Switch(config)#<span className="text-green-400">end</span></div>
+                  <div>Switch#</div>
+                </div>
+                <p className="text-gray-400 mt-3">Jumps directly to privileged mode</p>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300">
+                  <li><strong className="text-green-300">Use <code>end</code></strong> to quickly exit any configuration mode and return to privileged mode</li>
+                  <li>The <code>end</code> command works from <em>any</em> configuration mode — global config, interface config, router config, etc.</li>
+                  <li>Use <code>exit</code> when you want to go back one level at a time (more methodical)</li>
+                  <li>Use <code>end</code> when you want to jump straight to privileged mode (faster)</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
+
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Try It Now
             </h3>
             <p className="text-gray-300 mb-8 text-lg">Practice moving between modes in the terminal below:</p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li>Type <code>enable</code> and press Enter — watch the prompt change from <code>&gt;</code> to <code>#</code></li>
-              <li>Type <code>configure terminal</code> and press Enter — watch the prompt change to <code>(config)#</code></li>
+              <li>Type <code>configure terminal</code> and press Enter — watch the message appear and prompt change to <code>(config)#</code></li>
               <li>Type <code>exit</code> — notice you go back one level to <code>#</code></li>
               <li>Type <code>configure terminal</code> again to enter config mode</li>
-              <li>Type <code>exit</code> again to return to privileged mode</li>
+              <li>Type <code>end</code> — notice it jumps directly back to <code>#</code> (same as exit in this case)</li>
             </ol>
 
             <Terminal grammar={grammar} />

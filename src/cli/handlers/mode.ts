@@ -13,6 +13,15 @@ export function handleModePush(
   const targetMode = action.mode as ModeType;
   session.modeStack.push(targetMode);
   
+  // Show configuration message when entering global config mode
+  if (targetMode === ModeType.GLOBAL_CONFIG) {
+    return {
+      output: [
+        "Enter configuration commands, one per line.  End with CNTL/Z."
+      ]
+    };
+  }
+  
   return { output: [] };
 }
 

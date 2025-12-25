@@ -24,8 +24,9 @@ describe("CLI Integration Tests", () => {
       expect(session.getPrompt()).toBe("Switch# ");
       
       // Configure terminal
-      engine.executeCommand(session, "configure terminal");
+      const result = engine.executeCommand(session, "configure terminal");
       expect(session.getPrompt()).toBe("Switch(config)# ");
+      expect(result.output).toContain("Enter configuration commands, one per line.  End with CNTL/Z.");
       
       // Exit to priv exec
       engine.executeCommand(session, "exit");
