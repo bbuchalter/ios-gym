@@ -16,38 +16,103 @@ import { ProTip } from '@/components/ProTip';
 import { SkillCard } from '@/components/SkillCard';
 import { Diagram } from '@/components/Diagram';
 import { LessonCounterProvider } from '@/lib/LessonCounterContext';
+import { TerminalRegistryProvider, useTerminalRegistry } from '@/lib/TerminalRegistryContext';
 
 // Dynamically import Terminal to avoid SSR issues with XTerm
 const Terminal = dynamic(() => import('@/components/Terminal'), {
   ssr: false,
-  loading: () => <div className="bg-gray-800 p-8 rounded text-gray-400 text-center">Loading terminal...</div>
+  loading: () => (
+    <div 
+      className="my-8 border border-gray-700 bg-gray-800 rounded-lg"
+      style={{ minHeight: '470px' }}
+    >
+      <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 text-xs font-mono text-gray-400">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-red-500" />
+          <span className="h-2 w-2 rounded-full bg-yellow-500" />
+          <span className="h-2 w-2 rounded-full bg-green-500" />
+        </div>
+      </div>
+      <div className="p-8 text-gray-400 text-center">Loading terminal...</div>
+    </div>
+  )
 });
 
-export default function LearnPage() {
-  const [grammar, setGrammar] = useState<CommandGrammar | null>(null);
+const SCROLL_POSITION_KEY = 'ios-practice-scroll-position';
+
+function PageContent({ grammar }: { grammar: CommandGrammar }) {
+  const registry = useTerminalRegistry();
+  const [animationsEnabled, setAnimationsEnabled] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
 
   // Enable interactivity features
-  useScrollAnimations();
+  useScrollAnimations(animationsEnabled);
   useProgressBar();
 
+  // Save scroll position before unload
   useEffect(() => {
-    const manager = new TerminalManager();
-    manager.initialize().then(g => setGrammar(g));
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem(SCROLL_POSITION_KEY, window.scrollY.toString());
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
   }, []);
 
-  if (!grammar) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-gray-300 text-xl">Loading CLI Grammar...</div>
-      </div>
-    );
-  }
+  // Signal that initial load is complete and handle scroll restoration
+  useEffect(() => {
+    if (!grammar) return;
+
+    // Signal that all terminals have had a chance to mount
+    registry.finishInitialLoad();
+  }, [grammar, registry]);
+
+  // Restore scroll position when everything is ready
+  useEffect(() => {
+    if (!registry.isAllTerminalsReady || !grammar) return;
+
+    const savedPosition = sessionStorage.getItem(SCROLL_POSITION_KEY);
+    if (savedPosition) {
+      const position = parseInt(savedPosition, 10);
+      
+      // Use double requestAnimationFrame to ensure DOM is fully painted
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo(0, position);
+          sessionStorage.removeItem(SCROLL_POSITION_KEY);
+          
+          // Show content and enable animations
+          setContentVisible(true);
+          setAnimationsEnabled(true);
+        });
+      });
+    } else {
+      // No saved position, show content and enable animations
+      setContentVisible(true);
+      setAnimationsEnabled(true);
+    }
+  }, [registry.isAllTerminalsReady, grammar]);
 
   return (
-    <div id="top" className="min-h-screen bg-gray-900">
-      <main className="max-w-6xl mx-auto px-6 pb-24">
-        <div id="lessons">
-          <LessonCounterProvider>
+    <>
+      {/* Loading overlay - shown while content is not ready */}
+      {!contentVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-500"></div>
+        </div>
+      )}
+
+      {/* Main content - always rendered so terminals can load */}
+      <div 
+        id="top" 
+        className="min-h-screen bg-gray-900"
+        style={{ visibility: contentVisible ? 'visible' : 'hidden' }}
+      >
+        <main className="max-w-6xl mx-auto px-6 pb-24">
+          <div id="lessons">
+            <LessonCounterProvider>
           {/* INTRODUCTION */}
           <LessonSection title="Welcome, Future Network Engineer! 👋" isIntro>
             <p className="text-2xl text-white my-6">
@@ -3457,6 +3522,30 @@ ip ospf cost 30
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </>
+  );
+}
+
+export default function LearnPage() {
+  const [grammar, setGrammar] = useState<CommandGrammar | null>(null);
+
+  useEffect(() => {
+    const manager = new TerminalManager();
+    manager.initialize().then(g => setGrammar(g));
+  }, []);
+
+  if (!grammar) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-500"></div>
+      </div>
+    );
+  }
+
+  return (
+    <TerminalRegistryProvider>
+      <PageContent grammar={grammar} />
+    </TerminalRegistryProvider>
   );
 }

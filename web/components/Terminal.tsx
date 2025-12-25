@@ -10,6 +10,7 @@ import { CLIEngine } from '@src/cli/engine';
 import { CLISession } from '@src/cli-session';
 import type { CommandGrammar } from '@src/types';
 import { useLessonCounter } from '@/lib/LessonCounterContext';
+import { useTerminalRegistry } from '@/lib/TerminalRegistryContext';
 
 interface TerminalProps {
   terminalId?: string;
@@ -19,6 +20,7 @@ interface TerminalProps {
 export default function Terminal({ terminalId, grammar }: TerminalProps) {
   const counter = useLessonCounter();
   const finalTerminalId = terminalId || counter.getTerminalId();
+  const registry = useTerminalRegistry();
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
@@ -38,6 +40,14 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
     currentIndex: number;
     linesPerPage: number;
   } | null>(null);
+  
+  // Register with the terminal registry on mount
+  useEffect(() => {
+    registry.register();
+    return () => {
+      registry.unregister();
+    };
+  }, [registry]);
   
   useEffect(() => {
     if (!containerRef.current || terminalRef.current) return;
@@ -92,6 +102,8 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
     // Ensure terminal is focused
     setTimeout(() => {
       terminal.focus();
+      // Mark terminal as ready after initialization is complete
+      registry.markReady();
     }, 200);
     
     // Helper functions
