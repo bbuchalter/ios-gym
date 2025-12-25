@@ -10,7 +10,7 @@
     "build:grammar": "node -e \"const yaml = require('js-yaml'); const fs = require('fs'); const commands = yaml.load(fs.readFileSync('commands.yaml', 'utf8')); fs.writeFileSync('web/public/commands.json', JSON.stringify(commands, null, 2));\"",
     "web:dev": "nodemon",
     "web:build": "npm run build:grammar && cd web && npm run build",
-    "web:start": "cd web && npm start"
+    "web:start": "http-server web/out -p 3000 -o"
   },
   "keywords": [
     "cisco",
