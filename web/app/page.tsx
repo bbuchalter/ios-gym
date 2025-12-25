@@ -75,12 +75,12 @@ export default function LearnPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 my-10">
               <SkillCard icon="🎯" title="CLI Navigation" description="Modes, commands, tab completion" />
               <SkillCard icon="🔐" title="Security" description="Passwords, SSH, encryption" />
-              <SkillCard icon="🌐" title="IP Addressing" description="IPv4, subnets, gateways" />
-              <SkillCard icon="🏢" title="VLANs & Switching" description="Access ports, trunks, Layer 2" />
-              <SkillCard icon="⚡" title="Layer 3 Switching" description="Routed ports, no switchport" />
-              <SkillCard icon="🗺️" title="Static Routing" description="Default routes, floating backup" />
-              <SkillCard icon="🔄" title="Dynamic Routing" description="OSPF protocol, areas" />
-              <SkillCard icon="⚙️" title="Path Control" description="OSPF costs, traffic engineering" />
+              <SkillCard icon="🌐" title="IP Addressing" description="IPv4, /30 subnets, gateways" />
+              <SkillCard icon="🏢" title="VLANs & SVIs" description="Access ports, inter-VLAN routing" />
+              <SkillCard icon="🔗" title="Trunk Ports" description="Allow all vs restricted VLANs" />
+              <SkillCard icon="⚡" title="Layer 3 Switching" description="Routed ports, point-to-point links" />
+              <SkillCard icon="🔄" title="OSPF Routing" description="Multiple networks, areas" />
+              <SkillCard icon="⚙️" title="Path Control" description="OSPF costs, primary/backup paths" />
             </div>
           </LessonSection>
 
@@ -210,6 +210,81 @@ export default function LearnPage() {
                   <li>Use <kbd>TAB</kbd> liberally — it's not cheating, it's smart!</li>
                   <li>TAB completion works at any mode level — user, privileged, or configuration</li>
                 </ul>
+              </ProTip>
+            </InfoBox>
+          </LessonSection>
+
+          {/* LESSON 3: SETTING HOSTNAME */}
+          <LessonSection title="Giving Your Device a Name">
+            <p className="text-xl text-gray-200 my-6">
+              Just like you name your phone "Brian's iPhone", network devices need names too!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What's a Hostname?</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              The hostname is your device's name. It appears in the prompt and helps identify which device you're working on.
+              In a real network, you might have dozens of switches — good names help you stay organized!
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <Diagram title="Before">
+                {`┌─────────────┐
+│   Switch    │  ← Generic
+└─────────────┘`}
+              </Diagram>
+
+              <Diagram title="After">
+                {`┌──────────────────────┐
+│  MyFirstSwitch       │  ← Your name!
+└──────────────────────┘`}
+              </Diagram>
+            </div>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">Saving Your Work</h2>
+
+            <InfoBox variant="important">
+              <p className="text-red-200 font-semibold text-lg mb-2">⚠️ CRITICAL:</p>
+              <p className="text-gray-200 mb-3">Changes in Cisco IOS are NOT saved automatically!</p>
+              <p className="text-gray-300">You must use <code>write memory</code> to save, or your changes disappear when the device restarts.</p>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure your first device with these steps:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code> — Enter privileged mode</li>
+              <li><code>configure terminal</code> — Enter configuration mode</li>
+              <li><code>hostname MyFirstSwitch</code> — Set the name (watch the prompt change!)</li>
+              <li><code>end</code> — Exit configuration mode</li>
+              <li><code>write memory</code> — <strong className="text-yellow-300">SAVE YOUR WORK!</strong></li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3 text-lg">✓ You succeeded when:</p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>The prompt shows your new hostname instead of "Switch"</li>
+                <li>You see <code className="text-emerald-400">[OK]</code> after running <code>write memory</code></li>
+                <li>
+                  <strong className="text-cyan-300">Verify:</strong> Type <code>show running-config</code> and confirm you see your hostname near the top:
+                  <div className="bg-gray-800 rounded-lg p-3 mt-2 ml-4 font-mono text-sm">
+                    Building configuration...<br />
+                    !<br />
+                    <span className="text-yellow-300">hostname MyFirstSwitch</span><br />
+                    !
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <InfoBox variant="info">
+              <ProTip>
+                <p className="text-gray-300">
+                  The <code>show running-config</code> command displays ALL configuration on your device. 
+                  It's one of the most important commands you'll use — network engineers check it constantly to verify their work!
+                </p>
               </ProTip>
             </InfoBox>
           </LessonSection>
@@ -412,81 +487,6 @@ export default function LearnPage() {
             </InfoBox>
           </LessonSection>
 
-          {/* LESSON 3: SETTING HOSTNAME */}
-          <LessonSection title="Giving Your Device a Name">
-            <p className="text-xl text-gray-200 my-6">
-              Just like you name your phone "Brian's iPhone", network devices need names too!
-            </p>
-
-            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What's a Hostname?</h2>
-            <p className="text-gray-300 mb-6 text-lg">
-              The hostname is your device's name. It appears in the prompt and helps identify which device you're working on.
-              In a real network, you might have dozens of switches — good names help you stay organized!
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-6 my-8">
-              <Diagram title="Before">
-                {`┌─────────────┐
-│   Switch    │  ← Generic
-└─────────────┘`}
-              </Diagram>
-
-              <Diagram title="After">
-                {`┌──────────────────────┐
-│  MyFirstSwitch       │  ← Your name!
-└──────────────────────┘`}
-              </Diagram>
-            </div>
-
-            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">Saving Your Work</h2>
-
-            <InfoBox variant="important">
-              <p className="text-red-200 font-semibold text-lg mb-2">⚠️ CRITICAL:</p>
-              <p className="text-gray-200 mb-3">Changes in Cisco IOS are NOT saved automatically!</p>
-              <p className="text-gray-300">You must use <code>write memory</code> to save, or your changes disappear when the device restarts.</p>
-            </InfoBox>
-
-            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
-              <span className="text-4xl">👉</span> Your Task
-            </h3>
-            <p className="text-gray-300 mb-8 text-lg">Configure your first device with these steps:</p>
-            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
-              <li><code>enable</code> — Enter privileged mode</li>
-              <li><code>configure terminal</code> — Enter configuration mode</li>
-              <li><code>hostname MyFirstSwitch</code> — Set the name (watch the prompt change!)</li>
-              <li><code>end</code> — Exit configuration mode</li>
-              <li><code>write memory</code> — <strong className="text-yellow-300">SAVE YOUR WORK!</strong></li>
-            </ol>
-
-            <Terminal grammar={grammar} />
-
-            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
-              <p className="text-green-300 font-semibold mb-3 text-lg">✓ You succeeded when:</p>
-              <ul className="ml-6 space-y-2 text-gray-300">
-                <li>The prompt shows your new hostname instead of "Switch"</li>
-                <li>You see <code className="text-emerald-400">[OK]</code> after running <code>write memory</code></li>
-                <li>
-                  <strong className="text-cyan-300">Verify:</strong> Type <code>show running-config</code> and confirm you see your hostname near the top:
-                  <div className="bg-gray-800 rounded-lg p-3 mt-2 ml-4 font-mono text-sm">
-                    Building configuration...<br />
-                    !<br />
-                    <span className="text-yellow-300">hostname MyFirstSwitch</span><br />
-                    !
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <InfoBox variant="info">
-              <ProTip>
-                <p className="text-gray-300">
-                  The <code>show running-config</code> command displays ALL configuration on your device. 
-                  It's one of the most important commands you'll use — network engineers check it constantly to verify their work!
-                </p>
-              </ProTip>
-            </InfoBox>
-          </LessonSection>
-
           {/* LESSON 4: ENABLE SECRET */}
           <LessonSection title="Security: Adding a Password">
             <p className="text-xl text-gray-200 my-6">
@@ -554,9 +554,17 @@ export default function LearnPage() {
 
             <InfoBox variant="info">
               <ProTip>
+                <p className="text-gray-300 mb-3">
+                  You can view your configuration with <code>show running-config</code>. Try it!
+                </p>
+                <p className="text-gray-300 mb-3">
+                  <strong className="text-yellow-300">In this simulator:</strong> You'll see the password in plain text 
+                  (e.g., <code>enable secret C1sc0R0ck$</code>).
+                </p>
                 <p className="text-gray-300">
-                  You can view your configuration with <code>show running-config</code>.
-                  Try it! Notice how the password is encrypted (shows as a long hash).
+                  <strong className="text-green-300">On a real Cisco device:</strong> The password would be encrypted and 
+                  show as a long scrambled hash like <code>enable secret 5 $1$mERr$hx5rVt7...</code> — 
+                  this protects the password even if someone sees your configuration file!
                 </p>
               </ProTip>
             </InfoBox>
@@ -685,6 +693,23 @@ Attacker sees: "Could be any length!"
               <li>See the "% Bad secrets" message</li>
               <li>Try one more time with the correct password: <code>C1sc0R0ck$</code></li>
             </ol>
+
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-3">⚠️ Important: Understanding Password Attempts</p>
+              <p className="text-gray-300 mb-3">
+                Here's something that confuses many students: <strong className="text-white">when you enter a password correctly, 
+                you won't see any feedback at first — you'll just get prompted for the password again!</strong>
+              </p>
+              <p className="text-gray-300 mb-3">
+                IOS gives you <strong className="text-white">three attempts</strong> to enter the password before showing the 
+                <code className="text-red-400">% Bad secrets</code> message. This means if you enter the password correctly on 
+                your first or second try, you'll simply see another password prompt with no indication whether you were right or wrong.
+              </p>
+              <p className="text-gray-300">
+                <strong className="text-white">Bottom line:</strong> If you see the <code>#</code> prompt appear, your password 
+                was correct! If you see <code>% Bad secrets</code>, you used up all three attempts with incorrect passwords.
+              </p>
+            </InfoBox>
 
             <Terminal grammar={grammar} />
 
@@ -884,6 +909,7 @@ Router1(config)# no enable secret`}
               <li><strong className="text-cyan-300">Verify removal: </strong><code>show running-config</code> — Confirm both are gone!</li>
               <li><code>disable</code> — Exit to user mode</li>
               <li><code>enable</code> — Try again (no password needed now!)</li>
+              <li><strong className="text-green-300">Save your changes: </strong><code>write memory</code> — Always save your configuration!</li>
             </ol>
 
             <Terminal grammar={grammar} />
@@ -1517,6 +1543,215 @@ no shutdown:         Interface is ON ✅
             </div>
           </LessonSection>
 
+          {/* LESSON: SVI - VLAN INTERFACES */}
+          <LessonSection title="SVI: Giving VLANs Their Own IP Address">
+            <p className="text-xl text-gray-200 my-6">
+              Remember how we gave our switch an IP address using <code>interface vlan 1</code>? 
+              You can do the same thing for ANY VLAN — and that's how VLANs can talk to each other!
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What's an SVI?</h2>
+            <p className="text-gray-300 mb-6">
+              <strong className="text-white">SVI</strong> stands for <strong className="text-white">Switched Virtual Interface</strong>. 
+              Think of it like giving each VLAN its own "phone number" so it can communicate with the outside world.
+            </p>
+
+            <Diagram title="VLANs Without SVIs - Can't Talk to Each Other!">
+              {`┌─────────────────────────────────────────┐
+│           Layer 3 Switch                │
+│                                         │
+│   VLAN 100 (Students)   VLAN 200 (Teachers)
+│   Computers: A, B, C    Computers: X, Y, Z
+│        🚫                    🚫          │
+│    No IP Address         No IP Address  │
+│                                         │
+│   Students can't reach Teachers! ❌     │
+└─────────────────────────────────────────┘`}
+            </Diagram>
+
+            <Diagram title="VLANs With SVIs - Now They Can Communicate!">
+              {`┌─────────────────────────────────────────┐
+│           Layer 3 Switch                │
+│                                         │
+│   VLAN 100 (Students)   VLAN 200 (Teachers)
+│   SVI: 35.72.10.1/24    SVI: 33.2.169.1/24
+│        ✅                    ✅          │
+│                                         │
+│   Switch routes between VLANs! ✅       │
+│   Students can reach Teachers!          │
+└─────────────────────────────────────────┘`}
+            </Diagram>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Why Do VLANs Need IP Addresses?</h2>
+            <p className="text-gray-300 mb-4">
+              Imagine your school has two buildings — one for students and one for teachers. 
+              Each building has its own phone system, but they can't call each other!
+            </p>
+            <ul className="ml-8 space-y-3 text-gray-300 list-disc">
+              <li><strong className="text-white">Without SVI:</strong> Each VLAN is like a building with no phone line to the outside</li>
+              <li><strong className="text-white">With SVI:</strong> Each VLAN gets a phone number (IP address) and can call other VLANs</li>
+            </ul>
+
+            <InfoBox variant="info">
+              <h4 className="text-blue-300 font-semibold mb-3">🏠 Real-Life Analogy</h4>
+              <p className="text-gray-300 mb-3">
+                Think of VLANs like different apartment buildings:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li><strong className="text-white">VLAN 100 (35.72.10.0/24):</strong> "123 Student Street" — all student computers live here</li>
+                <li><strong className="text-white">VLAN 200 (33.2.169.0/24):</strong> "456 Teacher Avenue" — all teacher computers live here</li>
+              </ul>
+              <p className="text-gray-300 mt-3">
+                The SVI is like the building's front door with a street address — mail (data) can now be delivered!
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">SVI vs Management Interface</h2>
+            <p className="text-gray-300 mb-6">
+              Earlier, you configured <code>interface vlan 1</code> for management access. That was an SVI too! 
+              The difference is how you use it:
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h4 className="text-white font-semibold mb-3">VLAN 1 (Management)</h4>
+                <p className="text-gray-300 mb-3">Used by the switch itself</p>
+                <Diagram>
+                  {`interface vlan 1
+ ip address 172.16.16.1 255.255.255.0
+ no shutdown
+
+Purpose: So YOU can SSH into the switch`}
+                </Diagram>
+              </div>
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h4 className="text-white font-semibold mb-3">VLAN 100/200 (Routing)</h4>
+                <p className="text-gray-300 mb-3">Used to route between VLANs</p>
+                <Diagram>
+                  {`interface vlan 100
+ ip address 35.72.10.1 255.255.255.0
+ no shutdown
+
+Purpose: Gateway for computers in VLAN 100`}
+                </Diagram>
+              </div>
+            </div>
+
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-2">🎯 Key Concept: Default Gateway</p>
+              <p className="text-gray-300">
+                When you create an SVI with IP <code>35.72.10.1</code>, all computers in VLAN 100 will use 
+                <code>35.72.10.1</code> as their <strong className="text-white">default gateway</strong>. 
+                This is how they send traffic to other VLANs or the internet!
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Enable Routing on Layer 3 Switches</h2>
+            <p className="text-gray-300 mb-6">
+              For SVIs to route traffic between VLANs, you need to enable IP routing on the switch:
+            </p>
+
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 my-8">
+              <code className="font-mono text-lg text-blue-400">ip routing</code>
+              <p className="text-gray-400 mt-2">This command tells the switch: "Start routing packets between VLANs!"</p>
+            </div>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Your Task
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Configure SVIs for inter-VLAN routing on a Layer 3 switch:</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>ip routing</code> — Enable routing between VLANs</li>
+              <li><code>vlan 100</code> — Create VLAN 100</li>
+              <li><code>name Students</code></li>
+              <li><code>exit</code></li>
+              <li><code>vlan 200</code> — Create VLAN 200</li>
+              <li><code>name Teachers</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface vlan 100</code> — Create SVI for VLAN 100</li>
+              <li><code>ip address 35.72.10.1 255.255.255.0</code> — Gateway for student computers</li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface vlan 200</code> — Create SVI for VLAN 200</li>
+              <li><code>ip address 33.2.169.1 255.255.255.0</code> — Gateway for teacher computers</li>
+              <li><code>no shutdown</code></li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-gray-300 mb-2">Type: <code>show ip interface brief</code></p>
+              <p className="text-gray-300">You should see:</p>
+              <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
+                <li>Vlan100 with IP 35.72.10.1 — Status: up, Protocol: up</li>
+                <li>Vlan200 with IP 33.2.169.1 — Status: up, Protocol: up</li>
+              </ul>
+            </div>
+
+            <InfoBox variant="real-world">
+              <h4 className="text-blue-300 font-semibold mb-3">🌍 Real Network Example</h4>
+              <p className="text-gray-300 mb-3">
+                In your school's network, a Layer 3 switch might have:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li><strong className="text-white">VLAN 1 (172.16.16.1):</strong> Management — for IT to access switches</li>
+                <li><strong className="text-white">VLAN 100 (35.72.10.1):</strong> Students — classroom computers</li>
+                <li><strong className="text-white">VLAN 200 (33.2.169.1):</strong> Teachers — teacher laptops</li>
+              </ul>
+              <p className="text-gray-300 mt-3">
+                Each SVI acts as the default gateway for computers in that VLAN!
+              </p>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Practice: Full Layer 3 Switch Setup
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              Now configure a complete Layer 3 switch like in a real scenario (similar to CyberPatriot!):
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>hostname CorporateDistributionSwitch1</code> — Professional name</li>
+              <li><code>ip routing</code></li>
+              <li><code>vlan 100</code></li>
+              <li><code>exit</code></li>
+              <li><code>vlan 200</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface vlan 1</code> — Management SVI</li>
+              <li><code>ip address 172.16.16.1 255.255.255.0</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface vlan 100</code> — Student SVI</li>
+              <li><code>ip address 35.72.10.1 255.255.255.0</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface vlan 200</code> — Teacher SVI</li>
+              <li><code>ip address 33.2.169.1 255.255.255.0</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <InfoBox variant="info">
+              <ProTip>
+                <ul className="ml-6 space-y-2 text-gray-300">
+                  <li>You can create SVIs for any VLAN number (1-4094)</li>
+                  <li>The SVI IP becomes the default gateway for devices in that VLAN</li>
+                  <li>Don't forget <code>ip routing</code> or the switch won't route between VLANs!</li>
+                  <li>Always use <code>no shutdown</code> to activate the SVI</li>
+                </ul>
+              </ProTip>
+            </InfoBox>
+          </LessonSection>
+
           {/* LESSON 11: TRUNK PORTS */}
           <LessonSection title="Trunk Ports: Connecting Switches">
             <p className="text-xl text-gray-200 my-6">
@@ -1545,6 +1780,49 @@ no shutdown:         Interface is ON ✅
               </div>
             </div>
 
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Two Types of Trunk Configuration</h2>
+            <p className="text-gray-300 mb-6">
+              Sometimes you need a trunk to allow ALL VLANs, other times you want to restrict it. 
+              Here's the difference:
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-green-900 border border-green-600 rounded-lg p-6">
+                <h4 className="text-green-300 font-semibold mb-3">✅ Allow ALL VLANs (Default)</h4>
+                <Diagram>
+                  {`interface fa0/1
+ switchport mode trunk
+ 
+That's it! No "allowed vlan" command
+means ALL VLANs can pass through.`}
+                </Diagram>
+                <p className="text-gray-400 mt-3"><strong>Use when:</strong> You want the trunk to carry everything</p>
+              </div>
+              <div className="bg-yellow-900 border border-yellow-600 rounded-lg p-6">
+                <h4 className="text-yellow-300 font-semibold mb-3">⚠️ Restrict to Specific VLANs</h4>
+                <Diagram>
+                  {`interface fa0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 1,100,200
+ 
+Only VLANs 1, 100, and 200 allowed.
+All others are BLOCKED!`}
+                </Diagram>
+                <p className="text-gray-400 mt-3"><strong>Use when:</strong> Security requires limiting VLANs</p>
+              </div>
+            </div>
+
+            <InfoBox variant="info">
+              <h4 className="text-blue-300 font-semibold mb-3">🏠 Pizza Delivery Analogy</h4>
+              <p className="text-gray-300 mb-3">
+                Think of a trunk like a delivery entrance to an apartment building:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li><strong className="text-white">Allow ALL:</strong> Any pizza delivery can enter (fast, convenient)</li>
+                <li><strong className="text-white">Restrict:</strong> Only deliveries for apartments 1, 100, 200 allowed (more secure, controlled)</li>
+              </ul>
+            </InfoBox>
+
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Why Limit Allowed VLANs?</h2>
             <p className="text-gray-300 mb-6">
               By default, trunks allow ALL VLANs (1-4094). But best practice is to allow only the VLANs you need:
@@ -1564,9 +1842,36 @@ no shutdown:         Interface is ON ✅
             </InfoBox>
 
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
-              <span className="text-4xl">👉</span> Your Task
+              <span className="text-4xl">👉</span> Task 1: Trunk Allowing ALL VLANs
             </h3>
-            <p className="text-gray-300 mb-8 text-lg">Configure trunk ports that carry only specific VLANs:</p>
+            <p className="text-gray-300 mb-8 text-lg">First, configure a trunk that allows ALL VLANs (the simple way):</p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>interface fa0/1</code> — Configure FastEthernet 0/1</li>
+              <li><code>switchport mode trunk</code> — Make it a trunk (allows ALL VLANs by default!)</li>
+              <li><code>end</code></li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ You succeeded when:</p>
+              <p className="text-gray-300 mb-2">Type <code>show running-config</code> — you should see:</p>
+              <div className="bg-gray-800 rounded-lg p-3 mt-2 font-mono text-sm">
+                interface FastEthernet0/1<br />
+                &nbsp;<span className="text-yellow-300">switchport mode trunk</span><br />
+                !
+              </div>
+              <p className="text-gray-400 mt-3 text-sm">
+                Notice there's NO "switchport trunk allowed vlan" line — this means ALL VLANs are allowed!
+              </p>
+            </div>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Task 2: Trunk with Restricted VLANs
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">Now configure trunk ports that carry only specific VLANs:</p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
@@ -1829,6 +2134,111 @@ g1/0/2 = Routed port (connects to router/internet)`}
               </p>
             </InfoBox>
 
+            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">Point-to-Point Subnets: The /30 Network</h2>
+            <p className="text-gray-300 mb-6">
+              When connecting two routers (or a router and Layer 3 switch), you use a special tiny network 
+              called a <strong className="text-white">/30 subnet</strong>. Why? Because you only need 2 IP addresses!
+            </p>
+
+            <Diagram title="Point-to-Point Link">
+              {`┌──────────────┐                    ┌──────────────┐
+│   Switch 1   │ ════════════════ │   Switch 2   │
+│              │  Point-to-Point  │              │
+│   g1/0/1     │      Link        │   g1/0/1     │
+│ 35.72.15.1   │                  │ 35.72.15.2   │
+│    /30       │                  │    /30       │
+└──────────────┘                  └──────────────┘
+
+Only 2 devices, so only need 2 IPs!`}
+            </Diagram>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Understanding /30 Subnets</h2>
+            <p className="text-gray-300 mb-4">
+              The subnet mask <code>255.255.255.252</code> (also written as <code>/30</code>) gives you a tiny network:
+            </p>
+
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 my-8">
+              <h4 className="text-white font-semibold mb-4">Example: 35.72.15.0/30</h4>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="bg-gray-900 p-4 rounded">
+                  <p className="text-gray-400 mb-2">Network Address:</p>
+                  <code className="text-red-400">35.72.15.0</code>
+                  <p className="text-gray-500 text-xs mt-1">Can't use — identifies the network</p>
+                </div>
+                <div className="bg-gray-900 p-4 rounded">
+                  <p className="text-gray-400 mb-2">First Usable:</p>
+                  <code className="text-green-400">35.72.15.1</code>
+                  <p className="text-gray-500 text-xs mt-1">Device 1 uses this</p>
+                </div>
+                <div className="bg-gray-900 p-4 rounded">
+                  <p className="text-gray-400 mb-2">Second Usable:</p>
+                  <code className="text-green-400">35.72.15.2</code>
+                  <p className="text-gray-500 text-xs mt-1">Device 2 uses this</p>
+                </div>
+                <div className="bg-gray-900 p-4 rounded">
+                  <p className="text-gray-400 mb-2">Broadcast Address:</p>
+                  <code className="text-red-400">35.72.15.3</code>
+                  <p className="text-gray-500 text-xs mt-1">Can't use — broadcasts to all</p>
+                </div>
+              </div>
+              <p className="text-gray-300 mt-6 text-center">
+                <strong className="text-white">4 addresses total, but only 2 are usable!</strong>
+              </p>
+            </div>
+
+            <InfoBox variant="info">
+              <h4 className="text-blue-300 font-semibold mb-3">🏠 Phone Line Analogy</h4>
+              <p className="text-gray-300 mb-3">
+                Think of a /30 subnet like a direct phone line between two offices:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li><strong className="text-white">/30 subnet:</strong> Private line between two offices (just 2 extensions)</li>
+                <li><strong className="text-white">/24 subnet:</strong> Company phone system (254 extensions)</li>
+              </ul>
+              <p className="text-gray-300 mt-3">
+                You don't need 254 extensions for a cable connecting two devices!
+              </p>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Common /30 Patterns</h2>
+            <p className="text-gray-300 mb-4">
+              When you see these IP pairs in a scenario, they're point-to-point links:
+            </p>
+
+            <div className="bg-gray-800 rounded-lg p-6 my-8 space-y-4">
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div className="text-gray-400">Link 1:</div>
+                <code className="text-blue-400">35.72.15.1</code>
+                <code className="text-blue-400">35.72.15.2</code>
+              </div>
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div className="text-gray-400">Link 2:</div>
+                <code className="text-blue-400">35.72.15.5</code>
+                <code className="text-blue-400">35.72.15.6</code>
+              </div>
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div className="text-gray-400">Link 3:</div>
+                <code className="text-blue-400">35.72.15.9</code>
+                <code className="text-blue-400">35.72.15.10</code>
+              </div>
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div className="text-gray-400">Link 4:</div>
+                <code className="text-blue-400">35.72.15.13</code>
+                <code className="text-blue-400">35.72.15.14</code>
+              </div>
+              <p className="text-gray-400 mt-4 text-sm">
+                Notice the pattern: .1-.2, .5-.6, .9-.10, .13-.14, .17-.18...
+              </p>
+            </div>
+
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-2">🏆 CyberPatriot Tip</p>
+              <p className="text-gray-300">
+                When you see addresses like <code>35.72.15.2/30</code> and <code>35.72.15.6/30</code> on the same device, 
+                these are likely connections to different routers! Each /30 is a separate point-to-point link.
+              </p>
+            </InfoBox>
+
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
@@ -1860,6 +2270,62 @@ g1/0/2 = Routed port (connects to router/internet)`}
                   <li>After "no switchport", you'll see: "Interface will be in routed mode"</li>
                 </ul>
               </ProTip>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Task 2: Multiple Routed Ports
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              In a real scenario (like CyberPatriot!), you'll configure multiple routed ports. Practice here:
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>hostname CorporateDistributionSwitch1</code></li>
+              <li><code>interface g1/0/1</code> — First uplink</li>
+              <li><code>no switchport</code></li>
+              <li><code>ip address 35.72.15.2 255.255.255.252</code> — /30 subnet</li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface g1/0/2</code> — Second uplink</li>
+              <li><code>no switchport</code></li>
+              <li><code>ip address 35.72.15.6 255.255.255.252</code> — Different /30 subnet</li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface g1/0/3</code> — Third uplink</li>
+              <li><code>no switchport</code></li>
+              <li><code>ip address 35.72.15.17 255.255.255.252</code> — Another /30 subnet</li>
+              <li><code>no shutdown</code></li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-gray-300 mb-2">Type: <code>show ip interface brief</code></p>
+              <p className="text-gray-300">You should see all three interfaces with their IPs and status "up":</p>
+              <div className="bg-gray-800 rounded-lg p-3 mt-2 font-mono text-sm">
+                GigabitEthernet1/0/1 &nbsp;&nbsp; 35.72.15.2 &nbsp;&nbsp;&nbsp; up &nbsp;&nbsp; up<br />
+                GigabitEthernet1/0/2 &nbsp;&nbsp; 35.72.15.6 &nbsp;&nbsp;&nbsp; up &nbsp;&nbsp; up<br />
+                GigabitEthernet1/0/3 &nbsp;&nbsp; 35.72.15.17 &nbsp;&nbsp; up &nbsp;&nbsp; up
+              </div>
+            </div>
+
+            <InfoBox variant="real-world">
+              <h4 className="text-blue-300 font-semibold mb-3">🌍 What Did We Just Build?</h4>
+              <p className="text-gray-300 mb-3">
+                You just configured a distribution switch with 3 uplinks to other routers/switches:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li><strong className="text-white">g1/0/1 (35.72.15.2/30):</strong> Connects to another switch at 35.72.15.1</li>
+                <li><strong className="text-white">g1/0/2 (35.72.15.6/30):</strong> Connects to another switch at 35.72.15.5</li>
+                <li><strong className="text-white">g1/0/3 (35.72.15.17/30):</strong> Connects to another switch at 35.72.15.18</li>
+              </ul>
+              <p className="text-gray-300 mt-3">
+                This is exactly how real enterprise networks are built!
+              </p>
             </InfoBox>
           </LessonSection>
 
@@ -2086,9 +2552,9 @@ Traffic flows: A → C → B`}
             </InfoBox>
 
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
-              <span className="text-4xl">👉</span> Your Task
+              <span className="text-4xl">👉</span> Task 1: Basic OSPF
             </h3>
-            <p className="text-gray-300 mb-8 text-lg">Configure OSPF to advertise a network:</p>
+            <p className="text-gray-300 mb-8 text-lg">Configure OSPF to advertise a single network:</p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code></li>
               <li><code>configure terminal</code></li>
@@ -2109,6 +2575,95 @@ Traffic flows: A → C → B`}
                   <li><strong className="text-white">area 0</strong> = Put this network in area 0</li>
                 </ul>
               </ProTip>
+            </InfoBox>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">OSPF on ALL Layer 3 Interfaces</h2>
+            <p className="text-gray-300 mb-6">
+              In real networks (and CyberPatriot!), you often need OSPF on <strong className="text-white">ALL</strong> your 
+              Layer 3 interfaces — not just one. This means adding a <code>network</code> command for each interface's IP!
+            </p>
+
+            <Diagram title="Layer 3 Switch with Multiple OSPF Networks">
+              {`┌─────────────────────────────────────────────────────┐
+│         CorporateDistributionSwitch1                │
+│                                                     │
+│  g1/0/1: 35.72.15.2/30  ←── network statement needed│
+│  g1/0/2: 35.72.15.6/30  ←── network statement needed│
+│  g1/0/3: 35.72.15.17/30 ←── network statement needed│
+│                                                     │
+│  VLAN 1:   172.16.16.1/24  ←── network statement needed│
+│  VLAN 100: 35.72.10.1/24   ←── network statement needed│
+│  VLAN 200: 33.2.169.1/24   ←── network statement needed│
+│                                                     │
+│  Each IP needs to be advertised in OSPF!           │
+└─────────────────────────────────────────────────────┘
+
+router ospf 1
+ network 35.72.15.2 0.0.0.0 area 0
+ network 35.72.15.6 0.0.0.0 area 0
+ network 35.72.15.17 0.0.0.0 area 0
+ network 172.16.16.1 0.0.0.0 area 0
+ network 35.72.10.1 0.0.0.0 area 0
+ network 33.2.169.1 0.0.0.0 area 0`}
+            </Diagram>
+
+            <InfoBox variant="info">
+              <h4 className="text-blue-300 font-semibold mb-3">🏠 Mailbox Analogy</h4>
+              <p className="text-gray-300 mb-3">
+                Think of OSPF like registering your addresses with the post office:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>Each <code>network</code> command is like saying: "Hey, I'm responsible for this address!"</li>
+                <li>Other routers learn: "To reach 35.72.10.0, send traffic to this switch!"</li>
+                <li>If you forget to add a network, other routers won't know how to reach it!</li>
+              </ul>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Task 2: OSPF on ALL Interfaces
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              Configure OSPF for a Layer 3 switch with multiple interfaces (like in a real scenario!):
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>router ospf 1</code> — Enter OSPF configuration</li>
+              <li><code>network 35.72.15.2 0.0.0.0 area 0</code> — Gigabit 1/0/1</li>
+              <li><code>network 35.72.15.6 0.0.0.0 area 0</code> — Gigabit 1/0/2</li>
+              <li><code>network 35.72.15.17 0.0.0.0 area 0</code> — Gigabit 1/0/3</li>
+              <li><code>network 172.16.16.1 0.0.0.0 area 0</code> — VLAN 1 (management)</li>
+              <li><code>network 35.72.10.1 0.0.0.0 area 0</code> — VLAN 100 (students)</li>
+              <li><code>network 33.2.169.1 0.0.0.0 area 0</code> — VLAN 200 (teachers)</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
+              <p className="text-gray-300 mb-2">Type: <code>show running-config</code></p>
+              <p className="text-gray-300">You should see under <code>router ospf 1</code>:</p>
+              <div className="bg-gray-800 rounded-lg p-3 mt-2 font-mono text-sm">
+                router ospf 1<br />
+                &nbsp;<span className="text-yellow-300">network 35.72.15.2 0.0.0.0 area 0</span><br />
+                &nbsp;<span className="text-yellow-300">network 35.72.15.6 0.0.0.0 area 0</span><br />
+                &nbsp;<span className="text-yellow-300">network 35.72.15.17 0.0.0.0 area 0</span><br />
+                &nbsp;<span className="text-yellow-300">network 172.16.16.1 0.0.0.0 area 0</span><br />
+                &nbsp;<span className="text-yellow-300">network 35.72.10.1 0.0.0.0 area 0</span><br />
+                &nbsp;<span className="text-yellow-300">network 33.2.169.1 0.0.0.0 area 0</span><br />
+                !
+              </div>
+            </div>
+
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-2">🏆 CyberPatriot Tip</p>
+              <p className="text-gray-300">
+                When you see "Configure OSPF for <strong>all</strong> Layer 3 interfaces" — you need to add a 
+                <code>network</code> command for <strong>every single IP address</strong> on the device. 
+                Check <code>show ip interface brief</code> to see all your IPs!
+              </p>
             </InfoBox>
           </LessonSection>
 
@@ -2221,6 +2776,180 @@ ip ospf cost 30
 
             <Terminal grammar={grammar} />
           </LessonSection>
+
+          {/* CAPSTONE: FULL SCENARIO */}
+          <LessonSection title="Capstone: Full Network Configuration">
+            <p className="text-xl text-gray-200 my-6">
+              Time to put it ALL together! This exercise simulates a real CyberPatriot scenario. 
+              You'll configure a complete Layer 3 distribution switch from scratch.
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">The Scenario</h2>
+            <p className="text-gray-300 mb-6">
+              You've been hired to configure <strong className="text-white">CorporateDistributionSwitch1</strong> for a company network. 
+              Here are your requirements:
+            </p>
+
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 my-8">
+              <h4 className="text-white font-semibold mb-4">📋 Configuration Requirements</h4>
+              
+              <div className="space-y-4">
+                <div className="border-b border-gray-700 pb-4">
+                  <h5 className="text-blue-300 font-semibold mb-2">Device Setup:</h5>
+                  <ul className="ml-6 space-y-1 text-gray-300 list-disc">
+                    <li>Hostname: <code>CorporateDistributionSwitch1</code></li>
+                  </ul>
+                </div>
+
+                <div className="border-b border-gray-700 pb-4">
+                  <h5 className="text-blue-300 font-semibold mb-2">Layer 3 Interfaces (Routed Ports):</h5>
+                  <ul className="ml-6 space-y-1 text-gray-300 list-disc">
+                    <li>Gigabit 1/0/1: <code>35.72.15.2/30</code></li>
+                    <li>Gigabit 1/0/2: <code>35.72.15.6/30</code></li>
+                    <li>Gigabit 1/0/3: <code>35.72.15.17/30</code></li>
+                  </ul>
+                </div>
+
+                <div className="border-b border-gray-700 pb-4">
+                  <h5 className="text-blue-300 font-semibold mb-2">VLANs & SVIs:</h5>
+                  <ul className="ml-6 space-y-1 text-gray-300 list-disc">
+                    <li>Create VLANs 100 and 200</li>
+                    <li>VLAN 1 SVI: <code>172.16.16.1/24</code></li>
+                    <li>VLAN 100 SVI: <code>35.72.10.1/24</code></li>
+                    <li>VLAN 200 SVI: <code>33.2.169.1/24</code></li>
+                  </ul>
+                </div>
+
+                <div className="border-b border-gray-700 pb-4">
+                  <h5 className="text-blue-300 font-semibold mb-2">Trunk Port:</h5>
+                  <ul className="ml-6 space-y-1 text-gray-300 list-disc">
+                    <li>Gigabit 1/0/4 should be a trunk allowing only VLANs 1, 100, and 200</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="text-blue-300 font-semibold mb-2">OSPF Routing:</h5>
+                  <ul className="ml-6 space-y-1 text-gray-300 list-disc">
+                    <li>Configure OSPF for ALL Layer 3 interfaces</li>
+                    <li>Use cost 10 on g1/0/1 (primary path)</li>
+                    <li>Use cost 30 on g1/0/2 (backup path)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-2">🏆 Competition Tip</p>
+              <p className="text-gray-300">
+                This is EXACTLY the type of scenario you'll see in CyberPatriot! Take your time, 
+                follow the requirements carefully, and verify each step with <code>show</code> commands.
+              </p>
+            </InfoBox>
+
+            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
+              <span className="text-4xl">👉</span> Complete Configuration
+            </h3>
+            <p className="text-gray-300 mb-8 text-lg">
+              Follow these steps to complete the full configuration. This is a long one — take it step by step!
+            </p>
+            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
+              <li className="font-semibold text-blue-300">— Basic Setup —</li>
+              <li><code>enable</code></li>
+              <li><code>configure terminal</code></li>
+              <li><code>hostname CorporateDistributionSwitch1</code></li>
+              <li><code>ip routing</code> — Enable routing!</li>
+              
+              <li className="font-semibold text-blue-300 mt-6">— Create VLANs —</li>
+              <li><code>vlan 100</code></li>
+              <li><code>exit</code></li>
+              <li><code>vlan 200</code></li>
+              <li><code>exit</code></li>
+
+              <li className="font-semibold text-blue-300 mt-6">— Configure SVIs —</li>
+              <li><code>interface vlan 1</code></li>
+              <li><code>ip address 172.16.16.1 255.255.255.0</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface vlan 100</code></li>
+              <li><code>ip address 35.72.10.1 255.255.255.0</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+              <li><code>interface vlan 200</code></li>
+              <li><code>ip address 33.2.169.1 255.255.255.0</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+
+              <li className="font-semibold text-blue-300 mt-6">— Configure Routed Ports —</li>
+              <li><code>interface g1/0/1</code></li>
+              <li><code>no switchport</code></li>
+              <li><code>ip address 35.72.15.2 255.255.255.252</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>ip ospf cost 10</code> — Primary path!</li>
+              <li><code>exit</code></li>
+              <li><code>interface g1/0/2</code></li>
+              <li><code>no switchport</code></li>
+              <li><code>ip address 35.72.15.6 255.255.255.252</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>ip ospf cost 30</code> — Backup path!</li>
+              <li><code>exit</code></li>
+              <li><code>interface g1/0/3</code></li>
+              <li><code>no switchport</code></li>
+              <li><code>ip address 35.72.15.17 255.255.255.252</code></li>
+              <li><code>no shutdown</code></li>
+              <li><code>exit</code></li>
+
+              <li className="font-semibold text-blue-300 mt-6">— Configure Trunk Port —</li>
+              <li><code>interface g1/0/4</code></li>
+              <li><code>switchport mode trunk</code></li>
+              <li><code>switchport trunk allowed vlan 1,100,200</code></li>
+              <li><code>exit</code></li>
+
+              <li className="font-semibold text-blue-300 mt-6">— Configure OSPF —</li>
+              <li><code>router ospf 1</code></li>
+              <li><code>network 35.72.15.2 0.0.0.0 area 0</code></li>
+              <li><code>network 35.72.15.6 0.0.0.0 area 0</code></li>
+              <li><code>network 35.72.15.17 0.0.0.0 area 0</code></li>
+              <li><code>network 172.16.16.1 0.0.0.0 area 0</code></li>
+              <li><code>network 35.72.10.1 0.0.0.0 area 0</code></li>
+              <li><code>network 33.2.169.1 0.0.0.0 area 0</code></li>
+              <li><code>exit</code></li>
+
+              <li className="font-semibold text-blue-300 mt-6">— Save! —</li>
+              <li><code>end</code></li>
+              <li><code>write memory</code></li>
+            </ol>
+
+            <Terminal grammar={grammar} />
+
+            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
+              <p className="text-green-300 font-semibold mb-3">✓ Verification Checklist:</p>
+              <ul className="ml-6 space-y-2 text-gray-300">
+                <li>☐ <code>show vlan brief</code> — See VLANs 100 and 200</li>
+                <li>☐ <code>show ip interface brief</code> — All interfaces up with correct IPs</li>
+                <li>☐ <code>show running-config</code> — OSPF has 6 network statements</li>
+                <li>☐ <code>show running-config</code> — g1/0/1 has <code>ip ospf cost 10</code></li>
+                <li>☐ <code>show running-config</code> — g1/0/2 has <code>ip ospf cost 30</code></li>
+                <li>☐ <code>show running-config</code> — g1/0/4 shows trunk with allowed VLANs 1,100,200</li>
+              </ul>
+            </div>
+
+            <InfoBox variant="real-world">
+              <h4 className="text-blue-300 font-semibold mb-3">🎓 What You Just Accomplished</h4>
+              <p className="text-gray-300 mb-3">
+                Congratulations! You just configured a complete corporate distribution switch with:
+              </p>
+              <ul className="ml-6 space-y-2 text-gray-300 list-disc">
+                <li><strong className="text-white">3 routed uplinks</strong> using /30 subnets for router connections</li>
+                <li><strong className="text-white">3 SVIs</strong> acting as default gateways for each VLAN</li>
+                <li><strong className="text-white">OSPF on all interfaces</strong> for dynamic routing</li>
+                <li><strong className="text-white">OSPF costs</strong> to control primary vs backup paths</li>
+                <li><strong className="text-white">Restricted trunk</strong> for security</li>
+              </ul>
+              <p className="text-gray-300 mt-4">
+                This is EXACTLY what network engineers do in the real world — and in CyberPatriot competitions!
+              </p>
+            </InfoBox>
+          </LessonSection>
           </LessonCounterProvider>
 
           {/* COMPLETION SECTION */}
@@ -2246,11 +2975,13 @@ ip ospf cost 30
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Network hardware basics</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Management access configuration</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Creating and organizing VLANs</div>
-              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Trunk ports</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ SVI (VLAN interfaces) for routing</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Trunk ports (ALL vs restricted VLANs)</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ SSH secure access</div>
-              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Layer 3 switching</div>
-              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Static routing</div>
-              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ OSPF dynamic routing</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Layer 3 switching & routed ports</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Point-to-point /30 subnets</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ Static routing with floating backups</div>
+              <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ OSPF on ALL Layer 3 interfaces</div>
               <div className="bg-gray-800 rounded-lg p-4 text-gray-300">✅ OSPF cost manipulation</div>
             </div>
           </div>
