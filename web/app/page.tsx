@@ -1184,44 +1184,6 @@ Switch#show running-config
               a system message appears. This keeps your typing organized and readable!
             </p>
 
-            <div className="bg-gray-900 border border-gray-700 rounded-lg p-8 my-8">
-              <h4 className="text-blue-300 font-semibold mb-6 text-center">How to Configure logging synchronous</h4>
-              
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="bg-blue-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">1</div>
-                  <div>
-                    <p className="text-white font-mono mb-2">Switch#configure terminal</p>
-                    <p className="text-gray-400 text-sm">Enter global configuration mode</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="bg-blue-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">2</div>
-                  <div>
-                    <p className="text-white font-mono mb-2">Switch(config)#line console 0</p>
-                    <p className="text-gray-400 text-sm">Enter console line configuration mode</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="bg-blue-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">3</div>
-                  <div>
-                    <p className="text-white font-mono mb-2">Switch(config-line)#logging synchronous</p>
-                    <p className="text-gray-400 text-sm">Enable synchronized logging</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="bg-blue-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">4</div>
-                  <div>
-                    <p className="text-white font-mono mb-2">Switch(config-line)#end</p>
-                    <p className="text-gray-400 text-sm">Return to privileged mode (and see the system message!)</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <InfoBox variant="info">
               <ProTip>
                 <p className="text-gray-300 mb-2">
