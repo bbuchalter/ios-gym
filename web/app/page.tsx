@@ -2455,6 +2455,28 @@ All others are BLOCKED!`}
               <li><code>write memory</code></li>
             </ol>
 
+            <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-6 my-8">
+              <p className="text-blue-300 font-semibold mb-3 flex items-center gap-2">
+                <span className="text-xl">💡</span> Important: VLANs Don't Need to Exist Yet!
+              </p>
+              <div className="text-gray-300 space-y-3">
+                <p>
+                  Notice we're restricting VLANs 100 and 200, but we haven't created them yet. 
+                  This is <strong className="text-blue-300">perfectly normal in Cisco IOS</strong>!
+                </p>
+                <ul className="ml-6 space-y-2 list-disc">
+                  <li><strong>IOS accepts the command</strong> — No errors even if the VLANs don't exist</li>
+                  <li><strong>Configuration is saved</strong> — The allowed VLAN list is stored in running-config</li>
+                  <li><strong>No traffic flows yet</strong> — Until VLANs 100 and 200 are created, only VLAN 1 works</li>
+                  <li><strong>Automatic activation</strong> — Once you create <code>vlan 100</code>, it immediately starts working on the trunk</li>
+                </ul>
+                <p className="text-sm text-blue-200 mt-4">
+                  This allows a common workflow: configure trunk ports first, then create VLANs later. 
+                  Very handy when planning your network infrastructure!
+                </p>
+              </div>
+            </div>
+
             <Terminal grammar={grammar} />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
