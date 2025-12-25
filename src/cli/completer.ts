@@ -62,11 +62,11 @@ export class TabCompleter {
         return { type: "list", options: candidateArray };
       }
       
-      // If we're completing a partial token, replace it
+      // If we're completing a partial token, replace it and add a space
       if (!isTrailingSpace && lastToken) {
-        return { type: "complete", value: completion.substring(lastToken.length) };
+        return { type: "complete", value: completion.substring(lastToken.length) + " " };
       } else {
-        return { type: "complete", value: completion };
+        return { type: "complete", value: completion + " " };
       }
     }
     
