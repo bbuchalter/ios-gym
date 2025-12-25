@@ -972,28 +972,85 @@ Router1(config)# no enable secret`}
             <p className="text-gray-300 mb-6">
               When you configure specific parts of a device (like interfaces, routing protocols, or VTY lines),
               you enter a <strong className="text-white">sub-configuration mode</strong>.
-              This creates multiple layers you need to navigate through.
+              This creates multiple layers you need to navigate through — like nested folders on your computer!
             </p>
 
-            <Diagram title="Configuration Layers">
-              {`Switch#                    ← Privileged mode
-   ↓ (configure terminal)
-Switch(config)#            ← Global config mode
-   ↓ (interface vlan 1)
-Switch(config-if)#         ← Interface config mode (deeper!)
-   ↓ (exit)
-Switch(config)#            ← Back one level
-   ↓ (exit)
-Switch#                    ← Back to privileged mode`}
-            </Diagram>
+            <div className="bg-gray-900 border border-gray-700 rounded-lg p-8 my-8">
+              <h4 className="text-blue-300 font-semibold mb-6 text-center">Configuration Layers (Think: Nested Boxes)</h4>
+              
+              {/* Layer 1: Privileged Mode */}
+              <div className="border-2 border-blue-500 rounded-lg p-6 bg-blue-950">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-3xl">📦</span>
+                  <div>
+                    <p className="text-blue-300 font-mono text-lg">Switch#</p>
+                    <p className="text-gray-400 text-sm">Layer 1: Privileged Mode</p>
+                  </div>
+                </div>
+                
+                <div className="ml-8 text-gray-400 mb-4">
+                  <code>configure terminal</code> ↓
+                </div>
+
+                {/* Layer 2: Global Config Mode */}
+                <div className="border-2 border-green-500 rounded-lg p-6 bg-green-950 ml-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-3xl">📦</span>
+                    <div>
+                      <p className="text-green-300 font-mono text-lg">Switch(config)#</p>
+                      <p className="text-gray-400 text-sm">Layer 2: Global Configuration Mode</p>
+                    </div>
+                  </div>
+                  
+                  <div className="ml-8 text-gray-400 mb-4">
+                    <code>interface vlan 1</code> ↓
+                  </div>
+
+                  {/* Layer 3: Sub-Config Mode */}
+                  <div className="border-2 border-purple-500 rounded-lg p-6 bg-purple-950 ml-8">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">📦</span>
+                      <div>
+                        <p className="text-purple-300 font-mono text-lg">Switch(config-if)#</p>
+                        <p className="text-gray-400 text-sm">Layer 3: Interface Configuration Mode (Deepest!)</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="ml-8 text-gray-400 mt-4">
+                    ↑ <code>exit</code> (go back one level)
+                  </div>
+                </div>
+
+                <div className="ml-8 text-gray-400 mt-4">
+                  ↑ <code>exit</code> (go back one level)
+                </div>
+              </div>
+
+              <div className="mt-6 text-center text-gray-300">
+                <span className="text-yellow-300 font-semibold">💡 Pro Tip:</span> Use <code>end</code> from anywhere to jump straight to Layer 1!
+              </div>
+            </div>
 
             <InfoBox variant="info">
-              <p className="text-gray-300 mb-2">
-                Notice the prompt changes to <code>(config-if)#</code> when you're in interface configuration mode.
+              <p className="text-gray-300 mb-3">
+                <strong className="text-white">Think of it like folders on your computer:</strong>
               </p>
-              <p className="text-gray-300">
-                The prompt ALWAYS tells you exactly where you are!
+              <Diagram>
+                {`💻 Computer (Privileged Mode)
+   └─ 📁 Settings (Global Config)
+       └─ 📁 Network Adapter (Interface Config)
+           └─ 🔧 IP Address Settings (You configure here!)`}
+              </Diagram>
+              <p className="text-gray-300 mt-4">
+                The prompt <strong className="text-white">ALWAYS</strong> tells you exactly which "folder" (layer) you're in:
               </p>
+              <ul className="ml-6 mt-2 space-y-1 text-gray-300">
+                <li><code>#</code> = Top level (Privileged)</li>
+                <li><code>(config)#</code> = Global settings</li>
+                <li><code>(config-if)#</code> = Interface settings</li>
+                <li><code>(config-line)#</code> = Line settings (VTY, console)</li>
+              </ul>
             </InfoBox>
 
             <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Exit vs End: The Important Difference</h2>
