@@ -247,13 +247,59 @@ export default function LearnPage() {
               </ProTip>
             </InfoBox>
 
+            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">What If TAB Doesn't Do Anything?</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              <kbd>TAB</kbd> is also smart about <strong>what mode you're in</strong>. If you try to use a command that's not available in your current mode, <kbd>TAB</kbd> won't complete it!
+            </p>
+
+            <div className="bg-gray-800 p-6 rounded-lg border border-yellow-500/50 my-8">
+              <h4 className="text-yellow-400 font-semibold mb-4 text-lg flex items-center gap-2">
+                <span>⚠️</span> TAB as Your Safety Net
+              </h4>
+              <p className="text-gray-300 mb-4">
+                If <kbd>TAB</kbd> doesn't complete your command, it's usually because:
+              </p>
+              <ul className="ml-6 space-y-3 text-gray-300 list-disc">
+                <li><strong>You're in the wrong mode</strong> — The command isn't available where you are</li>
+                <li><strong>You mistyped</strong> — The command doesn't exist or has a typo</li>
+                <li><strong>More input is needed</strong> — The command needs additional parameters</li>
+              </ul>
+            </div>
+
+            <div className="bg-gray-900 p-6 rounded-lg border border-gray-700 my-8">
+              <h4 className="text-white font-semibold mb-4 text-lg">Example: Wrong Mode</h4>
+              <p className="text-gray-400 mb-4">Let's say you forgot to type <code>enable</code> first:</p>
+              <div className="bg-black p-4 rounded font-mono">
+                <p className="text-green-400">Switch&gt; conf<span className="text-gray-500">&lt;TAB&gt;</span></p>
+                <p className="text-gray-500 mt-2 italic">...nothing happens...</p>
+              </div>
+              <p className="text-gray-300 mt-4">
+                <kbd>TAB</kbd> won't complete <code>configure</code> because that command only works in <strong>privileged mode</strong> (Switch#), not user mode (Switch&gt;). This is <kbd>TAB</kbd> protecting you from making a mistake!
+              </p>
+              
+              <div className="bg-black p-4 rounded font-mono mt-6">
+                <p className="text-gray-400 mb-2">✅ The correct sequence:</p>
+                <p className="text-green-400">Switch&gt; enable</p>
+                <p className="text-green-400 mt-1">Switch# conf<span className="text-gray-500">&lt;TAB&gt;</span></p>
+                <p className="text-blue-400 mt-1">Switch# configure <span className="text-gray-500">← Now it works!</span></p>
+              </div>
+            </div>
+
+            <InfoBox variant="warning">
+              <div className="text-gray-300">
+                <p className="font-semibold text-yellow-400 mb-2">💡 Pro Tip</p>
+                <p>Use <kbd>TAB</kbd> as you type to <strong>validate</strong> you're using the right command in the right mode. If it doesn't complete, stop and check your mode prompt!</p>
+              </div>
+            </InfoBox>
+
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Try It Now
             </h3>
             <p className="text-gray-300 mb-8 text-lg">Practice using TAB completion in the terminal below:</p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
-              <li>Type <code>enable</code> to enter privileged mode</li>
-              <li>Type <code>conf</code> then press <kbd>TAB</kbd> — watch it auto-complete to <code>configure</code></li>
+              <li className="text-yellow-400"><strong>First, try the wrong mode:</strong> Type <code>conf</code> then press <kbd>TAB</kbd> — notice nothing happens because you haven't enabled yet! 🚫</li>
+              <li>Type <code>enable</code> to enter privileged mode (you should see <code>Switch#</code>)</li>
+              <li><strong>Now try again:</strong> Type <code>conf</code> then press <kbd>TAB</kbd> — watch it auto-complete to <code>configure</code> ✅</li>
               <li>Type <code> t</code> (space + t) then press <kbd>TAB</kbd> — it should complete to <code>terminal</code></li>
               <li>Press Enter to enter configuration mode</li>
             </ol>
@@ -265,6 +311,7 @@ export default function LearnPage() {
                 <ul className="ml-6 space-y-2 text-gray-300">
                   <li>Use <kbd>TAB</kbd> liberally — it's not cheating, it's smart!</li>
                   <li>TAB completion works at any mode level — user, privileged, or configuration</li>
+                  <li>If <kbd>TAB</kbd> doesn't work, it's telling you something! Check your mode and command.</li>
                 </ul>
               </ProTip>
             </InfoBox>
