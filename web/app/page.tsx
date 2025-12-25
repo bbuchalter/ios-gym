@@ -1657,29 +1657,33 @@ Switch#show running-config
               </p>
             </InfoBox>
 
-            <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
-              <span className="text-4xl">👉</span> Try It Now
-            </h3>
-            <p className="text-gray-300 mb-8 text-lg">
-              Let's see what IP addresses look like on a real device! Don't worry if you don't understand everything yet.
+            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">Checking IP Addresses on Devices</h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              When you want to see what IP addresses are configured on a device, you'll use the <code>show ip interface brief</code> command.
+              This command displays a quick summary of all interfaces and their IP addresses.
             </p>
-            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
-              <li><code>enable</code> — Enter privileged mode</li>
-              <li><code>show ip interface brief</code> — View IP addresses on interfaces (there won't be any configured yet!)</li>
-              <li>Look at the output — you'll see interface names and their status</li>
-            </ol>
 
-            <Terminal grammar={grammar} />
+            <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 my-8">
+              <p className="text-gray-400 mb-4 font-semibold">Example output:</p>
+              <div className="bg-black p-4 rounded font-mono text-sm">
+                <p className="text-gray-300">Interface              IP-Address      OK? Method Status                Protocol</p>
+                <p className="text-gray-300">Vlan1                  192.168.1.100   YES manual up                    up</p>
+                <p className="text-gray-300">GigabitEthernet0/1     10.0.0.1        YES manual up                    up</p>
+                <p className="text-gray-300">FastEthernet0/1        unassigned      YES manual down                  down</p>
+              </div>
+              <p className="text-gray-400 mt-4 italic">
+                This shows you at a glance which interfaces have IPs and which are up or down!
+              </p>
+            </div>
 
             <InfoBox variant="info">
               <ProTip>
                 <p className="text-gray-300 mb-3">
-                  The output might look confusing now, but you're seeing the same format you'll use later: 
-                  four numbers separated by dots! Notice how interfaces can have IP addresses assigned to them.
-                </p>
-                <p className="text-gray-300">
                   <strong className="text-white">Important:</strong> <code>show ip interface brief</code> is THE command to quickly check interface status and IP addresses. 
                   It's much faster than <code>show running-config</code> when you just want to see which interfaces are up and what IPs they have!
+                </p>
+                <p className="text-gray-300">
+                  You'll use this command constantly to verify your IP address configurations in the upcoming lessons.
                 </p>
               </ProTip>
             </InfoBox>
@@ -1687,7 +1691,8 @@ Switch#show running-config
             <div className="bg-blue-900 border border-blue-600 rounded-lg p-6 my-8">
               <p className="text-blue-200 font-semibold mb-3">💡 Coming Up Next</p>
               <p className="text-gray-300">
-                Before we configure IP addresses, let's learn about the physical parts of a network switch and how to connect to it.
+                Now that you understand what IP addresses are, let's learn about the physical parts of a network switch.
+                Then you'll be ready to configure your first IP address!
               </p>
             </div>
           </LessonSection>
@@ -1830,27 +1835,33 @@ Switch#show running-config
             </div>
 
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
-              <span className="text-4xl">👉</span> Explore Your Switch
+              <span className="text-4xl">👉</span> See the Interfaces on Your Switch
             </h3>
             <p className="text-gray-300 mb-8 text-lg">
-              Let's look at the interfaces on a switch! These commands show you information about the network interfaces.
+              Let's look at what interfaces exist on your switch! The <code>show ip interface brief</code> command 
+              is perfect for this — even though you haven't configured any IPs yet, you can see all the interface names and their status.
             </p>
             <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
               <li><code>enable</code> — Enter privileged mode</li>
-              <li><code>show ip interface brief</code> — View IP addresses on interfaces (there won't be any configured yet!)</li>
-              <li>Look at the output — you'll see interface names and their status</li>
+              <li><code>show ip interface brief</code> — View all interfaces on the switch</li>
+              <li><strong>Look carefully at the interface names</strong> — FastEthernet0/1 through 0/24, GigabitEthernet0/1 and 0/2, and Vlan1</li>
+              <li><strong>Notice the Status column</strong> — Most interfaces show "down" (they're not enabled yet)</li>
+              <li><strong>See the IP-Address column</strong> — Everything says "unassigned" because you haven't configured IPs yet!</li>
             </ol>
 
             <Terminal grammar={grammar} />
 
             <InfoBox variant="info">
               <ProTip>
-                <p className="text-gray-300 mb-2">
-                  Notice the interface names in the output! Each interface has a name that indicates what it is.
-                  For example, <code>Vlan1</code> is a virtual management interface, while physical ports would be named like <code>FastEthernet0/1</code> or <code>GigabitEthernet1/0/1</code>.
+                <p className="text-gray-300 mb-3">
+                  Notice the interface names in the output! Each interface has a name that indicates what type it is.
+                  For example, <code>FastEthernet0/1</code> is a physical port, <code>GigabitEthernet0/1</code> is a faster physical port,
+                  and <code>Vlan1</code> is a virtual management interface.
                 </p>
                 <p className="text-gray-300">
-                  The "Status" column shows if the interface is up or down, and "Protocol" shows if it's working properly.
+                  The "Status" column shows if the interface is enabled (up) or disabled (down). 
+                  The "Protocol" column shows if it's actually working. Right now everything is down because interfaces 
+                  are disabled by default on Cisco devices!
                 </p>
               </ProTip>
             </InfoBox>
