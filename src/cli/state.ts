@@ -203,6 +203,32 @@ export function normalizeInterfaceName(ifname: string): string {
 }
 
 /**
+ * Validate if an interface name is valid for the device model
+ */
+export function isValidInterface(state: DeviceState, ifname: string): boolean {
+  const normalized = normalizeInterfaceName(ifname);
+  
+  // Check if interface already exists
+  if (state.interfaces[normalized]) {
+    return true;
+  }
+  
+  // Device-specific validation for interfaces that could exist
+  if (state.deviceModel === '2960-switch') {
+    // 2960: fa0/1-24, g0/1-2, vlans
+    if (/^fa0\/(1[0-9]|2[0-4]|[1-9])$/.test(normalized)) return true;
+    if (/^g0\/[12]$/.test(normalized)) return true;
+    if (/^vlan\d+$/.test(normalized)) return true;
+  } else if (state.deviceModel === '1941-router') {
+    // 1941: g0/0-1, vlans (no FastEthernet on routers)
+    if (/^g0\/[01]$/.test(normalized)) return true;
+    if (/^vlan\d+$/.test(normalized)) return true;
+  }
+  
+  return false;
+}
+
+/**
  * Ensure interface exists in state
  */
 export function ensureInterface(state: DeviceState, ifname: string): void {

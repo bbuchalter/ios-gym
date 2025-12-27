@@ -194,10 +194,10 @@ describe("CLI Integration Tests", () => {
     test("should configure OSPF interface cost", () => {
       engine.executeCommand(session, "enable");
       engine.executeCommand(session, "configure terminal");
-      engine.executeCommand(session, "interface g0/0");
+      engine.executeCommand(session, "interface g0/1");
       engine.executeCommand(session, "ip ospf cost 10");
       
-      expect(session.deviceState.ospf.ifCosts["g0/0"]).toBe(10);
+      expect(session.deviceState.ospf.ifCosts["g0/1"]).toBe(10);
     });
   });
 

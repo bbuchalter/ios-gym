@@ -1,6 +1,6 @@
 import { ExecutionResult, ModeType } from "../../types";
 import { CLISession } from "../../cli-session";
-import { normalizeInterfaceName, ensureInterface } from "../state";
+import { normalizeInterfaceName, ensureInterface, isValidInterface } from "../state";
 
 /**
  * Handle interface configuration commands
@@ -13,7 +13,23 @@ export function handleIfEnter(
 ): ExecutionResult {
   const ifname = normalizeInterfaceName(args[action.if_from]);
   
-  // Ensure interface exists
+  // Validate interface exists for this device model
+  if (!isValidInterface(session.deviceState, ifname)) {
+    // Calculate error marker position:
+    // The Terminal component automatically adds spaces equal to prompt length
+    // for error markers, so we only need to account for the command text
+    const commandText = "interface ";
+    const spaces = " ".repeat(commandText.length);
+    
+    return { 
+      output: [
+        `${spaces}^`,
+        `% Invalid input detected at '^' marker.`
+      ] 
+    };
+  }
+  
+  // Ensure interface exists (will create if valid but not yet created)
   ensureInterface(session.deviceState, ifname);
   
   // Set current interface cursor
