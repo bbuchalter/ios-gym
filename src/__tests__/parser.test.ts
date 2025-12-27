@@ -7,7 +7,7 @@ describe("CommandParser", () => {
   let parser: CommandParser;
 
   beforeAll(() => {
-    const grammarPath = path.join(process.cwd(), "commands.yaml");
+    const grammarPath = path.join(process.cwd(), "commands-2960-switch.yaml");
     const grammar = loadGrammar(grammarPath);
     parser = new CommandParser(grammar);
   });

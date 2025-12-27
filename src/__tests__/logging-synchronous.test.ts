@@ -10,7 +10,7 @@ describe("Logging Synchronous Tests", () => {
   let session: CLISession;
 
   beforeEach(() => {
-    const grammarPath = path.join(process.cwd(), "commands.yaml");
+    const grammarPath = path.join(process.cwd(), "commands-2960-switch.yaml");
     grammar = loadGrammar(grammarPath);
     engine = new CLIEngine(grammar);
     session = new CLISession(grammar);

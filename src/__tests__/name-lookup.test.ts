@@ -10,7 +10,7 @@ describe("Name Lookup Behavior", () => {
   let session: CLISession;
 
   beforeAll(() => {
-    const grammarPath = path.join(process.cwd(), "commands.yaml");
+    const grammarPath = path.join(process.cwd(), "commands-2960-switch.yaml");
     grammar = loadGrammar(grammarPath);
   });
 

@@ -9,9 +9,10 @@ import {
 
 describe("Device State Management", () => {
   describe("createInitialState", () => {
-    test("should create initial state with default values", () => {
-      const state = createInitialState();
+    test("should create initial state with default values for 2960 switch", () => {
+      const state = createInitialState('2960-switch');
       
+      expect(state.deviceModel).toBe('2960-switch');
       expect(state.hostname).toBe("Switch");
       expect(state.enableSecret).toBeNull();
       
@@ -33,7 +34,7 @@ describe("Device State Management", () => {
 
   describe("cloneState", () => {
     test("should create deep copy of state", () => {
-      const state = createInitialState();
+      const state = createInitialState('2960-switch');
       state.hostname = "Router1";
       state.routes.push({
         dest: "0.0.0.0",
@@ -52,7 +53,7 @@ describe("Device State Management", () => {
 
   describe("getStatePath", () => {
     test("should get nested property value", () => {
-      const state = createInitialState();
+      const state = createInitialState('2960-switch');
       state.ssh.domainName = "cisco.com";
       
       expect(getStatePath(state, "hostname")).toBe("Switch");
@@ -61,7 +62,7 @@ describe("Device State Management", () => {
     });
 
     test("should return undefined for non-existent path", () => {
-      const state = createInitialState();
+      const state = createInitialState('2960-switch');
       
       expect(getStatePath(state, "nonexistent.path")).toBeUndefined();
     });
@@ -69,7 +70,7 @@ describe("Device State Management", () => {
 
   describe("setStatePath", () => {
     test("should set nested property value", () => {
-      const state = createInitialState();
+      const state = createInitialState('2960-switch');
       
       setStatePath(state, "hostname", "Router1");
       expect(state.hostname).toBe("Router1");
@@ -82,7 +83,7 @@ describe("Device State Management", () => {
     });
 
     test("should create intermediate objects if needed", () => {
-      const state = createInitialState();
+      const state = createInitialState('2960-switch');
       
       setStatePath(state, "ssh.vty.login", "local");
       expect(state.ssh.vty.login).toBe("local");
@@ -115,7 +116,7 @@ describe("Device State Management", () => {
 
   describe("ensureInterface", () => {
     test("should create interface if it doesn't exist", () => {
-      const state = createInitialState();
+      const state = createInitialState('2960-switch');
       
       // Use a non-standard interface that doesn't exist by default
       ensureInterface(state, "g1/0/1");
@@ -126,7 +127,7 @@ describe("Device State Management", () => {
     });
 
     test("should not overwrite existing interface", () => {
-      const state = createInitialState();
+      const state = createInitialState('2960-switch');
       
       // g0/1 already exists in initial state
       state.interfaces["g0/1"].adminUp = true;

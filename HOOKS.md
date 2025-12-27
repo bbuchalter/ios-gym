@@ -13,7 +13,9 @@ Runs automatically before every commit to validate:
 - ✅ All tests pass
 
 ### What it does:
-1. Checks that `commands.yaml` and `web/public/commands.json` are in sync
+1. Checks that grammar YAML files and their JSON counterparts are in sync:
+   - `commands-2960-switch.yaml` ↔ `web/public/commands-2960-switch.json`
+   - `commands-1941-router.yaml` ↔ `web/public/commands-1941-router.json`
 2. Validates TypeScript types with `tsc --noEmit` (type checking without compilation)
 3. Runs the test suite (`jest`)
 4. Blocks the commit if any check fails

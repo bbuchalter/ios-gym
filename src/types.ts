@@ -1,5 +1,8 @@
 // Shared TypeScript types for IOS CLI Trainer
 
+// Device model literal types for specific Cisco hardware
+export type DeviceModel = '2960-switch' | '1941-router';
+
 export enum ModeType {
   USER_EXEC = "USER_EXEC",
   PRIV_EXEC = "PRIV_EXEC",
@@ -12,6 +15,7 @@ export enum ModeType {
 }
 
 export interface DeviceState {
+  deviceModel: DeviceModel;
   hostname: string;
   enableSecret: string | null;
   interfaces: Record<string, InterfaceConfig>;
@@ -92,6 +96,7 @@ export interface LineConfig {
 export interface CommandGrammar {
   version: string;
   description: string;
+  deviceModel: DeviceModel;
   settings: GrammarSettings;
   modes: Record<ModeType, ModeConfig>;
   arg_types: Record<string, ArgTypeConfig>;

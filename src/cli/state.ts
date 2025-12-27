@@ -1,56 +1,16 @@
-import { DeviceState } from "../types";
+import { DeviceState, DeviceModel } from "../types";
 
 /**
- * Create initial device state matching the schema from commands.yaml
+ * Create initial device state for specific Cisco hardware models
+ * @param deviceModel - '2960-switch' for Catalyst 2960 or '1941-router' for Cisco 1941 ISR
  */
-export function createInitialState(): DeviceState {
-  // Create default interfaces like a real 2960 switch
+export function createInitialState(deviceModel: DeviceModel = '2960-switch'): DeviceState {
   const interfaces: DeviceState["interfaces"] = {};
   
-  // Add 24 FastEthernet interfaces (fa0/1 through fa0/24)
-  for (let i = 1; i <= 24; i++) {
-    interfaces[`fa0/${i}`] = {
-      adminUp: false,
-      l2mode: null,
-      accessVlan: null,
-      trunkAllowed: null,
-      ip: null,
-      mask: null
-    };
-  }
-  
-  // Add 2 GigabitEthernet interfaces (g0/1 and g0/2)
-  interfaces["g0/1"] = {
-    adminUp: false,
-    l2mode: null,
-    accessVlan: null,
-    trunkAllowed: null,
-    ip: null,
-    mask: null
-  };
-  interfaces["g0/2"] = {
-    adminUp: false,
-    l2mode: null,
-    accessVlan: null,
-    trunkAllowed: null,
-    ip: null,
-    mask: null
-  };
-  
-  // Add Vlan1 interface (shutdown by default)
-  interfaces["vlan1"] = {
-    adminUp: false,
-    l2mode: "routed",
-    accessVlan: null,
-    trunkAllowed: null,
-    ip: null,
-    mask: null
-  };
-  
-  return {
-    hostname: "Switch",
+  // Base state shared by all devices
+  const baseState = {
+    deviceModel,
     enableSecret: null,
-    interfaces,
     vlans: {
       "1": {
         name: "default"
@@ -95,6 +55,90 @@ export function createInitialState(): DeviceState {
     configSaved: false,
     savedState: null
   };
+  
+  if (deviceModel === '2960-switch') {
+    // Catalyst 2960 switch: 24 FastEthernet + 2 GigabitEthernet + Vlan1
+    // FastEthernet interfaces (fa0/1 through fa0/24)
+    for (let i = 1; i <= 24; i++) {
+      interfaces[`fa0/${i}`] = {
+        adminUp: false,
+        l2mode: null,  // Layer 2 by default on switches
+        accessVlan: null,
+        trunkAllowed: null,
+        ip: null,
+        mask: null
+      };
+    }
+    
+    // GigabitEthernet interfaces (g0/1 and g0/2)
+    interfaces["g0/1"] = {
+      adminUp: false,
+      l2mode: null,
+      accessVlan: null,
+      trunkAllowed: null,
+      ip: null,
+      mask: null
+    };
+    interfaces["g0/2"] = {
+      adminUp: false,
+      l2mode: null,
+      accessVlan: null,
+      trunkAllowed: null,
+      ip: null,
+      mask: null
+    };
+    
+    // Vlan1 management interface
+    interfaces["vlan1"] = {
+      adminUp: false,
+      l2mode: "routed",
+      accessVlan: null,
+      trunkAllowed: null,
+      ip: null,
+      mask: null
+    };
+    
+    return {
+      ...baseState,
+      hostname: "Switch",
+      interfaces
+    };
+  } else {
+    // Cisco 1941 ISR router: 2 GigabitEthernet + Vlan1
+    // Stored as abbreviated form (g0/0, g0/1) per user preference
+    interfaces["g0/0"] = {
+      adminUp: false,
+      l2mode: "routed",  // Routed by default on routers
+      accessVlan: null,
+      trunkAllowed: null,
+      ip: null,
+      mask: null
+    };
+    interfaces["g0/1"] = {
+      adminUp: false,
+      l2mode: "routed",
+      accessVlan: null,
+      trunkAllowed: null,
+      ip: null,
+      mask: null
+    };
+    
+    // Vlan1 management interface (routers have this too)
+    interfaces["vlan1"] = {
+      adminUp: false,
+      l2mode: "routed",
+      accessVlan: null,
+      trunkAllowed: null,
+      ip: null,
+      mask: null
+    };
+    
+    return {
+      ...baseState,
+      hostname: "Router",
+      interfaces
+    };
+  }
 }
 
 /**

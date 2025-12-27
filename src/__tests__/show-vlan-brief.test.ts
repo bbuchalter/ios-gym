@@ -9,7 +9,7 @@ describe("show vlan brief", () => {
   let session: CLISession;
 
   beforeEach(() => {
-    const grammarPath = path.join(__dirname, "../../commands.yaml");
+    const grammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
     const grammar = loadGrammar(grammarPath);
     engine = new CLIEngine(grammar);
     session = new CLISession(grammar);

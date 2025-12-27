@@ -8,16 +8,17 @@ import '@xterm/xterm/css/xterm.css';
 // Import from src/ via @src/* aliases
 import { CLIEngine } from '@src/cli/engine';
 import { CLISession } from '@src/cli-session';
-import type { CommandGrammar } from '@src/types';
+import type { CommandGrammar, DeviceModel } from '@src/types';
 import { useLessonCounter } from '@/lib/LessonCounterContext';
 import { useTerminalRegistry } from '@/lib/TerminalRegistryContext';
 
 interface TerminalProps {
   terminalId?: string;
   grammar: CommandGrammar;
+  deviceModel?: DeviceModel;  // Optional override (defaults to grammar.deviceModel)
 }
 
-export default function Terminal({ terminalId, grammar }: TerminalProps) {
+export default function Terminal({ terminalId, grammar, deviceModel }: TerminalProps) {
   const counter = useLessonCounter();
   const finalTerminalId = terminalId || counter.getTerminalId();
   const registry = useTerminalRegistry();
@@ -87,15 +88,17 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
     
     // Initialize CLI
     const engine = new CLIEngine(grammar);
-    const session = new CLISession(grammar);
+    const session = new CLISession(grammar, deviceModel);
     
     terminalRef.current = terminal;
     fitAddonRef.current = fitAddon;
     engineRef.current = engine;
     sessionRef.current = session;
     
-    // Display initial prompt
-    terminal.writeln('IOS CLI Practice Terminal');
+    // Display model-aware welcome message
+    const model = deviceModel ?? grammar.deviceModel;
+    const modelName = model === '2960-switch' ? 'Cisco Catalyst 2960' : 'Cisco 1941 ISR';
+    terminal.writeln(`${modelName} CLI Practice Terminal`);
     terminal.writeln('');
     terminal.write(session.getPrompt());
     
@@ -484,7 +487,7 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
         terminalRef.current = null;
       }
     };
-  }, [grammar, finalTerminalId]);
+  }, [grammar, deviceModel, finalTerminalId]);
   
   return (
     <div className="my-8 border border-gray-700 bg-gray-800 rounded-lg">
@@ -495,7 +498,9 @@ export default function Terminal({ terminalId, grammar }: TerminalProps) {
           <span className="h-2 w-2 rounded-full bg-green-500" />
           <span className="ml-4 text-gray-300">{finalTerminalId}</span>
         </div>
-        <span className="text-gray-500">Practice sandbox</span>
+        <span className="text-gray-500">
+          {grammar.deviceModel === '2960-switch' ? 'Catalyst 2960' : 'Cisco 1941'}
+        </span>
       </div>
       <div
         ref={containerRef}

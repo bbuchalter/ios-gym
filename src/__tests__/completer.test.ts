@@ -9,7 +9,7 @@ describe("TabCompleter", () => {
   let state: any;
 
   beforeEach(() => {
-    const grammarPath = path.join(process.cwd(), "commands.yaml");
+    const grammarPath = path.join(process.cwd(), "commands-2960-switch.yaml");
     const grammar = loadGrammar(grammarPath);
     completer = new TabCompleter(grammar);
     state = createInitialState();

@@ -39,7 +39,9 @@ const Terminal = dynamic(() => import('@/components/Terminal'), {
 
 const SCROLL_POSITION_KEY = 'ios-practice-scroll-position';
 
-function PageContent({ grammar }: { grammar: CommandGrammar }) {
+function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandGrammar; routerGrammar: CommandGrammar }) {
+  // Use switchGrammar for Lessons 1-13, routerGrammar for Lessons 14+
+  const grammar = switchGrammar;  // Default to switch for now, will update terminals individually
   const registry = useTerminalRegistry();
   const [contentVisible, setContentVisible] = useState(false);
 
@@ -2927,6 +2929,103 @@ Only 2 devices, so only need 2 IPs!`}
             </InfoBox>
           </LessonSection>
 
+          {/* TRANSITION: FROM SWITCHES TO ROUTERS */}
+          <div className="my-24 border-4 border-blue-500 rounded-xl bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-12">
+            <h2 className="text-5xl font-bold text-center mb-8 text-blue-300">
+              🚀 Hardware Change: Now Using Routers
+            </h2>
+            
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-2">⚠️ Device Transition Alert</p>
+              <p className="text-gray-300">
+                Starting with this lesson, you're working with a <strong className="text-white">Cisco 1941 ISR router</strong>,
+                not the Catalyst 2960 switch from earlier lessons. The interface names and
+                default behaviors are different!
+              </p>
+            </InfoBox>
+            
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              <div className="bg-gray-800 rounded-lg p-6 border-2 border-gray-600">
+                <h4 className="text-blue-300 font-bold mb-4 text-xl">Catalyst 2960 Switch<br/><span className="text-sm text-gray-400">(Lessons 1-13)</span></h4>
+                <ul className="space-y-3 text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 font-bold">•</span>
+                    <span><strong className="text-white">Interfaces:</strong> FastEthernet (fa0/1), GigabitEthernet (g0/1)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 font-bold">•</span>
+                    <span><strong className="text-white">Default mode:</strong> Layer 2 switchport</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 font-bold">•</span>
+                    <span><strong className="text-white">Primary use:</strong> Connect devices in a LAN</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 font-bold">•</span>
+                    <span><strong className="text-white">Commands:</strong> <code>switchport mode</code>, VLANs, trunks</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-800 rounded-lg p-6 border-2 border-green-500">
+                <h4 className="text-green-300 font-bold mb-4 text-xl">Cisco 1941 Router<br/><span className="text-sm text-gray-400">(Lessons 14+)</span></h4>
+                <ul className="space-y-3 text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400 font-bold">•</span>
+                    <span><strong className="text-white">Interfaces:</strong> GigabitEthernet0/0, GigabitEthernet0/1</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400 font-bold">•</span>
+                    <span><strong className="text-white">Default mode:</strong> Layer 3 routed port</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400 font-bold">•</span>
+                    <span><strong className="text-white">Primary use:</strong> Route between networks/WANs</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400 font-bold">•</span>
+                    <span><strong className="text-white">Commands:</strong> <code>ip route</code>, routing protocols, no switchport commands</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <Diagram title="Interface Naming Comparison">
+              {`Catalyst 2960 Switch             Cisco 1941 Router
+┌──────────────────────┐     ┌──────────────────────┐
+│ FastEthernet0/1      │     │ GigabitEthernet0/0   │
+│ FastEthernet0/2      │     │ GigabitEthernet0/1   │
+│ ...                  │     │ Vlan1 (management)   │
+│ FastEthernet0/24     │     └──────────────────────┘
+│ GigabitEthernet0/1   │
+│ GigabitEthernet0/2   │     Router interfaces:
+│ Vlan1 (management)   │     - NO FastEthernet
+└──────────────────────┘     - Routed by default
+                             - Can set IP directly
+Switch ports:
+- Layer 2 by default
+- Need "no switchport" for L3`}
+            </Diagram>
+            
+            <div className="bg-blue-900/40 border border-blue-600 rounded-lg p-6 mt-8">
+              <h4 className="text-blue-300 font-semibold mb-3 text-lg">💡 What This Means For You</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400">→</span>
+                  <span>Interface names change: Use <code>GigabitEthernet0/0</code> or <code>g0/0</code> instead of <code>fa0/1</code></span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400">→</span>
+                  <span>No <code>switchport</code> commands on routers—interfaces are routed by default</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400">→</span>
+                  <span>Focus shifts from VLANs/trunking to IP routing and connecting networks</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
           {/* LESSON 14: STATIC ROUTING */}
           <LessonSection title="Static Routing: Directing Traffic">
             <p className="text-xl text-gray-200 my-6">
@@ -3051,7 +3150,7 @@ Slower backup connection`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal grammar={grammar} />
+            <Terminal grammar={routerGrammar} deviceModel="1941-router" />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -3162,7 +3261,7 @@ Traffic flows: A → C → B`}
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal grammar={grammar} />
+            <Terminal grammar={routerGrammar} deviceModel="1941-router" />
 
             <InfoBox variant="info">
               <ProTip>
@@ -3237,7 +3336,7 @@ router ospf 1
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal grammar={grammar} />
+            <Terminal grammar={routerGrammar} deviceModel="1941-router" />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verify your work:</p>
@@ -3372,7 +3471,7 @@ ip ospf cost 30
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal grammar={grammar} />
+            <Terminal grammar={routerGrammar} deviceModel="1941-router" />
           </LessonSection>
 
           {/* CAPSTONE: FULL SCENARIO */}
@@ -3517,7 +3616,7 @@ ip ospf cost 30
               <li><code>write memory</code></li>
             </ol>
 
-            <Terminal grammar={grammar} />
+            <Terminal grammar={routerGrammar} deviceModel="1941-router" />
 
             <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
               <p className="text-green-300 font-semibold mb-3">✓ Verification Checklist:</p>
@@ -3591,14 +3690,23 @@ ip ospf cost 30
 }
 
 export default function LearnPage() {
-  const [grammar, setGrammar] = useState<CommandGrammar | null>(null);
+  const [switchGrammar, setSwitchGrammar] = useState<CommandGrammar | null>(null);
+  const [routerGrammar, setRouterGrammar] = useState<CommandGrammar | null>(null);
 
   useEffect(() => {
-    const manager = new TerminalManager();
-    manager.initialize().then(g => setGrammar(g));
+    // Load both device grammars
+    import('@/lib/data-loader').then(({ loadGrammar }) => {
+      Promise.all([
+        loadGrammar('2960-switch'),
+        loadGrammar('1941-router')
+      ]).then(([switchGr, routerGr]) => {
+        setSwitchGrammar(switchGr);
+        setRouterGrammar(routerGr);
+      });
+    });
   }, []);
 
-  if (!grammar) {
+  if (!switchGrammar || !routerGrammar) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
         <div className="text-gray-400">Loading terminal...</div>
@@ -3608,7 +3716,7 @@ export default function LearnPage() {
 
   return (
     <TerminalRegistryProvider>
-      <PageContent grammar={grammar} />
+      <PageContent switchGrammar={switchGrammar} routerGrammar={routerGrammar} />
     </TerminalRegistryProvider>
   );
 }

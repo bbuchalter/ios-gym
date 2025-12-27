@@ -4,7 +4,7 @@ import * as yaml from "js-yaml";
 import { CommandGrammar } from "../types";
 
 /**
- * Load and parse the commands.yaml grammar file
+ * Load and parse a device-specific grammar file
  */
 export function loadGrammar(filePath: string): CommandGrammar {
   const content = fs.readFileSync(filePath, "utf8");
@@ -13,9 +13,9 @@ export function loadGrammar(filePath: string): CommandGrammar {
 }
 
 /**
- * Get the default grammar path
+ * Get the default grammar path (Catalyst 2960 switch)
  */
 export function getDefaultGrammarPath(): string {
-  return path.join(process.cwd(), "commands.yaml");
+  return path.join(process.cwd(), "commands-2960-switch.yaml");
 }
 

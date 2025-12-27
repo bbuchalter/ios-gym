@@ -7,7 +7,7 @@ describe("ModeStack", () => {
   let modeStack: ModeStack;
 
   beforeEach(() => {
-    const grammarPath = path.join(process.cwd(), "commands.yaml");
+    const grammarPath = path.join(process.cwd(), "commands-2960-switch.yaml");
     const grammar = loadGrammar(grammarPath);
     modeStack = new ModeStack(grammar);
   });

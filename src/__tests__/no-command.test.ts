@@ -8,7 +8,7 @@ describe("No Command Tests - Removing Configuration", () => {
   let session: CLISession;
 
   beforeEach(() => {
-    const grammarPath = path.join(process.cwd(), "commands.yaml");
+    const grammarPath = path.join(process.cwd(), "commands-2960-switch.yaml");
     const grammar = loadGrammar(grammarPath);
     
     engine = new CLIEngine(grammar);
@@ -287,4 +287,5 @@ describe("No Command Tests - Removing Configuration", () => {
     });
   });
 });
+
 

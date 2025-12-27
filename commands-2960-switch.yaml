@@ -1,6 +1,7 @@
 version: 0.1
+deviceModel: "2960-switch"
 description: >
-  Minimal IOS-like command grammar for a typing-practice CLI.
+  Cisco Catalyst 2960 switch command grammar for typing-practice CLI.
   Supports mode-aware parsing, keyword abbreviation, and tab completion.
 
 settings:

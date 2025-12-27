@@ -124,7 +124,8 @@ Router(config-if)# ip ospf cost 10
 
 ```
 ios-practice/
-├── commands.yaml          # Command grammar (source)
+├── commands-2960-switch.yaml  # Catalyst 2960 switch grammar (source)
+├── commands-1941-router.yaml  # Cisco 1941 router grammar (source)
 │
 ├── src/                   # CLI engine & tests (Node.js/TypeScript)
 │   ├── cli/               # CLI engine (parser, completer, handlers, state)
@@ -137,7 +138,8 @@ ios-practice/
 │   ├── components/        # React components (Terminal, LessonSection, etc.)
 │   ├── lib/               # Client utilities (terminal manager, hooks)
 │   ├── public/            # Static assets
-│   │   └── commands.json  # Generated from commands.yaml
+│   │   ├── commands-2960-switch.json  # Generated from commands-2960-switch.yaml
+│   │   └── commands-1941-router.json  # Generated from commands-1941-router.yaml
 │   └── out/               # ⭐ STATIC BUILD - Deploy this!
 │       └── index.html     # Complete course with embedded terminals
 │
@@ -193,7 +195,7 @@ cp -r web/out/* /var/www/html/ios-trainer/
 npm run web:dev
 ```
 - 🔥 **Hot reload:** Automatically restarts when CLI code changes
-- 🔄 **Auto-rebuild grammar:** Watches `commands.yaml` and `src/` for changes
+- 🔄 **Auto-rebuild grammar:** Watches `commands-2960-switch.yaml`, `commands-1941-router.yaml` and `src/` for changes
 - ⚡ **Fast feedback:** See changes in seconds
 - 🎯 **Use this for:** Day-to-day development
 
@@ -201,7 +203,7 @@ npm run web:dev
 ```bash
 npm run web:build
 ```
-- 📦 **Builds grammar:** Converts `commands.yaml` → `web/public/commands.json`
+- 📦 **Builds grammars:** Converts YAML files → `web/public/*.json`
 - 🏗️ **Optimizes Next.js:** Creates production-ready static export
 - 📊 **Output:** Generates optimized files in `web/out/`
 - 🎯 **Use this for:** Deployment preparation
@@ -218,7 +220,9 @@ npm run web:start
 ```bash
 npm run build:grammar
 ```
-Manually converts `commands.yaml` → `web/public/commands.json` (usually not needed - `web:dev` and `web:build` do this automatically).
+Converts all device grammar YAML files to JSON (usually not needed - `web:dev` and `web:build` do this automatically). Builds both:
+- `commands-2960-switch.yaml` → `web/public/commands-2960-switch.json`
+- `commands-1941-router.yaml` → `web/public/commands-1941-router.json`
 
 ### Testing
 ```bash

@@ -36,27 +36,51 @@ fi
 
 # Check grammar files are in sync
 echo "📝 Checking grammar files are synchronized..."
-if [ -f "commands.yaml" ] && [ -f "web/public/commands.json" ]; then
-    # Convert YAML to JSON and compare
-    YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands.yaml', 'utf8')), null, 2));" 2>&1)
+
+# Check switch grammar (commands-2960-switch.yaml)
+if [ -f "commands-2960-switch.yaml" ] && [ -f "web/public/commands-2960-switch.json" ]; then
+    YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-2960-switch.yaml', 'utf8')), null, 2));" 2>&1)
     if [ $? -ne 0 ]; then
-        print_error "Failed to parse commands.yaml"
+        print_error "Failed to parse commands-2960-switch.yaml"
         echo "$YAML_JSON"
         exit 1
     fi
     
-    CURRENT_JSON=$(cat web/public/commands.json)
+    CURRENT_JSON=$(cat web/public/commands-2960-switch.json)
     
     if [ "$YAML_JSON" != "$CURRENT_JSON" ]; then
-        print_error "Grammar files are out of sync!"
+        print_error "Switch grammar files are out of sync!"
         echo ""
-        echo "commands.yaml and web/public/commands.json are not identical."
+        echo "commands-2960-switch.yaml and web/public/commands-2960-switch.json are not identical."
         echo "Run 'npm run build:grammar' to synchronize them."
         exit 1
     fi
-    print_success "Grammar files are synchronized"
+    print_success "Switch grammar files (Catalyst 2960) are synchronized"
 else
-    print_warning "Grammar files not found, skipping check"
+    print_warning "Switch grammar files not found, skipping check"
+fi
+
+# Check router grammar (commands-1941-router.yaml)
+if [ -f "commands-1941-router.yaml" ] && [ -f "web/public/commands-1941-router.json" ]; then
+    ROUTER_YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-1941-router.yaml', 'utf8')), null, 2));" 2>&1)
+    if [ $? -ne 0 ]; then
+        print_error "Failed to parse commands-1941-router.yaml"
+        echo "$ROUTER_YAML_JSON"
+        exit 1
+    fi
+    
+    ROUTER_CURRENT_JSON=$(cat web/public/commands-1941-router.json)
+    
+    if [ "$ROUTER_YAML_JSON" != "$ROUTER_CURRENT_JSON" ]; then
+        print_error "Router grammar files are out of sync!"
+        echo ""
+        echo "commands-1941-router.yaml and web/public/commands-1941-router.json are not identical."
+        echo "Run 'npm run build:grammar' to synchronize them."
+        exit 1
+    fi
+    print_success "Router grammar files (Cisco 1941) are synchronized"
+else
+    print_warning "Router grammar files not found, skipping check"
 fi
 
 # Run TypeScript type checking

@@ -16,7 +16,9 @@ ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
 ### pre-commit
 
 Runs before every commit to validate:
-- Grammar files are synchronized (`commands.yaml` ↔ `web/public/commands.json`)
+- Grammar files are synchronized:
+  - `commands-2960-switch.yaml` ↔ `web/public/commands-2960-switch.json`
+  - `commands-1941-router.yaml` ↔ `web/public/commands-1941-router.json`
 - TypeScript types are valid (`tsc --noEmit`)
 - All tests pass (`jest`)
 

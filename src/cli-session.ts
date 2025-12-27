@@ -1,7 +1,7 @@
 // Browser-safe CLI session - no exercises, no server dependencies
 
 import { ModeStack } from "./cli/modes";
-import { DeviceState, CommandGrammar } from "./types";
+import { DeviceState, CommandGrammar, DeviceModel } from "./types";
 import { createInitialState } from "./cli/state";
 
 /**
@@ -17,9 +17,24 @@ export class CLISession {
     attempts?: number;
   } | null = null;
   
-  constructor(grammar: CommandGrammar) {
+  /**
+   * Create a new CLI session
+   * @param grammar - Command grammar defining available commands and templates
+   * @param deviceModel - Optional device model override (defaults to grammar.deviceModel)
+   */
+  constructor(grammar: CommandGrammar, deviceModel?: DeviceModel) {
     this.modeStack = new ModeStack(grammar);
-    this.deviceState = createInitialState();
+    
+    // Use deviceModel from grammar if not explicitly provided
+    const model = deviceModel ?? grammar.deviceModel;
+    this.deviceState = createInitialState(model);
+    
+    // Validate that device model matches grammar (warn if mismatch)
+    if (this.deviceState.deviceModel !== grammar.deviceModel) {
+      console.warn(
+        `Device model mismatch: state=${this.deviceState.deviceModel}, grammar=${grammar.deviceModel}`
+      );
+    }
   }
   
   public getPrompt(): string {
