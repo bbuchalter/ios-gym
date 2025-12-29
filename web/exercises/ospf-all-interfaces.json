@@ -1,0 +1,66 @@
+{
+  "id": "ospf-all-interfaces",
+  "description": "Configure OSPF on all Layer 3 interfaces for complete routing coverage",
+  "deviceModel": "1941-router",
+  "commands": [
+    "enable",
+    "configure terminal",
+    "router ospf 1",
+    "network 35.72.15.2 0.0.0.0 area 0",
+    "network 35.72.15.6 0.0.0.0 area 0",
+    "network 35.72.15.17 0.0.0.0 area 0",
+    "network 172.16.16.1 0.0.0.0 area 0",
+    "network 35.72.10.1 0.0.0.0 area 0",
+    "network 33.2.169.1 0.0.0.0 area 0",
+    "end",
+    "write memory"
+  ],
+  "validation": {
+    "type": "goal-based",
+    "assertions": [
+      {
+        "type": "ospf_network",
+        "ip": "35.72.15.2",
+        "wildcard": "0.0.0.0",
+        "area": 0,
+        "message": "OSPF should advertise routed port 35.72.15.2"
+      },
+      {
+        "type": "ospf_network",
+        "ip": "35.72.15.6",
+        "wildcard": "0.0.0.0",
+        "area": 0,
+        "message": "OSPF should advertise routed port 35.72.15.6"
+      },
+      {
+        "type": "ospf_network",
+        "ip": "35.72.15.17",
+        "wildcard": "0.0.0.0",
+        "area": 0,
+        "message": "OSPF should advertise routed port 35.72.15.17"
+      },
+      {
+        "type": "ospf_network",
+        "ip": "172.16.16.1",
+        "wildcard": "0.0.0.0",
+        "area": 0,
+        "message": "OSPF should advertise VLAN 1 management SVI 172.16.16.1"
+      },
+      {
+        "type": "ospf_network",
+        "ip": "35.72.10.1",
+        "wildcard": "0.0.0.0",
+        "area": 0,
+        "message": "OSPF should advertise VLAN 100 SVI 35.72.10.1"
+      },
+      {
+        "type": "ospf_network",
+        "ip": "33.2.169.1",
+        "wildcard": "0.0.0.0",
+        "area": 0,
+        "message": "OSPF should advertise VLAN 200 SVI 33.2.169.1"
+      }
+    ]
+  }
+}
+

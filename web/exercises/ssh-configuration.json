@@ -1,0 +1,49 @@
+{
+  "id": "ssh-configuration",
+  "description": "Configure complete SSH access with domain name, RSA keys, version 2, local user, and VTY lines",
+  "deviceModel": "2960-switch",
+  "commands": [
+    "enable",
+    "configure terminal",
+    "hostname SecureRouter",
+    "ip domain-name cisco.com",
+    "crypto key generate rsa modulus 1024",
+    "ip ssh version 2",
+    "username admin secret Cyb3rPatriot",
+    "line vty 0 4",
+    "login local",
+    "transport input ssh",
+    "end",
+    "write memory"
+  ],
+  "validation": {
+    "type": "goal-based",
+    "assertions": [
+      {
+        "type": "hostname",
+        "expected": "SecureRouter",
+        "message": "Hostname should be SecureRouter"
+      },
+      {
+        "type": "ssh_domain",
+        "expected": "cisco.com",
+        "message": "SSH domain name should be cisco.com"
+      },
+      {
+        "type": "ssh_version",
+        "expected": 2,
+        "message": "SSH version should be set to 2 for security"
+      },
+      {
+        "type": "ssh_user",
+        "username": "admin",
+        "message": "Local user 'admin' should be created"
+      },
+      {
+        "type": "vty_config",
+        "message": "VTY lines should be configured with 'login local' and 'transport input ssh'"
+      }
+    ]
+  }
+}
+

@@ -1,0 +1,30 @@
+{
+  "id": "trunk-all-vlans",
+  "description": "Configure a trunk port allowing all VLANs",
+  "deviceModel": "2960-switch",
+  "commands": [
+    "enable",
+    "configure terminal",
+    "interface fa0/1",
+    "switchport mode trunk",
+    "end"
+  ],
+  "validation": {
+    "type": "goal-based",
+    "assertions": [
+      {
+        "type": "interface_mode",
+        "interface": "fa0/1",
+        "expected": "trunk",
+        "message": "FastEthernet 0/1 should be configured as a trunk port"
+      },
+      {
+        "type": "interface_trunk_allowed",
+        "interface": "fa0/1",
+        "expected": null,
+        "message": "Trunk should allow all VLANs (no restriction configured)"
+      }
+    ]
+  }
+}
+

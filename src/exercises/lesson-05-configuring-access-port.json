@@ -1,0 +1,96 @@
+{
+  "id": "lesson-05-configuring-access-port",
+  "title": "Configuring Access Port",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure Access Port",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Create VLAN 100",
+          "command": "vlan 100"
+        },
+        {
+          "objective": "Name it 'Students'",
+          "command": "name Students"
+        },
+        {
+          "objective": "Exit VLAN configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Enter interface FastEthernet0/1",
+          "command": "interface fa0/1",
+          "teachingPoint": "FastEthernet ports are common on switches. You can abbreviate 'FastEthernet' as 'fa'."
+        },
+        {
+          "objective": "Set switchport mode to access",
+          "command": "switchport mode access",
+          "teachingPoint": "Access mode means this port connects to an end device (computer, printer, etc.), not another switch."
+        },
+        {
+          "objective": "Assign port to VLAN 100",
+          "command": "switchport access vlan 100"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "100",
+        "name": "Students"
+      },
+      "description": "VLAN 100 should exist with name 'Students'",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/1.l2mode",
+      "expectedValue": "access",
+      "description": "FastEthernet0/1 should be in access mode",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/1.accessVlan",
+      "expectedValue": "100",
+      "description": "FastEthernet0/1 should be assigned to VLAN 100",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/1.adminUp",
+      "expectedValue": true,
+      "description": "FastEthernet0/1 should be enabled",
+      "diagnosticCommand": "show ip interface brief"
+    }
+  ]
+}
+

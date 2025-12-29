@@ -1,0 +1,22 @@
+{
+  "id": "navigating-modes",
+  "description": "Practice navigating between CLI modes",
+  "deviceModel": "2960-switch",
+  "commands": [
+    "enable",
+    "configure terminal",
+    "exit",
+    "configure terminal",
+    "end"
+  ],
+  "validation": {
+    "type": "exploratory",
+    "assertions": [
+      {
+        "type": "command_succeeded",
+        "message": "Mode navigation commands executed successfully"
+      }
+    ]
+  }
+}
+

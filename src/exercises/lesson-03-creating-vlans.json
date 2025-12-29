@@ -1,0 +1,75 @@
+{
+  "id": "lesson-03-creating-vlans",
+  "title": "Creating VLANs",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Create VLANs",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Create VLAN 10",
+          "command": "vlan 10",
+          "teachingPoint": "VLANs logically segment your network. VLAN 10 might be for students, VLAN 20 for teachers, etc."
+        },
+        {
+          "objective": "Name VLAN 10 as 'Students'",
+          "command": "name Students"
+        },
+        {
+          "objective": "Exit VLAN configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Create VLAN 20",
+          "command": "vlan 20"
+        },
+        {
+          "objective": "Name VLAN 20 as 'Teachers'",
+          "command": "name Teachers"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "10",
+        "name": "Students"
+      },
+      "description": "VLAN 10 should exist with name 'Students'",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "20",
+        "name": "Teachers"
+      },
+      "description": "VLAN 20 should exist with name 'Teachers'",
+      "diagnosticCommand": "show vlan brief"
+    }
+  ]
+}
+

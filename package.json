@@ -8,8 +8,9 @@
     "test:watch": "./node_modules/.bin/jest --watch",
     "test:coverage": "./node_modules/.bin/jest --coverage",
     "build:grammar": "node -e \"const yaml = require('js-yaml'); const fs = require('fs'); const switch2960 = yaml.load(fs.readFileSync('commands-2960-switch.yaml', 'utf8')); const router1941 = yaml.load(fs.readFileSync('commands-1941-router.yaml', 'utf8')); fs.writeFileSync('web/public/commands-2960-switch.json', JSON.stringify(switch2960, null, 2)); fs.writeFileSync('web/public/commands-1941-router.json', JSON.stringify(router1941, null, 2)); console.log('Built grammars for: 2960-switch, 1941-router');\"",
+    "validate:exercises": "ts-node scripts/validate-exercises.ts",
     "web:dev": "nodemon",
-    "web:build": "npm run build:grammar && cd web && npm run build",
+    "web:build": "npm run validate:exercises && npm run build:grammar && cd web && npm run build",
     "web:start": "http-server web/out -p 3000 -o"
   },
   "keywords": [
@@ -33,6 +34,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.10.0",
     "@types/ws": "^8.5.8",
+    "ajv": "^8.12.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "nodemon": "^3.1.9",

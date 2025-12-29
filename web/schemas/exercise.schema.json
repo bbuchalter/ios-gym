@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ios-practice.local/schemas/exercise.schema.json",
+  "title": "Exercise Definition",
+  "description": "Schema for IOS CLI practice exercises with goal-based validation",
+  "type": "object",
+  "required": ["id", "deviceModel", "commands", "validation"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier (kebab-case)"
+    },
+    "deviceModel": {
+      "type": "string",
+      "enum": ["2960-switch", "1941-router"],
+      "description": "Target device model for this exercise"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what this exercise teaches"
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of IOS commands to execute in order"
+    },
+    "validation": {
+      "type": "object",
+      "required": ["type", "assertions"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["goal-based", "exploratory"],
+          "description": "goal-based checks final state; exploratory has minimal checks"
+        },
+        "assertions": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/definitions/assertion"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "assertion": {
+      "type": "object",
+      "required": ["type", "message"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "interface_exists",
+            "interface_ip",
+            "interface_mode",
+            "interface_admin_up",
+            "hostname",
+            "vlan_exists",
+            "vlan_name",
+            "interface_access_vlan",
+            "interface_trunk_allowed",
+            "ospf_network",
+            "ospf_interface_cost",
+            "route_exists",
+            "ssh_domain",
+            "ssh_version",
+            "ssh_user",
+            "vty_config",
+            "enable_secret",
+            "default_gateway",
+            "mode_reached",
+            "command_succeeded",
+            "ip_routing_enabled",
+            "config_saved"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User-friendly error message if assertion fails"
+        },
+        "interface": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "mask": {
+          "type": "string"
+        },
+        "expected": {},
+        "vlanId": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "wildcard": {
+          "type": "string"
+        },
+        "area": {
+          "type": "integer"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "nextHop": {
+          "type": "string"
+        },
+        "ad": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

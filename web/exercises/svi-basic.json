@@ -1,0 +1,78 @@
+{
+  "id": "svi-basic",
+  "description": "Configure SVIs (Switched Virtual Interfaces) for inter-VLAN routing",
+  "deviceModel": "2960-switch",
+  "commands": [
+    "enable",
+    "configure terminal",
+    "vlan 100",
+    "name Students",
+    "exit",
+    "vlan 200",
+    "name Teachers",
+    "exit",
+    "interface vlan 100",
+    "ip address 35.72.10.1 255.255.255.0",
+    "no shutdown",
+    "exit",
+    "interface vlan 200",
+    "ip address 33.2.169.1 255.255.255.0",
+    "no shutdown",
+    "end",
+    "write memory"
+  ],
+  "validation": {
+    "type": "goal-based",
+    "assertions": [
+      {
+        "type": "vlan_exists",
+        "vlanId": "100",
+        "message": "VLAN 100 should exist"
+      },
+      {
+        "type": "vlan_name",
+        "vlanId": "100",
+        "expected": "Students",
+        "message": "VLAN 100 should be named 'Students'"
+      },
+      {
+        "type": "vlan_exists",
+        "vlanId": "200",
+        "message": "VLAN 200 should exist"
+      },
+      {
+        "type": "vlan_name",
+        "vlanId": "200",
+        "expected": "Teachers",
+        "message": "VLAN 200 should be named 'Teachers'"
+      },
+      {
+        "type": "interface_ip",
+        "interface": "vlan100",
+        "ip": "35.72.10.1",
+        "mask": "255.255.255.0",
+        "message": "VLAN 100 SVI should have IP 35.72.10.1/24"
+      },
+      {
+        "type": "interface_admin_up",
+        "interface": "vlan100",
+        "expected": true,
+        "message": "VLAN 100 SVI should be enabled"
+      },
+      {
+        "type": "interface_ip",
+        "interface": "vlan200",
+        "ip": "33.2.169.1",
+        "mask": "255.255.255.0",
+        "message": "VLAN 200 SVI should have IP 33.2.169.1/24"
+      },
+      {
+        "type": "interface_admin_up",
+        "interface": "vlan200",
+        "expected": true,
+        "message": "VLAN 200 SVI should be enabled"
+      }
+    ]
+  }
+}
+

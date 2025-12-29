@@ -36,6 +36,12 @@
       "@src/cli-session": [
         "../src/cli-session.ts"
       ],
+      "@src/validation/*": [
+        "../src/validation/*"
+      ],
+      "@src/exercises/*": [
+        "../src/exercises/*"
+      ],
       "@/components/*": [
         "./components/*"
       ],

@@ -1,0 +1,40 @@
+{
+  "id": "layer3-routed-port-v2",
+  "description": "Configure a routed port on a Layer 3 switch",
+  "deviceModel": "2960-switch",
+  "commands": [
+    "enable",
+    "configure terminal",
+    "interface g0/2",
+    "no switchport",
+    "ip address 35.72.12.1 255.255.255.252",
+    "no shutdown",
+    "end",
+    "write memory"
+  ],
+  "validation": {
+    "type": "goal-based",
+    "assertions": [
+      {
+        "type": "interface_mode",
+        "interface": "g0/2",
+        "expected": "routed",
+        "message": "Interface g0/2 should be a routed port (did you use 'no switchport'?)"
+      },
+      {
+        "type": "interface_ip",
+        "interface": "g0/2",
+        "ip": "35.72.12.1",
+        "mask": "255.255.255.252",
+        "message": "Interface g0/2 should have IP 35.72.12.1 with /30 subnet mask (255.255.255.252)"
+      },
+      {
+        "type": "interface_admin_up",
+        "interface": "g0/2",
+        "expected": true,
+        "message": "Interface g0/2 should be enabled (did you use 'no shutdown'?)"
+      }
+    ]
+  }
+}
+

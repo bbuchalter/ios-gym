@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cisco IOS CLI Exercise",
+  "description": "Exercise definition for CLI training with hierarchical goals and validation assertions",
+  "type": "object",
+  "required": ["id", "title", "deviceModel", "goals", "assertions"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^lesson-[0-9]{2}(-[a-z-]+)?$",
+      "description": "Unique exercise identifier (e.g., lesson-01-setting-hostname)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable exercise title"
+    },
+    "deviceModel": {
+      "type": "string",
+      "enum": ["2960-switch", "1941-router"],
+      "description": "Target Cisco device model"
+    },
+    "goals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/goal"
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/assertion"
+      }
+    },
+    "legacyCommands": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Legacy command list for backward compatibility"
+    }
+  },
+  "definitions": {
+    "goal": {
+      "type": "object",
+      "required": ["section", "steps"],
+      "properties": {
+        "section": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Section name (e.g., 'Basic Setup', 'Configure Routed Port')"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/step"
+          }
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": ["objective"],
+      "properties": {
+        "objective": {
+          "type": "string",
+          "minLength": 1,
+          "description": "What we're trying to accomplish"
+        },
+        "command": {
+          "type": "string",
+          "description": "The command to execute (optional for objectives-only mode)"
+        },
+        "teachingPoint": {
+          "type": "string",
+          "description": "Inline explanation for key concepts"
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "required": ["type", "description"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["state-path", "config-saved", "interface-exists", "ospf-network", "vlan-exists"],
+          "description": "Type of assertion to validate"
+        },
+        "path": {
+          "type": "string",
+          "description": "State path for state-path assertions (e.g., 'hostname', 'interfaces.g0/0.ip')"
+        },
+        "expectedValue": {
+          "description": "Expected value for comparison (type varies by assertion)"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User-friendly error message"
+        },
+        "diagnosticCommand": {
+          "type": "string",
+          "description": "Show command to help debug (e.g., 'show running-config')"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "state-path" } }
+          },
+          "then": {
+            "required": ["path", "expectedValue"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "interface-exists" } }
+          },
+          "then": {
+            "required": ["expectedValue"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "ospf-network" } }
+          },
+          "then": {
+            "required": ["expectedValue"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "vlan-exists" } }
+          },
+          "then": {
+            "required": ["expectedValue"]
+          }
+        }
+      ]
+    }
+  }
+}
+

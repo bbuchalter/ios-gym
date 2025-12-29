@@ -16,9 +16,11 @@ interface TerminalProps {
   terminalId?: string;
   grammar: CommandGrammar;
   deviceModel?: DeviceModel;  // Optional override (defaults to grammar.deviceModel)
+  sessionRef?: React.RefObject<CLISession | null>;  // Optional external ref for Exercise component
+  onKeyboardShortcut?: (event: KeyboardEvent) => void;  // Keyboard shortcut handler for Exercise navigation
 }
 
-export default function Terminal({ terminalId, grammar, deviceModel }: TerminalProps) {
+export default function Terminal({ terminalId, grammar, deviceModel, sessionRef: externalSessionRef, onKeyboardShortcut }: TerminalProps) {
   const counter = useLessonCounter();
   const finalTerminalId = terminalId || counter.getTerminalId();
   const registry = useTerminalRegistry();
@@ -26,7 +28,13 @@ export default function Terminal({ terminalId, grammar, deviceModel }: TerminalP
   const terminalRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
   const engineRef = useRef<CLIEngine | null>(null);
-  const sessionRef = useRef<CLISession | null>(null);
+  const internalSessionRef = useRef<CLISession | null>(null);
+  // Use external sessionRef if provided, otherwise use internal
+  const sessionRef = externalSessionRef || internalSessionRef;
+  
+  // Store keyboard shortcut handler in ref to always have latest version
+  const keyboardShortcutRef = useRef(onKeyboardShortcut);
+  keyboardShortcutRef.current = onKeyboardShortcut;
   
   // Use refs for values accessed in handlers to avoid stale closures
   const currentLineRef = useRef('');
@@ -95,11 +103,7 @@ export default function Terminal({ terminalId, grammar, deviceModel }: TerminalP
     engineRef.current = engine;
     sessionRef.current = session;
     
-    // Display model-aware welcome message
-    const model = deviceModel ?? grammar.deviceModel;
-    const modelName = model === '2960-switch' ? 'Cisco Catalyst 2960' : 'Cisco 1941 ISR';
-    terminal.writeln(`${modelName} CLI Practice Terminal`);
-    terminal.writeln('');
+    // Display initial prompt
     terminal.write(session.getPrompt());
     
     // Ensure terminal is focused
@@ -193,6 +197,15 @@ export default function Terminal({ terminalId, grammar, deviceModel }: TerminalP
     const handleKeyDown = (event: KeyboardEvent) => {
       lastKeyboardEvent = event;
       
+      // Handle Exercise keyboard shortcuts (Cmd/Ctrl + [, ], or \)
+      if (keyboardShortcutRef.current && (event.metaKey || event.ctrlKey) && (event.key === '[' || event.key === ']' || event.key === '\\')) {
+        event.preventDefault();
+        event.stopPropagation();
+        keyboardShortcutRef.current(event);
+        lastKeyboardEvent = null;
+        return;
+      }
+      
       // Detect CTRL+SHIFT+6 (requires all three keys)
       if (event.ctrlKey && event.shiftKey && event.key === '^') {
         event.preventDefault();
@@ -200,6 +213,7 @@ export default function Terminal({ terminalId, grammar, deviceModel }: TerminalP
           abortNameLookup();
         }
         lastKeyboardEvent = null;
+        return;
       }
     };
     
@@ -256,8 +270,6 @@ export default function Terminal({ terminalId, grammar, deviceModel }: TerminalP
         engineRef.current = newEngine;
         sessionRef.current = newSession;
         
-        terminal.writeln('IOS CLI Practice Terminal');
-        terminal.writeln('');
         terminal.write(newSession.getPrompt());
         return;
       }
@@ -490,7 +502,7 @@ export default function Terminal({ terminalId, grammar, deviceModel }: TerminalP
   }, [grammar, deviceModel, finalTerminalId]);
   
   return (
-    <div className="my-8 border border-gray-700 bg-gray-800 rounded-lg">
+    <div className="border border-gray-700 bg-gray-800 rounded-lg overflow-hidden">
       <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 text-xs font-mono text-gray-400">
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-red-500" />
@@ -504,10 +516,10 @@ export default function Terminal({ terminalId, grammar, deviceModel }: TerminalP
       </div>
       <div
         ref={containerRef}
-        className="cursor-text p-4"
+        className="cursor-text p-4 overflow-auto"
         style={{
           minHeight: "400px",
-          width: "100%",
+          maxWidth: "100%",
           backgroundColor: "#1f2937",
         }}
         onClick={() => terminalRef.current?.focus()}

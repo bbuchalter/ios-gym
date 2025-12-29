@@ -1,0 +1,64 @@
+{
+  "id": "vlan-creation",
+  "description": "Create VLANs and assign ports to them",
+  "deviceModel": "2960-switch",
+  "commands": [
+    "enable",
+    "configure terminal",
+    "vlan 100",
+    "name Students",
+    "exit",
+    "vlan 200",
+    "name Teachers",
+    "exit",
+    "interface fa0/2",
+    "switchport mode access",
+    "switchport access vlan 100",
+    "exit",
+    "interface fa0/3",
+    "switchport mode access",
+    "switchport access vlan 200",
+    "end",
+    "write memory"
+  ],
+  "validation": {
+    "type": "goal-based",
+    "assertions": [
+      {
+        "type": "vlan_exists",
+        "vlanId": "100",
+        "message": "VLAN 100 should exist"
+      },
+      {
+        "type": "vlan_name",
+        "vlanId": "100",
+        "expected": "Students",
+        "message": "VLAN 100 should be named 'Students'"
+      },
+      {
+        "type": "vlan_exists",
+        "vlanId": "200",
+        "message": "VLAN 200 should exist"
+      },
+      {
+        "type": "vlan_name",
+        "vlanId": "200",
+        "expected": "Teachers",
+        "message": "VLAN 200 should be named 'Teachers'"
+      },
+      {
+        "type": "interface_access_vlan",
+        "interface": "fa0/2",
+        "vlanId": "100",
+        "message": "FastEthernet 0/2 should be assigned to VLAN 100"
+      },
+      {
+        "type": "interface_access_vlan",
+        "interface": "fa0/3",
+        "vlanId": "200",
+        "message": "FastEthernet 0/3 should be assigned to VLAN 200"
+      }
+    ]
+  }
+}
+
