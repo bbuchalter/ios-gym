@@ -1,45 +1,60 @@
-# Stage 1: Build the Application
-# We use node:22 as the base for building and installing dependencies.
-FROM node:22 AS build
+# Multi-stage build for Next.js SSG deployment
 
-# Set the working directory inside the container
-WORKDIR /usr/src/app
+# Stage 1: Build the application
+FROM node:22-alpine AS builder
 
-# Copy package.json and package-lock.json first to leverage Docker caching.
-# If these files don't change, subsequent builds can skip 'npm install'.
+WORKDIR /app
+
+# Copy root package files
 COPY package*.json ./
 
-# Install dependencies including TypeScript
-RUN npm install
-RUN npm install --save-dev typescript @types/node
+# Install root dependencies (needed for build:grammar and validate:exercises)
+RUN npm ci
 
-# Copy the rest of the application source code
-# Note: Make sure tsconfig.json is NOT in .dockerignore for this to work
-COPY . .
+# Copy source files needed for build
+COPY tsconfig.json ./
+COPY commands-*.yaml ./
+COPY src ./src
+COPY scripts ./scripts
 
-# Build TypeScript
-RUN npm run build || npx tsc
+# Copy web application
+COPY web ./web
 
-# Stage 2: Create the Final Production Image
-# We use node:22-slim as a minimal runtime image.
-FROM node:22-slim
+# Install web dependencies
+WORKDIR /app/web
+RUN npm ci
 
-# Set the working directory
-WORKDIR /usr/src/app
+# Build the static site (from root directory to run full build chain)
+WORKDIR /app
+RUN npm run build
 
-# Copy only production dependencies
-COPY --from=build /usr/src/app/package*.json ./
-RUN npm install --only=production
+# Stage 2: Serve with nginx
+FROM nginx:alpine
 
-# Copy the built application files from the 'build' stage
-COPY --from=build /usr/src/app/dist ./dist
+# Copy the static files from builder
+COPY --from=builder /app/web/out /usr/share/nginx/html
 
-# Expose the port your app runs on
-ENV PORT=8080
-EXPOSE $PORT
+# Create nginx config to serve on port 8080 (required by fly.toml)
+RUN echo 'server { \
+    listen 8080; \
+    server_name _; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    \
+    location / { \
+        try_files $uri $uri/ $uri.html =404; \
+    } \
+    \
+    # Cache static assets \
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ { \
+        expires 1y; \
+        add_header Cache-Control "public, immutable"; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
-# Run the application using the non-root user (recommended for security)
-USER node
+# Expose port 8080
+EXPOSE 8080
 
-# Define the command to start your application
-CMD [ "node", "dist/index.js" ]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
+
