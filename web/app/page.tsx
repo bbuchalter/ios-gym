@@ -16,6 +16,11 @@ import { SkillCard } from '@/components/SkillCard';
 import { Diagram } from '@/components/Diagram';
 import { LessonCounterProvider } from '@/lib/LessonCounterContext';
 import { TerminalRegistryProvider, useTerminalRegistry } from '@/lib/TerminalRegistryContext';
+import { Exercise } from '@/components/Exercise';
+
+// Import exercises
+import lesson01 from '../../src/exercises/lesson-01-setting-hostname-and-saving-configuration.json';
+import lesson02 from '../../src/exercises/lesson-02-setting-enable-secret-password.json';
 
 // Dynamically import Terminal to avoid SSR issues with XTerm
 const Terminal = dynamic(() => import('@/components/Terminal'), {
@@ -107,6 +112,23 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
         className="min-h-screen bg-gray-900"
         style={{ visibility: contentVisible ? 'visible' : 'hidden' }}
       >
+        {/* Header Branding */}
+        <header className="border-b border-gray-800 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+          <div className="max-w-6xl mx-auto px-6 py-8">
+            <div className="flex items-center gap-4">
+              <div className="text-5xl">💪</div>
+              <div>
+                <h1 className="text-4xl font-bold text-white tracking-tight">
+                  IOS Gym
+                </h1>
+                <p className="text-gray-400 mt-1">
+                  Train Your Networking Skills
+                </p>
+              </div>
+            </div>
+          </div>
+        </header>
+
         <main className="max-w-6xl mx-auto px-6 pb-24">
           <div id="lessons">
             <LessonCounterProvider>
@@ -602,33 +624,12 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
             <h3 className="text-blue-400 text-3xl font-bold mt-16 mb-6 flex items-center gap-3">
               <span className="text-4xl">👉</span> Your Task
             </h3>
-            <p className="text-gray-300 mb-8 text-lg">Configure your first device with these steps:</p>
-            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
-              <li><code>enable</code> — Enter privileged mode</li>
-              <li><code>configure terminal</code> — Enter configuration mode</li>
-              <li><code>hostname MyFirstSwitch</code> — Set the name (watch the prompt change!)</li>
-              <li><code>end</code> — Exit configuration mode</li>
-              <li><code>write memory</code> — <strong className="text-yellow-300">SAVE YOUR WORK!</strong></li>
-            </ol>
+            <p className="text-gray-300 mb-8 text-lg">Configure your first device - try it with commands shown, then hide them and try again:</p>
 
-            <Terminal grammar={grammar} />
-
-            <div className="bg-green-900 border border-green-600 rounded-lg p-6 my-8">
-              <p className="text-green-300 font-semibold mb-3 text-lg">✓ You succeeded when:</p>
-              <ul className="ml-6 space-y-2 text-gray-300">
-                <li>The prompt shows your new hostname instead of "Switch"</li>
-                <li>You see <code className="text-emerald-400">[OK]</code> after running <code>write memory</code></li>
-                <li>
-                  <strong className="text-cyan-300">Verify:</strong> Type <code>show running-config</code> and confirm you see your hostname near the top:
-                  <div className="bg-gray-800 rounded-lg p-3 mt-2 ml-4 font-mono text-sm">
-                    Building configuration...<br />
-                    !<br />
-                    <span className="text-yellow-300">hostname MyFirstSwitch</span><br />
-                    !
-                  </div>
-                </li>
-              </ul>
-            </div>
+            <Exercise 
+              exercise={lesson01 as any}
+              grammar={grammar}
+            />
 
             <InfoBox variant="info">
               <ProTip>
@@ -892,16 +893,11 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
               <span className="text-4xl">👉</span> Your Task
             </h3>
             <p className="text-gray-300 mb-8 text-lg">Add security to your device:</p>
-            <ol className="bg-gray-800 p-8 pl-12 rounded-lg my-8 border border-gray-700 list-decimal space-y-5 text-gray-300">
-              <li><code>enable</code> — Enter privileged mode</li>
-              <li><code>configure terminal</code> — Enter configuration mode</li>
-              <li><code>hostname CorporateSwitch</code> — Give it a professional name</li>
-              <li><code>enable secret C1sc0R0ck$</code> — Set the password (be careful with special characters!)</li>
-              <li><code>end</code> — Exit configuration mode</li>
-              <li><code>write memory</code> — Save your work</li>
-            </ol>
 
-            <Terminal grammar={grammar} />
+            <Exercise 
+              exercise={lesson02 as any}
+              grammar={grammar}
+            />
 
             <InfoBox variant="info">
               <ProTip>
@@ -910,7 +906,7 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
                 </p>
                 <p className="text-gray-300 mb-3">
                   <strong className="text-yellow-300">In this simulator:</strong> You'll see the password in plain text 
-                  (e.g., <code>enable secret C1sc0R0ck$</code>).
+                  (e.g., <code>enable secret cisco</code>).
                 </p>
                 <p className="text-gray-300">
                   <strong className="text-green-300">On a real Cisco device:</strong> The password would be encrypted and 
@@ -1012,6 +1008,23 @@ Attacker sees: "Could be any length!"
               Don't panic — just type <code>enable</code> again and try entering your password more carefully.
             </p>
 
+            <InfoBox variant="important">
+              <p className="text-yellow-200 font-semibold mb-3">⚠️ Important: Understanding Password Attempts</p>
+              <p className="text-gray-300 mb-3">
+                Here's something that confuses many students: <strong className="text-white">when you enter a password correctly, 
+                you won't see any feedback at first — you'll just get prompted for the password again!</strong>
+              </p>
+              <p className="text-gray-300 mb-3">
+                IOS gives you <strong className="text-white">three attempts</strong> to enter the password before showing the 
+                <code className="text-red-400">% Bad secrets</code> message. This means if you enter the password correctly on 
+                your first or second try, you'll simply see another password prompt with no indication whether you were right or wrong.
+              </p>
+              <p className="text-gray-300">
+                <strong className="text-white">Bottom line:</strong> If you see the <code>#</code> prompt appear, your password 
+                was correct! If you see <code>% Bad secrets</code>, you used up all three attempts with incorrect passwords.
+              </p>
+            </InfoBox>
+
             <InfoBox variant="info">
               <ProTip>
                 <ul className="ml-6 space-y-2 text-gray-300">
@@ -1044,23 +1057,6 @@ Attacker sees: "Could be any length!"
               <li>See the "% Bad secrets" message</li>
               <li>Try one more time with the correct password: <code>C1sc0R0ck$</code></li>
             </ol>
-
-            <InfoBox variant="important">
-              <p className="text-yellow-200 font-semibold mb-3">⚠️ Important: Understanding Password Attempts</p>
-              <p className="text-gray-300 mb-3">
-                Here's something that confuses many students: <strong className="text-white">when you enter a password correctly, 
-                you won't see any feedback at first — you'll just get prompted for the password again!</strong>
-              </p>
-              <p className="text-gray-300 mb-3">
-                IOS gives you <strong className="text-white">three attempts</strong> to enter the password before showing the 
-                <code className="text-red-400">% Bad secrets</code> message. This means if you enter the password correctly on 
-                your first or second try, you'll simply see another password prompt with no indication whether you were right or wrong.
-              </p>
-              <p className="text-gray-300">
-                <strong className="text-white">Bottom line:</strong> If you see the <code>#</code> prompt appear, your password 
-                was correct! If you see <code>% Bad secrets</code>, you used up all three attempts with incorrect passwords.
-              </p>
-            </InfoBox>
 
             <Terminal grammar={grammar} />
 
@@ -2854,7 +2850,7 @@ Only 2 devices, so only need 2 IPs!`}
               <p className="text-gray-300 mb-2">Type: <code>show ip interface brief</code></p>
               <p className="text-gray-300">You should see:</p>
               <ul className="ml-6 mt-2 space-y-1 text-gray-300 list-disc">
-                <li>GigabitEthernet1/0/2 with IP address 35.72.12.1</li>
+                <li>GigabitEthernet0/2 with IP address 35.72.12.1</li>
                 <li>Status: up, Protocol: up</li>
               </ul>
               <p className="text-gray-400 mt-3 text-sm italic">

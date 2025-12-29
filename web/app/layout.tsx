@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "IOS Practice Lab",
+  title: "IOS Gym - Master Cisco Networking",
   description:
-    "An immersive, scrollable classroom where you can rehearse Cisco IOS workflows with live terminals.",
+    "Train your networking skills with interactive Cisco IOS terminals. Perfect for CyberPatriot, CCNA prep, and network engineering.",
 };
 
 export default function RootLayout({
