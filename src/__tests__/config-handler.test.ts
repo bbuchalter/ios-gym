@@ -10,6 +10,7 @@ describe("Config Handlers", () => {
     const mockGrammar = {
       version: "0.1",
       description: "Test",
+      deviceModel: "2960-switch",
       settings: { keyword_abbrev: { enabled: true, min_prefix: 2 }, case_insensitive: true },
       modes: {},
       arg_types: {},
