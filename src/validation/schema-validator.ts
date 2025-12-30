@@ -15,7 +15,7 @@ export class SchemaValidator {
     addFormats(this.ajv);
     
     // Load and compile the exercise schema
-    const schemaPath = path.join(process.cwd(), 'web/schemas/exercise.schema.json');
+    const schemaPath = path.join(process.cwd(), 'src/exercises/schema.json');
     const schemaContent = fs.readFileSync(schemaPath, 'utf-8');
     const schema = JSON.parse(schemaContent);
     

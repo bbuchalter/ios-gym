@@ -11,19 +11,17 @@ export interface Step {
 }
 
 export interface GoalSection {
-  title: string;
+  section: string;
   steps: Step[];
 }
 
 export interface ExerciseV2 {
   id: string;
+  title: string;
   deviceModel: string;
   description?: string;
   goals: GoalSection[];
-  validation: {
-    type: 'goal-based' | 'exploratory';
-    assertions: any[];
-  };
+  assertions: any[];
 }
 
 /**
@@ -35,7 +33,9 @@ export function extractCommands(exercise: ExerciseV2): string[] {
   
   for (const section of exercise.goals) {
     for (const step of section.steps) {
-      commands.push(step.command);
+      if (step.command) {
+        commands.push(step.command);
+      }
     }
   }
   
@@ -58,7 +58,10 @@ export function v2ToV1(exercise: ExerciseV2): any {
     deviceModel: exercise.deviceModel,
     description: exercise.description,
     commands: extractCommands(exercise),
-    validation: exercise.validation
+    validation: {
+      type: 'goal-based',
+      assertions: exercise.assertions
+    }
   };
 }
 

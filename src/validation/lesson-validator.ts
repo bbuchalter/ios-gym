@@ -10,6 +10,7 @@ import {
   Assertion, 
   ExerciseDefinition 
 } from './assertion-runner';
+import { isExerciseV2, extractCommands, ExerciseV2 } from './exercise-utils';
 
 export type { ValidationError, ValidationResult, Assertion, ExerciseDefinition };
 
@@ -18,7 +19,7 @@ export class LessonValidator extends AssertionRunner {
    * Validate exercise by executing commands and checking final state
    * Goal-based: doesn't care about command order, only final result
    */
-  validateExercise(exercise: ExerciseDefinition): ValidationResult {
+  validateExercise(exercise: ExerciseDefinition | ExerciseV2): ValidationResult {
     const grammarPath = path.join(
       process.cwd(),
       exercise.deviceModel === '2960-switch' 
@@ -28,16 +29,21 @@ export class LessonValidator extends AssertionRunner {
     
     const grammar = loadGrammar(grammarPath);
     const engine = new CLIEngine(grammar);
-    const session = new CLISession(grammar, exercise.deviceModel);
+    const session = new CLISession(grammar, exercise.deviceModel as DeviceModel);
+    
+    // Extract commands from either format
+    const commands = isExerciseV2(exercise) 
+      ? extractCommands(exercise)
+      : exercise.commands;
     
     // Execute all commands
     const commandErrors: string[] = [];
     
-    for (const command of exercise.commands) {
+    for (const command of commands) {
       // Auto-supply passwords if needed
       if (session.pendingPasswordPrompt) {
         // Extract password from previous enable secret command
-        const passwordCmd = exercise.commands.find(c => c.includes('enable secret'));
+        const passwordCmd = commands.find(c => c.includes('enable secret'));
         if (passwordCmd) {
           const password = passwordCmd.split('enable secret')[1].trim();
           engine.submitPassword(session, password);
@@ -68,7 +74,10 @@ export class LessonValidator extends AssertionRunner {
     
     // Check goal-based assertions against final state
     // For build-time validation, we don't require saved state (commands include write memory)
-    return this.runAssertions(session.deviceState, session.modeStack, exercise.validation.assertions, false);
+    const assertions = isExerciseV2(exercise) 
+      ? exercise.assertions 
+      : exercise.validation.assertions;
+    return this.runAssertions(session.deviceState, session.modeStack, assertions, false);
   }
 }
 
