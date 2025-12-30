@@ -329,14 +329,11 @@ describe('Exercise Component Logic', () => {
       
       // In the component, this would trigger the catch block
       // and set loadError state
-      try {
+      await expect(async () => {
         const response = await fetch(`/exercises/${exerciseId}.json`);
         if (!response.ok) throw new Error('Not found');
         await response.json();
-        fail('Should have thrown error');
-      } catch (err: any) {
-        expect(err.message).toBeTruthy();
-      }
+      }).rejects.toThrow();
     });
     
     test('handles malformed JSON', () => {
@@ -352,6 +349,7 @@ describe('Exercise Component Logic', () => {
     test('Exercise component uses RuntimeValidator for browser validation', () => {
       // In the browser, Exercise component uses RuntimeValidator
       // which doesn't require Node.js fs/path modules
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { RuntimeValidator } = require('../validation/runtime-validator');
       const validator = new RuntimeValidator();
       
@@ -442,7 +440,7 @@ describe('Exercise Component Logic', () => {
     ];
     
     testCases.forEach(({ name, exercise, expected }) => {
-      test(name, () => {
+      test(`${name}`, () => {
         const shouldShow = 
           exercise.validation.type === 'goal-based' && 
           exercise.validation.assertions.length > 0;
@@ -471,8 +469,8 @@ describe('Exercise Component Logic', () => {
       const error: {
         assertionType: string;
         message: string;
-        expected?: any;
-        actual?: any;
+        expected?: unknown;
+        actual?: unknown;
       } = {
         assertionType: 'session',
         message: 'Session not found'

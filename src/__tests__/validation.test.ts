@@ -1,7 +1,6 @@
 import { RuntimeValidator } from '../validation/RuntimeValidator';
 import { BuildValidator } from '../validation/BuildValidator';
 import { Exercise } from '../validation/types';
-import { DeviceState } from '../types';
 import { createInitialState } from '../cli/state';
 import * as path from 'path';
 
@@ -322,6 +321,7 @@ describe('BuildValidator', () => {
     };
     
     // Write temporary test file
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const fs = require('fs');
     const testPath = path.join(__dirname, '../exercises/test-invalid.json');
     fs.writeFileSync(testPath, JSON.stringify(testExercise, null, 2));

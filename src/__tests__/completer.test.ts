@@ -6,7 +6,7 @@ import * as path from "path";
 
 describe("TabCompleter", () => {
   let completer: TabCompleter;
-  let state: any;
+  let state: ReturnType<typeof createInitialState>;
 
   beforeEach(() => {
     const grammarPath = path.join(process.cwd(), "commands-2960-switch.yaml");

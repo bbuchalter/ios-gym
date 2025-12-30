@@ -1,6 +1,5 @@
 import { handlePersist, handleSet } from "../cli/handlers/config";
 import { CLISession } from "../cli-session";
-import { createInitialState } from "../cli/state";
 import { CommandGrammar } from "../types";
 
 describe("Config Handlers", () => {
@@ -176,7 +175,7 @@ describe("Config Handlers", () => {
     });
 
     test("should parse integer values", () => {
-      const result = handleSet(
+      handleSet(
         session,
         { processId: "1" },
         { path: "ospf.processId", value_from: "processId" }

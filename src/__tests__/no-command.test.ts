@@ -280,10 +280,9 @@ describe("No Command Tests - Removing Configuration", () => {
       
       // Should include both hostname and enable as options
       expect(completion.type).toBe("list");
-      if (completion.options) {
-        expect(completion.options).toContain("hostname");
-        expect(completion.options).toContain("enable");
-      }
+      expect(completion.options).toBeDefined();
+      expect(completion.options).toContain("hostname");
+      expect(completion.options).toContain("enable");
     });
   });
 });

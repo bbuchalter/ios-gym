@@ -35,7 +35,9 @@ describe("Password Entry Tests - Understanding Password Entry in IOS", () => {
       engine.executeCommand(session, "enable secret Cyb3rS3cur3!");
       engine.executeCommand(session, "end");
       engine.executeCommand(session, "disable");
-      
+    });
+
+    test("should configure enable secret correctly", () => {
       expect(session.getPrompt()).toBe("Switch> ");
       expect(session.deviceState.enableSecret).toBe("Cyb3rS3cur3!");
     });
@@ -376,7 +378,7 @@ describe("Password Entry Tests - Understanding Password Entry in IOS", () => {
       expect(result.passwordPrompt).toBeDefined();
       
       // And should work
-      const passwordResult = engine.submitPassword(session, "TestPass123");
+      engine.submitPassword(session, "TestPass123");
       expect(session.getPrompt()).toBe("Switch# ");
     });
   });
