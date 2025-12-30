@@ -1,0 +1,94 @@
+{
+  "id": "lesson-17-trunk-restricted",
+  "title": "Trunk Ports: Restricting VLANs",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure Restricted Trunk Ports",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Configure GigabitEthernet 0/1",
+          "command": "interface g0/1",
+          "teachingPoint": "Uplink ports are often GigabitEthernet for higher speed"
+        },
+        {
+          "objective": "Make it a trunk port",
+          "command": "switchport mode trunk"
+        },
+        {
+          "objective": "Restrict to VLANs 1,100,200",
+          "command": "switchport trunk allowed vlan 1,100,200",
+          "teachingPoint": "Best practice: only allow VLANs you actually need for security"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure FastEthernet 0/1",
+          "command": "interface fa0/1"
+        },
+        {
+          "objective": "Make it a trunk port",
+          "command": "switchport mode trunk"
+        },
+        {
+          "objective": "Restrict to VLANs 1,100,200",
+          "command": "switchport trunk allowed vlan 1,100,200"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.mode",
+      "expectedValue": "trunk",
+      "description": "GigabitEthernet 0/1 should be configured as a trunk port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.trunkAllowedVlans",
+      "expectedValue": "1,100,200",
+      "description": "GigabitEthernet 0/1 should allow only VLANs 1,100,200",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/1.mode",
+      "expectedValue": "trunk",
+      "description": "FastEthernet 0/1 should be configured as a trunk port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/1.trunkAllowedVlans",
+      "expectedValue": "1,100,200",
+      "description": "FastEthernet 0/1 should allow only VLANs 1,100,200",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

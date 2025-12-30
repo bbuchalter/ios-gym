@@ -3,7 +3,6 @@
 /* Educational content page with extensive prose - escaping quotes would harm source readability */
 /* eslint-disable react/no-unescaped-entities */
 
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
 import { Diagram } from '@/components/Diagram';
@@ -33,29 +32,20 @@ import lesson12 from '../../src/exercises/lesson-12-show-interfaces.json';
 import lesson13 from '../../src/exercises/lesson-13-management-access.json';
 import lesson14 from '../../src/exercises/lesson-14-vlan-creation.json';
 import lesson15 from '../../src/exercises/lesson-15-svi-basic.json';
+import lesson15a from '../../src/exercises/lesson-15a-svi-inter-vlan.json';
+import lesson16 from '../../src/exercises/lesson-16-trunk-all-vlans.json';
+import lesson17 from '../../src/exercises/lesson-17-trunk-restricted.json';
+import lesson18 from '../../src/exercises/lesson-18-ssh-configuration.json';
+import lesson19 from '../../src/exercises/lesson-19-routed-port.json';
+import lesson20 from '../../src/exercises/lesson-20-multiple-routed-ports.json';
+import lesson21 from '../../src/exercises/lesson-21-static-routing.json';
+import lesson22 from '../../src/exercises/lesson-22-ospf-basic.json';
+import lesson23 from '../../src/exercises/lesson-23-ospf-all-interfaces.json';
+import lesson24 from '../../src/exercises/lesson-24-ospf-cost.json';
+import lesson25 from '../../src/exercises/lesson-25-capstone.json';
 
 import type { CommandGrammar } from '@src/types';
 import type { Exercise as ExerciseType } from '@src/validation/types';
-
-// Dynamically import Terminal to avoid SSR issues with XTerm
-const Terminal = dynamic(() => import('@/components/Terminal'), {
-  ssr: false,
-  loading: () => (
-    <div
-      className="my-8 rounded-lg border border-gray-700 bg-gray-800"
-      style={{ minHeight: '470px' }}
-    >
-      <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 font-mono text-xs text-gray-400">
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-red-500" />
-          <span className="h-2 w-2 rounded-full bg-yellow-500" />
-          <span className="h-2 w-2 rounded-full bg-green-500" />
-        </div>
-      </div>
-      <div className="p-8 text-center text-gray-400">Loading terminal...</div>
-    </div>
-  ),
-});
 
 const SCROLL_POSITION_KEY = 'ios-practice-scroll-position';
 
@@ -2811,64 +2801,8 @@ Purpose: Gateway for computers in VLAN 100`}
                 <p className="mb-8 text-lg text-gray-300">
                   Configure SVIs for inter-VLAN routing on a Layer 3 switch:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>ip routing</code> — Enable routing between VLANs
-                  </li>
-                  <li>
-                    <code>vlan 100</code> — Create VLAN 100
-                  </li>
-                  <li>
-                    <code>name Students</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>vlan 200</code> — Create VLAN 200
-                  </li>
-                  <li>
-                    <code>name Teachers</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 100</code> — Create SVI for VLAN 100
-                  </li>
-                  <li>
-                    <code>ip address 35.72.10.1 255.255.255.0</code> — Gateway for student computers
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 200</code> — Create SVI for VLAN 200
-                  </li>
-                  <li>
-                    <code>ip address 33.2.169.1 255.255.255.0</code> — Gateway for teacher computers
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson15a as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -3066,26 +3000,8 @@ All others are BLOCKED!`}
                 <p className="mb-8 text-lg text-gray-300">
                   First, configure a trunk that allows ALL VLANs (the simple way):
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>interface fa0/1</code> — Configure FastEthernet 0/1
-                  </li>
-                  <li>
-                    <code>switchport mode trunk</code> — Make it a trunk (allows ALL VLANs by
-                    default!)
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson16 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ You succeeded when:</p>
@@ -3110,41 +3026,8 @@ All others are BLOCKED!`}
                 <p className="mb-8 text-lg text-gray-300">
                   Now configure trunk ports that carry only specific VLANs:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>interface g0/1</code> — GigabitEthernet 0/1 (uplink port)
-                  </li>
-                  <li>
-                    <code>switchport mode trunk</code> — Make it a trunk
-                  </li>
-                  <li>
-                    <code>switchport trunk allowed vlan 1,100,200</code> — Allow only these VLANs
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface fa0/1</code> — Another trunk port
-                  </li>
-                  <li>
-                    <code>switchport mode trunk</code>
-                  </li>
-                  <li>
-                    <code>switchport trunk allowed vlan 1,100,200</code>
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
+
+                <Exercise exercise={lesson17 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-blue-500/50 bg-blue-900/30 p-6">
                   <p className="mb-3 flex items-center gap-2 font-semibold text-blue-300">
@@ -3180,8 +3063,6 @@ All others are BLOCKED!`}
                     </p>
                   </div>
                 </div>
-
-                <Terminal grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ You succeeded when:</p>
@@ -3331,46 +3212,8 @@ Hacker sees: gibberish
                 <p className="mb-8 text-lg text-gray-300">
                   Configure complete SSH access (this is a big one!):
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>hostname SecureRouter</code> — Give it a name
-                  </li>
-                  <li>
-                    <code>ip domain-name cisco.com</code> — Required for key generation
-                  </li>
-                  <li>
-                    <code>crypto key generate rsa modulus 1024</code> — Generate encryption keys
-                  </li>
-                  <li>
-                    <code>ip ssh version 2</code> — Use secure version
-                  </li>
-                  <li>
-                    <code>username admin secret Cyb3rPatriot</code> — Create user account
-                  </li>
-                  <li>
-                    <code>line vty 0 4</code> — Enter VTY configuration
-                  </li>
-                  <li>
-                    <code>login local</code> — Use local user database
-                  </li>
-                  <li>
-                    <code>transport input ssh</code> — Only allow SSH (no Telnet!)
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson18 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ You succeeded when:</p>
@@ -3638,34 +3481,8 @@ Only 2 devices, so only need 2 IPs!`}
                 <p className="mb-8 text-lg text-gray-300">
                   Configure a routed port on a Layer 3 switch:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>interface g1/0/2</code> — Enter the interface
-                  </li>
-                  <li>
-                    <code>no switchport</code> — Convert to routed port (this is the key!)
-                  </li>
-                  <li>
-                    <code>ip address 35.72.12.1 255.255.255.252</code> — Assign IP address
-                  </li>
-                  <li>
-                    <code>no shutdown</code> — Turn the interface on
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson19 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -3702,67 +3519,8 @@ Only 2 devices, so only need 2 IPs!`}
                   In a real scenario (like CyberPatriot!), you'll configure multiple routed ports.
                   Practice here:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>hostname CorporateDistributionSwitch1</code>
-                  </li>
-                  <li>
-                    <code>interface g1/0/1</code> — First uplink
-                  </li>
-                  <li>
-                    <code>no switchport</code>
-                  </li>
-                  <li>
-                    <code>ip address 35.72.15.2 255.255.255.252</code> — /30 subnet
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface g1/0/2</code> — Second uplink
-                  </li>
-                  <li>
-                    <code>no switchport</code>
-                  </li>
-                  <li>
-                    <code>ip address 35.72.15.6 255.255.255.252</code> — Different /30 subnet
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface g1/0/3</code> — Third uplink
-                  </li>
-                  <li>
-                    <code>no switchport</code>
-                  </li>
-                  <li>
-                    <code>ip address 35.72.15.17 255.255.255.252</code> — Another /30 subnet
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson20 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -4091,29 +3849,12 @@ Slower backup connection`}
                 <p className="mb-8 text-lg text-gray-300">
                   Configure a primary default route with a floating backup:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>ip route 0.0.0.0 0.0.0.0 35.72.13.1</code> — Primary route (AD defaults to
-                    1)
-                  </li>
-                  <li>
-                    <code>ip route 0.0.0.0 0.0.0.0 35.72.13.2 254</code> — Backup route (AD 254)
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={routerGrammar} deviceModel="1941-router" />
+                <Exercise
+                  exercise={lesson21 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -4250,28 +3991,12 @@ Traffic flows: A → C → B`}
                 <p className="mb-8 text-lg text-gray-300">
                   Configure OSPF to advertise a single network:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>router ospf 1</code> — Enable OSPF with process ID 1
-                  </li>
-                  <li>
-                    <code>network 35.72.12.2 0.0.0.0 area 0</code> — Advertise this IP in area 0
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={routerGrammar} deviceModel="1941-router" />
+                <Exercise
+                  exercise={lesson22 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
 
                 <InfoBox variant="info">
                   <ProTip>
@@ -4352,43 +4077,12 @@ router ospf 1
                   Configure OSPF for a Layer 3 switch with multiple interfaces (like in a real
                   scenario!):
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>router ospf 1</code> — Enter OSPF configuration
-                  </li>
-                  <li>
-                    <code>network 35.72.15.2 0.0.0.0 area 0</code> — Gigabit 1/0/1
-                  </li>
-                  <li>
-                    <code>network 35.72.15.6 0.0.0.0 area 0</code> — Gigabit 1/0/2
-                  </li>
-                  <li>
-                    <code>network 35.72.15.17 0.0.0.0 area 0</code> — Gigabit 1/0/3
-                  </li>
-                  <li>
-                    <code>network 172.16.16.1 0.0.0.0 area 0</code> — VLAN 1 (management)
-                  </li>
-                  <li>
-                    <code>network 35.72.10.1 0.0.0.0 area 0</code> — VLAN 100 (students)
-                  </li>
-                  <li>
-                    <code>network 33.2.169.1 0.0.0.0 area 0</code> — VLAN 200 (teachers)
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={routerGrammar} deviceModel="1941-router" />
+                <Exercise
+                  exercise={lesson23 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -4571,37 +4265,12 @@ ip ospf cost 30
                 <p className="mb-8 text-lg text-gray-300">
                   Configure OSPF costs on two interfaces to control path preference:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>interface g0/0</code> — Primary interface
-                  </li>
-                  <li>
-                    <code>ip ospf cost 10</code> — Set low cost (preferred path)
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface g0/2</code> — Backup interface
-                  </li>
-                  <li>
-                    <code>ip ospf cost 30</code> — Set higher cost (backup path)
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={routerGrammar} deviceModel="1941-router" />
+                <Exercise
+                  exercise={lesson24 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
               </LessonSection>
 
               {/* CAPSTONE: FULL SCENARIO */}
@@ -4698,176 +4367,12 @@ ip ospf cost 30
                   Follow these steps to complete the full configuration. This is a long one — take
                   it step by step!
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li className="font-semibold text-blue-300">— Basic Setup —</li>
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>hostname CorporateDistributionSwitch1</code>
-                  </li>
-                  <li>
-                    <code>ip routing</code> — Enable routing!
-                  </li>
 
-                  <li className="mt-6 font-semibold text-blue-300">— Create VLANs —</li>
-                  <li>
-                    <code>vlan 100</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>vlan 200</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-
-                  <li className="mt-6 font-semibold text-blue-300">— Configure SVIs —</li>
-                  <li>
-                    <code>interface vlan 1</code>
-                  </li>
-                  <li>
-                    <code>ip address 172.16.16.1 255.255.255.0</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 100</code>
-                  </li>
-                  <li>
-                    <code>ip address 35.72.10.1 255.255.255.0</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 200</code>
-                  </li>
-                  <li>
-                    <code>ip address 33.2.169.1 255.255.255.0</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-
-                  <li className="mt-6 font-semibold text-blue-300">— Configure Routed Ports —</li>
-                  <li>
-                    <code>interface g1/0/1</code>
-                  </li>
-                  <li>
-                    <code>no switchport</code>
-                  </li>
-                  <li>
-                    <code>ip address 35.72.15.2 255.255.255.252</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>ip ospf cost 10</code> — Primary path!
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface g1/0/2</code>
-                  </li>
-                  <li>
-                    <code>no switchport</code>
-                  </li>
-                  <li>
-                    <code>ip address 35.72.15.6 255.255.255.252</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>ip ospf cost 30</code> — Backup path!
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface g1/0/3</code>
-                  </li>
-                  <li>
-                    <code>no switchport</code>
-                  </li>
-                  <li>
-                    <code>ip address 35.72.15.17 255.255.255.252</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-
-                  <li className="mt-6 font-semibold text-blue-300">— Configure Trunk Port —</li>
-                  <li>
-                    <code>interface g1/0/4</code>
-                  </li>
-                  <li>
-                    <code>switchport mode trunk</code>
-                  </li>
-                  <li>
-                    <code>switchport trunk allowed vlan 1,100,200</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-
-                  <li className="mt-6 font-semibold text-blue-300">— Configure OSPF —</li>
-                  <li>
-                    <code>router ospf 1</code>
-                  </li>
-                  <li>
-                    <code>network 35.72.15.2 0.0.0.0 area 0</code>
-                  </li>
-                  <li>
-                    <code>network 35.72.15.6 0.0.0.0 area 0</code>
-                  </li>
-                  <li>
-                    <code>network 35.72.15.17 0.0.0.0 area 0</code>
-                  </li>
-                  <li>
-                    <code>network 172.16.16.1 0.0.0.0 area 0</code>
-                  </li>
-                  <li>
-                    <code>network 35.72.10.1 0.0.0.0 area 0</code>
-                  </li>
-                  <li>
-                    <code>network 33.2.169.1 0.0.0.0 area 0</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-
-                  <li className="mt-6 font-semibold text-blue-300">— Save! —</li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
-
-                <Terminal grammar={routerGrammar} deviceModel="1941-router" />
+                <Exercise
+                  exercise={lesson25 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verification Checklist:</p>

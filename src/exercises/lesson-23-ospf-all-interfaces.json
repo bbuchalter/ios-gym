@@ -1,0 +1,125 @@
+{
+  "id": "lesson-23-ospf-all-interfaces",
+  "title": "OSPF: Advertising All Interfaces",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Configure OSPF on All Layer 3 Interfaces",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enter OSPF configuration",
+          "command": "router ospf 1"
+        },
+        {
+          "objective": "Advertise routed port g1/0/1 (35.72.15.2)",
+          "command": "network 35.72.15.2 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise routed port g1/0/2 (35.72.15.6)",
+          "command": "network 35.72.15.6 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise routed port g1/0/3 (35.72.15.17)",
+          "command": "network 35.72.15.17 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise management SVI (172.16.16.1)",
+          "command": "network 172.16.16.1 0.0.0.0 area 0",
+          "teachingPoint": "Don't forget SVIs - they need OSPF too!"
+        },
+        {
+          "objective": "Advertise VLAN 100 SVI (35.72.10.1)",
+          "command": "network 35.72.10.1 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise VLAN 200 SVI (33.2.169.1)",
+          "command": "network 33.2.169.1 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.15.2",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 35.72.15.2",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.15.6",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 35.72.15.6",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.15.17",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 35.72.15.17",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "172.16.16.1",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 172.16.16.1",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.10.1",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 35.72.10.1",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "33.2.169.1",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 33.2.169.1",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

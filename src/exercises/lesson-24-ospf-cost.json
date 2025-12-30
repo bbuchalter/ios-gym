@@ -1,0 +1,72 @@
+{
+  "id": "lesson-24-ospf-cost",
+  "title": "OSPF Interface Cost: Path Preference",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Configure OSPF Costs",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Configure primary interface (g0/0)",
+          "command": "interface g0/0"
+        },
+        {
+          "objective": "Set low OSPF cost for primary path",
+          "command": "ip ospf cost 10",
+          "teachingPoint": "Lower cost = preferred path. OSPF will choose this route first"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure backup interface (g0/2)",
+          "command": "interface g0/2"
+        },
+        {
+          "objective": "Set higher OSPF cost for backup path",
+          "command": "ip ospf cost 30",
+          "teachingPoint": "Higher cost = backup path. Only used if primary fails"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/0.ospfCost",
+      "expectedValue": 10,
+      "description": "GigabitEthernet 0/0 should have OSPF cost 10",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/2.ospfCost",
+      "expectedValue": 30,
+      "description": "GigabitEthernet 0/2 should have OSPF cost 30",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

@@ -1,0 +1,56 @@
+{
+  "id": "lesson-22-ospf-basic",
+  "title": "OSPF: Basic Configuration",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Configure Basic OSPF",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enable OSPF with process ID 1",
+          "command": "router ospf 1",
+          "teachingPoint": "Process ID is locally significant - can be any number 1-65535"
+        },
+        {
+          "objective": "Advertise network 35.72.12.2 in area 0",
+          "command": "network 35.72.12.2 0.0.0.0 area 0",
+          "teachingPoint": "Wildcard 0.0.0.0 means match this exact IP address"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.12.2",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise network 35.72.12.2 in area 0",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

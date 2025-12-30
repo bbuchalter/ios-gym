@@ -1,0 +1,50 @@
+{
+  "id": "lesson-16-trunk-all-vlans",
+  "title": "Trunk Ports: Allowing ALL VLANs",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure Trunk Port",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enter interface FastEthernet 0/1",
+          "command": "interface fa0/1"
+        },
+        {
+          "objective": "Configure as trunk port",
+          "command": "switchport mode trunk",
+          "teachingPoint": "By default, trunks allow ALL VLANs (1-4094) to pass through"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/1.mode",
+      "expectedValue": "trunk",
+      "description": "FastEthernet 0/1 should be configured as a trunk port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/1.trunkAllowedVlans",
+      "expectedValue": null,
+      "description": "Trunk should allow all VLANs (no 'allowed vlan' restriction)",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

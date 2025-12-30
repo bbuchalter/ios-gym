@@ -1,0 +1,163 @@
+{
+  "id": "lesson-15a-svi-inter-vlan",
+  "title": "SVI: Configure Inter-VLAN Routing",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure SVIs for Inter-VLAN Routing",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enable IP routing",
+          "command": "ip routing",
+          "teachingPoint": "This tells the switch to route packets between VLANs"
+        },
+        {
+          "objective": "Create VLAN 100",
+          "command": "vlan 100"
+        },
+        {
+          "objective": "Name it 'Students'",
+          "command": "name Students"
+        },
+        {
+          "objective": "Exit VLAN configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Create VLAN 200",
+          "command": "vlan 200"
+        },
+        {
+          "objective": "Name it 'Teachers'",
+          "command": "name Teachers"
+        },
+        {
+          "objective": "Exit VLAN configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Create SVI for VLAN 100",
+          "command": "interface vlan 100",
+          "teachingPoint": "This creates a virtual interface for VLAN 100"
+        },
+        {
+          "objective": "Assign IP 35.72.10.1/24",
+          "command": "ip address 35.72.10.1 255.255.255.0",
+          "teachingPoint": "This IP becomes the default gateway for devices in VLAN 100"
+        },
+        {
+          "objective": "Enable the SVI",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Create SVI for VLAN 200",
+          "command": "interface vlan 200"
+        },
+        {
+          "objective": "Assign IP 33.2.169.1/24",
+          "command": "ip address 33.2.169.1 255.255.255.0",
+          "teachingPoint": "This IP becomes the default gateway for devices in VLAN 200"
+        },
+        {
+          "objective": "Enable the SVI",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "ipRouting",
+      "expectedValue": true,
+      "description": "IP routing should be enabled",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "100",
+        "name": "Students"
+      },
+      "description": "VLAN 100 should exist with name 'Students'",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "200",
+        "name": "Teachers"
+      },
+      "description": "VLAN 200 should exist with name 'Teachers'",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan100.ip",
+      "expectedValue": "35.72.10.1",
+      "description": "VLAN 100 SVI should have IP 35.72.10.1",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan100.mask",
+      "expectedValue": "255.255.255.0",
+      "description": "VLAN 100 SVI should have mask 255.255.255.0",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan100.adminUp",
+      "expectedValue": true,
+      "description": "VLAN 100 SVI should be enabled",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan200.ip",
+      "expectedValue": "33.2.169.1",
+      "description": "VLAN 200 SVI should have IP 33.2.169.1",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan200.mask",
+      "expectedValue": "255.255.255.0",
+      "description": "VLAN 200 SVI should have mask 255.255.255.0",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan200.adminUp",
+      "expectedValue": true,
+      "description": "VLAN 200 SVI should be enabled",
+      "diagnosticCommand": "show ip interface brief"
+    }
+  ]
+}
+

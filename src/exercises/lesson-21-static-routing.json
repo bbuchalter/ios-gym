@@ -1,0 +1,66 @@
+{
+  "id": "lesson-21-static-routing",
+  "title": "Static Routing: Directing Traffic",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Configure Default Routes",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Configure primary default route via 35.72.13.1",
+          "command": "ip route 0.0.0.0 0.0.0.0 35.72.13.1",
+          "teachingPoint": "0.0.0.0 0.0.0.0 means 'all traffic' - this is the default route. AD defaults to 1"
+        },
+        {
+          "objective": "Configure backup default route via 35.72.13.2 with AD 254",
+          "command": "ip route 0.0.0.0 0.0.0.0 35.72.13.2 254",
+          "teachingPoint": "AD 254 makes this a floating static route - only used if primary fails"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "routes",
+      "expectedValue": [
+        {
+          "destination": "0.0.0.0",
+          "mask": "0.0.0.0",
+          "nextHop": "35.72.13.1",
+          "ad": 1
+        },
+        {
+          "destination": "0.0.0.0",
+          "mask": "0.0.0.0",
+          "nextHop": "35.72.13.2",
+          "ad": 254
+        }
+      ],
+      "description": "Both default routes should be configured with correct AD values",
+      "diagnosticCommand": "show ip route"
+    }
+  ]
+}
+

@@ -1,0 +1,148 @@
+{
+  "id": "lesson-20-multiple-routed-ports",
+  "title": "Layer 3 Switching: Multiple Routed Ports",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure Multiple Routed Ports",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Set hostname to 'CorporateDistributionSwitch1'",
+          "command": "hostname CorporateDistributionSwitch1"
+        },
+        {
+          "objective": "Configure first uplink (GigabitEthernet 1/0/1)",
+          "command": "interface g1/0/1"
+        },
+        {
+          "objective": "Convert to routed port",
+          "command": "no switchport"
+        },
+        {
+          "objective": "Assign IP 35.72.15.2/30",
+          "command": "ip address 35.72.15.2 255.255.255.252",
+          "teachingPoint": "First /30 subnet: .1 and .2 are usable"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure second uplink (GigabitEthernet 1/0/2)",
+          "command": "interface g1/0/2"
+        },
+        {
+          "objective": "Convert to routed port",
+          "command": "no switchport"
+        },
+        {
+          "objective": "Assign IP 35.72.15.6/30",
+          "command": "ip address 35.72.15.6 255.255.255.252",
+          "teachingPoint": "Second /30 subnet: .5 and .6 are usable"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure third uplink (GigabitEthernet 1/0/3)",
+          "command": "interface g1/0/3"
+        },
+        {
+          "objective": "Convert to routed port",
+          "command": "no switchport"
+        },
+        {
+          "objective": "Assign IP 35.72.15.17/30",
+          "command": "ip address 35.72.15.17 255.255.255.252",
+          "teachingPoint": "Third /30 subnet: .17 and .18 are usable"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "hostname",
+      "expectedValue": "CorporateDistributionSwitch1",
+      "description": "Hostname should be 'CorporateDistributionSwitch1'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/1.routed",
+      "expectedValue": true,
+      "description": "GigabitEthernet 1/0/1 should be a routed port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/1.ip",
+      "expectedValue": "35.72.15.2",
+      "description": "GigabitEthernet 1/0/1 should have IP 35.72.15.2",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.routed",
+      "expectedValue": true,
+      "description": "GigabitEthernet 1/0/2 should be a routed port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.ip",
+      "expectedValue": "35.72.15.6",
+      "description": "GigabitEthernet 1/0/2 should have IP 35.72.15.6",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/3.routed",
+      "expectedValue": true,
+      "description": "GigabitEthernet 1/0/3 should be a routed port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/3.ip",
+      "expectedValue": "35.72.15.17",
+      "description": "GigabitEthernet 1/0/3 should have IP 35.72.15.17",
+      "diagnosticCommand": "show ip interface brief"
+    }
+  ]
+}
+

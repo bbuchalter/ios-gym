@@ -1,0 +1,461 @@
+{
+  "id": "lesson-25-capstone",
+  "title": "Capstone: Full Network Configuration",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Basic Setup",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Set hostname to 'CorporateDistributionSwitch1'",
+          "command": "hostname CorporateDistributionSwitch1"
+        },
+        {
+          "objective": "Enable IP routing",
+          "command": "ip routing",
+          "teachingPoint": "Required for inter-VLAN routing"
+        }
+      ]
+    },
+    {
+      "section": "Create VLANs",
+      "steps": [
+        {
+          "objective": "Create VLAN 100",
+          "command": "vlan 100"
+        },
+        {
+          "objective": "Exit VLAN configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Create VLAN 200",
+          "command": "vlan 200"
+        },
+        {
+          "objective": "Exit VLAN configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Configure SVIs",
+      "steps": [
+        {
+          "objective": "Configure management SVI (VLAN 1)",
+          "command": "interface vlan 1"
+        },
+        {
+          "objective": "Assign IP 172.16.16.1/24",
+          "command": "ip address 172.16.16.1 255.255.255.0"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure VLAN 100 SVI",
+          "command": "interface vlan 100"
+        },
+        {
+          "objective": "Assign IP 35.72.10.1/24",
+          "command": "ip address 35.72.10.1 255.255.255.0"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure VLAN 200 SVI",
+          "command": "interface vlan 200"
+        },
+        {
+          "objective": "Assign IP 33.2.169.1/24",
+          "command": "ip address 33.2.169.1 255.255.255.0"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Configure Routed Ports",
+      "steps": [
+        {
+          "objective": "Configure GigabitEthernet 1/0/1",
+          "command": "interface g1/0/1"
+        },
+        {
+          "objective": "Convert to routed port",
+          "command": "no switchport"
+        },
+        {
+          "objective": "Assign IP 35.72.15.2/30",
+          "command": "ip address 35.72.15.2 255.255.255.252"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Set OSPF cost to 10 (primary path)",
+          "command": "ip ospf cost 10",
+          "teachingPoint": "Low cost makes this the preferred path"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure GigabitEthernet 1/0/2",
+          "command": "interface g1/0/2"
+        },
+        {
+          "objective": "Convert to routed port",
+          "command": "no switchport"
+        },
+        {
+          "objective": "Assign IP 35.72.15.6/30",
+          "command": "ip address 35.72.15.6 255.255.255.252"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Set OSPF cost to 30 (backup path)",
+          "command": "ip ospf cost 30",
+          "teachingPoint": "Higher cost makes this the backup path"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure GigabitEthernet 1/0/3",
+          "command": "interface g1/0/3"
+        },
+        {
+          "objective": "Convert to routed port",
+          "command": "no switchport"
+        },
+        {
+          "objective": "Assign IP 35.72.15.17/30",
+          "command": "ip address 35.72.15.17 255.255.255.252"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Configure Trunk Port",
+      "steps": [
+        {
+          "objective": "Configure GigabitEthernet 1/0/4",
+          "command": "interface g1/0/4"
+        },
+        {
+          "objective": "Make it a trunk port",
+          "command": "switchport mode trunk"
+        },
+        {
+          "objective": "Restrict to VLANs 1,100,200",
+          "command": "switchport trunk allowed vlan 1,100,200",
+          "teachingPoint": "Security best practice: only allow needed VLANs"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Configure OSPF",
+      "steps": [
+        {
+          "objective": "Enter OSPF configuration",
+          "command": "router ospf 1"
+        },
+        {
+          "objective": "Advertise g1/0/1 network",
+          "command": "network 35.72.15.2 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise g1/0/2 network",
+          "command": "network 35.72.15.6 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise g1/0/3 network",
+          "command": "network 35.72.15.17 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise VLAN 1 management network",
+          "command": "network 172.16.16.1 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise VLAN 100 student network",
+          "command": "network 35.72.10.1 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Advertise VLAN 200 teacher network",
+          "command": "network 33.2.169.1 0.0.0.0 area 0"
+        },
+        {
+          "objective": "Exit OSPF configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Save Configuration",
+      "steps": [
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save all configuration",
+          "command": "write memory",
+          "teachingPoint": "Always save your work!"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "hostname",
+      "expectedValue": "CorporateDistributionSwitch1",
+      "description": "Hostname should be 'CorporateDistributionSwitch1'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "ipRouting",
+      "expectedValue": true,
+      "description": "IP routing should be enabled",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "100"
+      },
+      "description": "VLAN 100 should exist",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "200"
+      },
+      "description": "VLAN 200 should exist",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan1.ip",
+      "expectedValue": "172.16.16.1",
+      "description": "VLAN 1 SVI should have IP 172.16.16.1",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan1.adminUp",
+      "expectedValue": true,
+      "description": "VLAN 1 SVI should be enabled",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan100.ip",
+      "expectedValue": "35.72.10.1",
+      "description": "VLAN 100 SVI should have IP 35.72.10.1",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan100.adminUp",
+      "expectedValue": true,
+      "description": "VLAN 100 SVI should be enabled",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan200.ip",
+      "expectedValue": "33.2.169.1",
+      "description": "VLAN 200 SVI should have IP 33.2.169.1",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan200.adminUp",
+      "expectedValue": true,
+      "description": "VLAN 200 SVI should be enabled",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/1.routed",
+      "expectedValue": true,
+      "description": "GigabitEthernet 1/0/1 should be a routed port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/1.ip",
+      "expectedValue": "35.72.15.2",
+      "description": "GigabitEthernet 1/0/1 should have IP 35.72.15.2",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/1.ospfCost",
+      "expectedValue": 10,
+      "description": "GigabitEthernet 1/0/1 should have OSPF cost 10",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.routed",
+      "expectedValue": true,
+      "description": "GigabitEthernet 1/0/2 should be a routed port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.ip",
+      "expectedValue": "35.72.15.6",
+      "description": "GigabitEthernet 1/0/2 should have IP 35.72.15.6",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.ospfCost",
+      "expectedValue": 30,
+      "description": "GigabitEthernet 1/0/2 should have OSPF cost 30",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/3.routed",
+      "expectedValue": true,
+      "description": "GigabitEthernet 1/0/3 should be a routed port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/3.ip",
+      "expectedValue": "35.72.15.17",
+      "description": "GigabitEthernet 1/0/3 should have IP 35.72.15.17",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/4.mode",
+      "expectedValue": "trunk",
+      "description": "GigabitEthernet 1/0/4 should be a trunk port",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/4.trunkAllowedVlans",
+      "expectedValue": "1,100,200",
+      "description": "GigabitEthernet 1/0/4 should allow only VLANs 1,100,200",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.15.2",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 35.72.15.2",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.15.6",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 35.72.15.6",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.15.17",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 35.72.15.17",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "172.16.16.1",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 172.16.16.1",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "35.72.10.1",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 35.72.10.1",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "33.2.169.1",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 33.2.169.1",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

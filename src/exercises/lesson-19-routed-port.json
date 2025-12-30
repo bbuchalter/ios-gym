@@ -1,0 +1,82 @@
+{
+  "id": "lesson-19-routed-port",
+  "title": "Layer 3 Switching: Routed Ports",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure Routed Port",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enter interface GigabitEthernet 1/0/2",
+          "command": "interface g1/0/2"
+        },
+        {
+          "objective": "Convert to routed port",
+          "command": "no switchport",
+          "teachingPoint": "This transforms the port from Layer 2 (switchport) to Layer 3 (routed)"
+        },
+        {
+          "objective": "Assign IP address 35.72.12.1/30",
+          "command": "ip address 35.72.12.1 255.255.255.252",
+          "teachingPoint": "/30 subnet gives only 2 usable IPs - perfect for point-to-point links"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.routed",
+      "expectedValue": true,
+      "description": "GigabitEthernet 1/0/2 should be a routed port (no switchport)",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.ip",
+      "expectedValue": "35.72.12.1",
+      "description": "GigabitEthernet 1/0/2 should have IP 35.72.12.1",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.mask",
+      "expectedValue": "255.255.255.252",
+      "description": "GigabitEthernet 1/0/2 should have mask 255.255.255.252 (/30)",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g1/0/2.adminUp",
+      "expectedValue": true,
+      "description": "GigabitEthernet 1/0/2 should be enabled",
+      "diagnosticCommand": "show ip interface brief"
+    }
+  ]
+}
+

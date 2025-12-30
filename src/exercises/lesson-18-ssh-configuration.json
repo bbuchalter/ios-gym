@@ -1,0 +1,124 @@
+{
+  "id": "lesson-18-ssh-configuration",
+  "title": "SSH: Secure Remote Access",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure SSH Components",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Set hostname to 'SecureRouter'",
+          "command": "hostname SecureRouter",
+          "teachingPoint": "Hostname is required for RSA key generation"
+        },
+        {
+          "objective": "Set domain name to 'cisco.com'",
+          "command": "ip domain-name cisco.com",
+          "teachingPoint": "Domain name is also required for key generation"
+        },
+        {
+          "objective": "Generate RSA encryption keys (1024 bits)",
+          "command": "crypto key generate rsa modulus 1024",
+          "teachingPoint": "This creates the encryption keys for SSH - you'll see a success message"
+        },
+        {
+          "objective": "Set SSH version to 2",
+          "command": "ip ssh version 2",
+          "teachingPoint": "Version 2 is more secure than version 1"
+        },
+        {
+          "objective": "Create local user 'admin' with password 'Cyb3rPatriot'",
+          "command": "username admin secret Cyb3rPatriot",
+          "teachingPoint": "This creates the account users will log in with"
+        },
+        {
+          "objective": "Enter VTY line configuration (lines 0-4)",
+          "command": "line vty 0 4",
+          "teachingPoint": "VTY lines are virtual terminals for remote connections (5 simultaneous users)"
+        },
+        {
+          "objective": "Use local user database for authentication",
+          "command": "login local"
+        },
+        {
+          "objective": "Only allow SSH (no Telnet)",
+          "command": "transport input ssh",
+          "teachingPoint": "This blocks insecure Telnet connections"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "hostname",
+      "expectedValue": "SecureRouter",
+      "description": "Hostname should be set to 'SecureRouter'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "ssh.domainName",
+      "expectedValue": "cisco.com",
+      "description": "SSH domain name should be 'cisco.com'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "ssh.version",
+      "expectedValue": 2,
+      "description": "SSH version should be 2",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "ssh.rsaKeyGenerated",
+      "expectedValue": true,
+      "description": "RSA keys should be generated",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "users.admin",
+      "expectedValue": "Cyb3rPatriot",
+      "description": "User 'admin' should exist with password 'Cyb3rPatriot'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "line.vty.loginLocal",
+      "expectedValue": true,
+      "description": "VTY lines should use local authentication",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "line.vty.transportInput",
+      "expectedValue": "ssh",
+      "description": "VTY lines should only allow SSH (not Telnet)",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+
