@@ -1,0 +1,23 @@
+{
+  "id": "lesson-05-pagination",
+  "title": "Understanding Paginated Output",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Practice Pagination",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Run show running-config to see paginated output",
+          "command": "show running-config",
+          "teachingPoint": "Watch for --More-- prompt. Press SPACE for next page, ENTER for next line, or Q to quit"
+        }
+      ]
+    }
+  ],
+  "assertions": []
+}
+

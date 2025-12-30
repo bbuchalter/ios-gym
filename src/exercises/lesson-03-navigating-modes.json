@@ -1,0 +1,38 @@
+{
+  "id": "lesson-03-navigating-modes",
+  "title": "Navigating Between Modes",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Practice Mode Navigation",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable",
+          "teachingPoint": "Watch the prompt change from > to #"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal",
+          "teachingPoint": "Watch the prompt change to (config)#"
+        },
+        {
+          "objective": "Go back one level using exit",
+          "command": "exit",
+          "teachingPoint": "Notice you go back to privileged mode #"
+        },
+        {
+          "objective": "Enter configuration mode again",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Jump directly to privileged mode using end",
+          "command": "end",
+          "teachingPoint": "The end command jumps straight to privileged mode from any config mode"
+        }
+      ]
+    }
+  ],
+  "assertions": []
+}
+

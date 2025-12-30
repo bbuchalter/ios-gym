@@ -409,30 +409,16 @@ describe('Exercise Component Logic', () => {
   describe('Button Visibility Logic', () => {
     const testCases = [
       {
-        name: 'shows button for goal-based with assertions',
+        name: 'shows button when assertions array has items',
         exercise: {
-          validation: { type: 'goal-based', assertions: [{ type: 'hostname', message: 'Test', expected: 'X' }] }
+          assertions: [{ type: 'state-path', path: 'hostname', expectedValue: 'Test', description: 'Test' }]
         },
         expected: true
       },
       {
-        name: 'hides button for goal-based with no assertions',
+        name: 'hides button when assertions array is empty',
         exercise: {
-          validation: { type: 'goal-based', assertions: [] }
-        },
-        expected: false
-      },
-      {
-        name: 'hides button for exploratory with assertions',
-        exercise: {
-          validation: { type: 'exploratory', assertions: [{ type: 'command_succeeded', message: 'Test' }] }
-        },
-        expected: false
-      },
-      {
-        name: 'hides button for exploratory with no assertions',
-        exercise: {
-          validation: { type: 'exploratory', assertions: [] }
+          assertions: []
         },
         expected: false
       }
@@ -440,9 +426,7 @@ describe('Exercise Component Logic', () => {
     
     testCases.forEach(({ name, exercise, expected }) => {
       test(`${name}`, () => {
-        const shouldShow = 
-          exercise.validation.type === 'goal-based' && 
-          exercise.validation.assertions.length > 0;
+        const shouldShow = exercise.assertions.length > 0;
         
         expect(shouldShow).toBe(expected);
       });
@@ -478,6 +462,252 @@ describe('Exercise Component Logic', () => {
       expect(error.message).toBeTruthy();
       expect(error.expected).toBeUndefined();
       expect(error.actual).toBeUndefined();
+    });
+  });
+});
+
+describe('New Schema Format (Goals/Steps/Assertions)', () => {
+  describe('Teaching Points', () => {
+    test('steps can include optional teachingPoint field', () => {
+      const step = {
+        objective: 'Enter privileged mode',
+        command: 'enable',
+        teachingPoint: 'Watch the prompt change from > to #'
+      };
+      
+      expect(step.teachingPoint).toBeDefined();
+      expect(typeof step.teachingPoint).toBe('string');
+      expect(step.teachingPoint.length).toBeGreaterThan(0);
+    });
+    
+    test('steps work without teachingPoint field', () => {
+      const step: {
+        objective: string;
+        command: string;
+        teachingPoint?: string;
+      } = {
+        objective: 'Save configuration',
+        command: 'write memory'
+      };
+      
+      expect(step.teachingPoint).toBeUndefined();
+      expect(step.objective).toBeDefined();
+      expect(step.command).toBeDefined();
+    });
+  });
+  
+  describe('Exploratory Lessons with Empty Assertions', () => {
+    test('exploratory lessons can have empty assertions array', () => {
+      const srcExercisePath = path.join(process.cwd(), 'src/exercises/lesson-03-navigating-modes.json');
+      
+      if (fs.existsSync(srcExercisePath)) {
+        const exercise = JSON.parse(fs.readFileSync(srcExercisePath, 'utf-8'));
+        
+        expect(exercise.assertions).toBeDefined();
+        expect(Array.isArray(exercise.assertions)).toBe(true);
+        expect(exercise.assertions.length).toBe(0);
+      }
+    });
+    
+    test('Check My Work button should not show for empty assertions', () => {
+      const exercise = {
+        assertions: []
+      };
+      
+      const shouldShowButton = exercise.assertions.length > 0;
+      expect(shouldShowButton).toBe(false);
+    });
+    
+    test('keyboard shortcut should exit early for empty assertions', () => {
+      const exercise = {
+        assertions: []
+      };
+      
+      // Simulates the logic in handleKeyboardShortcut
+      const shouldProcessValidation = exercise.assertions.length > 0;
+      expect(shouldProcessValidation).toBe(false);
+    });
+    
+    test('completion banner shows on final step with no assertions', () => {
+      const exercise = {
+        goals: [
+          {
+            section: 'Practice',
+            steps: [
+              { objective: 'Step 1', command: 'cmd1' },
+              { objective: 'Step 2', command: 'cmd2' },
+              { objective: 'Step 3', command: 'cmd3' }
+            ]
+          }
+        ],
+        assertions: []
+      };
+      
+      const allSteps = exercise.goals.flatMap(goal => goal.steps);
+      const totalSteps = allSteps.length;
+      const currentStepIndex = totalSteps - 1; // On last step
+      
+      // Banner should show when:
+      // - On last step (currentStepIndex === totalSteps - 1)
+      // - AND no assertions (exercise.assertions.length === 0)
+      const shouldShowCompletionBanner = 
+        currentStepIndex === totalSteps - 1 && 
+        exercise.assertions.length === 0;
+      
+      expect(shouldShowCompletionBanner).toBe(true);
+    });
+    
+    test('progress bar turns green on final step with no assertions', () => {
+      const exercise = {
+        goals: [{ section: 'Test', steps: [{ objective: 'Step 1', command: 'cmd1' }] }],
+        assertions: []
+      };
+      
+      const allSteps = exercise.goals.flatMap(goal => goal.steps);
+      const totalSteps = allSteps.length;
+      const currentStepIndex = totalSteps - 1;
+      
+      const progressBarClass = 
+        currentStepIndex === totalSteps - 1 && exercise.assertions.length === 0
+          ? 'bg-green-500'
+          : 'bg-blue-500';
+      
+      expect(progressBarClass).toBe('bg-green-500');
+    });
+    
+    test('Next button becomes Complete button on final step with no assertions', () => {
+      const exercise = {
+        goals: [{ section: 'Test', steps: [{ objective: 'Step 1', command: 'cmd1' }] }],
+        assertions: []
+      };
+      
+      const allSteps = exercise.goals.flatMap(goal => goal.steps);
+      const totalSteps = allSteps.length;
+      const currentStepIndex = totalSteps - 1;
+      
+      const isComplete = currentStepIndex === totalSteps - 1 && exercise.assertions.length === 0;
+      const buttonText = isComplete ? '✓ Complete' : 'Next →';
+      const buttonClass = isComplete ? 'bg-green-600 text-white' : 'cursor-not-allowed bg-gray-700 text-gray-500';
+      
+      expect(buttonText).toBe('✓ Complete');
+      expect(buttonClass).toContain('bg-green-600');
+    });
+    
+    test('completion features do not show when assertions exist', () => {
+      const exercise = {
+        goals: [{ section: 'Test', steps: [{ objective: 'Step 1', command: 'cmd1' }] }],
+        assertions: [{ type: 'state-path', path: 'hostname', expectedValue: 'Test', description: 'Test' }]
+      };
+      
+      const allSteps = exercise.goals.flatMap(goal => goal.steps);
+      const totalSteps = allSteps.length;
+      const currentStepIndex = totalSteps - 1;
+      
+      const shouldShowCompletionBanner = 
+        currentStepIndex === totalSteps - 1 && 
+        exercise.assertions.length === 0;
+      
+      expect(shouldShowCompletionBanner).toBe(false);
+    });
+  });
+  
+  describe('Goals and Steps Structure', () => {
+    test('exercises can use goals/steps structure', () => {
+      const exercise = {
+        id: 'test-goals',
+        title: 'Test Exercise',
+        deviceModel: '2960-switch',
+        goals: [
+          {
+            section: 'Basic Setup',
+            steps: [
+              { objective: 'Enter privileged mode', command: 'enable' },
+              { objective: 'Enter config mode', command: 'configure terminal' }
+            ]
+          }
+        ],
+        assertions: []
+      };
+      
+      expect(exercise.goals).toBeDefined();
+      expect(exercise.goals.length).toBeGreaterThan(0);
+      expect(exercise.goals[0].section).toBeDefined();
+      expect(exercise.goals[0].steps).toBeDefined();
+      expect(exercise.goals[0].steps.length).toBe(2);
+    });
+    
+    test('steps from multiple goals can be flattened', () => {
+      const exercise = {
+        goals: [
+          {
+            section: 'Section 1',
+            steps: [
+              { objective: 'Step 1', command: 'cmd1' },
+              { objective: 'Step 2', command: 'cmd2' }
+            ]
+          },
+          {
+            section: 'Section 2',
+            steps: [
+              { objective: 'Step 3', command: 'cmd3' }
+            ]
+          }
+        ]
+      };
+      
+      // Component logic: exercise.goals.flatMap(goal => goal.steps)
+      const allSteps = exercise.goals.flatMap(goal => goal.steps);
+      
+      expect(allSteps.length).toBe(3);
+      expect(allSteps[0].objective).toBe('Step 1');
+      expect(allSteps[2].objective).toBe('Step 3');
+    });
+  });
+  
+  describe('New src/exercises Schema Validation', () => {
+    const newExercises = [
+      'lesson-01-setting-hostname-and-saving-configuration.json',
+      'lesson-02-setting-enable-secret-password.json',
+      'lesson-03-navigating-modes.json',
+      'lesson-04-tab-completion.json',
+      'lesson-05-pagination.json',
+      'lesson-06-name-lookup-abort.json'
+    ];
+    
+    newExercises.forEach(filename => {
+      test(`src/exercises/${filename} has valid structure`, () => {
+        const filePath = path.join(process.cwd(), 'src/exercises', filename);
+        
+        if (!fs.existsSync(filePath)) {
+          console.warn(`Skipping ${filename} - file not found in src/exercises`);
+          return;
+        }
+        
+        const exercise = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        
+        // Check required fields
+        expect(exercise.id).toBeDefined();
+        expect(exercise.title).toBeDefined();
+        expect(exercise.deviceModel).toBeDefined();
+        expect(exercise.goals).toBeDefined();
+        expect(Array.isArray(exercise.goals)).toBe(true);
+        expect(exercise.assertions).toBeDefined();
+        expect(Array.isArray(exercise.assertions)).toBe(true);
+        
+        // Check goals structure
+        exercise.goals.forEach((goal: any) => {
+          expect(goal.section).toBeDefined();
+          expect(goal.steps).toBeDefined();
+          expect(Array.isArray(goal.steps)).toBe(true);
+          
+          // Check steps structure
+          goal.steps.forEach((step: any) => {
+            expect(step.objective).toBeDefined();
+            // command is optional in some exercises
+            // teachingPoint is optional
+          });
+        });
+      });
     });
   });
 });

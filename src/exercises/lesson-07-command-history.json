@@ -1,0 +1,46 @@
+{
+  "id": "lesson-07-command-history",
+  "title": "Command History: Using Arrow Keys",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Practice Command History Navigation",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Type a command",
+          "command": "show running-config",
+          "teachingPoint": "This command will be saved in your command history. Remember, press Q to quit the output."
+        },
+        {
+          "objective": "Press UP arrow to recall the previous command",
+          "teachingPoint": "The UP arrow key recalls your last command - no need to retype it!"
+        },
+        {
+          "objective": "Press ENTER to run it again"
+        },
+        {
+          "objective": "Press UP arrow multiple times to see older commands",
+          "teachingPoint": "Keep pressing UP to go back through your command history"
+        },
+        {
+          "objective": "Press DOWN arrow to move forward through history",
+          "teachingPoint": "DOWN arrow moves you back toward more recent commands"
+        },
+        {
+          "objective": "Type a new command: configure terminal",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Press UP arrow to see your command history persists",
+          "teachingPoint": "Your command history is saved even when you change modes"
+        }
+      ]
+    }
+  ],
+  "assertions": []
+}
+

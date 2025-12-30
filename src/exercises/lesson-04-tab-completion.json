@@ -1,0 +1,37 @@
+{
+  "id": "lesson-04-tab-completion",
+  "title": "The Magic TAB Key",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Practice TAB Completion",
+      "steps": [
+        {
+          "objective": "Try TAB in wrong mode (user mode)",
+          "command": "conf",
+          "teachingPoint": "Press TAB - nothing happens because configure only works in privileged mode"
+        },
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Use TAB to complete 'conf' to 'configure'",
+          "command": "conf",
+          "teachingPoint": "Now press TAB and watch it auto-complete to 'configure'"
+        },
+        {
+          "objective": "Use TAB to complete 'configure t' to 'configure terminal'",
+          "command": "configure t",
+          "teachingPoint": "Press TAB after the 't' to complete 'terminal'"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        }
+      ]
+    }
+  ],
+  "assertions": []
+}
+

@@ -1,0 +1,35 @@
+{
+  "id": "lesson-06-name-lookup-abort",
+  "title": "What to Do When Things Freeze",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Practice Aborting Name Lookup",
+      "steps": [
+        {
+          "objective": "Type an invalid command in user mode",
+          "command": "end",
+          "teachingPoint": "This triggers name lookup because 'end' only works in config mode"
+        },
+        {
+          "objective": "Abort the lookup with CTRL+SHIFT+6",
+          "teachingPoint": "Press CTRL+SHIFT+6 to immediately stop the name lookup timeout"
+        },
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Try another fake command",
+          "command": "test"
+        },
+        {
+          "objective": "Abort again with CTRL+SHIFT+6",
+          "teachingPoint": "Practice makes this keyboard shortcut muscle memory"
+        }
+      ]
+    }
+  ],
+  "assertions": []
+}
+

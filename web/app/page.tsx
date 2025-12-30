@@ -20,6 +20,11 @@ import { useProgressBar } from '@/lib/useProgressBar';
 // Import exercises
 import lesson01 from '../../src/exercises/lesson-01-setting-hostname-and-saving-configuration.json';
 import lesson02 from '../../src/exercises/lesson-02-setting-enable-secret-password.json';
+import lesson03 from '../../src/exercises/lesson-03-navigating-modes.json';
+import lesson04 from '../../src/exercises/lesson-04-tab-completion.json';
+import lesson05 from '../../src/exercises/lesson-05-pagination.json';
+import lesson06 from '../../src/exercises/lesson-06-name-lookup-abort.json';
+import lesson07 from '../../src/exercises/lesson-07-command-history.json';
 
 import type { CommandGrammar } from '@src/types';
 import type { Exercise as ExerciseType } from '@src/validation/types';
@@ -365,28 +370,8 @@ function PageContent({
                 <p className="mb-8 text-lg text-gray-300">
                   Practice moving between modes in the terminal below:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    Type <code>enable</code> and press Enter — watch the prompt change from{' '}
-                    <code>&gt;</code> to <code>#</code>
-                  </li>
-                  <li>
-                    Type <code>configure terminal</code> and press Enter — watch the message appear
-                    and prompt change to <code>(config)#</code>
-                  </li>
-                  <li>
-                    Type <code>exit</code> — notice you go back one level to <code>#</code>
-                  </li>
-                  <li>
-                    Type <code>configure terminal</code> again to enter config mode
-                  </li>
-                  <li>
-                    Type <code>end</code> — notice it jumps directly back to <code>#</code> (same as
-                    exit in this case)
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson03 as ExerciseType} grammar={grammar} />
 
                 <InfoBox variant="info">
                   <ProTip>
@@ -532,27 +517,8 @@ function PageContent({
                 <p className="mb-8 text-lg text-gray-300">
                   Practice using TAB completion in the terminal below:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li className="text-yellow-400">
-                    <strong>First, try the wrong mode:</strong> Type <code>conf</code> then press{' '}
-                    <kbd>TAB</kbd> — notice nothing happens because you haven't enabled yet! 🚫
-                  </li>
-                  <li>
-                    Type <code>enable</code> to enter privileged mode (you should see{' '}
-                    <code>Switch#</code>)
-                  </li>
-                  <li>
-                    <strong>Now try again:</strong> Type <code>conf</code> then press <kbd>TAB</kbd>{' '}
-                    — watch it auto-complete to <code>configure</code> ✅
-                  </li>
-                  <li>
-                    Type <code> t</code> (space + t) then press <kbd>TAB</kbd> — it should complete
-                    to <code>terminal</code>
-                  </li>
-                  <li>Press Enter to enter configuration mode</li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson04 as ExerciseType} grammar={grammar} />
 
                 <InfoBox variant="info">
                   <ProTip>
@@ -699,40 +665,8 @@ function PageContent({
                   <span className="text-4xl">👉</span> Try It Now
                 </h3>
                 <p className="mb-8 text-lg text-gray-300">Practice navigating paginated output:</p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    Type <code>enable</code> to enter privileged mode (you should see{' '}
-                    <code>Switch#</code>)
-                  </li>
-                  <li>
-                    Type <code>show running-config</code> and press <kbd>ENTER</kbd>
-                  </li>
-                  <li>
-                    Watch the output scroll and stop at{' '}
-                    <code className="text-yellow-400">--More--</code>
-                  </li>
-                  <li>
-                    <strong>
-                      Try pressing <kbd>SPACE</kbd>
-                    </strong>{' '}
-                    to see the next page
-                  </li>
-                  <li>
-                    If there's more,{' '}
-                    <strong>
-                      try pressing <kbd>ENTER</kbd>
-                    </strong>{' '}
-                    to advance one line at a time
-                  </li>
-                  <li>
-                    <strong>
-                      Press <kbd>Q</kbd>
-                    </strong>{' '}
-                    to quit back to the prompt (or let it finish naturally)
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson05 as ExerciseType} grammar={grammar} />
 
                 <InfoBox variant="success">
                   <div className="text-gray-300">
@@ -1077,36 +1011,8 @@ function PageContent({
                 <p className="mb-8 text-lg text-gray-300">
                   Let's deliberately trigger this error so you can practice escaping from it:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    At the <code>Switch&gt;</code> prompt, type:{' '}
-                    <code className="text-red-400">end</code> and press Enter
-                    <p className="mt-2 text-sm text-gray-400">
-                      (Remember: <code>end</code> only works in configuration mode, so this will
-                      trigger the DNS lookup)
-                    </p>
-                  </li>
-                  <li>
-                    Watch for the message:{' '}
-                    <code className="text-yellow-400">Translating "end"...</code>
-                  </li>
-                  <li>
-                    <strong className="text-green-300">Immediately press:</strong>{' '}
-                    <kbd>CTRL+SHIFT+6</kbd>
-                    <p className="mt-2 text-sm text-gray-400">
-                      You should see <code className="text-yellow-400">% Name lookup aborted</code>{' '}
-                      and get your prompt back
-                    </p>
-                  </li>
-                  <li>
-                    Try it again with other "fake" commands:{' '}
-                    <code className="text-red-400">test</code>,{' '}
-                    <code className="text-red-400">hello</code>, or any nonsense word — then use{' '}
-                    <kbd>CTRL+SHIFT+6</kbd> to abort
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson06 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-blue-600 bg-blue-900 p-6">
                   <p className="mb-3 text-lg font-semibold text-blue-300">💡 Key Takeaway</p>
@@ -1130,6 +1036,108 @@ function PageContent({
                     professional isn't avoiding mistakes — it's knowing <kbd>CTRL+SHIFT+6</kbd> by
                     heart so you can recover instantly! This keystroke will become muscle memory
                     very quickly.
+                  </p>
+                </InfoBox>
+              </LessonSection>
+
+              {/* LESSON: COMMAND HISTORY */}
+              <LessonSection title="Command History: Never Retype Again! ⬆️">
+                <p className="my-6 text-xl text-gray-200">
+                  You've learned to abort mistakes with <kbd>CTRL+SHIFT+6</kbd>. Now let's learn how
+                  to quickly retry the corrected command without retyping everything!
+                </p>
+
+                <h2 className="mt-12 mb-6 text-3xl font-bold text-blue-400">
+                  The Power of Arrow Keys
+                </h2>
+                <p className="mb-6 text-gray-300">
+                  Every command you type is automatically saved in your{' '}
+                  <strong className="text-white">command history</strong>. You can recall any
+                  previous command with just the arrow keys!
+                </p>
+
+                <div className="my-8 grid gap-6 md:grid-cols-2">
+                  <div className="rounded-lg border border-blue-600 bg-blue-900 p-6">
+                    <h4 className="mb-3 flex items-center gap-2 text-lg font-semibold text-blue-300">
+                      <kbd className="rounded bg-gray-700 px-3 py-1">↑</kbd> UP Arrow
+                    </h4>
+                    <p className="text-gray-300">
+                      Press <kbd>UP</kbd> to recall your previous command. Press it again to go
+                      further back in history.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-green-600 bg-green-900 p-6">
+                    <h4 className="mb-3 flex items-center gap-2 text-lg font-semibold text-green-300">
+                      <kbd className="rounded bg-gray-700 px-3 py-1">↓</kbd> DOWN Arrow
+                    </h4>
+                    <p className="text-gray-300">
+                      Press <kbd>DOWN</kbd> to move forward through history toward more recent
+                      commands.
+                    </p>
+                  </div>
+                </div>
+
+                <h2 className="mt-12 mb-6 text-3xl font-bold text-blue-400">Why This Matters</h2>
+                <p className="mb-4 text-gray-300">
+                  Imagine you typed a long command but made one small mistake:
+                </p>
+
+                <div className="my-8 rounded-lg border border-gray-700 bg-gray-900 p-6">
+                  <p className="mb-3 font-mono text-red-400">
+                    Switch(config)# interfce gigabitethernet 1/0/1
+                  </p>
+                  <p className="mb-3 text-gray-400">
+                    Oops! You typed <code className="text-red-400">interfce</code> instead of{' '}
+                    <code className="text-green-400">interface</code>
+                  </p>
+                  <p className="mt-6 mb-2 text-gray-300">
+                    <strong className="text-white">Without command history:</strong> Retype the
+                    entire thing 😫
+                  </p>
+                  <p className="mt-4 mb-2 text-gray-300">
+                    <strong className="text-white">With command history:</strong> Press{' '}
+                    <kbd>UP</kbd>, fix the typo, press <kbd>ENTER</kbd> ✨
+                  </p>
+                </div>
+
+                <InfoBox variant="info">
+                  <ProTip>
+                    <ul className="ml-6 space-y-2 text-gray-300">
+                      <li>
+                        Command history works across all modes — commands from user mode are still
+                        available in privileged or config mode!
+                      </li>
+                      <li>
+                        The CLI remembers dozens of commands, so you can go way back if needed
+                      </li>
+                      <li>
+                        This is especially useful for complex commands you'll run multiple times
+                        (like configuring multiple interfaces)
+                      </li>
+                      <li>
+                        <strong className="text-white">Pro tip:</strong> Press <kbd>UP</kbd>, edit
+                        part of the command, then press <kbd>ENTER</kbd> — much faster than
+                        retyping!
+                      </li>
+                    </ul>
+                  </ProTip>
+                </InfoBox>
+
+                <h3 className="mt-16 mb-6 flex items-center gap-3 text-3xl font-bold text-blue-400">
+                  <span className="text-4xl">👉</span> Try It Now
+                </h3>
+                <p className="mb-8 text-lg text-gray-300">
+                  Practice using command history to save time:
+                </p>
+
+                <Exercise exercise={lesson07 as ExerciseType} grammar={grammar} />
+
+                <InfoBox variant="real-world">
+                  <h4 className="mb-2 font-semibold text-blue-300">🌍 Real-World Usage</h4>
+                  <p className="text-gray-300">
+                    Network engineers use command history constantly! When configuring 48 ports with
+                    similar settings, you'll press <kbd>UP</kbd> and modify the interface number
+                    rather than typing the full command 48 times. It's a massive time-saver!
                   </p>
                 </InfoBox>
               </LessonSection>

@@ -100,6 +100,11 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
       if ((event.metaKey || event.ctrlKey) && event.key === '\\') {
         event.preventDefault();
 
+        // Skip validation if no assertions
+        if (exercise.assertions.length === 0) {
+          return;
+        }
+
         // If showing results, return to terminal
         if (validationState === 'fail' || validationState === 'pass') {
           setValidationState('not-run');
@@ -226,7 +231,11 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
             </span>
             <div className="h-1.5 max-w-xs flex-1 rounded-full bg-gray-700">
               <div
-                className="h-1.5 rounded-full bg-blue-500 transition-all duration-300"
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  currentStepIndex === totalSteps - 1 && exercise.assertions.length === 0
+                    ? 'bg-green-500'
+                    : 'bg-blue-500'
+                }`}
                 style={{ width: `${((currentStepIndex + 1) / totalSteps) * 100}%` }}
               />
             </div>
@@ -249,6 +258,11 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
                 </div>
               )}
             </div>
+            {currentStep.teachingPoint && (
+              <div className="mt-2 ml-10 text-xs text-blue-300 italic">
+                💡 {currentStep.teachingPoint}
+              </div>
+            )}
           </div>
 
           {/* Navigation and Validation */}
@@ -266,32 +280,39 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
               <kbd className="text-xs opacity-60">⌘[</kbd>
             </button>
 
-            <button
-              onClick={() => {
-                if (validationState === 'fail' || validationState === 'pass') {
-                  setValidationState('not-run');
-                } else {
-                  handleCheckWork();
-                }
-              }}
-              disabled={validationState === 'validating'}
-              className={`flex items-center gap-2 rounded px-4 py-1.5 text-xs font-semibold transition-colors ${
-                validationState === 'validating'
-                  ? 'cursor-not-allowed bg-gray-600 text-gray-400'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              <span>
-                {validationState === 'validating'
-                  ? 'Checking...'
-                  : validationState === 'fail'
-                    ? '← Try Again'
-                    : validationState === 'pass'
-                      ? '← Back to Terminal'
-                      : '🔍 Check My Work'}
-              </span>
-              {validationState !== 'validating' && <kbd className="text-xs opacity-60">⌘\</kbd>}
-            </button>
+            {/* Center Button: Check My Work OR Practice Complete */}
+            {exercise.assertions.length > 0 ? (
+              <button
+                onClick={() => {
+                  if (validationState === 'fail' || validationState === 'pass') {
+                    setValidationState('not-run');
+                  } else {
+                    handleCheckWork();
+                  }
+                }}
+                disabled={validationState === 'validating'}
+                className={`flex items-center gap-2 rounded px-4 py-1.5 text-xs font-semibold transition-colors ${
+                  validationState === 'validating'
+                    ? 'cursor-not-allowed bg-gray-600 text-gray-400'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                <span>
+                  {validationState === 'validating'
+                    ? 'Checking...'
+                    : validationState === 'fail'
+                      ? '← Try Again'
+                      : validationState === 'pass'
+                        ? '← Back to Terminal'
+                        : '🔍 Check My Work'}
+                </span>
+                {validationState !== 'validating' && <kbd className="text-xs opacity-60">⌘\</kbd>}
+              </button>
+            ) : currentStepIndex === totalSteps - 1 ? (
+              <div className="flex items-center gap-2 rounded bg-green-600/20 px-4 py-1.5 text-xs font-semibold text-green-400">
+                <span>✓ Practice Complete!</span>
+              </div>
+            ) : null}
 
             <button
               onClick={goToNextStep}
@@ -339,34 +360,36 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
           </div>
 
           {/* Check My Work Button for Show All Mode */}
-          <div className="mt-3 flex justify-center border-t border-gray-700 pt-3">
-            <button
-              onClick={() => {
-                if (validationState === 'fail' || validationState === 'pass') {
-                  setValidationState('not-run');
-                } else {
-                  handleCheckWork();
-                }
-              }}
-              disabled={validationState === 'validating'}
-              className={`flex items-center gap-2 rounded px-4 py-1.5 text-xs font-semibold transition-colors ${
-                validationState === 'validating'
-                  ? 'cursor-not-allowed bg-gray-600 text-gray-400'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              <span>
-                {validationState === 'validating'
-                  ? 'Checking...'
-                  : validationState === 'fail'
-                    ? '← Try Again'
-                    : validationState === 'pass'
-                      ? '← Back to Terminal'
-                      : '🔍 Check My Work'}
-              </span>
-              {validationState !== 'validating' && <kbd className="text-xs opacity-60">⌘\</kbd>}
-            </button>
-          </div>
+          {exercise.assertions.length > 0 && (
+            <div className="mt-3 flex justify-center border-t border-gray-700 pt-3">
+              <button
+                onClick={() => {
+                  if (validationState === 'fail' || validationState === 'pass') {
+                    setValidationState('not-run');
+                  } else {
+                    handleCheckWork();
+                  }
+                }}
+                disabled={validationState === 'validating'}
+                className={`flex items-center gap-2 rounded px-4 py-1.5 text-xs font-semibold transition-colors ${
+                  validationState === 'validating'
+                    ? 'cursor-not-allowed bg-gray-600 text-gray-400'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                <span>
+                  {validationState === 'validating'
+                    ? 'Checking...'
+                    : validationState === 'fail'
+                      ? '← Try Again'
+                      : validationState === 'pass'
+                        ? '← Back to Terminal'
+                        : '🔍 Check My Work'}
+                </span>
+                {validationState !== 'validating' && <kbd className="text-xs opacity-60">⌘\</kbd>}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
