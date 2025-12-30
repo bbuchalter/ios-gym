@@ -130,11 +130,8 @@ ios-gym/
 │   ├── commands-2960-switch.yaml  # Catalyst 2960 switch grammar
 │   └── commands-1941-router.yaml  # Cisco 1941 router grammar
 │
-├── docs/                  # Detailed documentation
-│   ├── ARCHITECTURE.md    # Technical architecture
-│   ├── TESTING.md         # Test suite documentation
-│   ├── HOOKS.md           # Git hooks documentation
-│   └── ... (8 more guides)
+├── docs/                  # AI agent context
+│   └── AGENT.md           # Project context, design philosophy, exercise authoring
 │
 ├── src/                   # CLI engine & tests (Node.js/TypeScript)
 │   ├── cli/               # CLI engine (parser, completer, handlers, state)
@@ -276,37 +273,10 @@ npm run test:coverage
 
 ---
 
-## 📚 Additional Documentation
+## 📚 Documentation
 
-All detailed documentation is in the [`docs/`](docs/) directory:
-
-**Architecture & Testing:**
-- **[`ARCHITECTURE.md`](docs/ARCHITECTURE.md)** - Technical architecture details
-- **[`TESTING.md`](docs/TESTING.md)** - Test suite documentation
-- **[`IMPLEMENTATION_COMPLETE.md`](docs/IMPLEMENTATION_COMPLETE.md)** - Implementation history
-
-**Validation System:**
-- **[`VALIDATION_SYSTEM.md`](docs/VALIDATION_SYSTEM.md)** - Exercise validation system
-- **[`EXERCISE-VALIDATION.md`](docs/EXERCISE-VALIDATION.md)** - Exercise validation details
-- **[`EXERCISE_AUTHORING.md`](docs/EXERCISE_AUTHORING.md)** - Complete exercise authoring guide
-- **[`SAVED-STATE-VALIDATION.md`](docs/SAVED-STATE-VALIDATION.md)** - State validation details
-
-**CLI & Display:**
-- **[`MODE_COMPARISON.md`](docs/MODE_COMPARISON.md)** - CLI mode comparison
-- **[`DISPLAY_MODES.md`](docs/DISPLAY_MODES.md)** - Display modes documentation
-- **[`PROGRESSIVE-DISCLOSURE.md`](docs/PROGRESSIVE-DISCLOSURE.md)** - Progressive disclosure design
-
-**Web Application:**
-- **[`WEB_SETUP.md`](docs/WEB_SETUP.md)** - Next.js setup and development guide
-- **[`WEB_TAILWIND_GUIDELINES.md`](docs/WEB_TAILWIND_GUIDELINES.md)** - Tailwind responsive design best practices
-
-**Development Tools:**
-- **[`HOOKS.md`](docs/HOOKS.md)** - Git hooks documentation
-- **[`GIT_HOOKS_SETUP.md`](docs/GIT_HOOKS_SETUP.md)** - Git hooks installation guide
-- **[`LINTING_SUMMARY.md`](docs/LINTING_SUMMARY.md)** - Linting configuration
-
-**Root level docs:**
-- **`.claude.md`** - AI assistant guidelines and git policies
+- **[`docs/AGENT.md`](docs/AGENT.md)** - Project context, design philosophy, and exercise authoring reference
+- **[`.claude.md`](.claude.md)** - AI assistant guidelines and git policies
 
 ---
 
