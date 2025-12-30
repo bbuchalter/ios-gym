@@ -1,155 +1,168 @@
 # Git Hooks
 
-This project uses Git hooks to ensure code quality before commits and pushes.
+This project uses [Lefthook](https://github.com/evilmartians/lefthook) for fast, parallel Git hook execution.
 
 ## Pre-Commit Hook
 
-**Source:** `hooks/pre-commit` (tracked in git)  
-**Installed at:** `.git/hooks/pre-commit` (symlink)
+**Configuration:** [`lefthook.yml`](lefthook.yml)  
+**Installed at:** `.git/hooks/pre-commit` (managed by Lefthook)
 
-Runs automatically before every commit to validate:
-- ✅ Grammar files are synchronized
-- ✅ TypeScript types are valid
-- ✅ All tests pass
+Runs validation checks **in parallel** before every commit:
+
+- ✅ Grammar files synchronized (Switch + Router)
+- ✅ TypeScript types valid
+- ✅ All tests pass (328 tests)
+- ✅ Web linting (ESLint)
+- ✅ Code formatting (Prettier)
+- ✅ YAML syntax valid
+
+### Performance
+
+**Parallel execution** reduces commit time:
+- Sequential (old bash): ~14+ seconds
+- Parallel (Lefthook): ~5-6 seconds
+
+All checks run simultaneously, so total time equals the slowest check, not the sum.
 
 ### What it does:
-1. Checks that grammar YAML files and their JSON counterparts are in sync:
-   - `commands-2960-switch.yaml` ↔ `web/public/commands-2960-switch.json`
-   - `commands-1941-router.yaml` ↔ `web/public/commands-1941-router.json`
-2. Validates TypeScript types with `tsc --noEmit` (type checking without compilation)
-3. Runs the test suite (`jest`)
-4. Blocks the commit if any check fails
+
+1. **Grammar sync** - Validates YAML ↔ JSON consistency
+2. **TypeScript** - Type checking with `tsc --noEmit`
+3. **Tests** - Runs full Jest suite (21 test files, 328 tests)
+4. **Web linting** - ESLint validation including:
+   - React/TypeScript rules
+   - Tailwind CSS class ordering
+   - Import validation
+   - Security checks
+5. **Prettier** - Code formatting validation
+6. **YAML** - Syntax validation for grammar files
+
+All checks must pass for commit to succeed.
 
 ### Output:
+
 ```
-🔍 Running pre-commit checks...
+╭────────────────────────────────────╮
+│ lefthook v1.13.6  hook: pre-commit │
+╰────────────────────────────────────╯
+┃  grammar-sync-router ❯ ✓ Router grammar synchronized
+┃  grammar-sync-switch ❯ ✓ Switch grammar synchronized
+┃  web-prettier ❯ All matched files use Prettier code style!
+┃  typecheck ❯ (running...)
+┃  yaml-lint ❯ ✔ YAML Lint successful.
+┃  tests ❯ Test Suites: 21 passed, 21 total
+┃  web-lint ❯ (running...)
 
-📝 Checking grammar files are synchronized...
-✓ Grammar files are synchronized
-🔍 Checking TypeScript types...
-✓ TypeScript types are valid
-🧪 Running tests...
-✓ All tests passed
-
-✓ All pre-commit checks passed! 🎉
+summary: (done in 5.58 seconds)
+✓ grammar-sync-router (0.32 seconds)
+✓ grammar-sync-switch (0.34 seconds)
+✓ web-prettier (1.45 seconds)
+✓ typecheck (1.77 seconds)
+✓ yaml-lint (2.47 seconds)
+✓ tests (3.51 seconds)
+✓ web-lint (5.56 seconds)
 ```
 
 ### If Checks Fail:
+
 **DO NOT bypass with `--no-verify`!** Instead:
-1. **Grammar files out of sync:** Run `npm run build:grammar`
-2. **TypeScript type errors:** Run `npx tsc --noEmit` to see type errors
-3. **Test failures:** Run `npm test` to see detailed test output
-4. Fix the issues
-5. Commit again normally
 
-See `.claude.md` for full git commit policy.
+1. **Grammar sync:** Run `npm run build:grammar`
+2. **TypeScript errors:** Run `npx tsc --noEmit`
+3. **Test failures:** Run `npm test`
+4. **Linting errors:** Run `cd web && npm run lint -- --fix`
+5. **Formatting:** Run `cd web && npm run format`
+6. **YAML errors:** Run `npm run lint:yaml`
 
-## Pre-Push Hook
-
-**Location:** `.git/hooks/pre-push`
-
-Runs automatically before pushing to remote to validate:
-- ✅ Full test suite passes
-- ✅ Build succeeds
-
-### What it does:
-1. Runs the complete test suite with output
-2. Verifies the build still works
-3. Blocks the push if either fails
-
-### Output:
-```
-🚀 Running pre-push checks...
-
-🧪 Running full test suite...
-Test Suites: 7 passed, 7 total
-Tests:       58 passed, 58 total
-✓ All tests passed
-📦 Verifying build...
-✓ Build successful
-
-✓ All pre-push checks passed! Ready to push 🚀
-```
-
-### If Checks Fail:
-**DO NOT bypass with `--no-verify`!** Instead:
-1. Run `npm test` to see full test output
-2. Run `npm run build` to check build
-3. Fix all failures
-4. Push again normally
-
-See `.claude.md` for full git commit policy.
+Fix the issues, then commit normally.
 
 ## Installation
 
-The hooks are stored in the `hooks/` directory (tracked in git) and need to be installed into `.git/hooks/`.
+Install Lefthook hooks using npm:
+
+```bash
+npm run hooks:install
+```
+
+This installs all hooks configured in [`lefthook.yml`](lefthook.yml).
 
 ### First Time Setup
 
-Run this command from the project root to install the hooks:
+After cloning the repository:
 
 ```bash
-ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+npm install              # Installs lefthook package
+npm run hooks:install    # Installs Git hooks
 ```
-
-This creates a symlink from `.git/hooks/pre-commit` to the tracked `hooks/pre-commit` file, so any updates to the hook will automatically apply to your local git hooks.
 
 ### Verification
 
-Test that the hook is installed and working:
+Make a test commit to verify hooks are working:
 
 ```bash
-./hooks/pre-commit
+touch test.txt
+git add test.txt
+git commit -m "Test hooks"
 ```
 
-If you see the checks running successfully, the hook is properly installed and will run automatically on every commit.
+You should see Lefthook run all validation checks in parallel.
 
 ## Benefits
 
-1. **Catch errors early**: Find build and test failures before they reach the repository
-2. **Maintain quality**: Ensure all committed code passes tests
-3. **Save time**: Prevent CI/CD failures by validating locally first
-4. **Team consistency**: Everyone runs the same checks before committing
+1. **Fast**: Parallel execution (~5-6s vs ~14s sequential)
+2. **Catch errors early**: Find issues before they reach CI/CD
+3. **Maintain quality**: All code passes validation before commit
+4. **Team consistency**: Same checks for everyone via [`lefthook.yml`](lefthook.yml)
+5. **Cross-platform**: Works on macOS, Linux, Windows
+6. **No symlinks**: Managed by npm, not manual file operations
+
+## Configuration
+
+All hooks are configured in [`lefthook.yml`](lefthook.yml) at the project root.
+
+### Adding New Checks
+
+Edit [`lefthook.yml`](lefthook.yml) and add new commands:
+
+```yaml
+pre-commit:
+  parallel: true
+  commands:
+    my-check:
+      run: npm run my-check
+```
+
+After editing:
+1. Commit the updated [`lefthook.yml`](lefthook.yml)
+2. Team members get updates on next `npm install` or `npm run hooks:install`
+
+### Disabling Specific Checks
+
+To skip a check temporarily (not recommended):
+
+```bash
+LEFTHOOK_EXCLUDE=tests git commit -m "Skip tests this time"
+```
 
 ## Troubleshooting
 
-### Hook not running
-Check if the hook is executable:
+### Hooks not running
+
+Reinstall hooks:
 ```bash
-ls -la .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
+npm run hooks:install
 ```
 
-### Tests failing
-Run tests manually to see detailed output:
+### Check what hooks are installed
+
 ```bash
-npm test
+npx lefthook dump
 ```
 
-### TypeScript type errors
-Run type checking manually to see detailed errors:
+### Run hooks manually
+
 ```bash
-npx tsc --noEmit
+npx lefthook run pre-commit
 ```
-
-## Adding More Checks
-
-To add linting or other checks, edit the hook files in the `hooks/` directory:
-- `hooks/pre-commit`
-- `hooks/pre-push`
-
-The changes will automatically apply since `.git/hooks/` contains symlinks to these files.
-
-Example adding ESLint:
-```bash
-echo "🔎 Checking code style..."
-if ! npm run lint > /dev/null 2>&1; then
-    print_error "Linting failed!"
-    exit 1
-fi
-print_success "Code style checks passed"
-```
-
-After editing, commit the updated hook file so other developers get the changes too.
 
 

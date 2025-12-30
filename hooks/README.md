@@ -1,41 +1,51 @@
 # Git Hooks
 
-This directory contains Git hooks that are tracked in the repository.
+This project uses [Lefthook](https://github.com/evilmartians/lefthook) for fast, parallel Git hook execution.
 
 ## Installation
 
-To use these hooks, create symlinks from `.git/hooks/` to this directory:
+Install hooks using npm:
 
 ```bash
-# From the project root
-ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+npm run hooks:install
 ```
+
+This installs hooks defined in [`lefthook.yml`](../lefthook.yml).
 
 ## Available Hooks
 
 ### pre-commit
 
-Runs before every commit to validate:
-- Grammar files are synchronized:
+Runs validation checks **in parallel** before every commit:
+
+- **Grammar sync** - Ensure YAML and JSON grammar files match
   - `commands-2960-switch.yaml` ↔ `web/public/commands-2960-switch.json`
   - `commands-1941-router.yaml` ↔ `web/public/commands-1941-router.json`
-- TypeScript types are valid (`tsc --noEmit`)
-- All tests pass (`jest`)
-- Code style checks pass (ESLint for web directory)
-- Code formatting is correct (Prettier for web directory)
-- YAML syntax is valid (`yaml-lint` for grammar files)
+- **TypeScript types** - Validate with `tsc --noEmit`
+- **Tests** - Run all Jest tests
+- **Web linting** - ESLint checks on web directory
+- **Prettier** - Code formatting validation on web directory
+- **YAML validation** - Syntax validation for grammar files
+
+**Performance:** All checks run in parallel, reducing commit time from ~14s to ~6s.
 
 See [../HOOKS.md](../HOOKS.md) for complete documentation.
 
-## Why Track Hooks in Git?
+## Configuration
 
-Tracking hooks in the repository ensures:
-1. All team members use the same validation checks
-2. Hook updates are versioned and shared automatically
-3. New contributors can easily install hooks
-4. Consistency across development environments
+Hook configuration is in [`lefthook.yml`](../lefthook.yml) at the project root.
+
+### Why Lefthook?
+
+- **Parallel execution** - Multiple checks run simultaneously
+- **Fast** - Only 5-6 seconds vs 14+ seconds sequential
+- **Declarative** - YAML configuration is easy to read and modify
+- **Cross-platform** - Works on macOS, Linux, and Windows
+- **npm-based** - No manual symlinks needed
 
 ## Updating Hooks
 
-When you modify hooks in this directory, the changes will automatically apply to anyone who has installed them via symlink. Remember to commit your changes so others get the updates too!
+1. Edit [`lefthook.yml`](../lefthook.yml)
+2. Commit changes
+3. Team members get updates automatically on next `npm install` or `npm run hooks:install`
 

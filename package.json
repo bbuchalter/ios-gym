@@ -11,6 +11,7 @@
     "build:grammar": "node -e \"const yaml = require('js-yaml'); const fs = require('fs'); const switch2960 = yaml.load(fs.readFileSync('commands-2960-switch.yaml', 'utf8')); const router1941 = yaml.load(fs.readFileSync('commands-1941-router.yaml', 'utf8')); fs.writeFileSync('web/public/commands-2960-switch.json', JSON.stringify(switch2960, null, 2)); fs.writeFileSync('web/public/commands-1941-router.json', JSON.stringify(router1941, null, 2)); console.log('Built grammars for: 2960-switch, 1941-router');\"",
     "validate:exercises": "ts-node scripts/validate-exercises.ts",
     "lint:yaml": "npx yaml-lint commands-*.yaml",
+    "hooks:install": "npx lefthook install",
     "web:dev": "nodemon",
     "web:build": "npm run validate:exercises && npm run build:grammar && cd web && npm run build",
     "web:start": "http-server web/out -p 3000 -o"
@@ -39,6 +40,7 @@
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
+    "@evilmartians/lefthook": "^2.0.13",
     "@jest/test-sequencer": "^29.7.0",
     "@types/express": "^4.17.20",
     "@types/jest": "^29.5.14",

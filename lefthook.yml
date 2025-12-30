@@ -4,9 +4,8 @@
 pre-commit:
   parallel: true
   commands:
-    # Fast checks that can run in parallel
+    # Grammar file synchronization - always check
     grammar-sync-switch:
-      glob: "*.yaml"
       run: |
         if [ -f "commands-2960-switch.yaml" ] && [ -f "web/public/commands-2960-switch.json" ]; then
           YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-2960-switch.yaml', 'utf8')), null, 2));")
@@ -19,7 +18,6 @@ pre-commit:
         fi
 
     grammar-sync-router:
-      glob: "*.yaml"
       run: |
         if [ -f "commands-1941-router.yaml" ] && [ -f "web/public/commands-1941-router.json" ]; then
           YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-1941-router.yaml', 'utf8')), null, 2));")
@@ -31,23 +29,22 @@ pre-commit:
           echo "✓ Router grammar synchronized"
         fi
 
+    # TypeScript type checking - always check
     typecheck:
-      glob: "*.{ts,tsx}"
       run: npx tsc --noEmit
-      stage_fixed: true
 
+    # YAML validation - always check
     yaml-lint:
-      glob: "*.yaml"
       run: npm run lint:yaml
 
+    # Prettier formatting - always check web directory
     web-prettier:
-      glob: "web/**/*.{ts,tsx,js,jsx,json,css}"
       run: cd web && npm run format:check
 
+    # ESLint - always check web directory
     web-lint:
-      glob: "web/**/*.{ts,tsx,js,jsx}"
       run: cd web && npm run lint
 
+    # Tests - always run all tests
     tests:
-      glob: "src/**/*.{ts,tsx}"
       run: ./node_modules/.bin/jest --silent --passWithNoTests
