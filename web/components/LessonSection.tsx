@@ -28,9 +28,9 @@ export function LessonSection({ title, children, isIntro, isFinal }: LessonSecti
     : `lesson-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
   return (
-    <section id={sectionId} className="mb-20">
-      <div className="border border-gray-700 rounded-lg bg-gray-800 p-8">
-        <h1 className="text-5xl font-bold text-white mb-12 pb-6 border-b-2 border-blue-500">
+    <section id={sectionId} className="mb-16">
+      <div className="border border-gray-700 rounded-lg bg-gray-800 p-6">
+        <h1 className="text-3xl lg:text-4xl font-bold text-white mb-8 pb-4 border-b-2 border-blue-500">
           {title}
         </h1>
         <div className="text-gray-300">

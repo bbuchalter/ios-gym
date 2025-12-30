@@ -115,14 +115,14 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
       >
         {/* Header Branding */}
         <header className="border-b border-gray-800 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
-          <div className="max-w-6xl mx-auto px-6 py-8">
-            <div className="flex items-center gap-4">
-              <div className="text-5xl">💪</div>
+          <div className="max-w-6xl mx-auto px-4 py-6">
+            <div className="flex items-center gap-3">
+              <div className="text-4xl">💪</div>
               <div>
-                <h1 className="text-4xl font-bold text-white tracking-tight">
+                <h1 className="text-3xl font-bold text-white tracking-tight">
                   IOS Gym
                 </h1>
-                <p className="text-gray-400 mt-1">
+                <p className="text-gray-400 text-sm">
                   Train Your Networking Skills
                 </p>
               </div>
@@ -130,23 +130,23 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
           </div>
         </header>
 
-        <main className="max-w-6xl mx-auto px-6 pb-24">
+        <main className="max-w-6xl mx-auto px-4 pb-20">
           <div id="lessons">
             <LessonCounterProvider>
           {/* INTRODUCTION */}
           <LessonSection title="Welcome, Future Network Engineer! 👋" isIntro>
-            <p className="text-2xl text-white my-6">
+            <p className="text-xl text-white my-6">
               You're about to learn how to configure real network devices — the computers that make the internet work!
             </p>
 
-            <p className="text-gray-300 text-lg mb-6">
+            <p className="text-gray-300 mb-6">
               Think of this like learning to drive, but instead of a car, you're controlling routers and switches
               that connect the entire world. Pretty cool, right?
             </p>
 
             <InfoBox variant="info">
-              <h3 className="text-lg font-semibold mb-4 text-blue-300">📚 How This Works</h3>
-              <ul className="ml-6 space-y-3 text-gray-300">
+              <h3 className="text-lg font-semibold mb-3 text-blue-300">📚 How This Works</h3>
+              <ul className="ml-5 space-y-2 text-gray-300">
                 <li><strong className="text-white">Read</strong> each concept explanation</li>
                 <li><strong className="text-white">Practice</strong> in the interactive terminal</li>
                 <li><strong className="text-white">Scroll down</strong> to learn the next concept</li>
@@ -154,10 +154,10 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
               </ul>
             </InfoBox>
 
-            <h2 className="text-4xl font-bold text-white mt-16 mb-8">
+            <h2 className="text-3xl font-bold text-white mt-12 mb-8">
               What You'll Master
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 my-10">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 my-8">
               <SkillCard icon="🎯" title="CLI Navigation" description="Modes, commands, tab completion" />
               <SkillCard icon="🔐" title="Security" description="Passwords, SSH, encryption" />
               <SkillCard icon="🌐" title="IP Addressing" description="IPv4, /30 subnets, gateways" />
@@ -171,58 +171,58 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
 
           {/* LESSON 1: NAVIGATING MODES */}
           <LessonSection title="Navigating Between Modes">
-            <p className="text-xl text-gray-200 my-6">
+            <p className="text-lg text-gray-200 my-6">
               Let's start with the basics. Every network device has different <strong className="text-white">"modes"</strong> — like different levels of access.
             </p>
 
-            <h2 className="text-3xl font-bold text-blue-400 mt-12 mb-6">Understanding the Prompt</h2>
-            <p className="text-gray-300 mb-8 text-lg">The prompt (the text before where you type) tells you where you are:</p>
+            <h2 className="text-2xl font-bold text-blue-400 mt-10 mb-4">Understanding the Prompt</h2>
+            <p className="text-gray-300 mb-6">The prompt (the text before where you type) tells you where you are:</p>
 
-            <div className="space-y-3 my-8">
-              <div className="flex items-center gap-6 p-6 bg-gray-800 rounded-lg border border-gray-700">
-                <code className="font-mono text-lg text-blue-400 px-4 py-2 rounded bg-gray-900 min-w-[200px]">Switch&gt;</code>
-                <span className="text-gray-400">User mode — Limited access</span>
+            <div className="space-y-3 my-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
+                <code className="font-mono text-blue-400 px-3 py-2 rounded bg-gray-900 w-full sm:w-auto sm:min-w-[180px]">Switch&gt;</code>
+                <span className="text-gray-400 text-sm">User mode — Limited access</span>
               </div>
-              <div className="flex items-center gap-6 p-6 bg-gray-800 rounded-lg border border-gray-700">
-                <code className="font-mono text-lg text-blue-400 px-4 py-2 rounded bg-gray-900 min-w-[200px]">Switch#</code>
-                <span className="text-gray-400">Privileged mode — More access</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
+                <code className="font-mono text-blue-400 px-3 py-2 rounded bg-gray-900 w-full sm:w-auto sm:min-w-[180px]">Switch#</code>
+                <span className="text-gray-400 text-sm">Privileged mode — More access</span>
               </div>
-              <div className="flex items-center gap-6 p-6 bg-gray-800 rounded-lg border border-gray-700">
-                <code className="font-mono text-lg text-blue-400 px-4 py-2 rounded bg-gray-900 min-w-[200px]">Switch(config)#</code>
-                <span className="text-gray-400">Configuration mode — Where you make changes</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
+                <code className="font-mono text-blue-400 px-3 py-2 rounded bg-gray-900 w-full sm:w-auto sm:min-w-[180px]">Switch(config)#</code>
+                <span className="text-gray-400 text-sm">Configuration mode — Where you make changes</span>
               </div>
             </div>
 
-            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">Moving Between Modes</h2>
-            <p className="text-gray-300 mb-6 text-lg">
+            <h2 className="text-2xl font-bold text-blue-400 mt-12 mb-4">Moving Between Modes</h2>
+            <p className="text-gray-300 mb-6">
               You'll use these commands constantly to navigate between modes:
             </p>
 
-            <div className="space-y-4 my-8">
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <code className="font-mono text-lg text-blue-400">enable</code>
-                <p className="text-gray-400 mt-2">Moves from user mode (<code>&gt;</code>) to privileged mode (<code>#</code>)</p>
+            <div className="space-y-3 my-6">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <code className="font-mono text-blue-400">enable</code>
+                <p className="text-gray-400 mt-2 text-sm">Moves from user mode (<code>&gt;</code>) to privileged mode (<code>#</code>)</p>
               </div>
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <code className="font-mono text-lg text-blue-400">configure terminal</code>
-                <p className="text-gray-400 mt-2">Moves from privileged mode (<code>#</code>) to configuration mode (<code>(config)#</code>)</p>
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <code className="font-mono text-blue-400">configure terminal</code>
+                <p className="text-gray-400 mt-2 text-sm">Moves from privileged mode (<code>#</code>) to configuration mode (<code>(config)#</code>)</p>
               </div>
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <code className="font-mono text-lg text-blue-400">exit</code>
-                <p className="text-gray-400 mt-2">Goes back one level at a time</p>
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <code className="font-mono text-blue-400">exit</code>
+                <p className="text-gray-400 mt-2 text-sm">Goes back one level at a time</p>
               </div>
             </div>
 
-            <h2 className="text-3xl font-bold text-blue-400 mt-16 mb-6">What is CNTL/Z?</h2>
-            <p className="text-gray-300 mb-6 text-lg">
+            <h2 className="text-2xl font-bold text-blue-400 mt-12 mb-4">What is CNTL/Z?</h2>
+            <p className="text-gray-300 mb-6">
               When you enter configuration mode with <code>configure terminal</code>, Cisco IOS displays:
             </p>
-            <div className="bg-gray-800 border border-gray-600 rounded-lg p-6 my-6 font-mono text-gray-300">
+            <div className="bg-gray-800 border border-gray-600 rounded-lg p-4 my-6 font-mono text-sm text-gray-300 overflow-x-auto">
               Switch#configure terminal<br />
               <span className="text-yellow-300">Enter configuration commands, one per line.  End with CNTL/Z.</span><br />
               Switch(config)#
             </div>
-            <p className="text-gray-300 mb-6 text-lg">
+            <p className="text-gray-300 mb-6">
               <strong className="text-white">CNTL/Z</strong> (also written as Ctrl+Z) is a keyboard shortcut on real Cisco devices that instantly exits configuration mode
               and returns you to privileged mode.
             </p>
@@ -239,22 +239,22 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
               </p>
             </InfoBox>
 
-            <div className="grid md:grid-cols-2 gap-6 my-8">
-              <div className="bg-gray-800 border border-blue-600 rounded-lg p-6">
-                <h4 className="text-blue-300 font-semibold mb-3">Using exit (Step by step)</h4>
+            <div className="grid md:grid-cols-2 gap-4 my-6">
+              <div className="bg-gray-800 border border-blue-600 rounded-lg p-4">
+                <h4 className="text-blue-300 font-semibold mb-3 text-sm">Using exit (Step by step)</h4>
                 <div className="font-mono text-sm text-gray-300 space-y-1">
                   <div>Switch(config)#<span className="text-green-400">exit</span></div>
                   <div>Switch#</div>
                 </div>
-                <p className="text-gray-400 mt-3">Goes back one level at a time</p>
+                <p className="text-gray-400 mt-3 text-xs">Goes back one level at a time</p>
               </div>
-              <div className="bg-gray-800 border border-green-600 rounded-lg p-6">
-                <h4 className="text-green-300 font-semibold mb-3">Using end (Recommended ✓)</h4>
+              <div className="bg-gray-800 border border-green-600 rounded-lg p-4">
+                <h4 className="text-green-300 font-semibold mb-3 text-sm">Using end (Recommended ✓)</h4>
                 <div className="font-mono text-sm text-gray-300 space-y-1">
                   <div>Switch(config)#<span className="text-green-400">end</span></div>
                   <div>Switch#</div>
                 </div>
-                <p className="text-gray-400 mt-3">Jumps directly to privileged mode</p>
+                <p className="text-gray-400 mt-3 text-xs">Jumps directly to privileged mode</p>
               </div>
             </div>
 
