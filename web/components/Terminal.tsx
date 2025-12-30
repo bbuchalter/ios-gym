@@ -321,7 +321,11 @@ export default function Terminal({
         }
 
         if (line) {
-          historyRef.current = [...historyRef.current, line];
+          // Add to history, but skip consecutive duplicates (matches Cisco IOS behavior)
+          const lastCommand = historyRef.current[historyRef.current.length - 1];
+          if (lastCommand !== line) {
+            historyRef.current = [...historyRef.current, line];
+          }
           historyIndexRef.current = historyRef.current.length;
 
           const result = engineRef.current!.executeCommand(sessionRef.current!, line);
