@@ -22,6 +22,8 @@ Runs before every commit to validate:
 - TypeScript types are valid (`tsc --noEmit`)
 - All tests pass (`jest`)
 - Code style checks pass (ESLint for web directory)
+- Code formatting is correct (Prettier for web directory)
+- YAML syntax is valid (`yaml-lint` for grammar files)
 
 See [../HOOKS.md](../HOOKS.md) for complete documentation.
 
