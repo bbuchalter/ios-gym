@@ -12,6 +12,7 @@ export function Diagram({ title, children, variant = 'default' }: DiagramProps) 
   };
 
   return (
+    // Safe: variant is a typed enum defaulting to 'default', not user input
     // eslint-disable-next-line security/detect-object-injection
     <div className={`my-4 rounded-lg border p-4 ${variantStyles[variant]}`}>
       {title && <h4 className="mb-2 text-sm font-semibold text-gray-400">{title}</h4>}

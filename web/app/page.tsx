@@ -1,5 +1,6 @@
 'use client';
 
+/* Educational content page with extensive prose - escaping quotes would harm source readability */
 /* eslint-disable react/no-unescaped-entities */
 
 import dynamic from 'next/dynamic';
@@ -2366,6 +2367,7 @@ Switch#show running-config
                     Typical Network Switch
                   </h4>
                   <div className="rounded-lg bg-gray-900 p-8">
+                    {/* Static export mode - next/image optimization unavailable for external images */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/2550T-PWR-Front.jpg/1280px-2550T-PWR-Front.jpg"
@@ -2438,6 +2440,7 @@ Switch#show running-config
                     Console Port Location
                   </h4>
                   <div className="rounded-lg bg-gray-900 p-8">
+                    {/* Static export mode - next/image optimization unavailable for external images */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="https://www.cisco.com/c/dam/en/us/td/i/100001-200000/190001-200000/197001-198000/197840.jpg"
@@ -2475,6 +2478,7 @@ Switch#show running-config
                 <div className="my-8 rounded-lg border border-gray-700 bg-gray-800 p-6">
                   <h4 className="mb-4 text-center font-semibold text-white">Equipment Rack</h4>
                   <div className="rounded-lg bg-gray-900 p-8">
+                    {/* Static export mode - next/image optimization unavailable for external images */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Rack001.jpg/800px-Rack001.jpg"

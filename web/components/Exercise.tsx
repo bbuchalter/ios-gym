@@ -77,6 +77,7 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
   // Flatten all steps from all goals
   const allSteps = exercise.goals.flatMap((goal) => goal.steps);
   const totalSteps = allSteps.length;
+  // Safe: currentStepIndex is a controlled state number from useState, not user input
   // eslint-disable-next-line security/detect-object-injection
   const currentStep = allSteps[currentStepIndex];
 

@@ -37,6 +37,7 @@ interface InfoBoxProps {
 }
 
 export function InfoBox({ variant, children }: InfoBoxProps) {
+  // Safe: variant is a typed enum (Variant), not user input
   // eslint-disable-next-line security/detect-object-injection
   const styles = variantStyles[variant];
   return (

@@ -8,6 +8,7 @@
 
 import { SchemaValidator } from '../validation/schema-validator';
 import { LessonValidator, ExerciseDefinition } from '../validation/lesson-validator';
+import { RuntimeValidator } from '../validation/runtime-validator';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -349,8 +350,6 @@ describe('Exercise Component Logic', () => {
     test('Exercise component uses RuntimeValidator for browser validation', () => {
       // In the browser, Exercise component uses RuntimeValidator
       // which doesn't require Node.js fs/path modules
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { RuntimeValidator } = require('../validation/runtime-validator');
       const validator = new RuntimeValidator();
       
       expect(validator).toBeDefined();
