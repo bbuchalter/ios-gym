@@ -1,0 +1,87 @@
+{
+  "id": "lesson-13-management-access",
+  "title": "Configuring Management Access",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure Management Interface",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enter VLAN 1 interface configuration",
+          "command": "interface vlan 1",
+          "teachingPoint": "VLAN 1 is the management interface - this is where you assign the switch's IP"
+        },
+        {
+          "objective": "Assign IP address 192.168.1.100 with subnet mask 255.255.255.0",
+          "command": "ip address 192.168.1.100 255.255.255.0"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown",
+          "teachingPoint": "You'll see a log message when the interface comes up"
+        },
+        {
+          "objective": "Exit to global configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Set default gateway to 192.168.1.1",
+          "command": "ip default-gateway 192.168.1.1",
+          "teachingPoint": "The default gateway must be on the same network as your IP address"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan1.ip",
+      "expectedValue": "192.168.1.100",
+      "description": "VLAN 1 should have IP address 192.168.1.100",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan1.mask",
+      "expectedValue": "255.255.255.0",
+      "description": "VLAN 1 should have subnet mask 255.255.255.0",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.vlan1.adminUp",
+      "expectedValue": true,
+      "description": "VLAN 1 interface should be enabled (no shutdown)",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "ipDefaultGateway",
+      "expectedValue": "192.168.1.1",
+      "description": "Default gateway should be set to 192.168.1.1",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

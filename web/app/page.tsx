@@ -29,6 +29,10 @@ import lesson08 from '../../src/exercises/lesson-08-password-entry.json';
 import lesson09 from '../../src/exercises/lesson-09-no-command.json';
 import lesson10 from '../../src/exercises/lesson-10-sub-config-modes.json';
 import lesson11 from '../../src/exercises/lesson-11-logging-synchronous.json';
+import lesson12 from '../../src/exercises/lesson-12-show-interfaces.json';
+import lesson13 from '../../src/exercises/lesson-13-management-access.json';
+import lesson14 from '../../src/exercises/lesson-14-vlan-creation.json';
+import lesson15 from '../../src/exercises/lesson-15-svi-basic.json';
 
 import type { CommandGrammar } from '@src/types';
 import type { Exercise as ExerciseType } from '@src/validation/types';
@@ -2383,7 +2387,7 @@ Switch#show running-config
                 </div>
 
                 <h3 className="mt-16 mb-6 flex items-center gap-3 text-3xl font-bold text-blue-400">
-                  <span className="text-4xl">👉</span> See the Interfaces on Your Switch
+                  <span className="text-4xl">👉</span> Try It Now
                 </h3>
                 <p className="mb-8 text-lg text-gray-300">
                   Let's look at what interfaces exist on your switch! The{' '}
@@ -2391,28 +2395,8 @@ Switch#show running-config
                   haven't configured any IPs yet, you can see all the interface names and their
                   status.
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code> — Enter privileged mode
-                  </li>
-                  <li>
-                    <code>show ip interface brief</code> — View all interfaces on the switch
-                  </li>
-                  <li>
-                    <strong>Look carefully at the interface names</strong> — FastEthernet0/1 through
-                    0/24, GigabitEthernet0/1 and 0/2, and Vlan1
-                  </li>
-                  <li>
-                    <strong>Notice the Status column</strong> — Most interfaces show "down" (they're
-                    not enabled yet)
-                  </li>
-                  <li>
-                    <strong>See the IP-Address column</strong> — Everything says "unassigned"
-                    because you haven't configured IPs yet!
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson12 as ExerciseType} grammar={grammar} />
 
                 <InfoBox variant="info">
                   <ProTip>
@@ -2539,39 +2523,8 @@ no shutdown:         Interface is ON [✓]
                 <p className="mb-8 text-lg text-gray-300">
                   Configure management access on your switch:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 1</code> — Enter interface configuration for the management
-                    interface
-                  </li>
-                  <li>
-                    <code>ip address 192.168.1.100 255.255.255.0</code> — Assign IP address and
-                    subnet mask
-                  </li>
-                  <li>
-                    <code>no shutdown</code> — Turn the interface on (you'll see a log message!)
-                  </li>
-                  <li>
-                    <code>exit</code> — Back to global config mode
-                  </li>
-                  <li>
-                    <code>ip default-gateway 192.168.1.1</code> — Set the default gateway
-                  </li>
-                  <li>
-                    <code>end</code> — Jump back to privileged mode
-                  </li>
-                  <li>
-                    <code>write memory</code> — Save your configuration
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson13 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -2688,59 +2641,8 @@ no shutdown:         Interface is ON [✓]
                   <span className="text-4xl">👉</span> Your Task
                 </h3>
                 <p className="mb-8 text-lg text-gray-300">Create VLANs and assign ports:</p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>vlan 100</code> — Create VLAN 100 (notice the prompt changes to{' '}
-                    <code>(config-vlan)#</code>!)
-                  </li>
-                  <li>
-                    <code>name Students</code> — Give it a name (optional but helpful!)
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>vlan 200</code> — Create VLAN 200
-                  </li>
-                  <li>
-                    <code>name Teachers</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface fa0/2</code> — Configure port FastEthernet 0/2
-                  </li>
-                  <li>
-                    <code>switchport mode access</code> — Make it an access port
-                  </li>
-                  <li>
-                    <code>switchport access vlan 100</code> — Assign to VLAN 100
-                  </li>
-                  <li>
-                    <code>interface fa0/3</code> — Configure another port
-                  </li>
-                  <li>
-                    <code>switchport mode access</code>
-                  </li>
-                  <li>
-                    <code>switchport access vlan 200</code> — Assign to VLAN 200
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson14 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -3015,73 +2917,8 @@ Purpose: Gateway for computers in VLAN 100`}
                   Now configure a complete Layer 3 switch like in a real scenario (similar to
                   CyberPatriot!):
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code>
-                  </li>
-                  <li>
-                    <code>configure terminal</code>
-                  </li>
-                  <li>
-                    <code>hostname CorporateDistributionSwitch1</code> — Professional name
-                  </li>
-                  <li>
-                    <code>ip routing</code>
-                  </li>
-                  <li>
-                    <code>vlan 100</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>vlan 200</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 1</code> — Management SVI
-                  </li>
-                  <li>
-                    <code>ip address 172.16.16.1 255.255.255.0</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 100</code> — Student SVI
-                  </li>
-                  <li>
-                    <code>ip address 35.72.10.1 255.255.255.0</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>exit</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 200</code> — Teacher SVI
-                  </li>
-                  <li>
-                    <code>ip address 33.2.169.1 255.255.255.0</code>
-                  </li>
-                  <li>
-                    <code>no shutdown</code>
-                  </li>
-                  <li>
-                    <code>end</code>
-                  </li>
-                  <li>
-                    <code>write memory</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson15 as ExerciseType} grammar={grammar} />
 
                 <InfoBox variant="info">
                   <ProTip>

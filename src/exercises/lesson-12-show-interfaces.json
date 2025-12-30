@@ -1,0 +1,35 @@
+{
+  "id": "lesson-12-show-interfaces",
+  "title": "Network Hardware: Switches and Interfaces",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "View Switch Interfaces",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "View all interfaces on the switch",
+          "command": "show ip interface brief",
+          "teachingPoint": "This shows all physical and virtual interfaces with their IPs and status"
+        },
+        {
+          "objective": "Look at the interface names",
+          "teachingPoint": "Notice FastEthernet0/1-24, GigabitEthernet0/1-2, and Vlan1"
+        },
+        {
+          "objective": "Check the Status column",
+          "teachingPoint": "Most interfaces show 'down' because they're disabled by default"
+        },
+        {
+          "objective": "See the IP-Address column",
+          "teachingPoint": "Everything says 'unassigned' because no IPs are configured yet"
+        }
+      ]
+    }
+  ],
+  "assertions": []
+}
+

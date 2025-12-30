@@ -1,0 +1,119 @@
+{
+  "id": "lesson-14-vlan-creation",
+  "title": "VLANs: Organizing Your Network",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Create VLANs and Assign Ports",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Create VLAN 100",
+          "command": "vlan 100",
+          "teachingPoint": "Watch the prompt change to (config-vlan)#"
+        },
+        {
+          "objective": "Name VLAN 100 as 'Students'",
+          "command": "name Students",
+          "teachingPoint": "Names are optional but helpful for organization"
+        },
+        {
+          "objective": "Exit VLAN configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Create VLAN 200",
+          "command": "vlan 200"
+        },
+        {
+          "objective": "Name VLAN 200 as 'Teachers'",
+          "command": "name Teachers"
+        },
+        {
+          "objective": "Exit VLAN configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure port FastEthernet 0/2",
+          "command": "interface fa0/2"
+        },
+        {
+          "objective": "Make it an access port",
+          "command": "switchport mode access",
+          "teachingPoint": "Access ports carry only one VLAN - for end devices like computers"
+        },
+        {
+          "objective": "Assign port to VLAN 100",
+          "command": "switchport access vlan 100"
+        },
+        {
+          "objective": "Configure port FastEthernet 0/3",
+          "command": "interface fa0/3"
+        },
+        {
+          "objective": "Make it an access port",
+          "command": "switchport mode access"
+        },
+        {
+          "objective": "Assign port to VLAN 200",
+          "command": "switchport access vlan 200"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "100",
+        "name": "Students"
+      },
+      "description": "VLAN 100 should exist with name 'Students'",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "200",
+        "name": "Teachers"
+      },
+      "description": "VLAN 200 should exist with name 'Teachers'",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/2.accessVlan",
+      "expectedValue": "100",
+      "description": "FastEthernet 0/2 should be assigned to VLAN 100",
+      "diagnosticCommand": "show vlan brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.fa0/3.accessVlan",
+      "expectedValue": "200",
+      "description": "FastEthernet 0/3 should be assigned to VLAN 200",
+      "diagnosticCommand": "show vlan brief"
+    }
+  ]
+}
+
