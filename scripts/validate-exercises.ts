@@ -66,20 +66,45 @@ async function main(): Promise<void> {
       continue;
     }
     
-    // Only validate exercises from the original set that were built for validation
-    // New exercises use RuntimeValidator (browser) which handles them correctly
-    const validateList = [
-      'lesson-01-setting-hostname-and-saving-configuration',
-      'lesson-02-setting-enable-secret-password',
-      'lesson-03-creating-vlans',
-      'lesson-04-configuring-svi-for-management',
-      'lesson-05-configuring-access-port',
-      'lesson-13-management-access',
-      'lesson-22-ospf-basic',
-      'lesson-23-ospf-all-interfaces'
+    // Skip lessons that can't be build-validated:
+    //
+    // 1. DEMO/PRACTICE LESSONS - Have incomplete commands for teaching purposes
+    //    - lesson-04-tab-completion: Uses "conf" (incomplete for TAB demo)
+    //
+    // 2. INTERACTION LESSONS - Require manual user interaction
+    //    - lesson-08-password-entry: Password entry without visual feedback
+    //    - lesson-09-no-command: Password entry and disable/enable cycles
+    //
+    // 3. DEVICE-SPECIFIC LESSONS - Use interfaces/features not in base CLI model
+    //    - lesson-10-sub-config-modes: Complex mode transitions
+    //    - lesson-11-logging-synchronous: Line configuration
+    //    - lesson-14-vlan-creation: Uses fa0/3 (config-specific)
+    //    - lesson-16-trunk-all-vlans: Missing write memory (by design)
+    //    - lesson-17-trunk-restricted: Interface mode/trunk validation paths
+    //    - lesson-18-ssh-configuration: SSH state validation paths
+    //    - lesson-19, 20, 25: Use g1/0/x interfaces (Layer 3 switch hardware)
+    //    - lesson-21-static-routing: Route state property mismatch
+    //    - lesson-24-ospf-cost: OSPF cost not captured in state
+    //
+    // These lessons ARE validated by RuntimeValidator in the browser.
+    const skipList = [
+      'lesson-04-tab-completion',
+      'lesson-08-password-entry',
+      'lesson-09-no-command',
+      'lesson-10-sub-config-modes',
+      'lesson-11-logging-synchronous',
+      'lesson-14-vlan-creation',
+      'lesson-16-trunk-all-vlans',
+      'lesson-17-trunk-restricted',
+      'lesson-18-ssh-configuration',
+      'lesson-19-routed-port',
+      'lesson-20-multiple-routed-ports',
+      'lesson-21-static-routing',
+      'lesson-24-ospf-cost',
+      'lesson-25-capstone'
     ];
     
-    if (!validateList.some(valid => content.id === valid)) {
+    if (skipList.some(skip => content.id === skip)) {
       process.stdout.write(`  Validating ${filename}... `);
       console.log('⏭️  SKIP (RuntimeValidator only)');
       continue;

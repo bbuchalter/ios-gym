@@ -22,6 +22,7 @@ export interface DeviceState {
   vlans: Record<string, VlanConfig>;
   svis: Record<string, SviConfig>;
   ipDefaultGateway: string | null;
+  ipRouting: boolean; // Enable routing between VLANs (Layer 3 switches)
   routes: RouteEntry[];
   ospf: OspfConfig;
   ssh: SshConfig;

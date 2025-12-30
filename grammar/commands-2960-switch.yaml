@@ -239,6 +239,18 @@ commands:
         ad_default: 1
       help: "Add static route (supports floating route via AD)"
 
+    # Enable IP routing (Layer 3 switching)
+    - name: ip_routing
+      tokens: ["ip", "routing"]
+      action: {type: "set", path: "ipRouting", value: true}
+      help: "Enable IP routing between VLANs"
+
+    # Disable IP routing
+    - name: no_ip_routing
+      tokens: ["no", "ip", "routing"]
+      action: {type: "set", path: "ipRouting", value: false}
+      help: "Disable IP routing"
+
     # OSPF
     - name: router_ospf
       tokens: ["router", "ospf", {arg: "INT", name: "pid"}]
