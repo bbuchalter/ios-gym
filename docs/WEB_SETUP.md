@@ -23,7 +23,7 @@ This project enforces Tailwind CSS best practices using [eslint-plugin-tailwindc
 - Add breakpoints only for major layout changes (e.g., `grid-cols-2 lg:grid-cols-4`)
 - Avoid chains like `p-2 sm:p-4 md:p-6 lg:p-8`
 
-See [TAILWIND_RESPONSIVE_GUIDELINES.md](./TAILWIND_RESPONSIVE_GUIDELINES.md) for full details.
+See [WEB_TAILWIND_GUIDELINES.md](./WEB_TAILWIND_GUIDELINES.md) for full details.
 
 ## Linting
 

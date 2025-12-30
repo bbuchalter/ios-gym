@@ -19,8 +19,8 @@ This installs hooks defined in [`lefthook.yml`](../lefthook.yml).
 Runs validation checks **in parallel** before every commit:
 
 - **Grammar sync** - Ensure YAML and JSON grammar files match
-  - `commands-2960-switch.yaml` ↔ `web/public/commands-2960-switch.json`
-  - `commands-1941-router.yaml` ↔ `web/public/commands-1941-router.json`
+  - `grammar/commands-2960-switch.yaml` ↔ `web/public/commands-2960-switch.json`
+  - `grammar/commands-1941-router.yaml` ↔ `web/public/commands-1941-router.json`
 - **TypeScript types** - Validate with `tsc --noEmit`
 - **Tests** - Run all Jest tests
 - **Web linting** - ESLint checks on web directory
@@ -29,7 +29,7 @@ Runs validation checks **in parallel** before every commit:
 
 **Performance:** All checks run in parallel, reducing commit time from ~14s to ~6s.
 
-See [../HOOKS.md](../HOOKS.md) for complete documentation.
+See [../docs/HOOKS.md](../docs/HOOKS.md) for complete documentation.
 
 ## Configuration
 

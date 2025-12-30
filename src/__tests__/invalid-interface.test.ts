@@ -10,7 +10,7 @@ describe("Invalid Interface Validation", () => {
     let session: CLISession;
 
     beforeEach(() => {
-      const grammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
+      const grammarPath = path.join(__dirname, "../../grammar/commands-2960-switch.yaml");
       const grammar = loadGrammar(grammarPath);
       engine = new CLIEngine(grammar);
       session = new CLISession(grammar, "2960-switch");
@@ -120,7 +120,7 @@ describe("Invalid Interface Validation", () => {
     let session: CLISession;
 
     beforeEach(() => {
-      const grammarPath = path.join(__dirname, "../../commands-1941-router.yaml");
+      const grammarPath = path.join(__dirname, "../../grammar/commands-1941-router.yaml");
       const grammar = loadGrammar(grammarPath);
       engine = new CLIEngine(grammar);
       session = new CLISession(grammar, "1941-router");
@@ -186,7 +186,7 @@ describe("Invalid Interface Validation", () => {
     let session: CLISession;
 
     beforeEach(() => {
-      const grammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
+      const grammarPath = path.join(__dirname, "../../grammar/commands-2960-switch.yaml");
       const grammar = loadGrammar(grammarPath);
       engine = new CLIEngine(grammar);
       session = new CLISession(grammar, "2960-switch");
@@ -231,7 +231,7 @@ describe("Invalid Interface Validation", () => {
     let session: CLISession;
 
     beforeEach(() => {
-      const grammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
+      const grammarPath = path.join(__dirname, "../../grammar/commands-2960-switch.yaml");
       const grammar = loadGrammar(grammarPath);
       engine = new CLIEngine(grammar);
       session = new CLISession(grammar, "2960-switch");

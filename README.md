@@ -126,8 +126,15 @@ Router(config-if)# ip ospf cost 10
 
 ```
 ios-gym/
-├── commands-2960-switch.yaml  # Catalyst 2960 switch grammar (source)
-├── commands-1941-router.yaml  # Cisco 1941 router grammar (source)
+├── grammar/               # Device command definitions
+│   ├── commands-2960-switch.yaml  # Catalyst 2960 switch grammar
+│   └── commands-1941-router.yaml  # Cisco 1941 router grammar
+│
+├── docs/                  # Detailed documentation
+│   ├── ARCHITECTURE.md    # Technical architecture
+│   ├── TESTING.md         # Test suite documentation
+│   ├── HOOKS.md           # Git hooks documentation
+│   └── ... (8 more guides)
 │
 ├── src/                   # CLI engine & tests (Node.js/TypeScript)
 │   ├── cli/               # CLI engine (parser, completer, handlers, state)
@@ -140,8 +147,8 @@ ios-gym/
 │   ├── components/        # React components (Terminal, LessonSection, etc.)
 │   ├── lib/               # Client utilities (terminal manager, hooks)
 │   ├── public/            # Static assets
-│   │   ├── commands-2960-switch.json  # Generated from commands-2960-switch.yaml
-│   │   └── commands-1941-router.json  # Generated from commands-1941-router.yaml
+│   │   ├── commands-2960-switch.json  # Generated from grammar/commands-2960-switch.yaml
+│   │   └── commands-1941-router.json  # Generated from grammar/commands-1941-router.yaml
 │   └── out/               # ⭐ STATIC BUILD - Deploy this!
 │       └── index.html     # Complete course with embedded terminals
 │
@@ -197,7 +204,7 @@ cp -r web/out/* /var/www/html/ios-trainer/
 npm run web:dev
 ```
 - 🔥 **Hot reload:** Automatically restarts when CLI code changes
-- 🔄 **Auto-rebuild grammar:** Watches `commands-2960-switch.yaml`, `commands-1941-router.yaml` and `src/` for changes
+- 🔄 **Auto-rebuild grammar:** Watches `grammar/*.yaml` and `src/` for changes
 - ⚡ **Fast feedback:** See changes in seconds
 - 🎯 **Use this for:** Day-to-day development
 
@@ -223,8 +230,8 @@ npm run web:start
 npm run build:grammar
 ```
 Converts all device grammar YAML files to JSON (usually not needed - `web:dev` and `web:build` do this automatically). Builds both:
-- `commands-2960-switch.yaml` → `web/public/commands-2960-switch.json`
-- `commands-1941-router.yaml` → `web/public/commands-1941-router.json`
+- `grammar/commands-2960-switch.yaml` → `web/public/commands-2960-switch.json`
+- `grammar/commands-1941-router.yaml` → `web/public/commands-1941-router.json`
 
 ### Testing
 ```bash
@@ -271,11 +278,35 @@ npm run test:coverage
 
 ## 📚 Additional Documentation
 
+All detailed documentation is in the [`docs/`](docs/) directory:
+
+**Architecture & Testing:**
+- **[`ARCHITECTURE.md`](docs/ARCHITECTURE.md)** - Technical architecture details
+- **[`TESTING.md`](docs/TESTING.md)** - Test suite documentation
+- **[`IMPLEMENTATION_COMPLETE.md`](docs/IMPLEMENTATION_COMPLETE.md)** - Implementation history
+
+**Validation System:**
+- **[`VALIDATION_SYSTEM.md`](docs/VALIDATION_SYSTEM.md)** - Exercise validation system
+- **[`EXERCISE-VALIDATION.md`](docs/EXERCISE-VALIDATION.md)** - Exercise validation details
+- **[`EXERCISE_AUTHORING.md`](docs/EXERCISE_AUTHORING.md)** - Complete exercise authoring guide
+- **[`SAVED-STATE-VALIDATION.md`](docs/SAVED-STATE-VALIDATION.md)** - State validation details
+
+**CLI & Display:**
+- **[`MODE_COMPARISON.md`](docs/MODE_COMPARISON.md)** - CLI mode comparison
+- **[`DISPLAY_MODES.md`](docs/DISPLAY_MODES.md)** - Display modes documentation
+- **[`PROGRESSIVE-DISCLOSURE.md`](docs/PROGRESSIVE-DISCLOSURE.md)** - Progressive disclosure design
+
+**Web Application:**
+- **[`WEB_SETUP.md`](docs/WEB_SETUP.md)** - Next.js setup and development guide
+- **[`WEB_TAILWIND_GUIDELINES.md`](docs/WEB_TAILWIND_GUIDELINES.md)** - Tailwind responsive design best practices
+
+**Development Tools:**
+- **[`HOOKS.md`](docs/HOOKS.md)** - Git hooks documentation
+- **[`GIT_HOOKS_SETUP.md`](docs/GIT_HOOKS_SETUP.md)** - Git hooks installation guide
+- **[`LINTING_SUMMARY.md`](docs/LINTING_SUMMARY.md)** - Linting configuration
+
+**Root level docs:**
 - **`.claude.md`** - AI assistant guidelines and git policies
-- **`HOOKS.md`** - Git hooks documentation
-- **`ARCHITECTURE.md`** - Technical architecture details
-- **`TESTING.md`** - Test suite documentation
-- **`CLEANUP_PLAN.md`** - Rationale for file organization
 
 ---
 

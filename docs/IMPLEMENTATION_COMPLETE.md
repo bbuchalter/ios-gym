@@ -92,10 +92,10 @@ All exercises:
 
 ### 6. Documentation ✅
 
-- `src/exercises/README.md` - Complete authoring guide
-- `VALIDATION_SYSTEM.md` - System overview
-- `MODE_COMPARISON.md` - Display mode documentation
-- `DISPLAY_MODES.md` - Pedagogical approach
+- `docs/EXERCISE_AUTHORING.md` - Complete authoring guide
+- `docs/VALIDATION_SYSTEM.md` - System overview
+- `docs/MODE_COMPARISON.md` - Display mode documentation
+- `docs/DISPLAY_MODES.md` - Pedagogical approach
 
 ### 7. Testing ✅
 

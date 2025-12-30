@@ -9,7 +9,7 @@ describe("Cisco 1941 router default output", () => {
   let session: CLISession;
 
   beforeEach(() => {
-    const grammarPath = path.join(__dirname, "../../commands-1941-router.yaml");
+    const grammarPath = path.join(__dirname, "../../grammar/commands-1941-router.yaml");
     const grammar = loadGrammar(grammarPath);
     engine = new CLIEngine(grammar);
     session = new CLISession(grammar, '1941-router');

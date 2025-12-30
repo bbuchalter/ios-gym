@@ -16,6 +16,6 @@ export function loadGrammar(filePath: string): CommandGrammar {
  * Get the default grammar path (Catalyst 2960 switch)
  */
 export function getDefaultGrammarPath(): string {
-  return path.join(process.cwd(), "commands-2960-switch.yaml");
+  return path.join(process.cwd(), "grammar/commands-2960-switch.yaml");
 }
 

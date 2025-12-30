@@ -1,5 +1,5 @@
 {
-  "watch": ["src/**/*", "commands-2960-switch.yaml", "commands-1941-router.yaml"],
+  "watch": ["src/**/*", "grammar/commands-2960-switch.yaml", "grammar/commands-1941-router.yaml"],
   "ext": "ts,js,yaml",
   "ignore": ["src/**/*.test.ts", "web/**/*"],
   "delay": 500,

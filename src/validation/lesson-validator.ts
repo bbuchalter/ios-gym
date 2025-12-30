@@ -22,8 +22,8 @@ export class LessonValidator extends AssertionRunner {
     const grammarPath = path.join(
       process.cwd(),
       exercise.deviceModel === '2960-switch' 
-        ? 'commands-2960-switch.yaml' 
-        : 'commands-1941-router.yaml'
+        ? 'grammar/commands-2960-switch.yaml' 
+        : 'grammar/commands-1941-router.yaml'
     );
     
     const grammar = loadGrammar(grammarPath);

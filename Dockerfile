@@ -13,7 +13,7 @@ RUN npm ci
 
 # Copy source files needed for build
 COPY tsconfig.json ./
-COPY commands-*.yaml ./
+COPY grammar ./grammar
 COPY src ./src
 COPY scripts ./scripts
 

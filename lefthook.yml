@@ -6,8 +6,8 @@
   # Grammar file synchronization - always check
   grammar-sync-switch:
     run: |
-      if [ -f "commands-2960-switch.yaml" ] && [ -f "web/public/commands-2960-switch.json" ]; then
-        YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-2960-switch.yaml', 'utf8')), null, 2));")
+      if [ -f "grammar/commands-2960-switch.yaml" ] && [ -f "web/public/commands-2960-switch.json" ]; then
+        YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('grammar/commands-2960-switch.yaml', 'utf8')), null, 2));")
         CURRENT_JSON=$(cat web/public/commands-2960-switch.json)
         if [ "$YAML_JSON" != "$CURRENT_JSON" ]; then
           echo "❌ Switch grammar files out of sync! Run 'npm run build:grammar'"
@@ -18,8 +18,8 @@
 
   grammar-sync-router:
     run: |
-      if [ -f "commands-1941-router.yaml" ] && [ -f "web/public/commands-1941-router.json" ]; then
-        YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-1941-router.yaml', 'utf8')), null, 2));")
+      if [ -f "grammar/commands-1941-router.yaml" ] && [ -f "web/public/commands-1941-router.json" ]; then
+        YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('grammar/commands-1941-router.yaml', 'utf8')), null, 2));")
         CURRENT_JSON=$(cat web/public/commands-1941-router.json)
         if [ "$YAML_JSON" != "$CURRENT_JSON" ]; then
           echo "❌ Router grammar files out of sync! Run 'npm run build:grammar'"

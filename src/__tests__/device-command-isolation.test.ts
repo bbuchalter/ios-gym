@@ -10,7 +10,7 @@ describe("Device Command Isolation", () => {
     let session: CLISession;
 
     beforeEach(() => {
-      const grammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
+      const grammarPath = path.join(__dirname, "../../grammar/commands-2960-switch.yaml");
       const grammar = loadGrammar(grammarPath);
       engine = new CLIEngine(grammar);
       session = new CLISession(grammar, '2960-switch');
@@ -67,7 +67,7 @@ describe("Device Command Isolation", () => {
     let session: CLISession;
 
     beforeEach(() => {
-      const grammarPath = path.join(__dirname, "../../commands-1941-router.yaml");
+      const grammarPath = path.join(__dirname, "../../grammar/commands-1941-router.yaml");
       const grammar = loadGrammar(grammarPath);
       engine = new CLIEngine(grammar);
       session = new CLISession(grammar, '1941-router');
@@ -140,7 +140,7 @@ describe("Device Command Isolation", () => {
 
   describe("Both devices support common commands", () => {
     test("2960 switch supports 'show ip interface brief'", () => {
-      const grammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
+      const grammarPath = path.join(__dirname, "../../grammar/commands-2960-switch.yaml");
       const grammar = loadGrammar(grammarPath);
       const engine = new CLIEngine(grammar);
       const session = new CLISession(grammar, '2960-switch');
@@ -151,7 +151,7 @@ describe("Device Command Isolation", () => {
     });
 
     test("1941 router supports 'show ip interface brief'", () => {
-      const grammarPath = path.join(__dirname, "../../commands-1941-router.yaml");
+      const grammarPath = path.join(__dirname, "../../grammar/commands-1941-router.yaml");
       const grammar = loadGrammar(grammarPath);
       const engine = new CLIEngine(grammar);
       const session = new CLISession(grammar, '1941-router');
@@ -163,7 +163,7 @@ describe("Device Command Isolation", () => {
 
     test("both support 'ip route' static routing", () => {
       // Test switch
-      const switchGrammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
+      const switchGrammarPath = path.join(__dirname, "../../grammar/commands-2960-switch.yaml");
       const switchGrammar = loadGrammar(switchGrammarPath);
       const switchEngine = new CLIEngine(switchGrammar);
       const switchSession = new CLISession(switchGrammar, '2960-switch');
@@ -175,7 +175,7 @@ describe("Device Command Isolation", () => {
       expect(switchSession.deviceState.routes.length).toBe(1);
       
       // Test router
-      const routerGrammarPath = path.join(__dirname, "../../commands-1941-router.yaml");
+      const routerGrammarPath = path.join(__dirname, "../../grammar/commands-1941-router.yaml");
       const routerGrammar = loadGrammar(routerGrammarPath);
       const routerEngine = new CLIEngine(routerGrammar);
       const routerSession = new CLISession(routerGrammar, '1941-router');
@@ -189,7 +189,7 @@ describe("Device Command Isolation", () => {
 
     test("both support 'router ospf' configuration", () => {
       // Test switch
-      const switchGrammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
+      const switchGrammarPath = path.join(__dirname, "../../grammar/commands-2960-switch.yaml");
       const switchGrammar = loadGrammar(switchGrammarPath);
       const switchEngine = new CLIEngine(switchGrammar);
       const switchSession = new CLISession(switchGrammar, '2960-switch');
@@ -201,7 +201,7 @@ describe("Device Command Isolation", () => {
       expect(switchSession.deviceState.ospf.processId).toBe(1);
       
       // Test router
-      const routerGrammarPath = path.join(__dirname, "../../commands-1941-router.yaml");
+      const routerGrammarPath = path.join(__dirname, "../../grammar/commands-1941-router.yaml");
       const routerGrammar = loadGrammar(routerGrammarPath);
       const routerEngine = new CLIEngine(routerGrammar);
       const routerSession = new CLISession(routerGrammar, '1941-router');
@@ -215,7 +215,7 @@ describe("Device Command Isolation", () => {
 
     test("both support 'show running-config'", () => {
       // Test switch
-      const switchGrammarPath = path.join(__dirname, "../../commands-2960-switch.yaml");
+      const switchGrammarPath = path.join(__dirname, "../../grammar/commands-2960-switch.yaml");
       const switchGrammar = loadGrammar(switchGrammarPath);
       const switchEngine = new CLIEngine(switchGrammar);
       const switchSession = new CLISession(switchGrammar, '2960-switch');
@@ -226,7 +226,7 @@ describe("Device Command Isolation", () => {
       expect(switchResult.paginated).toBe(true);
       
       // Test router
-      const routerGrammarPath = path.join(__dirname, "../../commands-1941-router.yaml");
+      const routerGrammarPath = path.join(__dirname, "../../grammar/commands-1941-router.yaml");
       const routerGrammar = loadGrammar(routerGrammarPath);
       const routerEngine = new CLIEngine(routerGrammar);
       const routerSession = new CLISession(routerGrammar, '1941-router');

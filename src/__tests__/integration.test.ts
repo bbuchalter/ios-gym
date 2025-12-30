@@ -8,7 +8,7 @@ describe("CLI Integration Tests", () => {
   let session: CLISession;
 
   beforeEach(() => {
-    const grammarPath = path.join(process.cwd(), "commands-2960-switch.yaml");
+    const grammarPath = path.join(process.cwd(), "grammar/commands-2960-switch.yaml");
     const grammar = loadGrammar(grammarPath);
     
     engine = new CLIEngine(grammar);

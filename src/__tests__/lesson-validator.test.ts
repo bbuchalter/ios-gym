@@ -17,7 +17,7 @@ describe('LessonValidator - Assertion Types', () => {
       const state = createInitialState('2960-switch');
       state.hostname = 'TestSwitch';
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -33,7 +33,7 @@ describe('LessonValidator - Assertion Types', () => {
       const state = createInitialState('2960-switch');
       state.hostname = 'Switch';
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -54,7 +54,7 @@ describe('LessonValidator - Assertion Types', () => {
       const state = createInitialState('2960-switch');
       state.enableSecret = 'MyPassword';
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -69,7 +69,7 @@ describe('LessonValidator - Assertion Types', () => {
       const state = createInitialState('2960-switch');
       state.enableSecret = null;
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -93,7 +93,7 @@ describe('LessonValidator - Assertion Types', () => {
         trunkAllowed: null
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -121,7 +121,7 @@ describe('LessonValidator - Assertion Types', () => {
         trunkAllowed: null
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -151,7 +151,7 @@ describe('LessonValidator - Assertion Types', () => {
         trunkAllowed: null
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -178,7 +178,7 @@ describe('LessonValidator - Assertion Types', () => {
         trunkAllowed: null
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -200,7 +200,7 @@ describe('LessonValidator - Assertion Types', () => {
       const state = createInitialState('2960-switch');
       state.vlans['100'] = { name: 'TestVLAN' };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -215,7 +215,7 @@ describe('LessonValidator - Assertion Types', () => {
       const state = createInitialState('2960-switch');
       state.vlans['100'] = { name: 'Students' };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -242,7 +242,7 @@ describe('LessonValidator - Assertion Types', () => {
         trunkAllowed: null
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -269,7 +269,7 @@ describe('LessonValidator - Assertion Types', () => {
         trunkAllowed: '1,100,200'
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -294,7 +294,7 @@ describe('LessonValidator - Assertion Types', () => {
         { ip: '192.168.1.0', wildcard: '0.0.0.255', area: 0 }
       ];
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -315,7 +315,7 @@ describe('LessonValidator - Assertion Types', () => {
       const state = createInitialState('2960-switch');
       state.ospf.ifCosts = { 'g0/1': 10 };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -343,7 +343,7 @@ describe('LessonValidator - Assertion Types', () => {
         vty: { range: null, login: null, transport: [] }
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -368,7 +368,7 @@ describe('LessonValidator - Assertion Types', () => {
         vty: { range: null, login: null, transport: [] }
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -397,7 +397,7 @@ describe('LessonValidator - Assertion Types', () => {
         }
       };
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -419,7 +419,7 @@ describe('LessonValidator - Assertion Types', () => {
         { dest: '0.0.0.0', mask: '0.0.0.0', nextHop: '192.168.1.1', ad: 1 }
       ];
       
-      const grammarPath = path.join(process.cwd(), 'commands-1941-router.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-1941-router.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -443,7 +443,7 @@ describe('LessonValidator - Assertion Types', () => {
         { dest: '0.0.0.0', mask: '0.0.0.0', nextHop: '192.168.1.2', ad: 254 }
       ];
       
-      const grammarPath = path.join(process.cwd(), 'commands-1941-router.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-1941-router.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       
@@ -466,7 +466,7 @@ describe('LessonValidator - Assertion Types', () => {
     test('mode_reached validates current mode', () => {
       const state = createInitialState('2960-switch');
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       modeStack.push(ModeType.PRIV_EXEC);
@@ -488,7 +488,7 @@ describe('LessonValidator - Assertion Types', () => {
     test('always passes for exploratory exercises', () => {
       const state = createInitialState('2960-switch');
       
-      const grammarPath = path.join(process.cwd(), 'commands-2960-switch.yaml');
+      const grammarPath = path.join(process.cwd(), 'grammar/commands-2960-switch.yaml');
       const grammar = loadGrammar(grammarPath);
       const modeStack = new ModeStack(grammar);
       

@@ -238,9 +238,9 @@ export class BuildValidator {
     const projectRoot = path.join(__dirname, '../..');
     
     if (deviceModel === '2960-switch') {
-      return path.join(projectRoot, 'commands-2960-switch.yaml');
+      return path.join(projectRoot, 'grammar/commands-2960-switch.yaml');
     } else if (deviceModel === '1941-router') {
-      return path.join(projectRoot, 'commands-1941-router.yaml');
+      return path.join(projectRoot, 'grammar/commands-1941-router.yaml');
     } else {
       throw new Error(`Unknown device model: ${deviceModel}`);
     }
