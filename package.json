@@ -10,6 +10,7 @@
     "build": "npm run web:build",
     "build:grammar": "node -e \"const yaml = require('js-yaml'); const fs = require('fs'); const switch2960 = yaml.load(fs.readFileSync('commands-2960-switch.yaml', 'utf8')); const router1941 = yaml.load(fs.readFileSync('commands-1941-router.yaml', 'utf8')); fs.writeFileSync('web/public/commands-2960-switch.json', JSON.stringify(switch2960, null, 2)); fs.writeFileSync('web/public/commands-1941-router.json', JSON.stringify(router1941, null, 2)); console.log('Built grammars for: 2960-switch, 1941-router');\"",
     "validate:exercises": "ts-node scripts/validate-exercises.ts",
+    "lint:yaml": "npx yaml-lint commands-*.yaml",
     "web:dev": "nodemon",
     "web:build": "npm run validate:exercises && npm run build:grammar && cd web && npm run build",
     "web:start": "http-server web/out -p 3000 -o"
@@ -53,6 +54,7 @@
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2",
-    "typescript-eslint": "^8.51.0"
+    "typescript-eslint": "^8.51.0",
+    "yaml-lint": "^1.7.0"
   }
 }
