@@ -63,7 +63,7 @@ export function ValidationFeedback({ result }: ValidationFeedbackProps) {
           <li><code>show vlan brief</code> — Check VLANs (if applicable)</li>
         </ul>
         <p className="mt-3 text-sm text-red-300 italic">
-          Use these commands to find what's missing or incorrect, then fix it and try "Check My Work" again!
+          Use these commands to find what&apos;s missing or incorrect, then fix it and try &quot;Check My Work&quot; again!
         </p>
       </div>
     </div>

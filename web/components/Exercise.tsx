@@ -6,7 +6,6 @@ import type { CommandGrammar, DeviceModel } from '@src/types';
 import type { Exercise as ExerciseType, Assertion } from '@src/validation/types';
 import { RuntimeValidator } from '@src/validation/RuntimeValidator';
 import dynamic from 'next/dynamic';
-import { InfoBox } from './InfoBox';
 
 // Dynamically import Terminal to avoid SSR issues
 const Terminal = dynamic(() => import('./Terminal'), {
@@ -70,7 +69,7 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
   }, [validationState]);
   
   // Flatten all steps from all goals
-  const allSteps = exercise.goals.flatMap((goal: { steps: any[] }) => goal.steps);
+  const allSteps = exercise.goals.flatMap((goal) => goal.steps);
   const totalSteps = allSteps.length;
   const currentStep = allSteps[currentStepIndex];
   

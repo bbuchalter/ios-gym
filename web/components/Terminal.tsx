@@ -191,11 +191,7 @@ export default function Terminal({ terminalId, grammar, deviceModel, sessionRef:
       }
     };
     
-    // Track keyboard event for CTRL+SHIFT+6 detection
-    let lastKeyboardEvent: KeyboardEvent | null = null;
-    
     const handleKeyDown = (event: KeyboardEvent) => {
-      lastKeyboardEvent = event;
       
       // Handle Exercise keyboard shortcuts (Cmd/Ctrl + [, ], or \)
       if (keyboardShortcutRef.current && (event.metaKey || event.ctrlKey) && (event.key === '[' || event.key === ']' || event.key === '\\')) {

@@ -4,9 +4,9 @@
 
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { TerminalManager } from '@/lib/terminal-manager';
 import { useProgressBar } from '@/lib/useProgressBar';
 import type { CommandGrammar } from '@src/types';
+import type { Exercise as ExerciseType } from '@src/validation/types';
 
 
 import { LessonSection } from '@/components/LessonSection';
@@ -628,7 +628,7 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
             <p className="mb-8 text-lg text-gray-300">Configure your first device - try it with commands shown, then hide them and try again:</p>
 
             <Exercise 
-              exercise={lesson01 as any}
+              exercise={lesson01 as ExerciseType}
               grammar={grammar}
             />
 
@@ -896,7 +896,7 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
             <p className="mb-8 text-lg text-gray-300">Add security to your device:</p>
 
             <Exercise 
-              exercise={lesson02 as any}
+              exercise={lesson02 as ExerciseType}
               grammar={grammar}
             />
 
@@ -1728,6 +1728,7 @@ Switch#show running-config
             <div className="my-8 rounded-lg border border-gray-700 bg-gray-800 p-6">
               <h4 className="mb-4 text-center font-semibold text-white">Typical Network Switch</h4>
               <div className="rounded-lg bg-gray-900 p-8">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/2550T-PWR-Front.jpg/1280px-2550T-PWR-Front.jpg" 
                   alt="Cisco network switch showing multiple ethernet ports on the front panel"
@@ -1774,6 +1775,7 @@ Switch#show running-config
             <div className="my-8 rounded-lg border border-gray-700 bg-gray-800 p-6">
               <h4 className="mb-4 text-center font-semibold text-white">Console Port Location</h4>
               <div className="rounded-lg bg-gray-900 p-8">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="https://www.cisco.com/c/dam/en/us/td/i/100001-200000/190001-200000/197001-198000/197840.jpg" 
                   alt="Back of Cisco switch showing console port"
@@ -1805,6 +1807,7 @@ Switch#show running-config
             <div className="my-8 rounded-lg border border-gray-700 bg-gray-800 p-6">
               <h4 className="mb-4 text-center font-semibold text-white">Equipment Rack</h4>
               <div className="rounded-lg bg-gray-900 p-8">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Rack001.jpg/800px-Rack001.jpg" 
                   alt="Network equipment rack with multiple switches and servers"
