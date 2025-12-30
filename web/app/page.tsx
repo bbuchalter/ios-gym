@@ -93,9 +93,10 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
         });
       });
     } else {
-      // No saved position, show content
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setContentVisible(true);
+      // No saved position, show content after DOM is ready
+      requestAnimationFrame(() => {
+        setContentVisible(true);
+      });
     }
   }, [registry.isAllTerminalsReady, grammar]);
 
