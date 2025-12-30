@@ -8,7 +8,6 @@ import '@xterm/xterm/css/xterm.css';
 import { CLIEngine } from '@src/cli/engine';
 import { CLISession } from '@src/cli-session';
 
-
 import { useLessonCounter } from '@/lib/LessonCounterContext';
 import { useTerminalRegistry } from '@/lib/TerminalRegistryContext';
 

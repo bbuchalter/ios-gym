@@ -119,6 +119,26 @@ if ! (cd web && npm run lint > /dev/null 2>&1); then
 fi
 print_success "Code style checks passed"
 
+# Check code formatting with Prettier
+echo "🎨 Checking code formatting..."
+if ! (cd web && npm run format:check > /dev/null 2>&1); then
+    print_error "Code formatting issues found!"
+    echo ""
+    echo "Run 'cd web && npm run format' to fix formatting."
+    exit 1
+fi
+print_success "Code formatting is correct"
+
+# Validate YAML syntax
+echo "🔍 Validating YAML syntax..."
+if ! npm run lint:yaml > /dev/null 2>&1; then
+    print_error "YAML validation failed!"
+    echo ""
+    echo "Run 'npm run lint:yaml' to see errors."
+    exit 1
+fi
+print_success "YAML files are valid"
+
 echo ""
 print_success "All pre-commit checks passed! 🎉"
 echo ""

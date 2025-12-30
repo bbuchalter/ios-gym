@@ -8,7 +8,6 @@ import type { CLISession } from '@src/cli-session';
 import type { CommandGrammar, DeviceModel } from '@src/types';
 import type { Exercise as ExerciseType, Assertion } from '@src/validation/types';
 
-
 // Dynamically import Terminal to avoid SSR issues
 const Terminal = dynamic(() => import('./Terminal'), {
   ssr: false,

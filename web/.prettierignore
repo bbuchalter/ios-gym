@@ -4,4 +4,6 @@ node_modules/
 *.config.js
 *.config.mjs
 *.config.ts
+# Generated grammar files
+public/commands-*.json
 
