@@ -17,6 +17,7 @@ import { Diagram } from '@/components/Diagram';
 import { LessonCounterProvider } from '@/lib/LessonCounterContext';
 import { TerminalRegistryProvider, useTerminalRegistry } from '@/lib/TerminalRegistryContext';
 import { Exercise } from '@/components/Exercise';
+import Footer from '@/components/Footer';
 
 // Import exercises
 import lesson01 from '../../src/exercises/lesson-01-setting-hostname-and-saving-configuration.json';
@@ -3679,6 +3680,7 @@ ip ospf cost 30
             </div>
           </div>
         </div>
+        <Footer />
       </main>
       </div>
     </>
