@@ -6,19 +6,33 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Responsive Design Guidelines
+
+This project enforces Tailwind CSS responsive design best practices through custom ESLint rules. 
+
+**Key principles:**
+- Use single values for spacing and typography (e.g., `p-4`, `text-lg`)
+- Rely on Tailwind's rem-based scaling instead of multiple breakpoints
+- Add breakpoints only for major layout changes (e.g., `grid-cols-2 lg:grid-cols-4`)
+- Avoid chains like `p-2 sm:p-4 md:p-6 lg:p-8`
+
+See [TAILWIND_RESPONSIVE_GUIDELINES.md](./TAILWIND_RESPONSIVE_GUIDELINES.md) for full details.
+
+## Linting
+
+Check your code for issues:
+
+```bash
+npm run lint
+```
+
+This includes custom rules that enforce responsive design standards and catch over-complicated breakpoint usage.
 
 ## Learn More
 

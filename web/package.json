@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:responsive": "eslint --rule 'local/no-excessive-breakpoints: error' --rule 'local/prefer-mobile-first: warn'"
   },
   "dependencies": {
     "@xterm/addon-fit": "^0.10.0",
