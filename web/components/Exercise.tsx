@@ -13,17 +13,17 @@ const Terminal = dynamic(() => import('./Terminal'), {
   ssr: false,
   loading: () => (
     <div 
-      className="my-8 border border-gray-700 bg-gray-800 rounded-lg"
+      className="my-8 rounded-lg border border-gray-700 bg-gray-800"
       style={{ minHeight: '470px' }}
     >
-      <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 text-xs font-mono text-gray-400">
+      <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 font-mono text-xs text-gray-400">
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-red-500" />
           <span className="h-2 w-2 rounded-full bg-yellow-500" />
           <span className="h-2 w-2 rounded-full bg-green-500" />
         </div>
       </div>
-      <div className="p-8 text-gray-400 text-center">Loading terminal...</div>
+      <div className="p-8 text-center text-gray-400">Loading terminal...</div>
     </div>
   )
 });
@@ -165,11 +165,11 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
   return (
     <div className="my-6">
       {/* View Mode and Controls */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setViewMode('step-by-step')}
-            className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+            className={`rounded px-3 py-1 text-xs font-semibold transition-colors ${
               viewMode === 'step-by-step'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
@@ -179,7 +179,7 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
           </button>
           <button
             onClick={() => setViewMode('show-all')}
-            className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+            className={`rounded px-3 py-1 text-xs font-semibold transition-colors ${
               viewMode === 'show-all'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
@@ -188,16 +188,16 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
             Show All
           </button>
         </div>
-        <label className="flex items-center gap-2 cursor-pointer">
-          <span className="text-xs text-gray-400 font-semibold">Show commands</span>
+        <label className="flex cursor-pointer items-center gap-2">
+          <span className="text-xs font-semibold text-gray-400">Show commands</span>
           <div
             onClick={() => setCommandsVisible(!commandsVisible)}
-            className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
+            className={`relative h-6 w-11 rounded-full transition-colors duration-200 ${
               commandsVisible ? 'bg-blue-600' : 'bg-gray-600'
             }`}
           >
             <div
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-200 ${
+              className={`absolute top-0.5 left-0.5 h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
                 commandsVisible ? 'translate-x-5' : 'translate-x-0'
               }`}
             />
@@ -208,32 +208,32 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
       {/* Instructions Container */}
       {viewMode === 'step-by-step' ? (
         /* Step-by-Step Mode */
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-3 mb-3">
+        <div className="mb-3 rounded-lg border border-gray-700 bg-gray-800 p-3">
           {/* Progress Bar */}
-          <div className="flex items-center gap-3 mb-2">
+          <div className="mb-2 flex items-center gap-3">
             <span className="text-xs font-semibold text-gray-400">
               Step {currentStepIndex + 1} of {totalSteps}
             </span>
-            <div className="flex-1 bg-gray-700 rounded-full h-1.5 max-w-xs">
+            <div className="h-1.5 max-w-xs flex-1 rounded-full bg-gray-700">
               <div 
-                className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
+                className="h-1.5 rounded-full bg-blue-500 transition-all duration-300"
                 style={{ width: `${((currentStepIndex + 1) / totalSteps) * 100}%` }}
               />
             </div>
           </div>
         
         {/* Current Step Display */}
-        <div className="bg-gray-900 rounded-lg p-3 border border-gray-600">
+        <div className="rounded-lg border border-gray-600 bg-gray-900 p-3">
           <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
               {currentStepIndex + 1}
             </div>
-            <div className="flex-1 text-gray-200 text-sm font-medium">
+            <div className="flex-1 text-sm font-medium text-gray-200">
               {currentStep.objective}
             </div>
             {commandsVisible && currentStep.command && (
               <div className="flex-shrink-0">
-                <code className="text-green-400 font-mono text-sm bg-gray-800 px-3 py-1.5 rounded border border-gray-700">
+                <code className="rounded border border-gray-700 bg-gray-800 px-3 py-1.5 font-mono text-sm text-green-400">
                   {currentStep.command}
                 </code>
               </div>
@@ -242,13 +242,13 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
         </div>
         
         {/* Navigation and Validation */}
-        <div className="flex items-center justify-between mt-2 gap-2">
+        <div className="mt-2 flex items-center justify-between gap-2">
           <button
             onClick={goToPreviousStep}
             disabled={currentStepIndex === 0}
-            className={`px-4 py-1.5 rounded text-xs font-semibold transition-colors flex items-center gap-2 ${
+            className={`flex items-center gap-2 rounded px-4 py-1.5 text-xs font-semibold transition-colors ${
               currentStepIndex === 0
-                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                ? 'cursor-not-allowed bg-gray-700 text-gray-500'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
           >
@@ -265,10 +265,10 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
               }
             }}
             disabled={validationState === 'validating'}
-            className={`px-4 py-1.5 rounded text-xs font-semibold transition-colors flex items-center gap-2 ${
+            className={`flex items-center gap-2 rounded px-4 py-1.5 text-xs font-semibold transition-colors ${
               validationState === 'validating'
-                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                ? 'cursor-not-allowed bg-gray-600 text-gray-400'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
             }`}
           >
             <span>
@@ -286,9 +286,9 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
           <button
             onClick={goToNextStep}
             disabled={currentStepIndex === totalSteps - 1}
-            className={`px-4 py-1.5 rounded text-xs font-semibold transition-colors flex items-center gap-2 ${
+            className={`flex items-center gap-2 rounded px-4 py-1.5 text-xs font-semibold transition-colors ${
               currentStepIndex === totalSteps - 1
-                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                ? 'cursor-not-allowed bg-gray-700 text-gray-500'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
           >
@@ -299,23 +299,23 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
       </div>
       ) : (
         /* Show All Mode - Compact List */
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-3 mb-3">
+        <div className="mb-3 rounded-lg border border-gray-700 bg-gray-800 p-3">
           <div className="space-y-2">
             {allSteps.map((step: { objective: string; command?: string; teachingPoint?: string }, globalIdx: number) => (
               <div key={`step-${globalIdx}`} className="flex items-center gap-3 py-1">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs">
+                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
                   {globalIdx + 1}
                 </span>
-                <div className="flex-1 text-gray-300 text-sm">
+                <div className="flex-1 text-sm text-gray-300">
                   {step.objective}
                   {step.teachingPoint && (
-                    <span className="text-xs text-blue-300 ml-2 italic">
+                    <span className="ml-2 text-xs text-blue-300 italic">
                       💡 {step.teachingPoint}
                     </span>
                   )}
                 </div>
                 {commandsVisible && step.command && (
-                  <code className="flex-shrink-0 text-green-400 font-mono text-xs bg-gray-900 px-2 py-1 rounded border border-gray-700">
+                  <code className="flex-shrink-0 rounded border border-gray-700 bg-gray-900 px-2 py-1 font-mono text-xs text-green-400">
                     {step.command}
                   </code>
                 )}
@@ -324,7 +324,7 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
           </div>
           
           {/* Check My Work Button for Show All Mode */}
-          <div className="mt-3 pt-3 border-t border-gray-700 flex justify-center">
+          <div className="mt-3 flex justify-center border-t border-gray-700 pt-3">
             <button
               onClick={() => {
                 if (validationState === 'fail' || validationState === 'pass') {
@@ -334,10 +334,10 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
                 }
               }}
               disabled={validationState === 'validating'}
-              className={`px-4 py-1.5 rounded text-xs font-semibold transition-colors flex items-center gap-2 ${
+              className={`flex items-center gap-2 rounded px-4 py-1.5 text-xs font-semibold transition-colors ${
                 validationState === 'validating'
-                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  ? 'cursor-not-allowed bg-gray-600 text-gray-400'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
             >
               <span>
@@ -374,7 +374,7 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
         {(validationState === 'fail' || validationState === 'pass') && (
           <div 
             ref={validationResultsRef}
-            className="border border-gray-700 bg-gray-800 rounded-lg overflow-hidden outline-none" 
+            className="overflow-hidden rounded-lg border border-gray-700 bg-gray-800 outline-none" 
             style={{ minHeight: '470px' }}
             tabIndex={0}
             onKeyDown={(e) => {
@@ -385,7 +385,7 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
               }
             }}
           >
-          <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 text-xs font-mono text-gray-400">
+          <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 font-mono text-xs text-gray-400">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-red-500" />
               <span className="h-2 w-2 rounded-full bg-yellow-500" />
@@ -393,7 +393,7 @@ export function Exercise({ exercise, grammar, deviceModel, showCommands = true }
               <span className="ml-4 text-gray-300">Validation Results</span>
             </div>
           </div>
-          <div className="p-6 overflow-auto" style={{ minHeight: '430px' }}>
+          <div className="overflow-auto p-6" style={{ minHeight: '430px' }}>
             {validationState === 'fail' && (
               <ErrorBoxContent errors={errors} assertions={exercise.assertions} />
             )}
@@ -419,22 +419,22 @@ function ErrorBoxContent({ errors, assertions }: { errors: string[]; assertions:
   
   return (
     <div>
-      <div className="flex items-center gap-3 mb-6">
+      <div className="mb-6 flex items-center gap-3">
         <div className="text-6xl">❌</div>
         <div>
-          <h4 className="text-red-300 font-semibold text-2xl mb-2">Validation Failed</h4>
+          <h4 className="mb-2 text-2xl font-semibold text-red-300">Validation Failed</h4>
           <p className="text-gray-300">
             Your configuration has some issues. Review the errors below and try again:
           </p>
         </div>
       </div>
       
-      <div className="bg-red-950/50 rounded-lg p-4 mb-4">
-        <h5 className="text-red-300 font-semibold mb-3 text-sm uppercase tracking-wide">Issues Found:</h5>
+      <div className="mb-4 rounded-lg bg-red-950/50 p-4">
+        <h5 className="mb-3 text-sm font-semibold tracking-wide text-red-300 uppercase">Issues Found:</h5>
         <ul className="space-y-2">
           {errors.map((error, idx) => (
-            <li key={idx} className="text-red-200 text-sm flex items-start gap-2">
-              <span className="text-red-400 mt-0.5">•</span>
+            <li key={idx} className="flex items-start gap-2 text-sm text-red-200">
+              <span className="mt-0.5 text-red-400">•</span>
               <span>{error}</span>
             </li>
           ))}
@@ -442,12 +442,12 @@ function ErrorBoxContent({ errors, assertions }: { errors: string[]; assertions:
       </div>
       
       {uniqueDiagnosticCommands.length > 0 && (
-        <div className="bg-blue-950/30 rounded-lg p-4 border border-blue-700/50">
-          <h5 className="text-blue-300 font-semibold mb-3 text-sm">🔍 Try these commands to debug:</h5>
+        <div className="rounded-lg border border-blue-700/50 bg-blue-950/30 p-4">
+          <h5 className="mb-3 text-sm font-semibold text-blue-300">🔍 Try these commands to debug:</h5>
           <ul className="space-y-1.5">
             {uniqueDiagnosticCommands.map((cmd, idx) => (
-              <li key={idx} className="text-gray-300 text-sm">
-                <code className="text-blue-400 bg-gray-900 px-2 py-1 rounded font-mono">{cmd}</code>
+              <li key={idx} className="text-sm text-gray-300">
+                <code className="rounded bg-gray-900 px-2 py-1 font-mono text-blue-400">{cmd}</code>
               </li>
             ))}
           </ul>
@@ -462,16 +462,16 @@ function ErrorBoxContent({ errors, assertions }: { errors: string[]; assertions:
  */
 function SuccessBoxContent() {
   return (
-    <div className="flex flex-col items-center justify-center h-full text-center">
-      <div className="text-8xl mb-6">🎉</div>
-      <h4 className="text-green-300 font-bold text-3xl mb-4">
+    <div className="flex h-full flex-col items-center justify-center text-center">
+      <div className="mb-6 text-8xl">🎉</div>
+      <h4 className="mb-4 text-3xl font-bold text-green-300">
         Excellent Work!
       </h4>
-      <p className="text-gray-300 text-lg mb-6 max-w-2xl">
+      <p className="mb-6 max-w-2xl text-lg text-gray-300">
         Your configuration is correct! All assertions passed.
       </p>
-      <div className="bg-green-950/50 rounded-lg p-6 max-w-2xl border border-green-700/50">
-        <p className="text-gray-300 text-sm leading-relaxed">
+      <div className="max-w-2xl rounded-lg border border-green-700/50 bg-green-950/50 p-6">
+        <p className="text-sm leading-relaxed text-gray-300">
           <strong className="text-green-300">🎓 Key Takeaway:</strong> You verified your work both
           manually (using <code className="text-green-400">show</code> commands) and with automated validation. This is exactly
           how professional network engineers work - always verify before trusting automation!

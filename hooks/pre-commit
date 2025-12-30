@@ -108,16 +108,16 @@ if [ $TEST_EXIT_CODE -ne 0 ]; then
 fi
 print_success "All tests passed"
 
-# Check for linting errors (if you have a linter configured)
-# Uncomment if you add ESLint or similar
-# echo "🔎 Checking code style..."
-# if ! npm run lint > /dev/null 2>&1; then
-#     print_error "Linting failed!"
-#     echo ""
-#     echo "Run 'npm run lint' to see the errors."
-#     exit 1
-# fi
-# print_success "Code style checks passed"
+# Check for linting errors in web directory
+echo "🔎 Checking code style (web)..."
+if ! (cd web && npm run lint > /dev/null 2>&1); then
+    print_error "Web linting failed!"
+    echo ""
+    echo "Run 'cd web && npm run lint' to see the errors."
+    echo "Tip: Use 'npm run lint -- --fix' to auto-fix some issues."
+    exit 1
+fi
+print_success "Code style checks passed"
 
 echo ""
 print_success "All pre-commit checks passed! 🎉"

@@ -29,8 +29,8 @@ export function LessonSection({ title, children, isIntro, isFinal }: LessonSecti
 
   return (
     <section id={sectionId} className="mb-16">
-      <div className="border border-gray-700 rounded-lg bg-gray-800 p-6">
-        <h1 className="text-3xl lg:text-4xl font-bold text-white mb-8 pb-4 border-b-2 border-blue-500">
+      <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
+        <h1 className="mb-8 border-b-2 border-blue-500 pb-4 text-3xl font-bold text-white lg:text-4xl">
           {title}
         </h1>
         <div className="text-gray-300">

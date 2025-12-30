@@ -502,8 +502,8 @@ export default function Terminal({ terminalId, grammar, deviceModel, sessionRef:
   }, [grammar, deviceModel, finalTerminalId]);
   
   return (
-    <div className="border border-gray-700 bg-gray-800 rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 text-xs font-mono text-gray-400">
+    <div className="overflow-hidden rounded-lg border border-gray-700 bg-gray-800">
+      <div className="flex items-center justify-between border-b border-gray-700 bg-gray-900 px-4 py-2 font-mono text-xs text-gray-400">
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-red-500" />
           <span className="h-2 w-2 rounded-full bg-yellow-500" />
@@ -516,7 +516,7 @@ export default function Terminal({ terminalId, grammar, deviceModel, sessionRef:
       </div>
       <div
         ref={containerRef}
-        className="cursor-text p-4 overflow-auto"
+        className="cursor-text overflow-auto p-4"
         style={{
           minHeight: "400px",
           maxWidth: "100%",

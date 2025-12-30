@@ -21,6 +21,7 @@ Runs before every commit to validate:
   - `commands-1941-router.yaml` ↔ `web/public/commands-1941-router.json`
 - TypeScript types are valid (`tsc --noEmit`)
 - All tests pass (`jest`)
+- Code style checks pass (ESLint for web directory)
 
 See [../HOOKS.md](../HOOKS.md) for complete documentation.
 

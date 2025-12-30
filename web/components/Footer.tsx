@@ -1,18 +1,18 @@
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 border-t border-gray-700 py-8 mt-20">
-      <div className="max-w-4xl mx-auto px-6 text-center">
-        <p className="text-gray-300 mb-4">
+    <footer className="mt-20 border-t border-gray-700 bg-gray-800 py-8">
+      <div className="mx-auto max-w-4xl px-6 text-center">
+        <p className="mb-4 text-gray-300">
           Want to help make this better? We welcome contributions!
         </p>
         <a
           href="https://github.com/bbuchalter/ios-gym"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
         >
           <svg
-            className="w-5 h-5"
+            className="h-5 w-5"
             fill="currentColor"
             viewBox="0 0 24 24"
             aria-hidden="true"
@@ -25,7 +25,7 @@ export default function Footer() {
           </svg>
           Contribute on GitHub
         </a>
-        <p className="text-gray-500 text-sm mt-6">
+        <p className="mt-6 text-sm text-gray-500">
           Open source • MIT License
         </p>
       </div>
