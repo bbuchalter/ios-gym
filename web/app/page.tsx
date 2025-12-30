@@ -2,25 +2,26 @@
 
 /* eslint-disable react/no-unescaped-entities */
 
-import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { useProgressBar } from '@/lib/useProgressBar';
-import type { CommandGrammar } from '@src/types';
-import type { Exercise as ExerciseType } from '@src/validation/types';
+import { useEffect, useState } from 'react';
 
-import { LessonSection } from '@/components/LessonSection';
-import { InfoBox } from '@/components/InfoBox';
-import { ProTip } from '@/components/ProTip';
-import { SkillCard } from '@/components/SkillCard';
 import { Diagram } from '@/components/Diagram';
-import { LessonCounterProvider } from '@/lib/LessonCounterContext';
-import { TerminalRegistryProvider, useTerminalRegistry } from '@/lib/TerminalRegistryContext';
 import { Exercise } from '@/components/Exercise';
 import Footer from '@/components/Footer';
+import { InfoBox } from '@/components/InfoBox';
+import { LessonSection } from '@/components/LessonSection';
+import { ProTip } from '@/components/ProTip';
+import { SkillCard } from '@/components/SkillCard';
+import { LessonCounterProvider } from '@/lib/LessonCounterContext';
+import { TerminalRegistryProvider, useTerminalRegistry } from '@/lib/TerminalRegistryContext';
+import { useProgressBar } from '@/lib/useProgressBar';
 
 // Import exercises
 import lesson01 from '../../src/exercises/lesson-01-setting-hostname-and-saving-configuration.json';
 import lesson02 from '../../src/exercises/lesson-02-setting-enable-secret-password.json';
+
+import type { CommandGrammar } from '@src/types';
+import type { Exercise as ExerciseType } from '@src/validation/types';
 
 // Dynamically import Terminal to avoid SSR issues with XTerm
 const Terminal = dynamic(() => import('@/components/Terminal'), {

@@ -1,16 +1,18 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Terminal as XTerm } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
+import { Terminal as XTerm } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 
-// Import from src/ via @src/* aliases
 import { CLIEngine } from '@src/cli/engine';
 import { CLISession } from '@src/cli-session';
-import type { CommandGrammar, DeviceModel } from '@src/types';
+
+
 import { useLessonCounter } from '@/lib/LessonCounterContext';
 import { useTerminalRegistry } from '@/lib/TerminalRegistryContext';
+
+import type { CommandGrammar, DeviceModel } from '@src/types';
 
 interface TerminalProps {
   terminalId?: string;

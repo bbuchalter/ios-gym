@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+
 import { useLessonCounter } from '@/lib/LessonCounterContext';
 
 interface LessonSectionProps {

@@ -1,5 +1,7 @@
 import { loadGrammar } from './data-loader';
+
 import type { CommandGrammar } from '@src/types';
+
 
 export class TerminalManager {
   private grammar: CommandGrammar | null = null;

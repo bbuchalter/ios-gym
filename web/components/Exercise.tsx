@@ -1,11 +1,13 @@
 'use client';
 
+import { RuntimeValidator } from '@src/validation/RuntimeValidator';
+import dynamic from 'next/dynamic';
 import { useState, useRef, useCallback, useEffect } from 'react';
+
 import type { CLISession } from '@src/cli-session';
 import type { CommandGrammar, DeviceModel } from '@src/types';
 import type { Exercise as ExerciseType, Assertion } from '@src/validation/types';
-import { RuntimeValidator } from '@src/validation/RuntimeValidator';
-import dynamic from 'next/dynamic';
+
 
 // Dynamically import Terminal to avoid SSR issues
 const Terminal = dynamic(() => import('./Terminal'), {
