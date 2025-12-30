@@ -8,12 +8,6 @@ const eslintConfig = defineConfig([
   ...nextTs,
   ...tailwind.configs["flat/recommended"],
   {
-    rules: {
-      // Tailwind rules - allow custom animation classes
-      'tailwindcss/no-custom-classname': ['warn', {
-        whitelist: ['animate-in', 'fade-in'],
-      }],
-    },
     settings: {
       tailwindcss: {
         // Enforce best practices for responsive design
@@ -23,7 +17,7 @@ const eslintConfig = defineConfig([
         cssFiles: [],
         removeDuplicates: true,
         skipClassAttribute: false,
-        whitelist: ['animate-in', 'fade-in'], // Custom animation classes
+        whitelist: [],
         classRegex: "^class(Name)?$",
       },
     },

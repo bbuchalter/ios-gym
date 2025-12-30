@@ -7,7 +7,7 @@ interface ValidationFeedbackProps {
 export function ValidationFeedback({ result }: ValidationFeedbackProps) {
   if (result.passed) {
     return (
-      <div className="animate-in fade-in mt-6 rounded-lg border border-green-600 bg-green-900 p-6 duration-300">
+      <div className="mt-6 rounded-lg border border-green-600 bg-green-900 p-6">
         <p className="mb-2 text-lg font-semibold text-green-300">
           ✓ Excellent work! Configuration is correct!
         </p>
@@ -24,7 +24,7 @@ export function ValidationFeedback({ result }: ValidationFeedbackProps) {
     result.errors[0].assertionType === 'config_saved';
   
   return (
-    <div className="animate-in fade-in mt-6 rounded-lg border border-red-600 bg-red-900 p-6 duration-300">
+    <div className="mt-6 rounded-lg border border-red-600 bg-red-900 p-6">
       <p className="mb-3 text-lg font-semibold text-red-300">
         {onlyConfigNotSaved ? '⚠️ Configuration Not Saved' : '✗ Configuration Incomplete'}
       </p>
