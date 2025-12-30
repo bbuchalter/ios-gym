@@ -4,6 +4,9 @@ dist/
 .DS_Store
 coverage/
 
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 # Note: public/ contains the deployable static site
 # It's generated from client/ and should be committed
 # so it's ready to deploy

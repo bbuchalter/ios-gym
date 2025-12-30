@@ -33,6 +33,10 @@ pre-commit:
     typecheck:
       run: npx tsc --noEmit
 
+    # TypeScript type checking for web directory
+    web-typecheck:
+      run: cd web && npx tsc --noEmit
+
     # YAML validation - always check
     yaml-lint:
       run: npm run lint:yaml
@@ -41,9 +45,9 @@ pre-commit:
     web-prettier:
       run: cd web && npm run format:check
 
-    # ESLint - always check web directory
+    # ESLint - always check web directory (with safe caching)
     web-lint:
-      run: cd web && npm run lint
+      run: cd web && npm run lint -- --cache --cache-location .eslintcache
 
     # Tests - always run all tests
     tests:

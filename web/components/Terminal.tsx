@@ -211,7 +211,6 @@ export default function Terminal({
         event.preventDefault();
         event.stopPropagation();
         keyboardShortcutRef.current(event);
-        lastKeyboardEvent = null;
         return;
       }
 
@@ -221,7 +220,6 @@ export default function Terminal({
         if (inNameLookupRef.current) {
           abortNameLookup();
         }
-        lastKeyboardEvent = null;
         return;
       }
     };
@@ -233,9 +231,6 @@ export default function Terminal({
 
     // Handle input
     const handleData = (data: string) => {
-      // Clear the keyboard event tracker after handling
-      lastKeyboardEvent = null;
-
       // Handle pagination mode
       if (paginationRef.current) {
         const lowerData = data.toLowerCase();
