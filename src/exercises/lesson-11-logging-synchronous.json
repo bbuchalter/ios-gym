@@ -1,0 +1,59 @@
+{
+  "id": "lesson-11-logging-synchronous",
+  "title": "Managing Console Messages",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure Logging Synchronous",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enter interface vlan 1 to go deep",
+          "command": "interface vlan 1",
+          "teachingPoint": "This gets us into sub-config mode to trigger system messages"
+        },
+        {
+          "objective": "Exit to privileged mode and watch for system message",
+          "command": "end",
+          "teachingPoint": "You'll see %SYS-5-CONFIG_I message appear"
+        },
+        {
+          "objective": "Enter configuration mode again",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enter console line configuration",
+          "command": "line console 0",
+          "teachingPoint": "This is where you configure console connection settings"
+        },
+        {
+          "objective": "Enable synchronized logging",
+          "command": "logging synchronous",
+          "teachingPoint": "This prevents system messages from interrupting your typing"
+        },
+        {
+          "objective": "Exit and see the message appear cleanly",
+          "command": "end",
+          "teachingPoint": "With logging synchronous, your command line won't be disrupted"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "state-path",
+      "path": "line.console.loggingSynchronous",
+      "expectedValue": true,
+      "description": "Logging synchronous should be enabled on console line",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

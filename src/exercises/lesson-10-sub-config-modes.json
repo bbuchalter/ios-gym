@@ -1,0 +1,59 @@
+{
+  "id": "lesson-10-sub-config-modes",
+  "title": "Working with Sub-Configuration Modes",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Navigate Sub-Configuration Modes",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Enter VLAN configuration mode",
+          "command": "vlan 100",
+          "teachingPoint": "Notice the prompt changes to (config-vlan)#"
+        },
+        {
+          "objective": "Go back one level with exit",
+          "command": "exit",
+          "teachingPoint": "Back to (config)# - global configuration"
+        },
+        {
+          "objective": "Enter interface configuration mode",
+          "command": "interface vlan 1",
+          "teachingPoint": "Notice the prompt changes to (config-if)#"
+        },
+        {
+          "objective": "Go back one level with exit",
+          "command": "exit"
+        },
+        {
+          "objective": "Enter VLAN config mode again",
+          "command": "vlan 100"
+        },
+        {
+          "objective": "Jump directly to privileged mode with end",
+          "command": "end",
+          "teachingPoint": "The 'end' command skips all levels and goes straight to #"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "vlan-exists",
+      "expectedValue": {
+        "vlanId": "100"
+      },
+      "description": "VLAN 100 should be created during sub-config mode practice",
+      "diagnosticCommand": "show vlan brief"
+    }
+  ]
+}
+

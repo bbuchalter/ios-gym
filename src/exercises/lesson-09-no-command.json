@@ -1,0 +1,124 @@
+{
+  "id": "lesson-09-no-command",
+  "title": "The 'no' Command: Undoing Configuration",
+  "deviceModel": "2960-switch",
+  "goals": [
+    {
+      "section": "Configure Settings",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Set hostname to 'TestLab'",
+          "command": "hostname TestLab",
+          "teachingPoint": "Watch the prompt change to show the new hostname"
+        },
+        {
+          "objective": "Set enable secret to 'Practice123'",
+          "command": "enable secret Practice123"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Verify configuration with show running-config",
+          "command": "show running-config",
+          "teachingPoint": "Look for both hostname and enable secret in the output"
+        },
+        {
+          "objective": "Notice your prompt shows 'TestLab#'"
+        }
+      ]
+    },
+    {
+      "section": "Test the Password",
+      "steps": [
+        {
+          "objective": "Return to user mode",
+          "command": "disable"
+        },
+        {
+          "objective": "Try to enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter password 'Practice123'",
+          "teachingPoint": "Remember - no visual feedback!"
+        },
+        {
+          "objective": "Verify you're in privileged mode (TestLab#)"
+        }
+      ]
+    },
+    {
+      "section": "Remove Configuration",
+      "steps": [
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Remove the password",
+          "command": "no enable secret",
+          "teachingPoint": "The 'no' command reverses configuration - no password required"
+        },
+        {
+          "objective": "Reset hostname to default",
+          "command": "no hostname",
+          "teachingPoint": "Notice the prompt changes back to 'Switch(config)#'"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Verify removal with show running-config",
+          "command": "show running-config",
+          "teachingPoint": "Confirm both hostname and enable secret are gone"
+        },
+        {
+          "objective": "Return to user mode",
+          "command": "disable"
+        },
+        {
+          "objective": "Try enable without password",
+          "command": "enable",
+          "teachingPoint": "No password prompt - it was successfully removed!"
+        },
+        {
+          "objective": "Save your changes",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "hostname",
+      "expectedValue": "Switch",
+      "description": "Hostname should be reset to default 'Switch' after using 'no hostname'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "enableSecret",
+      "expectedValue": null,
+      "description": "Enable secret should be removed after using 'no enable secret'",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}
+

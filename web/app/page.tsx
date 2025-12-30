@@ -25,6 +25,10 @@ import lesson04 from '../../src/exercises/lesson-04-tab-completion.json';
 import lesson05 from '../../src/exercises/lesson-05-pagination.json';
 import lesson06 from '../../src/exercises/lesson-06-name-lookup-abort.json';
 import lesson07 from '../../src/exercises/lesson-07-command-history.json';
+import lesson08 from '../../src/exercises/lesson-08-password-entry.json';
+import lesson09 from '../../src/exercises/lesson-09-no-command.json';
+import lesson10 from '../../src/exercises/lesson-10-sub-config-modes.json';
+import lesson11 from '../../src/exercises/lesson-11-logging-synchronous.json';
 
 import type { CommandGrammar } from '@src/types';
 import type { Exercise as ExerciseType } from '@src/validation/types';
@@ -1385,49 +1389,8 @@ Attacker sees: "Could be any length!"
                 <p className="mb-8 text-lg text-gray-300">
                   First, you'll set up a password, then practice using it with no visual feedback:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code> — Enter privileged mode (no password yet)
-                  </li>
-                  <li>
-                    <code>configure terminal</code> — Enter configuration mode
-                  </li>
-                  <li>
-                    <code>enable secret C1sc0R0ck$</code> — Set the password
-                  </li>
-                  <li>
-                    <code>end</code> — Exit configuration mode
-                  </li>
-                  <li>
-                    <code>disable</code> — Go back to user mode (the password is now active!)
-                  </li>
-                  <li>
-                    <strong className="text-yellow-300">Now the real test:</strong> Type{' '}
-                    <code>enable</code> and press Enter
-                  </li>
-                  <li>You'll be prompted for a password</li>
-                  <li>
-                    Type <code>C1sc0R0ck$</code> carefully —{' '}
-                    <strong className="text-yellow-300">
-                      you won't see anything appear on screen!
-                    </strong>
-                  </li>
-                  <li>
-                    Press Enter and watch the prompt change to <code>#</code> (success!)
-                  </li>
-                  <li>
-                    Type <code>disable</code> to go back to user mode
-                  </li>
-                  <li>
-                    Try <code>enable</code> again, but this time type the wrong password on purpose
-                  </li>
-                  <li>See the "% Bad secrets" message</li>
-                  <li>
-                    Try one more time with the correct password: <code>C1sc0R0ck$</code>
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson08 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ You succeeded when:</p>
@@ -1626,73 +1589,8 @@ Router1(config)# no enable secret`}
                   Practice the complete configuration lifecycle — set something, verify it, then
                   remove it:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code> — Enter privileged mode
-                  </li>
-                  <li>
-                    <code>configure terminal</code> — Enter configuration mode
-                  </li>
-                  <li>
-                    <code>hostname TestLab</code> — Set a hostname (watch the prompt change!)
-                  </li>
-                  <li>
-                    <code>enable secret Practice123</code> — Set a password
-                  </li>
-                  <li>
-                    <code>end</code> — Exit to privileged mode to see your changes
-                  </li>
-                  <li>
-                    <strong className="text-cyan-300">Checkpoint: </strong>
-                    <code>show running-config</code> — See both hostname and password in config
-                  </li>
-                  <li>
-                    Notice your prompt shows <code>TestLab#</code>
-                  </li>
-                  <li>
-                    <code>disable</code> — Go to user mode (you'll see <code>TestLab&gt;</code>)
-                  </li>
-                  <li>
-                    <code>enable</code> — Try to enter privileged mode (password prompt appears)
-                  </li>
-                  <li>
-                    Type <code>Practice123</code> carefully (no visual feedback) and press Enter
-                  </li>
-                  <li>
-                    <code>configure terminal</code> — Back to config mode
-                  </li>
-                  <li>
-                    <strong className="text-yellow-300">Now remove everything:</strong>
-                  </li>
-                  <li>
-                    <code>no enable secret</code> — Remove the password
-                  </li>
-                  <li>
-                    <code>no hostname</code> — Reset hostname to default
-                  </li>
-                  <li>
-                    Notice the prompt changed back to <code>Switch(config)#</code>
-                  </li>
-                  <li>
-                    <code>end</code> — Exit to privileged mode
-                  </li>
-                  <li>
-                    <strong className="text-cyan-300">Verify removal: </strong>
-                    <code>show running-config</code> — Confirm both are gone!
-                  </li>
-                  <li>
-                    <code>disable</code> — Exit to user mode
-                  </li>
-                  <li>
-                    <code>enable</code> — Try again (no password needed now!)
-                  </li>
-                  <li>
-                    <strong className="text-green-300">Save your changes: </strong>
-                    <code>write memory</code> — Always save your configuration!
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson09 as ExerciseType} grammar={grammar} />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ You succeeded when:</p>
@@ -2014,37 +1912,8 @@ Takes 1 command! [✓]`}
                 <p className="mb-8 text-lg text-gray-300">
                   Practice navigating different sub-configuration modes:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code> — Enter privileged mode
-                  </li>
-                  <li>
-                    <code>configure terminal</code> — Enter global config mode
-                  </li>
-                  <li>
-                    <code>vlan 100</code> — Enter VLAN configuration mode (notice prompt becomes{' '}
-                    <code>(config-vlan)#</code>!)
-                  </li>
-                  <li>
-                    <code>exit</code> — Go back to <code>(config)#</code>
-                  </li>
-                  <li>
-                    <code>interface vlan 1</code> — Enter interface configuration mode (notice
-                    prompt becomes <code>(config-if)#</code>!)
-                  </li>
-                  <li>
-                    <code>exit</code> — Go back to <code>(config)#</code> again
-                  </li>
-                  <li>
-                    <code>vlan 100</code> — Enter VLAN config mode again
-                  </li>
-                  <li>
-                    <code>end</code> — Jump directly back to <code>#</code> (compare how fast this
-                    is!)
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson10 as ExerciseType} grammar={grammar} />
 
                 <InfoBox variant="info">
                   <ProTip>
@@ -2181,34 +2050,8 @@ Switch#show running-config
                 <p className="mb-8 text-lg text-gray-300">
                   Configure logging synchronous and observe the difference:
                 </p>
-                <ol className="my-8 list-decimal space-y-5 rounded-lg border border-gray-700 bg-gray-800 p-8 pl-12 text-gray-300">
-                  <li>
-                    <code>enable</code> — Enter privileged mode
-                  </li>
-                  <li>
-                    <code>configure terminal</code> — Enter global config
-                  </li>
-                  <li>
-                    <code>interface vlan 1</code> — Enter interface config (to go deep)
-                  </li>
-                  <li>
-                    <code>end</code> — Exit to privileged mode (watch for the system message!)
-                  </li>
-                  <li>
-                    <code>configure terminal</code> — Enter global config again
-                  </li>
-                  <li>
-                    <code>line console 0</code> — Enter console line configuration mode
-                  </li>
-                  <li>
-                    <code>logging synchronous</code> — Enable synchronized logging
-                  </li>
-                  <li>
-                    <code>end</code> — Exit and see the message appear cleanly
-                  </li>
-                </ol>
 
-                <Terminal grammar={grammar} />
+                <Exercise exercise={lesson11 as ExerciseType} grammar={grammar} />
 
                 <InfoBox variant="success">
                   <h3 className="mb-4 text-lg font-semibold text-green-300">🎉 What You Learned</h3>
