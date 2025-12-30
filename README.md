@@ -1,6 +1,8 @@
-# Cisco IOS CLI Learning Platform
+# IOS Gym
 
 A **comprehensive, interactive web application** for learning Cisco IOS network configuration - from basic CLI navigation to advanced OSPF routing.
+
+🌐 **Live at [iosgym.com](https://iosgym.com)**
 
 🎓 **Perfect for:**
 - CyberPatriot competitors
@@ -123,7 +125,7 @@ Router(config-if)# ip ospf cost 10
 ## 🏗️ Project Structure
 
 ```
-ios-practice/
+ios-gym/
 ├── commands-2960-switch.yaml  # Catalyst 2960 switch grammar (source)
 ├── commands-1941-router.yaml  # Cisco 1941 router grammar (source)
 │
@@ -159,7 +161,7 @@ This is a **pure static site** - deploy `web/out/` to any hosting service!
 ```bash
 npm run web:build
 git subtree push --prefix web/out origin gh-pages
-# Live at: https://yourusername.github.io/ios-practice/
+# Live at: https://yourusername.github.io/ios-gym/
 ```
 
 ### Netlify (FREE)
@@ -291,7 +293,23 @@ See `.claude.md` for detailed development guidelines.
 
 ## 📜 License
 
-MIT
+MIT - See [LICENSE](LICENSE) file for details.
+
+---
+
+## ⚖️ Legal Notices
+
+### Trademark Disclaimer
+
+Cisco, IOS, CCNA, Catalyst, Packet Tracer, and related terms are trademarks or registered trademarks of Cisco Systems, Inc. and/or its affiliates in the United States and certain other countries.
+
+CyberPatriot is a registered trademark of the Air Force Association.
+
+This project is an independent educational tool and is not affiliated with, endorsed by, or sponsored by Cisco Systems, Inc., the Air Force Association, or any other mentioned organizations. All trademarks are the property of their respective owners.
+
+### Educational Use
+
+This software is provided for educational purposes only. It simulates Cisco IOS command-line interfaces for learning and training. It is not a substitute for official Cisco training materials or certification programs.
 
 ---
 

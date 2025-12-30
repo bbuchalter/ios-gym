@@ -1,7 +1,7 @@
 {
-  "name": "ios-cli-trainer",
+  "name": "ios-gym",
   "version": "1.0.0",
-  "description": "Web-based Cisco IOS CLI typing trainer",
+  "description": "Interactive Cisco IOS training platform - Master networking skills with realistic CLI practice",
   "main": "dist/server/index.js",
   "scripts": {
     "test": "./node_modules/.bin/jest",
@@ -18,10 +18,19 @@
     "cisco",
     "ios",
     "cli",
-    "training"
+    "training",
+    "networking",
+    "ccna",
+    "cyberpatriot",
+    "education"
   ],
-  "author": "",
+  "author": "Brian Buchalter",
   "license": "MIT",
+  "homepage": "https://iosgym.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bbuchalter/ios-gym.git"
+  },
   "dependencies": {
     "http-server": "^14.1.1"
   },
