@@ -1,20 +1,25 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
-import localRules from "./eslint-local-rules.js";
+import tailwind from "eslint-plugin-tailwindcss";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  ...tailwind.configs["flat/recommended"],
   {
-    plugins: {
-      'local': {
-        rules: localRules,
+    settings: {
+      tailwindcss: {
+        // Enforce best practices for responsive design
+        callees: ["classnames", "clsx", "ctl", "cn"],
+        // Set to false to skip config loading - Tailwind v4 uses CSS-first configuration
+        config: false,
+        cssFiles: [],
+        removeDuplicates: true,
+        skipClassAttribute: false,
+        whitelist: [],
+        classRegex: "^class(Name)?$",
       },
-    },
-    rules: {
-      'local/no-excessive-breakpoints': 'error',
-      'local/prefer-mobile-first': 'warn',
     },
   },
   // Override default ignores of eslint-config-next.

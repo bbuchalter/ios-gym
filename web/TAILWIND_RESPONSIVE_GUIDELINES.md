@@ -1,18 +1,35 @@
 # Tailwind Responsive Design Guidelines
 
-This project enforces responsive design best practices through custom ESLint rules to prevent over-complicated responsive patterns.
+This project enforces responsive design best practices using [eslint-plugin-tailwindcss](https://github.com/francoismassart/eslint-plugin-tailwindcss) (beta version with Tailwind v4 support) to prevent over-complicated responsive patterns.
 
 ## Philosophy
 
 **Rely on Tailwind's natural responsive behavior** instead of adding multiple breakpoints for every property. Tailwind's rem-based spacing and typography scale naturally across viewports.
 
-## ESLint Rules
+## ESLint Plugin
 
-### `local/no-excessive-breakpoints` (error)
+We use the official [`eslint-plugin-tailwindcss@beta`](https://github.com/francoismassart/eslint-plugin-tailwindcss) which includes several helpful rules:
 
-Prevents using more than 2 responsive breakpoints for the same CSS property.
+- **`tailwindcss/classnames-order`** - Enforces consistent ordering of Tailwind classes
+- **`tailwindcss/no-custom-classname`** - Warns about non-Tailwind classes (disabled for v4 compatibility)
+- **`tailwindcss/no-contradicting-classname`** - Catches conflicting classes like `p-4 p-6`
+- **`tailwindcss/enforces-negative-arbitrary-values`** - Ensures correct negative value syntax
+- **`tailwindcss/enforces-shorthand`** - Prefers shorthand like `p-4` over `px-4 py-4`
 
-**❌ Bad:**
+See the [full documentation](https://github.com/francoismassart/eslint-plugin-tailwindcss) for all rules.
+
+### Tailwind v4 Compatibility Note
+
+The beta plugin has partial support for Tailwind v4. We've configured it to skip config file loading (`config: false`) since Tailwind v4 uses CSS-first configuration via `@import "tailwindcss"`.
+
+The core linting rules (class ordering, enforcing shorthands, etc.) work correctly. Some rules that require full Tailwind config introspection may have limited functionality, but the most valuable rules for code quality are fully functional.
+
+## Project-Specific Guidelines
+
+While the ESLint plugin catches technical issues, follow these patterns for better responsive design:
+
+### ❌ Bad: Over-complicated breakpoints
+
 ```tsx
 <div className="p-2 sm:p-3 md:p-4 lg:p-6">
   Too many padding breakpoints
@@ -27,7 +44,8 @@ Prevents using more than 2 responsive breakpoints for the same CSS property.
 </div>
 ```
 
-**✅ Good:**
+### ✅ Good: Minimal breakpoints
+
 ```tsx
 <div className="p-4">
   Single value - scales naturally
@@ -41,19 +59,6 @@ Prevents using more than 2 responsive breakpoints for the same CSS property.
   Simple gap - works well at all sizes
 </div>
 ```
-
-### `local/prefer-mobile-first` (warning)
-
-Warns about common anti-patterns that indicate over-complication.
-
-**❌ Bad patterns:**
-- `text-sm sm:text-base md:text-lg` - Complex text sizing
-- `p-2 sm:p-4 md:p-6` - Complex padding progression
-
-**✅ Better:**
-- `text-lg` - Single size that works everywhere
-- `p-4` - One padding value that scales
-- `text-xl lg:text-2xl` - One breakpoint for desktop emphasis
 
 ## When to Use Breakpoints
 
@@ -154,11 +159,22 @@ npm run lint -- --fix
 
 ## Disabling Rules (When Necessary)
 
-If you have a legitimate reason to bypass these rules:
+If you have a legitimate reason to bypass a rule:
 
 ```tsx
-{/* eslint-disable-next-line local/no-excessive-breakpoints */}
+{/* eslint-disable-next-line tailwindcss/classnames-order */}
 <div className="p-2 sm:p-3 md:p-4 lg:p-6">
+```
+
+Or disable specific rules in your ESLint config:
+
+```javascript
+{
+  rules: {
+    'tailwindcss/no-custom-classname': 'off', // Allow custom classes
+    'tailwindcss/classnames-order': 'warn',   // Downgrade to warning
+  }
+}
 ```
 
 **But ask yourself first:** Do I really need all these breakpoints, or am I over-engineering?

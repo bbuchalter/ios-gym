@@ -6,10 +6,10 @@ interface SkillCardProps {
 
 export function SkillCard({ icon, title, description }: SkillCardProps) {
   return (
-    <div className="border border-gray-700 bg-gray-800 rounded-lg p-4">
-      <div className="text-3xl mb-2">{icon}</div>
-      <h4 className="text-white font-semibold mb-1 text-sm">{title}</h4>
-      <p className="text-gray-400 text-xs">{description}</p>
+    <div className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+      <div className="mb-2 text-3xl">{icon}</div>
+      <h4 className="mb-1 text-sm font-semibold text-white">{title}</h4>
+      <p className="text-xs text-gray-400">{description}</p>
     </div>
   );
 }

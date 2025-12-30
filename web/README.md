@@ -14,7 +14,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 ## Responsive Design Guidelines
 
-This project enforces Tailwind CSS responsive design best practices through custom ESLint rules. 
+This project enforces Tailwind CSS best practices using [eslint-plugin-tailwindcss](https://github.com/francoismassart/eslint-plugin-tailwindcss) (beta version with Tailwind v4 support).
 
 **Key principles:**
 - Use single values for spacing and typography (e.g., `p-4`, `text-lg`)
@@ -32,7 +32,11 @@ Check your code for issues:
 npm run lint
 ```
 
-This includes custom rules that enforce responsive design standards and catch over-complicated breakpoint usage.
+The linter includes:
+- Tailwind class ordering enforcement
+- Detection of contradicting classes
+- Warnings about non-standard class names
+- Enforcement of Tailwind best practices
 
 ## Learn More
 
