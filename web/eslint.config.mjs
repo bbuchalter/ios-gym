@@ -9,25 +9,10 @@ const eslintConfig = defineConfig([
   ...tailwind.configs["flat/recommended"],
   {
     rules: {
-      // Tailwind rules
+      // Tailwind rules - allow custom animation classes
       'tailwindcss/no-custom-classname': ['warn', {
-        whitelist: ['animate-in', 'fade-in'], // Custom animation classes
+        whitelist: ['animate-in', 'fade-in'],
       }],
-      
-      // Make React hooks rules warnings instead of errors for now
-      'react-hooks/refs': 'warn',
-      'react-hooks/set-state-in-effect': 'warn',
-      'react-hooks/exhaustive-deps': 'warn',
-      
-      // TypeScript - warn about any types
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': 'warn',
-      
-      // Next.js - warn about img usage
-      '@next/next/no-img-element': 'warn',
-      
-      // React - warn about unescaped entities
-      'react/no-unescaped-entities': 'warn',
     },
     settings: {
       tailwindcss: {
