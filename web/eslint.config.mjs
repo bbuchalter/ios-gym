@@ -5,6 +5,7 @@ import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import security from 'eslint-plugin-security';
 import tailwind from 'eslint-plugin-tailwindcss';
+import tseslint from '@typescript-eslint/eslint-plugin';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -13,8 +14,20 @@ const eslintConfig = defineConfig([
   security.configs.recommended,
   prettier, // Disables ESLint rules that conflict with Prettier
   {
-    plugins: { import: importPlugin },
+    plugins: { 
+      import: importPlugin,
+      '@typescript-eslint': tseslint,
+    },
     rules: {
+      // TypeScript-specific rules for catching common issues
+      '@typescript-eslint/no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      }],
+      'no-undef': 'off', // TypeScript handles this better
+      
+      // Import rules
       'import/no-unresolved': 'off', // TypeScript handles this
       'import/named': 'error',
       'import/default': 'error',
