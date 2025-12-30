@@ -2,10 +2,7 @@
   "id": "show-interfaces",
   "description": "View all interfaces on the switch using show ip interface brief",
   "deviceModel": "2960-switch",
-  "commands": [
-    "enable",
-    "show ip interface brief"
-  ],
+  "commands": ["enable", "show ip interface brief"],
   "validation": {
     "type": "exploratory",
     "assertions": [
@@ -16,4 +13,3 @@
     ]
   }
 }
-

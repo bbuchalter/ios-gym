@@ -2,10 +2,7 @@
   "id": "pagination",
   "description": "Practice navigating paginated output with SPACE, ENTER, and Q",
   "deviceModel": "2960-switch",
-  "commands": [
-    "enable",
-    "show running-config"
-  ],
+  "commands": ["enable", "show running-config"],
   "validation": {
     "type": "exploratory",
     "assertions": [
@@ -16,4 +13,3 @@
     ]
   }
 }
-

@@ -2,13 +2,7 @@
   "id": "hostname-basic",
   "description": "Configure device hostname and save configuration",
   "deviceModel": "2960-switch",
-  "commands": [
-    "enable",
-    "configure terminal",
-    "hostname MyFirstSwitch",
-    "end",
-    "write memory"
-  ],
+  "commands": ["enable", "configure terminal", "hostname MyFirstSwitch", "end", "write memory"],
   "validation": {
     "type": "goal-based",
     "assertions": [
@@ -20,4 +14,3 @@
     ]
   }
 }
-

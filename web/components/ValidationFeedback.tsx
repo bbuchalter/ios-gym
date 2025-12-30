@@ -17,19 +17,18 @@ export function ValidationFeedback({ result }: ValidationFeedbackProps) {
       </div>
     );
   }
-  
+
   // Check if the only error is config not saved
-  const onlyConfigNotSaved = 
-    result.errors.length === 1 && 
-    result.errors[0].assertionType === 'config_saved';
-  
+  const onlyConfigNotSaved =
+    result.errors.length === 1 && result.errors[0].assertionType === 'config_saved';
+
   return (
     <div className="mt-6 rounded-lg border border-red-600 bg-red-900 p-6">
       <p className="mb-3 text-lg font-semibold text-red-300">
         {onlyConfigNotSaved ? '⚠️ Configuration Not Saved' : '✗ Configuration Incomplete'}
       </p>
       <p className="mb-4 text-red-200">
-        {onlyConfigNotSaved 
+        {onlyConfigNotSaved
           ? 'Your configuration looks correct, but you need to save it!'
           : 'Please review and fix the following:'}
       </p>
@@ -43,10 +42,16 @@ export function ValidationFeedback({ result }: ValidationFeedbackProps) {
                 {error.expected && error.actual && (
                   <div className="mt-2 space-y-1 text-sm">
                     <p className="text-red-300">
-                      Expected: <code className="rounded border border-red-700 bg-red-950 px-2 py-0.5">{String(error.expected)}</code>
+                      Expected:{' '}
+                      <code className="rounded border border-red-700 bg-red-950 px-2 py-0.5">
+                        {String(error.expected)}
+                      </code>
                     </p>
                     <p className="text-red-300">
-                      Found: <code className="rounded border border-red-700 bg-red-950 px-2 py-0.5">{String(error.actual)}</code>
+                      Found:{' '}
+                      <code className="rounded border border-red-700 bg-red-950 px-2 py-0.5">
+                        {String(error.actual)}
+                      </code>
                     </p>
                   </div>
                 )}
@@ -58,15 +63,21 @@ export function ValidationFeedback({ result }: ValidationFeedbackProps) {
       <div className="mt-6 border-t border-red-700 pt-4">
         <p className="mb-2 font-semibold text-red-200">💡 How to Check Your Configuration:</p>
         <ul className="ml-6 space-y-2 text-sm text-red-200">
-          <li><code>show ip interface brief</code> — Check interface IPs and status</li>
-          <li><code>show running-config</code> — See all your configuration</li>
-          <li><code>show vlan brief</code> — Check VLANs (if applicable)</li>
+          <li>
+            <code>show ip interface brief</code> — Check interface IPs and status
+          </li>
+          <li>
+            <code>show running-config</code> — See all your configuration
+          </li>
+          <li>
+            <code>show vlan brief</code> — Check VLANs (if applicable)
+          </li>
         </ul>
         <p className="mt-3 text-sm text-red-300 italic">
-          Use these commands to find what&apos;s missing or incorrect, then fix it and try &quot;Check My Work&quot; again!
+          Use these commands to find what&apos;s missing or incorrect, then fix it and try
+          &quot;Check My Work&quot; again!
         </p>
       </div>
     </div>
   );
 }
-

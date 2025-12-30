@@ -2,13 +2,7 @@
   "id": "trunk-all-vlans",
   "description": "Configure a trunk port allowing all VLANs",
   "deviceModel": "2960-switch",
-  "commands": [
-    "enable",
-    "configure terminal",
-    "interface fa0/1",
-    "switchport mode trunk",
-    "end"
-  ],
+  "commands": ["enable", "configure terminal", "interface fa0/1", "switchport mode trunk", "end"],
   "validation": {
     "type": "goal-based",
     "assertions": [
@@ -27,4 +21,3 @@
     ]
   }
 }
-

@@ -65,12 +65,14 @@ While the ESLint plugin catches technical issues, follow these patterns for bett
 ### ✅ Good use cases for breakpoints:
 
 1. **Layout changes** - Flex direction, grid columns
+
    ```tsx
    <div className="flex-col sm:flex-row">
    <div className="grid-cols-2 lg:grid-cols-4">
    ```
 
 2. **Major size changes** - One breakpoint for desktop emphasis
+
    ```tsx
    <h1 className="text-3xl lg:text-4xl">
    ```
@@ -182,9 +184,9 @@ Or disable specific rules in your ESLint config:
 ## Questions?
 
 If you're unsure whether a pattern is acceptable:
+
 1. Try using a single value first
 2. Add ONE breakpoint only if absolutely needed
 3. Ask during code review if still uncertain
 
 Remember: **Less is more** when it comes to responsive breakpoints!
-

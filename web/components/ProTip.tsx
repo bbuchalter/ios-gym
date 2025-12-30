@@ -12,4 +12,3 @@ export function ProTip({ children }: ProTipProps) {
     </>
   );
 }
-

@@ -13,4 +13,3 @@ export function SkillCard({ icon, title, description }: SkillCardProps) {
     </div>
   );
 }
-

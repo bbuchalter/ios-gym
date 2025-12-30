@@ -11,22 +11,24 @@ const LessonCounterContext = createContext<LessonCounterContextValue | null>(nul
 
 export function LessonCounterProvider({ children }: { children: ReactNode }) {
   const lessonCounter = useRef(0);
-  
+
   const getNextLessonNumber = () => {
     lessonCounter.current += 1;
     return lessonCounter.current;
   };
-  
+
   const getCurrentLessonNumber = () => {
     return lessonCounter.current;
   };
-  
+
   const getTerminalId = () => {
     return `terminal-${lessonCounter.current}`;
   };
-  
+
   return (
-    <LessonCounterContext.Provider value={{ getNextLessonNumber, getCurrentLessonNumber, getTerminalId }}>
+    <LessonCounterContext.Provider
+      value={{ getNextLessonNumber, getCurrentLessonNumber, getTerminalId }}
+    >
       {children}
     </LessonCounterContext.Provider>
   );
@@ -39,5 +41,3 @@ export function useLessonCounter() {
   }
   return context;
 }
-
-

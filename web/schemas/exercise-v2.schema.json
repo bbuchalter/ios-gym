@@ -93,12 +93,28 @@
         "type": {
           "type": "string",
           "enum": [
-            "interface_exists", "interface_ip", "interface_mode", "interface_admin_up",
-            "hostname", "vlan_exists", "vlan_name", "interface_access_vlan",
-            "interface_trunk_allowed", "ospf_network", "ospf_interface_cost",
-            "route_exists", "ssh_domain", "ssh_version", "ssh_user",
-            "vty_config", "enable_secret", "default_gateway", "mode_reached",
-            "command_succeeded", "ip_routing_enabled", "config_saved"
+            "interface_exists",
+            "interface_ip",
+            "interface_mode",
+            "interface_admin_up",
+            "hostname",
+            "vlan_exists",
+            "vlan_name",
+            "interface_access_vlan",
+            "interface_trunk_allowed",
+            "ospf_network",
+            "ospf_interface_cost",
+            "route_exists",
+            "ssh_domain",
+            "ssh_version",
+            "ssh_user",
+            "vty_config",
+            "enable_secret",
+            "default_gateway",
+            "mode_reached",
+            "command_succeeded",
+            "ip_routing_enabled",
+            "config_saved"
           ]
         },
         "message": {
@@ -110,4 +126,3 @@
     }
   }
 }
-

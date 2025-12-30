@@ -17,6 +17,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 This project enforces Tailwind CSS best practices using [eslint-plugin-tailwindcss](https://github.com/francoismassart/eslint-plugin-tailwindcss) (beta version with Tailwind v4 support).
 
 **Key principles:**
+
 - Use single values for spacing and typography (e.g., `p-4`, `text-lg`)
 - Rely on Tailwind's rem-based scaling instead of multiple breakpoints
 - Add breakpoints only for major layout changes (e.g., `grid-cols-2 lg:grid-cols-4`)
@@ -33,6 +34,7 @@ npm run lint
 ```
 
 The linter includes:
+
 - Tailwind class ordering enforcement
 - Detection of contradicting classes
 - Warnings about non-standard class names

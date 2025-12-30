@@ -7,14 +7,9 @@ export function CommandSteps({ steps }: CommandStepsProps) {
     <ol className="mt-6 mb-4 list-inside list-decimal space-y-4 rounded-2xl border border-white/5 bg-slate-950/60 p-8 shadow-lg shadow-slate-950/50">
       {steps.map((step, index) => (
         <li key={index} className="leading-relaxed text-slate-200">
-          {step.includes('<code>') ? (
-            <span dangerouslySetInnerHTML={{ __html: step }} />
-          ) : (
-            step
-          )}
+          {step.includes('<code>') ? <span dangerouslySetInnerHTML={{ __html: step }} /> : step}
         </li>
       ))}
     </ol>
   );
 }
-

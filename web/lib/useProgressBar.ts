@@ -15,7 +15,7 @@ export function useProgressBar() {
       width: 0%;
     `;
     document.body.appendChild(progressBar);
-    
+
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight - windowHeight;
@@ -23,14 +23,13 @@ export function useProgressBar() {
       const progress = (scrolled / documentHeight) * 100;
       progressBar.style.width = `${progress}%`;
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Initialize
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.body.removeChild(progressBar);
     };
   }, []);
 }
-

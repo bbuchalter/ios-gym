@@ -12,7 +12,7 @@ interface LessonSectionProps {
 
 export function LessonSection({ title, children, isIntro, isFinal }: LessonSectionProps) {
   const counter = useLessonCounter();
-  
+
   // Increment counter for terminal IDs on mount
   const hasIncrementedRef = useRef(false);
   useEffect(() => {
@@ -24,10 +24,10 @@ export function LessonSection({ title, children, isIntro, isFinal }: LessonSecti
 
   // Generate section ID from title
   const sectionId = isIntro
-    ? "lesson-intro"
+    ? 'lesson-intro'
     : isFinal
-    ? "lesson-final"
-    : `lesson-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+      ? 'lesson-final'
+      : `lesson-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
   return (
     <section id={sectionId} className="mb-16">
@@ -35,9 +35,7 @@ export function LessonSection({ title, children, isIntro, isFinal }: LessonSecti
         <h1 className="mb-8 border-b-2 border-blue-500 pb-4 text-3xl font-bold text-white lg:text-4xl">
           {title}
         </h1>
-        <div className="text-gray-300">
-          {children}
-        </div>
+        <div className="text-gray-300">{children}</div>
       </div>
     </section>
   );

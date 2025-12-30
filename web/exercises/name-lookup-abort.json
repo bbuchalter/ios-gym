@@ -2,11 +2,7 @@
   "id": "name-lookup-abort",
   "description": "Practice aborting DNS name lookups with CTRL+SHIFT+6",
   "deviceModel": "2960-switch",
-  "commands": [
-    "end",
-    "test",
-    "hello"
-  ],
+  "commands": ["end", "test", "hello"],
   "validation": {
     "type": "exploratory",
     "assertions": [
@@ -17,4 +13,3 @@
     ]
   }
 }
-
