@@ -34,7 +34,9 @@ export default function Terminal({ terminalId, grammar, deviceModel, sessionRef:
   
   // Store keyboard shortcut handler in ref to always have latest version
   const keyboardShortcutRef = useRef(onKeyboardShortcut);
-  keyboardShortcutRef.current = onKeyboardShortcut;
+  useEffect(() => {
+    keyboardShortcutRef.current = onKeyboardShortcut;
+  }, [onKeyboardShortcut]);
   
   // Use refs for values accessed in handlers to avoid stale closures
   const currentLineRef = useRef('');
@@ -495,6 +497,8 @@ export default function Terminal({ terminalId, grammar, deviceModel, sessionRef:
         terminalRef.current = null;
       }
     };
+    // registry and sessionRef are intentionally omitted - registry is stable, sessionRef is assigned within effect
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grammar, deviceModel, finalTerminalId]);
   
   return (

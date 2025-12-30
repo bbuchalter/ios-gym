@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useLessonCounter } from '@/lib/LessonCounterContext';
 
 interface LessonSectionProps {
@@ -13,12 +13,14 @@ interface LessonSectionProps {
 export function LessonSection({ title, children, isIntro, isFinal }: LessonSectionProps) {
   const counter = useLessonCounter();
   
-  // Still increment counter for terminal IDs, but don't use it for display
+  // Increment counter for terminal IDs on mount
   const hasIncrementedRef = useRef(false);
-  if (!hasIncrementedRef.current && !isIntro && !isFinal) {
-    counter.getNextLessonNumber();
-    hasIncrementedRef.current = true;
-  }
+  useEffect(() => {
+    if (!hasIncrementedRef.current && !isIntro && !isFinal) {
+      counter.getNextLessonNumber();
+      hasIncrementedRef.current = true;
+    }
+  }, [counter, isIntro, isFinal]);
 
   // Generate section ID from title
   const sectionId = isIntro

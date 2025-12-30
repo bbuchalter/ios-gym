@@ -94,6 +94,7 @@ function PageContent({ switchGrammar, routerGrammar }: { switchGrammar: CommandG
       });
     } else {
       // No saved position, show content
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setContentVisible(true);
     }
   }, [registry.isAllTerminalsReady, grammar]);
