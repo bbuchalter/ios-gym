@@ -1,54 +1,63 @@
-# Lefthook configuration for pre-commit checks
+# Lefthook configuration for pre-commit and pre-push checks
 # Runs validation checks in parallel for faster commits
+
+# Define validation commands once using YAML anchors
+.validation-commands: &validation-commands
+  # Grammar file synchronization - always check
+  grammar-sync-switch:
+    run: |
+      if [ -f "commands-2960-switch.yaml" ] && [ -f "web/public/commands-2960-switch.json" ]; then
+        YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-2960-switch.yaml', 'utf8')), null, 2));")
+        CURRENT_JSON=$(cat web/public/commands-2960-switch.json)
+        if [ "$YAML_JSON" != "$CURRENT_JSON" ]; then
+          echo "❌ Switch grammar files out of sync! Run 'npm run build:grammar'"
+          exit 1
+        fi
+        echo "✓ Switch grammar synchronized"
+      fi
+
+  grammar-sync-router:
+    run: |
+      if [ -f "commands-1941-router.yaml" ] && [ -f "web/public/commands-1941-router.json" ]; then
+        YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-1941-router.yaml', 'utf8')), null, 2));")
+        CURRENT_JSON=$(cat web/public/commands-1941-router.json)
+        if [ "$YAML_JSON" != "$CURRENT_JSON" ]; then
+          echo "❌ Router grammar files out of sync! Run 'npm run build:grammar'"
+          exit 1
+        fi
+        echo "✓ Router grammar synchronized"
+      fi
+
+  # TypeScript type checking - always check
+  typecheck:
+    run: npx tsc --noEmit
+
+  # TypeScript type checking for web directory
+  web-typecheck:
+    run: cd web && npx tsc --noEmit
+
+  # YAML validation - always check
+  yaml-lint:
+    run: npm run lint:yaml
+
+  # Prettier formatting - always check web directory
+  web-prettier:
+    run: cd web && npm run format:check
+
+  # ESLint - always check web directory (with safe caching)
+  web-lint:
+    run: cd web && npm run lint -- --cache --cache-location .eslintcache
+
+  # Tests - always run all tests
+  tests:
+    run: ./node_modules/.bin/jest --silent --passWithNoTests
 
 pre-commit:
   parallel: true
   commands:
-    # Grammar file synchronization - always check
-    grammar-sync-switch:
-      run: |
-        if [ -f "commands-2960-switch.yaml" ] && [ -f "web/public/commands-2960-switch.json" ]; then
-          YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-2960-switch.yaml', 'utf8')), null, 2));")
-          CURRENT_JSON=$(cat web/public/commands-2960-switch.json)
-          if [ "$YAML_JSON" != "$CURRENT_JSON" ]; then
-            echo "❌ Switch grammar files out of sync! Run 'npm run build:grammar'"
-            exit 1
-          fi
-          echo "✓ Switch grammar synchronized"
-        fi
+    <<: *validation-commands
 
-    grammar-sync-router:
-      run: |
-        if [ -f "commands-1941-router.yaml" ] && [ -f "web/public/commands-1941-router.json" ]; then
-          YAML_JSON=$(node -e "const yaml = require('js-yaml'); const fs = require('fs'); console.log(JSON.stringify(yaml.load(fs.readFileSync('commands-1941-router.yaml', 'utf8')), null, 2));")
-          CURRENT_JSON=$(cat web/public/commands-1941-router.json)
-          if [ "$YAML_JSON" != "$CURRENT_JSON" ]; then
-            echo "❌ Router grammar files out of sync! Run 'npm run build:grammar'"
-            exit 1
-          fi
-          echo "✓ Router grammar synchronized"
-        fi
-
-    # TypeScript type checking - always check
-    typecheck:
-      run: npx tsc --noEmit
-
-    # TypeScript type checking for web directory
-    web-typecheck:
-      run: cd web && npx tsc --noEmit
-
-    # YAML validation - always check
-    yaml-lint:
-      run: npm run lint:yaml
-
-    # Prettier formatting - always check web directory
-    web-prettier:
-      run: cd web && npm run format:check
-
-    # ESLint - always check web directory (with safe caching)
-    web-lint:
-      run: cd web && npm run lint -- --cache --cache-location .eslintcache
-
-    # Tests - always run all tests
-    tests:
-      run: ./node_modules/.bin/jest --silent --passWithNoTests
+pre-push:
+  parallel: true
+  commands:
+    <<: *validation-commands
