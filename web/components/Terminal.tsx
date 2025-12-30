@@ -182,6 +182,7 @@ export default function Terminal({
       // Show lines
       for (let i = currentIndex; i < endIndex; i++) {
         if (i > currentIndex) terminal.write('\r\n');
+        // eslint-disable-next-line security/detect-object-injection
         terminal.write(lines[i]);
       }
 

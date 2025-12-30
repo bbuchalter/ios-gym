@@ -3,12 +3,14 @@ import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
+import security from 'eslint-plugin-security';
 import tailwind from 'eslint-plugin-tailwindcss';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   ...tailwind.configs['flat/recommended'],
+  security.configs.recommended,
   prettier, // Disables ESLint rules that conflict with Prettier
   {
     plugins: { import: importPlugin },

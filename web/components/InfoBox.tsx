@@ -37,6 +37,7 @@ interface InfoBoxProps {
 }
 
 export function InfoBox({ variant, children }: InfoBoxProps) {
+  // eslint-disable-next-line security/detect-object-injection
   const styles = variantStyles[variant];
   return (
     <div className={`border ${styles.border} ${styles.bg} my-4 rounded-lg p-4`}>{children}</div>
