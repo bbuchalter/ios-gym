@@ -487,14 +487,6 @@ function SuccessBoxContent() {
       <p className="mb-6 max-w-2xl text-lg text-gray-300">
         Your configuration is correct! All assertions passed.
       </p>
-      <div className="max-w-2xl rounded-lg border border-green-700/50 bg-green-950/50 p-6">
-        <p className="text-sm leading-relaxed text-gray-300">
-          <strong className="text-green-300">🎓 Key Takeaway:</strong> You verified your work both
-          manually (using <code className="text-green-400">show</code> commands) and with automated
-          validation. This is exactly how professional network engineers work - always verify before
-          trusting automation!
-        </p>
-      </div>
     </div>
   );
 }
