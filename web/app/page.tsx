@@ -2196,6 +2196,74 @@ Switch#show running-config
                     the next lesson!
                   </p>
                 </InfoBox>
+
+                <h2 className="mb-6 mt-16 text-3xl font-bold text-blue-400">
+                  CIDR to Subnet Mask Cheatsheet
+                </h2>
+                <p className="mb-6 text-gray-300">
+                  You'll often see IP addresses written with a{' '}
+                  <strong className="text-white">slash notation</strong> like{' '}
+                  <code className="rounded bg-gray-800 px-2 py-1 text-green-400">
+                    192.168.1.1/24
+                  </code>
+                  . The number after the slash is called{' '}
+                  <strong className="text-white">CIDR</strong> (Classless Inter-Domain Routing)
+                  notation. Here's how to convert between CIDR and subnet masks:
+                </p>
+
+                <Diagram title="CIDR / Subnet Mask Reference">
+                  {`┌────────┬─────────────────────┬────────────────┬───────────────┐
+│  CIDR  │    Subnet Mask      │  Wildcard Mask │  # of Hosts   │
+├────────┼─────────────────────┼────────────────┼───────────────┤
+│  /8    │  255.0.0.0          │  0.255.255.255 │  16,777,214   │
+│  /16   │  255.255.0.0        │  0.0.255.255   │  65,534       │
+│  /24   │  255.255.255.0      │  0.0.0.255     │  254          │
+├────────┼─────────────────────┼────────────────┼───────────────┤
+│  /25   │  255.255.255.128    │  0.0.0.127     │  126          │
+│  /26   │  255.255.255.192    │  0.0.0.63      │  62           │
+│  /27   │  255.255.255.224    │  0.0.0.31      │  30           │
+│  /28   │  255.255.255.240    │  0.0.0.15      │  14           │
+│  /29   │  255.255.255.248    │  0.0.0.7       │  6            │
+│  /30   │  255.255.255.252    │  0.0.0.3       │  2            │
+│  /32   │  255.255.255.255    │  0.0.0.0       │  1 (host)     │
+└────────┴─────────────────────┴────────────────┴───────────────┘
+
+Most Common:
+  /24 = 255.255.255.0  → Standard LAN (254 hosts)
+  /30 = 255.255.255.252 → Point-to-point links (2 hosts)
+  /32 = 255.255.255.255 → Single host route`}
+                </Diagram>
+
+                <InfoBox variant="tip">
+                  <p className="mb-2 text-gray-300">
+                    <strong className="text-white">Wildcard masks</strong> are used in ACLs and
+                    OSPF. They're the "opposite" of subnet masks.
+                  </p>
+                  <p className="text-gray-300">
+                    Quick trick: Subtract each subnet mask octet from 255 to get the wildcard. For
+                    /24: 255 - 255 = 0, 255 - 0 = 255 → <code>0.0.0.255</code>
+                  </p>
+                </InfoBox>
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">Quick Mental Math</h3>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
+                    <h4 className="mb-3 font-semibold text-blue-400">Subnet Mask Pattern</h4>
+                    <p className="mb-2 text-sm text-gray-300">
+                      Last octet values for /25 through /30:
+                    </p>
+                    <p className="font-mono text-gray-200">128 → 192 → 224 → 240 → 248 → 252</p>
+                    <p className="mt-2 text-sm text-gray-400">Each step adds half of what's left</p>
+                  </div>
+                  <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
+                    <h4 className="mb-3 font-semibold text-green-400">Host Count Formula</h4>
+                    <p className="mb-2 text-sm text-gray-300">Calculate hosts from CIDR:</p>
+                    <p className="font-mono text-gray-200">2^(32 - CIDR) - 2 = hosts</p>
+                    <p className="mt-2 text-sm text-gray-400">
+                      Example: /26 → 2^(32-26) - 2 = 62 hosts
+                    </p>
+                  </div>
+                </div>
               </LessonSection>
 
               {/* LESSON 8: NETWORK HARDWARE BASICS */}
