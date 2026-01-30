@@ -58,7 +58,7 @@ export function createInitialState(deviceModel: DeviceModel = '2960-switch'): De
   };
   
   if (deviceModel === '2960-switch') {
-    // Catalyst 2960 switch: 24 FastEthernet + 2 GigabitEthernet + Vlan1
+    // Catalyst 2960 switch: 24 FastEthernet + 2 GigabitEthernet + Vlan1 (Layer 2 only)
     // FastEthernet interfaces (fa0/1 through fa0/24)
     for (let i = 1; i <= 24; i++) {
       interfaces[`fa0/${i}`] = {
@@ -102,6 +102,51 @@ export function createInitialState(deviceModel: DeviceModel = '2960-switch'): De
     return {
       ...baseState,
       hostname: "Switch",
+      ipRouting: false, // 2960 is Layer 2 only - no routing capability
+      interfaces
+    };
+  } else if (deviceModel === '3650-24ps') {
+    // Catalyst 3650-24PS: 24 main GigabitEthernet + 4 uplink module + Vlan1 (Layer 3 capable)
+    // Verified against Packet Tracer output - stackable naming g1/0/x (stack 1, module 0, port x)
+    
+    // Main 24 GigabitEthernet ports (g1/0/1 through g1/0/24)
+    for (let i = 1; i <= 24; i++) {
+      interfaces[`g1/0/${i}`] = {
+        adminUp: false,
+        l2mode: null,  // Can be Layer 2 or Layer 3
+        accessVlan: null,
+        trunkAllowed: null,
+        ip: null,
+        mask: null
+      };
+    }
+    
+    // Uplink module ports (g1/1/1 through g1/1/4)
+    for (let i = 1; i <= 4; i++) {
+      interfaces[`g1/1/${i}`] = {
+        adminUp: false,
+        l2mode: null,
+        accessVlan: null,
+        trunkAllowed: null,
+        ip: null,
+        mask: null
+      };
+    }
+    
+    // Vlan1 management interface (administratively down by default)
+    interfaces["vlan1"] = {
+      adminUp: false,  // Matches "shutdown" in Packet Tracer
+      l2mode: "routed",
+      accessVlan: null,
+      trunkAllowed: null,
+      ip: null,
+      mask: null
+    };
+    
+    return {
+      ...baseState,
+      hostname: "Switch", // Matches Packet Tracer default
+      ipRouting: false, // "no ip cef" in PT means routing disabled by default
       interfaces
     };
   } else {
@@ -216,9 +261,14 @@ export function isValidInterface(state: DeviceState, ifname: string): boolean {
   
   // Device-specific validation for interfaces that could exist
   if (state.deviceModel === '2960-switch') {
-    // 2960: fa0/1-24, g0/1-2, vlans
+    // 2960: fa0/1-24, g0/1-2, vlans (Layer 2 only)
     if (/^fa0\/(1[0-9]|2[0-4]|[1-9])$/.test(normalized)) return true;
     if (/^g0\/[12]$/.test(normalized)) return true;
+    if (/^vlan\d+$/.test(normalized)) return true;
+  } else if (state.deviceModel === '3650-24ps') {
+    // 3650-24PS: g1/0/1-24 (main), g1/1/1-4 (uplink), vlans (Layer 3 capable)
+    if (/^g1\/0\/(1[0-9]|2[0-4]|[1-9])$/.test(normalized)) return true;
+    if (/^g1\/1\/[1-4]$/.test(normalized)) return true;
     if (/^vlan\d+$/.test(normalized)) return true;
   } else if (state.deviceModel === '1941-router') {
     // 1941: g0/0-1, vlans (no FastEthernet on routers)

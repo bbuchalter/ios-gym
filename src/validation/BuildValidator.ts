@@ -239,6 +239,8 @@ export class BuildValidator {
     
     if (deviceModel === '2960-switch') {
       return path.join(projectRoot, 'grammar/commands-2960-switch.yaml');
+    } else if (deviceModel === '3650-24ps') {
+      return path.join(projectRoot, 'grammar/commands-3650-24ps.yaml');
     } else if (deviceModel === '1941-router') {
       return path.join(projectRoot, 'grammar/commands-1941-router.yaml');
     } else {

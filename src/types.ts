@@ -1,7 +1,7 @@
 // Shared TypeScript types for IOS CLI Trainer
 
 // Device model literal types for specific Cisco hardware
-export type DeviceModel = '2960-switch' | '1941-router';
+export type DeviceModel = '2960-switch' | '3650-24ps' | '1941-router';
 
 export enum ModeType {
   USER_EXEC = "USER_EXEC",

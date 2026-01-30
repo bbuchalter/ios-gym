@@ -1,7 +1,7 @@
 {
   "id": "lesson-19-routed-port",
   "title": "Layer 3 Switching: Routed Ports",
-  "deviceModel": "2960-switch",
+  "deviceModel": "3650-24ps",
   "goals": [
     {
       "section": "Configure Routed Port",
@@ -51,8 +51,8 @@
     },
     {
       "type": "state-path",
-      "path": "interfaces.g1/0/2.routed",
-      "expectedValue": true,
+      "path": "interfaces.g1/0/2.l2mode",
+      "expectedValue": "routed",
       "description": "GigabitEthernet 1/0/2 should be a routed port (no switchport)",
       "diagnosticCommand": "show running-config"
     },

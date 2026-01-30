@@ -1,7 +1,7 @@
 {
   "id": "lesson-15a-svi-inter-vlan",
   "title": "SVI: Configure Inter-VLAN Routing",
-  "deviceModel": "2960-switch",
+  "deviceModel": "3650-24ps",
   "goals": [
     {
       "section": "Configure SVIs for Inter-VLAN Routing",

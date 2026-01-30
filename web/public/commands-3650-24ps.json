@@ -1,7 +1,7 @@
 {
   "version": 0.1,
-  "deviceModel": "2960-switch",
-  "description": "Cisco Catalyst 2960 switch command grammar for typing-practice CLI. Supports mode-aware parsing, keyword abbreviation, and tab completion.\n",
+  "deviceModel": "3650-24ps",
+  "description": "Cisco Catalyst 3650-24PS Layer 3 switch command grammar for CLI practice. Stackable naming (g1/0/x), 24 main ports + 4 uplink module ports. Supports Layer 3 features: ip routing, routed ports, SVIs.\n",
   "settings": {
     "keyword_abbrev": {
       "enabled": true,
@@ -52,7 +52,7 @@
       "pattern": "^(\\d{1,3}\\.){3}\\d{1,3}$"
     },
     "IFNAME": {
-      "pattern": "^(gi|g|gigabitethernet)?\\d+(\\/\\d+)+$|^(fa|fastethernet)?\\d+(\\/\\d+)+$|^vlan\\s*\\d+$"
+      "pattern": "^(gi|g|gigabitethernet)?\\d+(\\/\\d+)+$|^vlan\\s*\\d+$"
     },
     "VLAN_ID": {
       "pattern": "^\\d+$"
@@ -378,14 +378,13 @@
           "arg": "IFNAME",
           "from_state": "interfaces.keys",
           "defaults": [
-            "g0/0",
-            "g0/1",
-            "g0/2",
             "g1/0/1",
             "g1/0/2",
-            "fa0/1",
-            "fa0/2",
-            "fa0/3",
+            "g1/0/3",
+            "g1/0/4",
+            "g1/0/24",
+            "g1/1/1",
+            "g1/1/2",
             "vlan 1",
             "vlan 100",
             "vlan 200"
@@ -440,6 +439,33 @@
           "ad_default": 1
         },
         "help": "Add static route (supports floating route via AD)"
+      },
+      {
+        "name": "ip_routing",
+        "tokens": [
+          "ip",
+          "routing"
+        ],
+        "action": {
+          "type": "set",
+          "path": "ipRouting",
+          "value": true
+        },
+        "help": "Enable IP routing between VLANs"
+      },
+      {
+        "name": "no_ip_routing",
+        "tokens": [
+          "no",
+          "ip",
+          "routing"
+        ],
+        "action": {
+          "type": "set",
+          "path": "ipRouting",
+          "value": false
+        },
+        "help": "Disable IP routing"
       },
       {
         "name": "router_ospf",
@@ -916,7 +942,7 @@
     ]
   },
   "templates": {
-    "show_running_config": "Building configuration...\n\nCurrent configuration : 1080 bytes\n!\nversion 15.0\nno service timestamps log datetime msec\nno service timestamps debug datetime msec\nno service password-encryption\n!\nhostname {hostname}\n{#if enableSecret}!\nenable secret 5 {enableSecret}\n{#endif}!\n!\n!\n!\n!\n!\nspanning-tree mode pvst\nspanning-tree extend system-id\n!\n{#vlans}vlan {id}\n name {name}\n!\n{#endvlans}{#interfaces}interface {name_full}{#if l2mode == \"access\"}\n switchport mode access{#endif}{#if accessVlan}\n switchport access vlan {accessVlan}{#endif}{#if l2mode == \"trunk\"}\n switchport mode trunk{#endif}{#if trunkAllowed}\n switchport trunk allowed vlan {trunkAllowed}{#endif}{#if l2mode == \"routed\"}\n no switchport{#endif}{#if ip}\n ip address {ip} {mask}{#endif}{#if name == \"vlan1\"}\n no ip address\n shutdown{#endif}{#if adminUp}{#if name != \"vlan1\"}\n no shutdown{#endif}{#endif}\n!\n{#endifaces_end}{#if ipDefaultGateway}ip default-gateway {ipDefaultGateway}\n!\n{#endif}{#routes}ip route {dest} {mask} {nextHop}\n!\n{#endroutes}{#if ospf.processId}router ospf {ospf.processId}\n {#ospf.networks}network {ip} {wildcard} area {area}\n {#end}!\n{#endif}!\n!\n!\nline con 0\n!\nline vty 0 4\n login\nline vty 5 15\n login\n!\n!\n!\n!\nend\n",
+    "show_running_config": "Building configuration...\n\nCurrent configuration : 1280 bytes\n!\nversion 16.3\nno service timestamps log datetime msec\nno service timestamps debug datetime msec\nno service password-encryption\n!\nhostname {hostname}\n{#if enableSecret}!\nenable secret 5 {enableSecret}\n{#endif}!\n!\n!\n!\n!\n!\nspanning-tree mode pvst\nspanning-tree extend system-id\n!\n{#vlans}vlan {id}\n name {name}\n!\n{#endvlans}{#interfaces}interface {name_full}{#if l2mode == \"access\"}\n switchport mode access{#endif}{#if accessVlan}\n switchport access vlan {accessVlan}{#endif}{#if l2mode == \"trunk\"}\n switchport mode trunk{#endif}{#if trunkAllowed}\n switchport trunk allowed vlan {trunkAllowed}{#endif}{#if l2mode == \"routed\"}\n no switchport{#endif}{#if ip}\n ip address {ip} {mask}{#endif}{#if name == \"vlan1\"}\n no ip address\n shutdown{#endif}{#if adminUp}{#if name != \"vlan1\"}\n no shutdown{#endif}{#endif}\n!\n{#endifaces_end}{#if ipDefaultGateway}ip default-gateway {ipDefaultGateway}\n!\n{#endif}{#routes}ip route {dest} {mask} {nextHop}\n!\n{#endroutes}{#if ospf.processId}router ospf {ospf.processId}\n {#ospf.networks}network {ip} {wildcard} area {area}\n {#end}!\n{#endif}!\n!\n!\nline con 0\n!\nline vty 0 4\n login\nline vty 5 15\n login\n!\n!\n!\n!\nend\n",
     "show_vlan_brief": "\nVLAN Name                             Status    Ports\n---- -------------------------------- --------- -------------------------------\n{#vlans_with_ports}{id} {name_or_default} {status} {ports}\n{#endvlans_with_ports}\n",
     "show_ip_interface_brief": "Interface              IP-Address      OK? Method Status                Protocol\n{#interfaces}{name_full_padded} {ip_or_unassigned} YES manual {status}{protocol}\n{#endifaces_end}\n",
     "show_ip_route": "Codes: C - connected, S - static, O - OSPF\n{#routes}\nS*  {dest}/{mask} [AD {ad}] via {nextHop}\n{#end}\n"

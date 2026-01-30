@@ -51,12 +51,16 @@ const SCROLL_POSITION_KEY = 'ios-practice-scroll-position';
 
 function PageContent({
   switchGrammar,
+  _layer3Grammar,
   routerGrammar,
 }: {
   switchGrammar: CommandGrammar;
+  _layer3Grammar: CommandGrammar; // Catalyst 3650-24PS for Layer 3 switching lessons (future use)
   routerGrammar: CommandGrammar;
 }) {
-  // Use switchGrammar for Lessons 1-13, routerGrammar for Lessons 14+
+  // Use switchGrammar for L2 lessons (1-12, 14, 16)
+  // Use _layer3Grammar for L3 switch lessons (13, 15, 17-20, 25) - to be wired up
+  // Use routerGrammar for routing lessons (21-24)
   const grammar = switchGrammar; // Default to switch for now, will update terminals individually
   const registry = useTerminalRegistry();
   const [contentVisible, setContentVisible] = useState(false);
@@ -4505,21 +4509,25 @@ ip ospf cost 30
 
 export default function LearnPage() {
   const [switchGrammar, setSwitchGrammar] = useState<CommandGrammar | null>(null);
+  const [layer3Grammar, setLayer3Grammar] = useState<CommandGrammar | null>(null);
   const [routerGrammar, setRouterGrammar] = useState<CommandGrammar | null>(null);
 
   useEffect(() => {
-    // Load both device grammars
+    // Load all three device grammars
     import('@/lib/data-loader').then(({ loadGrammar }) => {
-      Promise.all([loadGrammar('2960-switch'), loadGrammar('1941-router')]).then(
-        ([switchGr, routerGr]) => {
-          setSwitchGrammar(switchGr);
-          setRouterGrammar(routerGr);
-        }
-      );
+      Promise.all([
+        loadGrammar('2960-switch'),
+        loadGrammar('3650-24ps'),
+        loadGrammar('1941-router'),
+      ]).then(([switchGr, layer3Gr, routerGr]) => {
+        setSwitchGrammar(switchGr);
+        setLayer3Grammar(layer3Gr);
+        setRouterGrammar(routerGr);
+      });
     });
   }, []);
 
-  if (!switchGrammar || !routerGrammar) {
+  if (!switchGrammar || !layer3Grammar || !routerGrammar) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-900">
         <div className="text-gray-400">Loading terminal...</div>
@@ -4529,7 +4537,11 @@ export default function LearnPage() {
 
   return (
     <TerminalRegistryProvider>
-      <PageContent switchGrammar={switchGrammar} routerGrammar={routerGrammar} />
+      <PageContent
+        switchGrammar={switchGrammar}
+        _layer3Grammar={layer3Grammar}
+        routerGrammar={routerGrammar}
+      />
     </TerminalRegistryProvider>
   );
 }

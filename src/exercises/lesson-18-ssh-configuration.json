@@ -1,7 +1,7 @@
 {
   "id": "lesson-18-ssh-configuration",
   "title": "SSH: Secure Remote Access",
-  "deviceModel": "2960-switch",
+  "deviceModel": "3650-24ps",
   "goals": [
     {
       "section": "Configure SSH Components",

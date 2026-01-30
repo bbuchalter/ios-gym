@@ -1,7 +1,7 @@
 {
   "id": "lesson-20-multiple-routed-ports",
   "title": "Layer 3 Switching: Multiple Routed Ports",
-  "deviceModel": "2960-switch",
+  "deviceModel": "3650-24ps",
   "goals": [
     {
       "section": "Configure Multiple Routed Ports",
@@ -103,8 +103,8 @@
     },
     {
       "type": "state-path",
-      "path": "interfaces.g1/0/1.routed",
-      "expectedValue": true,
+      "path": "interfaces.g1/0/1.l2mode",
+      "expectedValue": "routed",
       "description": "GigabitEthernet 1/0/1 should be a routed port",
       "diagnosticCommand": "show running-config"
     },
@@ -117,8 +117,8 @@
     },
     {
       "type": "state-path",
-      "path": "interfaces.g1/0/2.routed",
-      "expectedValue": true,
+      "path": "interfaces.g1/0/2.l2mode",
+      "expectedValue": "routed",
       "description": "GigabitEthernet 1/0/2 should be a routed port",
       "diagnosticCommand": "show running-config"
     },
@@ -131,8 +131,8 @@
     },
     {
       "type": "state-path",
-      "path": "interfaces.g1/0/3.routed",
-      "expectedValue": true,
+      "path": "interfaces.g1/0/3.l2mode",
+      "expectedValue": "routed",
       "description": "GigabitEthernet 1/0/3 should be a routed port",
       "diagnosticCommand": "show running-config"
     },

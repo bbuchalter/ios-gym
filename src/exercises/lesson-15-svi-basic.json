@@ -1,7 +1,7 @@
 {
   "id": "lesson-15-svi-basic",
   "title": "SVI: Giving VLANs Their Own IP Address",
-  "deviceModel": "2960-switch",
+  "deviceModel": "3650-24ps",
   "goals": [
     {
       "section": "Basic Setup",

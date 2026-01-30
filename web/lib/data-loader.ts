@@ -26,10 +26,17 @@ export async function loadGrammar(
 }
 
 /**
- * Load Catalyst 2960 switch grammar
+ * Load Catalyst 2960 switch grammar (Layer 2 only)
  */
 export function load2960SwitchGrammar(): Promise<CommandGrammar> {
   return loadGrammar('2960-switch');
+}
+
+/**
+ * Load Catalyst 3650-24PS switch grammar (Layer 3 capable)
+ */
+export function load3650SwitchGrammar(): Promise<CommandGrammar> {
+  return loadGrammar('3650-24ps');
 }
 
 /**

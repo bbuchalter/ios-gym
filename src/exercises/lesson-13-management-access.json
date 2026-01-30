@@ -1,7 +1,7 @@
 {
   "id": "lesson-13-management-access",
   "title": "Configuring Management Access",
-  "deviceModel": "2960-switch",
+  "deviceModel": "3650-24ps",
   "goals": [
     {
       "section": "Configure Management Interface",

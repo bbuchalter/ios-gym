@@ -17,7 +17,7 @@
     },
     "deviceModel": {
       "type": "string",
-      "enum": ["2960-switch", "1941-router"],
+      "enum": ["2960-switch", "3650-24ps", "1941-router"],
       "description": "Target Cisco device model"
     },
     "goals": {
