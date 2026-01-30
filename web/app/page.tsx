@@ -43,6 +43,10 @@ import lesson22 from '../../src/exercises/lesson-22-ospf-basic.json';
 import lesson23 from '../../src/exercises/lesson-23-ospf-all-interfaces.json';
 import lesson24 from '../../src/exercises/lesson-24-ospf-cost.json';
 import lesson25 from '../../src/exercises/lesson-25-capstone.json';
+import lesson26 from '../../src/exercises/lesson-26-router-bootstrap.json';
+import lesson27 from '../../src/exercises/lesson-27-ospf-default-route.json';
+// Note: lessons 28-30 are concept reference files (no interactive exercises)
+import lesson31 from '../../src/exercises/lesson-31-cyberpatriot-router-prep.json';
 
 import type { CommandGrammar } from '@src/types';
 import type { Exercise as ExerciseType } from '@src/validation/types';
@@ -4438,6 +4442,227 @@ ip ospf cost 30
                   </p>
                 </InfoBox>
               </LessonSection>
+
+              {/* CYBERPATRIOT PREPARATION */}
+              <LessonSection title="CyberPatriot Router Challenge Preparation">
+                <p className="mb-6 text-lg text-gray-300">
+                  Ready for competition? These lessons prepare you for the router configuration
+                  tasks you'll encounter in CyberPatriot Packet Tracer challenges.
+                </p>
+
+                <InfoBox variant="real-world">
+                  <h4 className="mb-3 font-semibold text-blue-300">
+                    🎯 What CyberPatriot Router Challenges Include
+                  </h4>
+                  <ul className="ml-6 list-disc space-y-2 text-gray-300">
+                    <li>
+                      <strong className="text-white">Router Bootstrap</strong> — Hostname, enable
+                      secret, password encryption
+                    </li>
+                    <li>
+                      <strong className="text-white">Interface Configuration</strong> — WAN and LAN
+                      IPs per the MOP (Method of Procedure)
+                    </li>
+                    <li>
+                      <strong className="text-white">OSPF Routing</strong> — Including
+                      default-information originate
+                    </li>
+                    <li>
+                      <strong className="text-white">Access Control Lists</strong> — Block
+                      attackers, allow legitimate traffic
+                    </li>
+                    <li>
+                      <strong className="text-white">NAT/PAT</strong> — Translate private IPs to
+                      public for Internet access
+                    </li>
+                    <li>
+                      <strong className="text-white">DHCP</strong> — Automatic IP assignment for LAN
+                      hosts
+                    </li>
+                  </ul>
+                </InfoBox>
+
+                <h3 className="mb-4 mt-8 text-2xl font-bold text-white">
+                  Router Bootstrap: Essential Security
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  Every CyberPatriot router challenge starts with basic security setup. Master these
+                  commands — they're worth easy points!
+                </p>
+
+                <Exercise
+                  exercise={lesson26 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                  OSPF: Advertising the Default Route
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  Border routers need to tell other routers "I know how to reach the Internet."
+                  That's what{' '}
+                  <code className="rounded bg-gray-800 px-1">default-information originate</code>{' '}
+                  does!
+                </p>
+
+                <Exercise
+                  exercise={lesson27 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                  Understanding Access Control Lists (ACLs)
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  ACLs are the firewall of the router. They filter traffic based on source,
+                  destination, and protocol.
+                </p>
+
+                <Diagram title="Extended ACL Structure">
+                  {`┌─────────────────────────────────────────────────────────────┐
+│              EXTENDED ACL (100-199)                          │
+├─────────────────────────────────────────────────────────────┤
+│  ! First, block specific attacker hosts                      │
+│  access-list 101 deny icmp host 10.0.0.50 any  ← Attacker 1 │
+│  access-list 101 deny tcp host 10.0.0.50 any                │
+│  access-list 101 deny icmp host 10.0.0.51 any  ← Attacker 2 │
+│  access-list 101 deny tcp host 10.0.0.51 any                │
+│                                                              │
+│  ! Then permit legitimate traffic                            │
+│  access-list 101 permit ospf any any  ← Routing updates     │
+│  access-list 101 permit tcp any any   ← Web, SSH, etc.      │
+│  access-list 101 permit udp any any   ← DNS, DHCP, etc.     │
+│  access-list 101 permit icmp any any  ← Ping (for friends)  │
+│                                                              │
+│  ! Apply to WAN interface                                    │
+│  interface g0/0                                              │
+│    ip access-group 101 in                                    │
+├─────────────────────────────────────────────────────────────┤
+│  KEY: Order matters! Deny attackers BEFORE permit any.      │
+│       Implicit "deny any" at end of every ACL.              │
+└─────────────────────────────────────────────────────────────┘`}
+                </Diagram>
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                  Understanding NAT and PAT
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  NAT (Network Address Translation) lets many private IPs share one public IP. PAT
+                  (Port Address Translation) uses port numbers to track connections.
+                </p>
+
+                <Diagram title="NAT/PAT Configuration Flow">
+                  {`┌─────────────────────────────────────────────────────────────┐
+│                    NAT/PAT SETUP                             │
+├─────────────────────────────────────────────────────────────┤
+│  Step 1: Identify inside hosts (ACL 1)                       │
+│    access-list 1 permit 192.168.100.0 0.0.0.255             │
+│                                                              │
+│  Step 2: Mark interfaces                                     │
+│    interface g0/0        interface g0/1                      │
+│      ip nat outside        ip nat inside                     │
+│         ↑                      ↑                             │
+│      (Internet)             (LAN)                            │
+│                                                              │
+│  Step 3: Enable PAT (overload)                               │
+│    ip nat inside source list 1 interface g0/0 overload      │
+│                                                              │
+│  Step 4: Static NAT for servers                              │
+│    Server visible from outside as WAN_SUBNET.100             │
+│    ip nat inside source static 192.168.100.10 10.0.0.100    │
+│         ↑                              ↑                     │
+│    (Private Server)           (Public: matches WAN subnet)   │
+└─────────────────────────────────────────────────────────────┘`}
+                </Diagram>
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                  Understanding DHCP Pools
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  DHCP automatically assigns IP addresses to network devices. Routers can act as
+                  DHCP servers for their LAN.
+                </p>
+
+                <Diagram title="DHCP Pool Configuration">
+                  {`┌─────────────────────────────────────────────────────────────┐
+│                    DHCP CONFIGURATION                        │
+├─────────────────────────────────────────────────────────────┤
+│  ! Exclude static IPs (router, servers)                      │
+│  ip dhcp excluded-address 192.168.100.1 192.168.100.10      │
+│                                                              │
+│  ! Create the DHCP pool                                      │
+│  ip dhcp pool LAN_POOL                                       │
+│    network 192.168.100.0 255.255.255.0                       │
+│    default-router 192.168.100.1  ← Gateway for clients      │
+│    dns-server 8.8.8.8            ← DNS for clients          │
+├─────────────────────────────────────────────────────────────┤
+│  Result: Clients get IPs from 192.168.100.11 - .254         │
+│          Gateway: 192.168.100.1                              │
+│          DNS: 8.8.8.8                                        │
+└─────────────────────────────────────────────────────────────┘`}
+                </Diagram>
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">Threat Mitigation</h3>
+                <p className="mb-4 text-gray-300">
+                  CyberPatriot challenges often include threat mitigation tasks — finding and
+                  removing malicious configurations or rogue devices.
+                </p>
+
+                <Diagram title="Common Threats to Find">
+                  {`┌─────────────────────────────────────────────────────────────┐
+│                    THREAT MITIGATION                         │
+├─────────────────────────────────────────────────────────────┤
+│  1. ROGUE DHCP SERVER                                        │
+│     - Look for unauthorized "ip dhcp pool" configurations   │
+│     - Check switches for DHCP snooping violations           │
+│     - Remove any DHCP pool not in the MOP                   │
+│                                                              │
+│  2. ATTACKER HOST BLOCKING                                   │
+│     - Identify attacker IPs from the scenario               │
+│     - Add deny statements to ACL BEFORE permit any          │
+│     - access-list 101 deny icmp host 10.0.0.50 any          │
+│     - access-list 101 deny tcp host 10.0.0.50 any           │
+│                                                              │
+│  3. UNAUTHORIZED STATIC ROUTES                               │
+│     - Check for routes pointing to wrong next-hop           │
+│     - Remove with: no ip route <dest> <mask> <next-hop>     │
+├─────────────────────────────────────────────────────────────┤
+│  TIP: Use "show running-config" to find suspicious configs  │
+│       Compare against the MOP — anything not listed may be  │
+│       malicious!                                             │
+└─────────────────────────────────────────────────────────────┘`}
+                </Diagram>
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                  Full CyberPatriot Router Practice
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  Put it all together! This exercise combines bootstrap, OSPF, and prepares you for
+                  the full challenge.
+                </p>
+
+                <Exercise
+                  exercise={lesson31 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <ProTip>
+                  <strong>Competition Tips:</strong>
+                  <ul className="mt-2 ml-4 list-disc space-y-1">
+                    <li>Read the MOP (Method of Procedure) carefully — every detail matters</li>
+                    <li>Save your Packet Tracer file OFTEN (crashes happen!)</li>
+                    <li>
+                      Use <code className="rounded bg-gray-700 px-1">write memory</code> after every
+                      section
+                    </li>
+                    <li>Double-check IP addresses — typos cost points</li>
+                    <li>Click "Check Results" periodically to see your score</li>
+                  </ul>
+                </ProTip>
+              </LessonSection>
             </LessonCounterProvider>
 
             {/* COMPLETION SECTION */}
@@ -4496,6 +4721,18 @@ ip ospf cost 30
                 </div>
                 <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
                   ✅ OSPF cost manipulation
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ Password encryption (service password-encryption)
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ OSPF default route advertisement
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ ACL, NAT & DHCP concepts
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ CyberPatriot router challenge prep
                 </div>
               </div>
             </div>

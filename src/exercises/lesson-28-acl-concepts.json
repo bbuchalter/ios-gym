@@ -1,0 +1,44 @@
+{
+  "id": "lesson-28-acl-concepts",
+  "title": "Access Control Lists: Firewall Fundamentals",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Understanding ACL Basics",
+      "steps": [
+        {
+          "objective": "Enter privileged mode to explore ACL concepts",
+          "command": "enable",
+          "teachingPoint": "ACLs filter traffic based on source/destination IP, protocol, and ports"
+        },
+        {
+          "objective": "View current configuration (no ACLs yet)",
+          "command": "show running-config",
+          "teachingPoint": "ACLs appear in config as 'access-list' statements"
+        }
+      ]
+    }
+  ],
+  "assertions": [],
+  "legacyCommands": [
+    "! ACL REFERENCE - Extended ACL Structure:",
+    "! access-list 101 permit ospf any any",
+    "! access-list 101 permit tcp any any",
+    "! access-list 101 permit udp any any",
+    "! access-list 101 permit icmp any any",
+    "! access-list 101 deny icmp host 10.0.0.50 any",
+    "! access-list 101 deny tcp host 10.0.0.50 any",
+    "!",
+    "! Apply ACL inbound on WAN interface:",
+    "! interface g0/0",
+    "! ip access-group 101 in",
+    "!",
+    "! KEY CONCEPTS:",
+    "! - ACL 1-99: Standard (filters by source IP only)",
+    "! - ACL 100-199: Extended (filters by source, dest, protocol, port)",
+    "! - 'permit ospf any any' - Allow OSPF routing updates",
+    "! - 'deny icmp host X.X.X.X any' - Block ping from specific host",
+    "! - Order matters! First match wins",
+    "! - Implicit 'deny any' at end of every ACL"
+  ]
+}

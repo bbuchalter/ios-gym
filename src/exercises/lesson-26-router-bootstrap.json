@@ -1,0 +1,127 @@
+{
+  "id": "lesson-26-router-bootstrap",
+  "title": "Router Bootstrap: Essential Security Setup",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Initial Router Configuration",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Set hostname to 'Router_West'",
+          "command": "hostname Router_West",
+          "teachingPoint": "Descriptive hostnames help identify devices in large networks"
+        },
+        {
+          "objective": "Set enable secret password",
+          "command": "enable secret C1sc0P@ss",
+          "teachingPoint": "Enable secret is automatically encrypted with MD5 - much stronger than 'enable password'"
+        },
+        {
+          "objective": "Enable password encryption for all passwords",
+          "command": "service password-encryption",
+          "teachingPoint": "This encrypts plaintext passwords in the config (type 7) - protects against shoulder surfing"
+        }
+      ]
+    },
+    {
+      "section": "Configure WAN Interface",
+      "steps": [
+        {
+          "objective": "Enter WAN interface (GigabitEthernet 0/0)",
+          "command": "interface g0/0",
+          "teachingPoint": "G0/0 is typically the WAN-facing interface on routers"
+        },
+        {
+          "objective": "Assign WAN IP address 10.0.0.34/24",
+          "command": "ip address 10.0.0.34 255.255.255.0"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Configure LAN Interface",
+      "steps": [
+        {
+          "objective": "Enter LAN interface (GigabitEthernet 0/1)",
+          "command": "interface g0/1",
+          "teachingPoint": "G0/1 is typically the LAN-facing interface"
+        },
+        {
+          "objective": "Assign LAN IP address 192.168.100.1/24",
+          "command": "ip address 192.168.100.1 255.255.255.0",
+          "teachingPoint": "This IP becomes the default gateway for LAN devices"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory",
+          "teachingPoint": "Always save after making changes!"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "hostname",
+      "expectedValue": "Router_West",
+      "description": "Hostname should be 'Router_West'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "enableSecret",
+      "expectedValue": "C1sc0P@ss",
+      "description": "Enable secret should be set",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "servicePasswordEncryption",
+      "expectedValue": true,
+      "description": "Password encryption should be enabled",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/0.ip",
+      "expectedValue": "10.0.0.34",
+      "description": "G0/0 should have IP 10.0.0.34",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.ip",
+      "expectedValue": "192.168.100.1",
+      "description": "G0/1 should have IP 192.168.100.1",
+      "diagnosticCommand": "show ip interface brief"
+    }
+  ]
+}

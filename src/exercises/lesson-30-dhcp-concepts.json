@@ -1,0 +1,43 @@
+{
+  "id": "lesson-30-dhcp-concepts",
+  "title": "DHCP: Automatic IP Assignment",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Understanding DHCP Basics",
+      "steps": [
+        {
+          "objective": "Enter privileged mode to explore DHCP concepts",
+          "command": "enable",
+          "teachingPoint": "DHCP automatically assigns IP addresses to network devices"
+        },
+        {
+          "objective": "View current configuration",
+          "command": "show running-config",
+          "teachingPoint": "DHCP pools appear as 'ip dhcp pool' sections in config"
+        }
+      ]
+    }
+  ],
+  "assertions": [],
+  "legacyCommands": [
+    "! DHCP REFERENCE - Router as DHCP Server:",
+    "!",
+    "! Step 1: Exclude static IPs (router, servers)",
+    "! ip dhcp excluded-address 192.168.100.1 192.168.100.10",
+    "!",
+    "! Step 2: Create DHCP pool",
+    "! ip dhcp pool LAN_POOL",
+    "! network 192.168.100.0 255.255.255.0",
+    "! default-router 192.168.100.1",
+    "! dns-server 8.8.8.8",
+    "!",
+    "! KEY CONCEPTS:",
+    "! - Pool name can be anything (LAN_POOL is common)",
+    "! - 'network' defines the subnet to assign from",
+    "! - 'default-router' is the gateway for DHCP clients",
+    "! - 'dns-server' tells clients which DNS to use",
+    "! - Excluded addresses are reserved (won't be assigned)",
+    "! - Always exclude the router interface IP!"
+  ]
+}

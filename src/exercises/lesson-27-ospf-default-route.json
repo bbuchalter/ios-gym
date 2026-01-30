@@ -1,0 +1,127 @@
+{
+  "id": "lesson-27-ospf-default-route",
+  "title": "OSPF: Advertising the Default Route",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Configure Router Interfaces",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Set hostname to 'Border_Router'",
+          "command": "hostname Border_Router",
+          "teachingPoint": "This router connects the internal network to the Internet"
+        },
+        {
+          "objective": "Configure WAN interface (to Internet)",
+          "command": "interface g0/0"
+        },
+        {
+          "objective": "Assign WAN IP 10.0.0.2/24",
+          "command": "ip address 10.0.0.2 255.255.255.0"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure LAN interface",
+          "command": "interface g0/1"
+        },
+        {
+          "objective": "Assign LAN IP 192.168.100.1/24",
+          "command": "ip address 192.168.100.1 255.255.255.0"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Configure OSPF with Default Route",
+      "steps": [
+        {
+          "objective": "Enter OSPF configuration (process 1)",
+          "command": "router ospf 1",
+          "teachingPoint": "OSPF process ID is locally significant - can be any number"
+        },
+        {
+          "objective": "Advertise WAN network to OSPF neighbors",
+          "command": "network 10.0.0.2 0.0.0.0 area 0",
+          "teachingPoint": "Wildcard 0.0.0.0 matches exactly this IP address"
+        },
+        {
+          "objective": "Advertise default route to neighbors",
+          "command": "default-information originate",
+          "teachingPoint": "This tells OSPF to advertise this router as the path to the Internet!"
+        },
+        {
+          "objective": "Exit OSPF configuration",
+          "command": "exit"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "hostname",
+      "expectedValue": "Border_Router",
+      "description": "Hostname should be 'Border_Router'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/0.ip",
+      "expectedValue": "10.0.0.2",
+      "description": "G0/0 should have IP 10.0.0.2",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "ospf-network",
+      "expectedValue": {
+        "network": "10.0.0.2",
+        "wildcard": "0.0.0.0",
+        "area": 0
+      },
+      "description": "OSPF should advertise 10.0.0.2 in area 0",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "ospf.defaultInformationOriginate",
+      "expectedValue": true,
+      "description": "OSPF should advertise default route",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}

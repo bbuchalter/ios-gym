@@ -11,6 +11,7 @@ export function createInitialState(deviceModel: DeviceModel = '2960-switch'): De
   const baseState = {
     deviceModel,
     enableSecret: null,
+    servicePasswordEncryption: false, // service password-encryption
     ipRouting: deviceModel === '1941-router', // Enabled by default on routers, disabled on switches
     vlans: {
       "1": {
@@ -35,7 +36,8 @@ export function createInitialState(deviceModel: DeviceModel = '2960-switch'): De
     ospf: {
       processId: null,
       networks: [],
-      ifCosts: {}
+      ifCosts: {},
+      defaultInformationOriginate: false
     },
     ssh: {
       domainName: null,

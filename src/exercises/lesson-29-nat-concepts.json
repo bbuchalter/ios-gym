@@ -1,0 +1,50 @@
+{
+  "id": "lesson-29-nat-concepts",
+  "title": "NAT and PAT: Address Translation",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Understanding NAT Basics",
+      "steps": [
+        {
+          "objective": "Enter privileged mode to explore NAT concepts",
+          "command": "enable",
+          "teachingPoint": "NAT translates private IPs to public IPs for Internet access"
+        },
+        {
+          "objective": "View current configuration",
+          "command": "show running-config",
+          "teachingPoint": "NAT config includes 'ip nat inside/outside' on interfaces"
+        }
+      ]
+    }
+  ],
+  "assertions": [],
+  "legacyCommands": [
+    "! NAT REFERENCE - Standard Setup:",
+    "!",
+    "! Step 1: Create ACL to identify inside hosts",
+    "! access-list 1 permit 192.168.100.0 0.0.0.255",
+    "!",
+    "! Step 2: Mark interfaces as inside/outside",
+    "! interface g0/0",
+    "! ip nat outside",
+    "! interface g0/1",
+    "! ip nat inside",
+    "!",
+    "! Step 3: Enable PAT (overload) using WAN interface IP",
+    "! ip nat inside source list 1 interface g0/0 overload",
+    "!",
+    "! Step 4: Static NAT for servers",
+    "! The server should be reachable from outside as WAN_SUBNET.100",
+    "! Example: If WAN is 10.0.0.0/24, server appears as 10.0.0.100",
+    "! ip nat inside source static 192.168.100.10 10.0.0.100",
+    "!",
+    "! KEY CONCEPTS:",
+    "! - PAT (Port Address Translation) = NAT overload",
+    "! - All LAN hosts share one public IP (WAN interface)",
+    "! - Static NAT maps one private IP to one public IP",
+    "! - 'inside' = your LAN, 'outside' = Internet/WAN",
+    "! - Static NAT public IP should match WAN subnet (x.x.x.100)"
+  ]
+}

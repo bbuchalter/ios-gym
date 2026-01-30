@@ -197,6 +197,17 @@ commands:
         value: null
       help: "Remove enable secret"
 
+    # Password encryption
+    - name: service_password_encryption
+      tokens: ["service", "password-encryption"]
+      action: {type: "set", path: "servicePasswordEncryption", value: true}
+      help: "Encrypt all passwords in configuration"
+
+    - name: no_service_password_encryption
+      tokens: ["no", "service", "password-encryption"]
+      action: {type: "set", path: "servicePasswordEncryption", value: false}
+      help: "Disable password encryption"
+
     # VLAN
     - name: vlan
       tokens: ["vlan", {arg: "VLAN_ID", name: "vlan"}]
@@ -364,6 +375,16 @@ commands:
         wildcard_from: "wc"
         area_from: "area"
       help: "Advertise network in OSPF"
+
+    - name: default_information_originate
+      tokens: ["default-information", "originate"]
+      action: {type: "set", path: "ospf.defaultInformationOriginate", value: true}
+      help: "Advertise default route to OSPF neighbors"
+
+    - name: no_default_information_originate
+      tokens: ["no", "default-information", "originate"]
+      action: {type: "set", path: "ospf.defaultInformationOriginate", value: false}
+      help: "Stop advertising default route"
 
   LINE_VTY_CONFIG:
     - name: exit

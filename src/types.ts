@@ -18,6 +18,7 @@ export interface DeviceState {
   deviceModel: DeviceModel;
   hostname: string;
   enableSecret: string | null;
+  servicePasswordEncryption: boolean; // service password-encryption
   interfaces: Record<string, InterfaceConfig>;
   vlans: Record<string, VlanConfig>;
   svis: Record<string, SviConfig>;
@@ -63,6 +64,7 @@ export interface OspfConfig {
   processId: number | null;
   networks: OspfNetwork[];
   ifCosts: Record<string, number>;
+  defaultInformationOriginate: boolean; // Advertise default route to OSPF neighbors
 }
 
 export interface OspfNetwork {

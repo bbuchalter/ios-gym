@@ -1,0 +1,206 @@
+{
+  "id": "lesson-31-cyberpatriot-router-prep",
+  "title": "CyberPatriot Router Challenge Preparation",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Router Bootstrap (Required in Most Challenges)",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Set the hostname as specified in MOP",
+          "command": "hostname Competition_Router",
+          "teachingPoint": "Always match the hostname EXACTLY as specified in the MOP"
+        },
+        {
+          "objective": "Set enable secret (check MOP for exact password)",
+          "command": "enable secret Cyb3rP@tr10t",
+          "teachingPoint": "IMPORTANT: Read passwords carefully! '0' might be zero, 'l' might be one. The MOP will specify."
+        },
+        {
+          "objective": "Enable password encryption",
+          "command": "service password-encryption",
+          "teachingPoint": "This is almost always required in CyberPatriot router challenges"
+        }
+      ]
+    },
+    {
+      "section": "Interface Configuration (Per MOP Diagram)",
+      "steps": [
+        {
+          "objective": "Configure WAN interface",
+          "command": "interface g0/0"
+        },
+        {
+          "objective": "Assign WAN IP from MOP (typically x.x.x.x/24)",
+          "command": "ip address 10.0.0.34 255.255.255.0",
+          "teachingPoint": "Check the MOP for exact IP - usually a public IP on the WAN side"
+        },
+        {
+          "objective": "Enable WAN interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure LAN interface",
+          "command": "interface g0/1"
+        },
+        {
+          "objective": "Assign LAN IP from MOP (typically 192.168.x.1/24)",
+          "command": "ip address 192.168.100.1 255.255.255.0",
+          "teachingPoint": "This IP becomes the default gateway for all LAN hosts"
+        },
+        {
+          "objective": "Enable LAN interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "OSPF Routing (If Required by MOP)",
+      "steps": [
+        {
+          "objective": "Enter OSPF configuration",
+          "command": "router ospf 1",
+          "teachingPoint": "Process ID (1) must match what's in the MOP"
+        },
+        {
+          "objective": "Advertise WAN network",
+          "command": "network 10.0.0.34 0.0.0.0 area 0",
+          "teachingPoint": "Use 0.0.0.0 wildcard to match exactly this interface"
+        },
+        {
+          "objective": "Advertise default route to neighbors",
+          "command": "default-information originate",
+          "teachingPoint": "Border routers use this to tell others 'I know the way out'"
+        },
+        {
+          "objective": "Exit OSPF configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Save Configuration",
+      "steps": [
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "ALWAYS save your work!",
+          "command": "write memory",
+          "teachingPoint": "Save frequently! Packet Tracer can crash and lose unsaved work"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "hostname",
+      "expectedValue": "Competition_Router",
+      "description": "Hostname should be set correctly",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "servicePasswordEncryption",
+      "expectedValue": true,
+      "description": "Password encryption should be enabled",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/0.ip",
+      "expectedValue": "10.0.0.34",
+      "description": "WAN interface should have correct IP",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.ip",
+      "expectedValue": "192.168.100.1",
+      "description": "LAN interface should have correct IP",
+      "diagnosticCommand": "show ip interface brief"
+    },
+    {
+      "type": "state-path",
+      "path": "ospf.defaultInformationOriginate",
+      "expectedValue": true,
+      "description": "OSPF should advertise default route",
+      "diagnosticCommand": "show running-config"
+    }
+  ],
+  "legacyCommands": [
+    "! ADDITIONAL CYBERPATRIOT TASKS (Reference):",
+    "!",
+    "! === ACCESS CONTROL LISTS ===",
+    "! IMPORTANT: Deny attackers BEFORE permit statements!",
+    "! Block specific attacker hosts first:",
+    "! access-list 101 deny icmp host 10.0.0.50 any",
+    "! access-list 101 deny tcp host 10.0.0.50 any",
+    "! access-list 101 deny icmp host 10.0.0.51 any",
+    "! access-list 101 deny tcp host 10.0.0.51 any",
+    "!",
+    "! Then permit legitimate traffic:",
+    "! access-list 101 permit ospf any any",
+    "! access-list 101 permit tcp any any",
+    "! access-list 101 permit udp any any", 
+    "! access-list 101 permit icmp any any",
+    "!",
+    "! Apply to WAN interface (inbound):",
+    "! interface g0/0",
+    "! ip access-group 101 in",
+    "!",
+    "! === NAT/PAT CONFIGURATION ===",
+    "! Standard ACL for NAT (ACL 1):",
+    "! access-list 1 permit 192.168.100.0 0.0.0.255",
+    "!",
+    "! Mark interfaces:",
+    "! interface g0/0",
+    "! ip nat outside",
+    "! interface g0/1",
+    "! ip nat inside",
+    "!",
+    "! Enable PAT (overload):",
+    "! ip nat inside source list 1 interface g0/0 overload",
+    "!",
+    "! Static NAT for server (public IP matches WAN subnet .100):",
+    "! ip nat inside source static 192.168.100.10 10.0.0.100",
+    "!",
+    "! === DHCP CONFIGURATION ===",
+    "! ip dhcp excluded-address 192.168.100.1 192.168.100.10",
+    "! ip dhcp pool LAN_POOL",
+    "! network 192.168.100.0 255.255.255.0",
+    "! default-router 192.168.100.1",
+    "! dns-server 8.8.8.8",
+    "!",
+    "! === THREAT MITIGATION ===",
+    "! Look for rogue DHCP pools - remove if not in MOP:",
+    "! no ip dhcp pool ROGUE_POOL",
+    "!",
+    "! Check for unauthorized routes:",
+    "! show ip route",
+    "! no ip route <suspicious-route>"
+  ]
+}
