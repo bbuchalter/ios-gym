@@ -47,7 +47,6 @@ import lesson26 from '../../src/exercises/lesson-26-router-bootstrap.json';
 import lesson27 from '../../src/exercises/lesson-27-ospf-default-route.json';
 import lesson28 from '../../src/exercises/lesson-28-acl-concepts.json';
 import lesson29 from '../../src/exercises/lesson-29-nat-concepts.json';
-import lesson30 from '../../src/exercises/lesson-30-dhcp-concepts.json';
 import lesson31 from '../../src/exercises/lesson-31-cyberpatriot-router-prep.json';
 import lesson32 from '../../src/exercises/lesson-32-standard-acl.json';
 import lesson33 from '../../src/exercises/lesson-33-extended-acl.json';
@@ -5104,12 +5103,6 @@ ip ospf cost 30
                   <strong>receptionist handing out visitor badges</strong> — when you arrive, you
                   get a badge (IP address) automatically instead of picking your own!
                 </p>
-
-                <Exercise
-                  exercise={lesson30 as ExerciseType}
-                  grammar={routerGrammar}
-                  deviceModel="1941-router"
-                />
 
                 <InfoBox variant="info">
                   <h4 className="mb-3 font-semibold text-blue-300">

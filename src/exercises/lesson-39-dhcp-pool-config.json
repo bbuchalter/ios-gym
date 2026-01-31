@@ -9,25 +9,27 @@
         {
           "objective": "Enter privileged mode",
           "command": "enable",
-          "teachingPoint": "Before configuring DHCP, we need a gateway interface for clients to use!"
+          "teachingPoint": "DHCP is like a receptionist handing out visitor badges - devices get IP addresses automatically instead of picking their own!"
         },
         {
           "objective": "Enter configuration mode",
-          "command": "configure terminal"
+          "command": "configure terminal",
+          "teachingPoint": "Without DHCP, you'd have to manually type an IP on every computer, phone, and tablet. Imagine doing that for 500 devices!"
         },
         {
           "objective": "Configure the LAN interface",
           "command": "interface g0/1",
-          "teachingPoint": "G0/1 will be our LAN interface - this is where DHCP clients will connect."
+          "teachingPoint": "G0/1 is our LAN interface where DHCP clients connect - computers, phones, printers, and more."
         },
         {
           "objective": "Assign the gateway IP address",
           "command": "ip address 192.168.100.1 255.255.255.0",
-          "teachingPoint": "This IP (192.168.100.1) becomes the default-router we'll tell DHCP clients to use!"
+          "teachingPoint": "This IP becomes the 'default gateway' - the exit door for all traffic leaving your network!"
         },
         {
           "objective": "Enable the interface",
-          "command": "no shutdown"
+          "command": "no shutdown",
+          "teachingPoint": "Just like a light switch - you need to turn it ON for it to work!"
         },
         {
           "objective": "Exit interface configuration",
@@ -41,7 +43,7 @@
         {
           "objective": "Exclude addresses for the router and servers",
           "command": "ip dhcp excluded-address 192.168.100.1 192.168.100.10",
-          "teachingPoint": "IMPORTANT: Always exclude the router's IP and any servers! These need permanent addresses."
+          "teachingPoint": "Some IPs should NEVER be given out - the router, servers, printers. We 'exclude' .1 through .10 to reserve them!"
         }
       ]
     },
@@ -51,17 +53,17 @@
         {
           "objective": "Create a DHCP pool named SCHOOL_NETWORK",
           "command": "ip dhcp pool SCHOOL_NETWORK",
-          "teachingPoint": "A 'pool' is like a bucket of IP addresses the router can hand out. Name it something meaningful!"
+          "teachingPoint": "A 'pool' is like a bucket of addresses. Think of it like school lockers - students don't pick their own, they get assigned one!"
         },
         {
           "objective": "Define the network range",
           "command": "network 192.168.100.0 255.255.255.0",
-          "teachingPoint": "This tells DHCP which addresses to give out. Combined with exclusions, clients get .11 through .254"
+          "teachingPoint": "This tells DHCP which subnet to use. Combined with exclusions, clients get .11 through .254"
         },
         {
           "objective": "Set the default gateway",
           "command": "default-router 192.168.100.1",
-          "teachingPoint": "This is the 'exit door' for clients - the router IP we configured on G0/1!"
+          "teachingPoint": "The gateway is the 'exit door' - this must match the IP we put on G0/1!"
         },
         {
           "objective": "Set the DNS server",
@@ -89,7 +91,7 @@
         {
           "objective": "Save the configuration",
           "command": "write memory",
-          "teachingPoint": "Now any device on G0/1 will automatically get an IP from 192.168.100.11-254!"
+          "teachingPoint": "Done! Devices on G0/1 will now automatically get IPs from .11-.254 with gateway .1 and DNS 8.8.8.8"
         }
       ]
     }
@@ -107,5 +109,47 @@
       "description": "G0/1 should have IP 192.168.100.1 (the gateway)",
       "diagnosticCommand": "show ip interface brief"
     }
+  ],
+  "legacyCommands": [
+    "! ============================================================",
+    "! KEY CONCEPTS FOR MIDDLE SCHOOLERS",
+    "! ============================================================",
+    "!",
+    "! THE DORA HANDSHAKE (How devices get an IP):",
+    "! D = Discover (device: 'Anyone have an IP for me?')",
+    "! O = Offer (router: 'Here's 192.168.100.50!')",
+    "! R = Request (device: 'I'll take that one!')",
+    "! A = Acknowledge (router: 'Done! It's yours for 24 hours.')",
+    "!",
+    "! Q: Why do we EXCLUDE addresses?",
+    "! A: So the router doesn't accidentally give away its own IP,",
+    "!    or addresses we want for servers and printers!",
+    "!",
+    "! Q: What is a 'lease'?",
+    "! A: DHCP addresses are temporary - like checking out a library",
+    "!    book. After the lease expires, the device asks for renewal.",
+    "!",
+    "! Q: What's the difference between STATIC and DHCP?",
+    "! A: Static = you type the IP yourself (permanent)",
+    "!    DHCP = the router gives you an IP automatically (temporary)",
+    "!",
+    "! ============================================================",
+    "! WHAT EACH COMMAND MEANS",
+    "! ============================================================",
+    "!",
+    "! ip dhcp excluded-address 192.168.100.1 192.168.100.10",
+    "!   ^ Reserves .1 through .10 (won't be given to clients)",
+    "!",
+    "! ip dhcp pool SCHOOL_NETWORK",
+    "!   ^ Creates a pool - name can be anything meaningful",
+    "!",
+    "! network 192.168.100.0 255.255.255.0",
+    "!   ^ The subnet to assign addresses FROM",
+    "!",
+    "! default-router 192.168.100.1",
+    "!   ^ The gateway IP clients will use (our router's LAN IP)",
+    "!",
+    "! dns-server 8.8.8.8",
+    "!   ^ Where clients look up website names (Google's DNS)"
   ]
 }
