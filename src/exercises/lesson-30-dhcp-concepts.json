@@ -4,40 +4,157 @@
   "deviceModel": "1941-router",
   "goals": [
     {
-      "section": "Understanding DHCP Basics",
+      "section": "What is DHCP?",
       "steps": [
         {
-          "objective": "Enter privileged mode to explore DHCP concepts",
+          "objective": "Enter privileged mode to explore DHCP",
           "command": "enable",
-          "teachingPoint": "DHCP automatically assigns IP addresses to network devices"
+          "teachingPoint": "DHCP stands for Dynamic Host Configuration Protocol - it's like a receptionist that hands out addresses to visitors!"
         },
         {
-          "objective": "View current configuration",
+          "objective": "View the router's current configuration",
           "command": "show running-config",
-          "teachingPoint": "DHCP pools appear as 'ip dhcp pool' sections in config"
+          "teachingPoint": "Without DHCP, you'd have to manually type an IP address on every single computer, phone, and tablet. Imagine doing that for 500 devices!"
+        }
+      ]
+    },
+    {
+      "section": "Why DHCP Matters",
+      "steps": [
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal",
+          "teachingPoint": "Think of DHCP like a school giving out locker numbers - students don't pick their own lockers, they get assigned one automatically!"
+        },
+        {
+          "objective": "View the LAN interface (where devices connect)",
+          "command": "interface g0/1",
+          "teachingPoint": "The LAN interface connects to devices that need IP addresses - computers, phones, printers, and more."
+        },
+        {
+          "objective": "Give this interface an IP address (this will be the gateway)",
+          "command": "ip address 192.168.100.1 255.255.255.0",
+          "teachingPoint": "This IP (192.168.100.1) becomes the 'default gateway' - the exit door for all traffic leaving your network."
+        },
+        {
+          "objective": "Turn on the interface",
+          "command": "no shutdown",
+          "teachingPoint": "Just like a light switch - you need to turn it ON for it to work!"
+        },
+        {
+          "objective": "Return to global configuration",
+          "command": "exit",
+          "teachingPoint": "Now our router's LAN port has an address. Next, we'd set up DHCP to give out addresses to other devices."
+        }
+      ]
+    },
+    {
+      "section": "Understanding DHCP Pools",
+      "steps": [
+        {
+          "objective": "Exit to view configuration",
+          "command": "end",
+          "teachingPoint": "A DHCP 'pool' is like a bucket of addresses the router can hand out. Each pool has a name and a range of addresses."
+        },
+        {
+          "objective": "Check the configuration",
+          "command": "show running-config",
+          "teachingPoint": "A DHCP pool configuration would include: 1) The network range (which addresses to give out), 2) The gateway (where to send traffic), 3) DNS servers (for looking up websites)."
+        }
+      ]
+    },
+    {
+      "section": "Excluded Addresses - Reserving IPs",
+      "steps": [
+        {
+          "objective": "Enter configuration mode to discuss exclusions",
+          "command": "configure terminal",
+          "teachingPoint": "Some IP addresses should NEVER be given out by DHCP - like the router itself! These are called 'excluded addresses'."
+        },
+        {
+          "objective": "Return to privileged mode",
+          "command": "end",
+          "teachingPoint": "You typically exclude: The router's IP, server IPs, printer IPs - anything that needs a permanent, unchanging address."
+        }
+      ]
+    },
+    {
+      "section": "The Four-Step DHCP Conversation (DORA)",
+      "steps": [
+        {
+          "objective": "View current interfaces",
+          "command": "show ip interface brief",
+          "teachingPoint": "DORA = Discover, Offer, Request, Acknowledge. When your laptop connects to WiFi, it goes through these 4 steps to get an IP!"
+        },
+        {
+          "objective": "Save your work",
+          "command": "write memory",
+          "teachingPoint": "DISCOVER: Device shouts 'I need an IP!' - OFFER: Router says 'How about 192.168.100.50?' - REQUEST: Device says 'Yes, I'll take it!' - ACKNOWLEDGE: Router confirms 'It's yours!'"
         }
       ]
     }
   ],
-  "assertions": [],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.ip",
+      "expectedValue": "192.168.100.1",
+      "description": "G0/1 should have IP 192.168.100.1 (the gateway address for DHCP clients)",
+      "diagnosticCommand": "show ip interface brief"
+    }
+  ],
   "legacyCommands": [
-    "! DHCP REFERENCE - Router as DHCP Server:",
+    "! ============================================================",
+    "! DHCP CONFIGURATION REFERENCE",
+    "! ============================================================",
+    "! When this feature is implemented, you'll use these commands:",
     "!",
-    "! Step 1: Exclude static IPs (router, servers)",
+    "! STEP 1: Exclude addresses that should NOT be given out",
+    "! --------------------------------------------------------",
     "! ip dhcp excluded-address 192.168.100.1 192.168.100.10",
     "!",
-    "! Step 2: Create DHCP pool",
-    "! ip dhcp pool LAN_POOL",
-    "! network 192.168.100.0 255.255.255.0",
-    "! default-router 192.168.100.1",
-    "! dns-server 8.8.8.8",
+    "! ^ This reserves .1 through .10 for routers/servers",
     "!",
-    "! KEY CONCEPTS:",
-    "! - Pool name can be anything (LAN_POOL is common)",
-    "! - 'network' defines the subnet to assign from",
-    "! - 'default-router' is the gateway for DHCP clients",
-    "! - 'dns-server' tells clients which DNS to use",
-    "! - Excluded addresses are reserved (won't be assigned)",
-    "! - Always exclude the router interface IP!"
+    "! STEP 2: Create a DHCP pool",
+    "! --------------------------------------------------------",
+    "! ip dhcp pool SCHOOL_NETWORK",
+    "!   network 192.168.100.0 255.255.255.0",
+    "!   default-router 192.168.100.1",
+    "!   dns-server 8.8.8.8",
+    "!",
+    "! WHAT EACH LINE MEANS:",
+    "! - pool name: Any name you want (SCHOOL_NETWORK, LAN_POOL, etc.)",
+    "! - network: The subnet to assign addresses FROM",
+    "! - default-router: The gateway IP (usually the router's LAN IP)",
+    "! - dns-server: Where to look up website names (8.8.8.8 is Google's)",
+    "!",
+    "! RESULT: Devices get IPs from 192.168.100.11 to 192.168.100.254",
+    "!",
+    "! ============================================================",
+    "! KEY CONCEPTS FOR MIDDLE SCHOOLERS",
+    "! ============================================================",
+    "! ",
+    "! Q: Why do we EXCLUDE addresses?",
+    "! A: So the router doesn't accidentally give away the router's",
+    "!    own IP address, or addresses we want for servers/printers!",
+    "!",
+    "! Q: What is a 'lease'?",
+    "! A: DHCP addresses are temporary - like checking out a library",
+    "!    book. After the lease expires, the device asks for renewal.",
+    "!",
+    "! Q: What's the difference between STATIC and DHCP?",
+    "! A: Static = you type the IP yourself (permanent)",
+    "!    DHCP = the router gives you an IP automatically (temporary)",
+    "!",
+    "! DORA - The Four Steps:",
+    "! D = Discover (device: 'Anyone have an IP for me?')",
+    "! O = Offer (server: 'Here's 192.168.100.50!')",
+    "! R = Request (device: 'I'll take that one!')",
+    "! A = Acknowledge (server: 'Done! It's yours for 24 hours.')"
   ]
 }
