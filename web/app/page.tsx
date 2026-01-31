@@ -5169,25 +5169,6 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <Diagram title="DHCP Pool Configuration">
-                  {`┌─────────────────────────────────────────────────────────────┐
-│                    DHCP CONFIGURATION                        │
-├─────────────────────────────────────────────────────────────┤
-│  STEP 1: Reserve addresses for routers/servers              │
-│  ip dhcp excluded-address 192.168.100.1 192.168.100.10      │
-│                                                              │
-│  STEP 2: Create the DHCP pool                                │
-│  ip dhcp pool SCHOOL_NETWORK                                 │
-│    network 192.168.100.0 255.255.255.0  ← Address range     │
-│    default-router 192.168.100.1         ← Exit door (gateway)│
-│    dns-server 8.8.8.8                   ← Website lookup    │
-├─────────────────────────────────────────────────────────────┤
-│  Result: Devices get IPs from 192.168.100.11 - .254         │
-│          Gateway: 192.168.100.1 (the router)                 │
-│          DNS: 8.8.8.8 (Google's DNS)                         │
-└─────────────────────────────────────────────────────────────┘`}
-                </Diagram>
-
                 <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
                   Why Exclude Addresses?
                 </h4>
