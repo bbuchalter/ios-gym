@@ -4636,7 +4636,76 @@ ip ospf cost 30
                   destination, and protocol.
                 </p>
 
-                <Diagram title="Extended ACL Structure">
+                <h4 className="mb-4 mt-8 text-xl font-semibold text-blue-400">
+                  Extended ACL Command Syntax
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  Let's break down each part of an extended ACL command:
+                </p>
+
+                <Diagram title="ACL Command Breakdown">
+                  {`access-list 101 permit ospf any any
+     │       │     │     │    │   │
+     │       │     │     │    │   └── DESTINATION: who can receive it
+     │       │     │     │    │       "any" = all destinations
+     │       │     │     │    │
+     │       │     │     │    └── SOURCE: who is sending the traffic
+     │       │     │     │        "any" = from anywhere
+     │       │     │     │
+     │       │     │     └── PROTOCOL: what type of traffic
+     │       │     │         ospf, tcp, udp, icmp, ip (all)
+     │       │     │
+     │       │     └── ACTION: permit or deny
+     │       │
+     │       └── ACL NUMBER: 100-199 = extended ACL
+     │                       1-99 = standard ACL (source only)
+     │
+     └── COMMAND: creates an ACL entry`}
+                </Diagram>
+
+                <div className="my-6 grid gap-4 md:grid-cols-2">
+                  <div className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+                    <h5 className="mb-2 font-semibold text-green-400">Source Options</h5>
+                    <ul className="space-y-1 text-sm text-gray-300">
+                      <li>
+                        <code>any</code> — from anywhere
+                      </li>
+                      <li>
+                        <code>host 10.0.0.50</code> — from one specific IP
+                      </li>
+                      <li>
+                        <code>192.168.1.0 0.0.0.255</code> — from a subnet
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+                    <h5 className="mb-2 font-semibold text-blue-400">Destination Options</h5>
+                    <ul className="space-y-1 text-sm text-gray-300">
+                      <li>
+                        <code>any</code> — to anywhere
+                      </li>
+                      <li>
+                        <code>host 192.168.1.10</code> — to one specific IP
+                      </li>
+                      <li>
+                        <code>10.0.0.0 0.0.0.255</code> — to a subnet
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <InfoBox variant="info">
+                  <p className="mb-2 text-gray-300">
+                    <strong className="text-white">Reading "any any":</strong>
+                  </p>
+                  <p className="text-gray-300">
+                    <code>access-list 101 permit tcp any any</code> means "allow TCP traffic{' '}
+                    <strong>from any source</strong> going <strong>to any destination</strong>." The
+                    first <code>any</code> is the source, the second is the destination.
+                  </p>
+                </InfoBox>
+
+                <Diagram title="Extended ACL Examples">
                   {`┌─────────────────────────────────────────────────────────────┐
 │              EXTENDED ACL (100-199)                          │
 ├─────────────────────────────────────────────────────────────┤
