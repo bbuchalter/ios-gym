@@ -1,0 +1,126 @@
+{
+  "id": "lesson-34-acl-application",
+  "title": "Applying ACLs to Interfaces",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Setup: Create an Extended ACL",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable",
+          "teachingPoint": "ACLs don't do anything until applied to an interface!"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Create ACL 101 - block attacker, permit rest",
+          "command": "access-list 101 deny icmp host 10.0.0.50 any",
+          "teachingPoint": "We'll create a simple ACL first, then apply it"
+        },
+        {
+          "objective": "Permit all other ICMP",
+          "command": "access-list 101 permit icmp any any"
+        },
+        {
+          "objective": "Permit TCP traffic",
+          "command": "access-list 101 permit tcp any any"
+        },
+        {
+          "objective": "Permit UDP traffic",
+          "command": "access-list 101 permit udp any any"
+        }
+      ]
+    },
+    {
+      "section": "Applying ACL to the WAN Interface",
+      "steps": [
+        {
+          "objective": "Enter WAN interface configuration",
+          "command": "interface g0/0",
+          "teachingPoint": "G0/0 is typically the WAN (Internet-facing) interface"
+        },
+        {
+          "objective": "Apply ACL 101 inbound",
+          "command": "ip access-group 101 in",
+          "teachingPoint": "INBOUND means filter traffic COMING INTO this interface from the outside. This is where you filter Internet traffic!"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Understanding Inbound vs Outbound",
+      "steps": [
+        {
+          "objective": "Enter LAN interface configuration",
+          "command": "interface g0/1",
+          "teachingPoint": "G0/1 is typically the LAN (internal network) interface"
+        },
+        {
+          "objective": "Assign IP to LAN interface",
+          "command": "ip address 192.168.100.1 255.255.255.0"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Verify and Save",
+      "steps": [
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "View access lists",
+          "command": "show access-lists",
+          "teachingPoint": "This shows the ACL entries. To see WHERE it's applied, check show running-config"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory",
+          "teachingPoint": "Remember: One ACL per interface per direction (in OR out)"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "accessLists.101.type",
+      "expectedValue": "extended",
+      "description": "ACL 101 should exist",
+      "diagnosticCommand": "show access-lists"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/0.accessGroupIn",
+      "expectedValue": 101,
+      "description": "ACL 101 should be applied inbound on G0/0",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.ip",
+      "expectedValue": "192.168.100.1",
+      "description": "G0/1 should have IP address configured",
+      "diagnosticCommand": "show ip interface brief"
+    }
+  ]
+}

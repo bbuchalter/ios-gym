@@ -1,0 +1,86 @@
+{
+  "id": "lesson-32-standard-acl",
+  "title": "Standard Access Control Lists (ACLs)",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Understanding Standard ACLs",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable",
+          "teachingPoint": "Standard ACLs (1-99) filter traffic based on SOURCE IP address only"
+        },
+        {
+          "objective": "View current access lists (should be empty)",
+          "command": "show access-lists",
+          "teachingPoint": "When no ACLs exist, this command shows nothing"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        }
+      ]
+    },
+    {
+      "section": "Creating a Standard ACL",
+      "steps": [
+        {
+          "objective": "Create ACL 1 - permit the LAN network",
+          "command": "access-list 1 permit 192.168.100.0 0.0.0.255",
+          "teachingPoint": "This permits all traffic FROM the 192.168.100.0/24 network. The wildcard mask 0.0.0.255 means 'match first 3 octets exactly'"
+        },
+        {
+          "objective": "Add a deny entry for a specific host",
+          "command": "access-list 1 deny host 10.0.0.50",
+          "teachingPoint": "'host 10.0.0.50' is shorthand for '10.0.0.50 0.0.0.0' - matches exactly one IP"
+        },
+        {
+          "objective": "Permit any remaining traffic",
+          "command": "access-list 1 permit any",
+          "teachingPoint": "'any' is shorthand for '0.0.0.0 255.255.255.255' - matches all IPs. Without this, there's an implicit 'deny any' at the end!"
+        }
+      ]
+    },
+    {
+      "section": "Viewing Your ACL",
+      "steps": [
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "View the ACL you created",
+          "command": "show access-lists",
+          "teachingPoint": "Notice the entries are listed in order. Order matters - first match wins!"
+        },
+        {
+          "objective": "Save your configuration",
+          "command": "write memory",
+          "teachingPoint": "Always save after creating ACLs"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "accessLists.1.type",
+      "expectedValue": "standard",
+      "description": "ACL 1 should be a standard ACL",
+      "diagnosticCommand": "show access-lists"
+    },
+    {
+      "type": "state-path",
+      "path": "accessLists.1.entries.length",
+      "expectedValue": 3,
+      "description": "ACL 1 should have 3 entries",
+      "diagnosticCommand": "show access-lists"
+    }
+  ]
+}

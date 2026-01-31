@@ -53,6 +53,21 @@ arg_types:
     pattern: "^\\d+$"
   WILDCARD:
     pattern: "^(\\d{1,3}\\.){3}\\d{1,3}$"
+  ACL_NUMBER_STD:
+    # Standard ACL numbers: 1-99
+    pattern: "^[1-9][0-9]?$"
+  ACL_NUMBER_EXT:
+    # Extended ACL numbers: 100-199
+    pattern: "^1[0-9]{2}$"
+  ACL_ACTION:
+    # permit or deny
+    pattern: "^(permit|deny)$"
+  ACL_PROTOCOL:
+    # Common protocols for extended ACLs
+    pattern: "^(ip|tcp|udp|icmp|ospf)$"
+  ACL_SOURCE:
+    # any, host x.x.x.x, or x.x.x.x (network)
+    pattern: "^(any|host|(\\d{1,3}\\.){3}\\d{1,3})$"
 
 # The "device state" keys your handlers should read/write
 state_schema:
@@ -153,6 +168,11 @@ commands:
       tokens: ["show", "ip", "route"]
       action: {type: "render", template: "show_ip_route"}
       help: "Show routing table"
+
+    - name: show_access_lists
+      tokens: ["show", "access-lists"]
+      action: {type: "render", template: "show_access_lists"}
+      help: "Display all access lists"
 
   GLOBAL_CONFIG:
     - name: end
@@ -304,6 +324,152 @@ commands:
       action: {type: "mode_push", mode: "LINE_CONSOLE_CONFIG"}
       help: "Enter console line configuration mode"
 
+    # ===== ACCESS CONTROL LISTS (ACLs) =====
+    
+    # Standard ACL (1-99): permit/deny based on source only
+    - name: access_list_std_any
+      tokens: ["access-list", {arg: "ACL_NUMBER_STD", name: "num"}, {arg: "ACL_ACTION", name: "action"}, "any"]
+      action:
+        type: "acl_add_std"
+        number_from: "num"
+        action_from: "action"
+        source: "any"
+      help: "Create standard ACL entry for any source"
+
+    - name: access_list_std_host
+      tokens: ["access-list", {arg: "ACL_NUMBER_STD", name: "num"}, {arg: "ACL_ACTION", name: "action"}, "host", {arg: "IP", name: "ip"}]
+      action:
+        type: "acl_add_std"
+        number_from: "num"
+        action_from: "action"
+        source: "host"
+        source_ip_from: "ip"
+      help: "Create standard ACL entry for specific host"
+
+    - name: access_list_std_network
+      tokens: ["access-list", {arg: "ACL_NUMBER_STD", name: "num"}, {arg: "ACL_ACTION", name: "action"}, {arg: "IP", name: "net"}, {arg: "WILDCARD", name: "wc"}]
+      action:
+        type: "acl_add_std"
+        number_from: "num"
+        action_from: "action"
+        source_ip_from: "net"
+        source_wildcard_from: "wc"
+      help: "Create standard ACL entry for network"
+
+    # Extended ACL (100-199): permit/deny based on protocol, source, and destination
+    - name: access_list_ext_any_any
+      tokens: ["access-list", {arg: "ACL_NUMBER_EXT", name: "num"}, {arg: "ACL_ACTION", name: "action"}, {arg: "ACL_PROTOCOL", name: "proto"}, "any", "any"]
+      action:
+        type: "acl_add_ext"
+        number_from: "num"
+        action_from: "action"
+        protocol_from: "proto"
+        source: "any"
+        destination: "any"
+      help: "Create extended ACL entry: any source to any destination"
+
+    - name: access_list_ext_host_any
+      tokens: ["access-list", {arg: "ACL_NUMBER_EXT", name: "num"}, {arg: "ACL_ACTION", name: "action"}, {arg: "ACL_PROTOCOL", name: "proto"}, "host", {arg: "IP", name: "src_ip"}, "any"]
+      action:
+        type: "acl_add_ext"
+        number_from: "num"
+        action_from: "action"
+        protocol_from: "proto"
+        source: "host"
+        source_ip_from: "src_ip"
+        destination: "any"
+      help: "Create extended ACL entry: specific host to any destination"
+
+    - name: access_list_ext_any_host
+      tokens: ["access-list", {arg: "ACL_NUMBER_EXT", name: "num"}, {arg: "ACL_ACTION", name: "action"}, {arg: "ACL_PROTOCOL", name: "proto"}, "any", "host", {arg: "IP", name: "dst_ip"}]
+      action:
+        type: "acl_add_ext"
+        number_from: "num"
+        action_from: "action"
+        protocol_from: "proto"
+        source: "any"
+        destination: "host"
+        dest_ip_from: "dst_ip"
+      help: "Create extended ACL entry: any source to specific host"
+
+    - name: access_list_ext_host_host
+      tokens: ["access-list", {arg: "ACL_NUMBER_EXT", name: "num"}, {arg: "ACL_ACTION", name: "action"}, {arg: "ACL_PROTOCOL", name: "proto"}, "host", {arg: "IP", name: "src_ip"}, "host", {arg: "IP", name: "dst_ip"}]
+      action:
+        type: "acl_add_ext"
+        number_from: "num"
+        action_from: "action"
+        protocol_from: "proto"
+        source: "host"
+        source_ip_from: "src_ip"
+        destination: "host"
+        dest_ip_from: "dst_ip"
+      help: "Create extended ACL entry: specific host to specific host"
+
+    - name: access_list_ext_net_any
+      tokens: ["access-list", {arg: "ACL_NUMBER_EXT", name: "num"}, {arg: "ACL_ACTION", name: "action"}, {arg: "ACL_PROTOCOL", name: "proto"}, {arg: "IP", name: "src_net"}, {arg: "WILDCARD", name: "src_wc"}, "any"]
+      action:
+        type: "acl_add_ext"
+        number_from: "num"
+        action_from: "action"
+        protocol_from: "proto"
+        source_ip_from: "src_net"
+        source_wildcard_from: "src_wc"
+        destination: "any"
+      help: "Create extended ACL entry: network to any destination"
+
+    - name: access_list_ext_any_net
+      tokens: ["access-list", {arg: "ACL_NUMBER_EXT", name: "num"}, {arg: "ACL_ACTION", name: "action"}, {arg: "ACL_PROTOCOL", name: "proto"}, "any", {arg: "IP", name: "dst_net"}, {arg: "WILDCARD", name: "dst_wc"}]
+      action:
+        type: "acl_add_ext"
+        number_from: "num"
+        action_from: "action"
+        protocol_from: "proto"
+        source: "any"
+        dest_ip_from: "dst_net"
+        dest_wildcard_from: "dst_wc"
+      help: "Create extended ACL entry: any source to network"
+
+    # Remove entire ACL
+    - name: no_access_list
+      tokens: ["no", "access-list", {arg: "INT", name: "num"}]
+      action:
+        type: "acl_remove"
+        number_from: "num"
+      help: "Remove entire access list"
+
+    # ===== NETWORK ADDRESS TRANSLATION (NAT/PAT) =====
+    
+    # PAT (Port Address Translation) - overload
+    - name: ip_nat_inside_source_list_interface_overload
+      tokens: ["ip", "nat", "inside", "source", "list", {arg: "INT", name: "acl"}, "interface", {arg: "IFNAME", name: "if"}, "overload"]
+      action:
+        type: "nat_overload_enable"
+        acl_from: "acl"
+        interface_from: "if"
+      help: "Enable PAT using interface IP"
+
+    - name: no_ip_nat_inside_source_list_interface_overload
+      tokens: ["no", "ip", "nat", "inside", "source", "list", {arg: "INT", name: "acl"}, "interface", {arg: "IFNAME", name: "if"}, "overload"]
+      action: {type: "nat_overload_disable"}
+      help: "Disable PAT"
+
+    # Static NAT
+    - name: ip_nat_inside_source_static
+      tokens: ["ip", "nat", "inside", "source", "static", {arg: "IP", name: "local"}, {arg: "IP", name: "global"}]
+      action:
+        type: "nat_static_add"
+        inside_local_from: "local"
+        inside_global_from: "global"
+      help: "Create static NAT mapping"
+
+    - name: no_ip_nat_inside_source_static
+      tokens: ["no", "ip", "nat", "inside", "source", "static", {arg: "IP", name: "local"}, {arg: "IP", name: "global"}]
+      action:
+        type: "nat_static_remove"
+        inside_local_from: "local"
+        inside_global_from: "global"
+      help: "Remove static NAT mapping"
+
   IF_CONFIG:
     - name: exit
       tokens: ["exit"]
@@ -329,6 +495,48 @@ commands:
       tokens: ["ip", "ospf", "cost", {arg: "INT", name: "cost"}]
       action: {type: "ospf_if_cost_set", cost_from: "cost"}
       help: "Set OSPF interface cost"
+
+    # Access Control List application
+    - name: ip_access_group_in
+      tokens: ["ip", "access-group", {arg: "INT", name: "num"}, "in"]
+      action: {type: "acl_apply", direction: "in", number_from: "num"}
+      help: "Apply access list to inbound traffic"
+
+    - name: ip_access_group_out
+      tokens: ["ip", "access-group", {arg: "INT", name: "num"}, "out"]
+      action: {type: "acl_apply", direction: "out", number_from: "num"}
+      help: "Apply access list to outbound traffic"
+
+    - name: no_ip_access_group_in
+      tokens: ["no", "ip", "access-group", {arg: "INT", name: "num"}, "in"]
+      action: {type: "acl_remove_apply", direction: "in", number_from: "num"}
+      help: "Remove inbound access list"
+
+    - name: no_ip_access_group_out
+      tokens: ["no", "ip", "access-group", {arg: "INT", name: "num"}, "out"]
+      action: {type: "acl_remove_apply", direction: "out", number_from: "num"}
+      help: "Remove outbound access list"
+
+    # NAT interface designation
+    - name: ip_nat_inside
+      tokens: ["ip", "nat", "inside"]
+      action: {type: "nat_if_inside"}
+      help: "Mark interface as NAT inside (private network)"
+
+    - name: ip_nat_outside
+      tokens: ["ip", "nat", "outside"]
+      action: {type: "nat_if_outside"}
+      help: "Mark interface as NAT outside (public network)"
+
+    - name: no_ip_nat_inside
+      tokens: ["no", "ip", "nat", "inside"]
+      action: {type: "nat_if_remove_inside"}
+      help: "Remove NAT inside designation"
+
+    - name: no_ip_nat_outside
+      tokens: ["no", "ip", "nat", "outside"]
+      action: {type: "nat_if_remove_outside"}
+      help: "Remove NAT outside designation"
 
   CONFIG_VLAN:
     - name: exit
@@ -523,3 +731,10 @@ templates:
     {#routes}
     S*  {dest}/{mask} [AD {ad}] via {nextHop}
     {#end}
+
+  show_access_lists: |
+    {#access_lists}{#if type == "standard"}Standard IP access list {number}
+    {#entries}    {action} {source_display}
+    {#end_entries}{#endif}{#if type == "extended"}Extended IP access list {number}
+    {#entries}    {action} {protocol} {source_display} {dest_display}
+    {#end_entries}{#endif}{#end_access_lists}

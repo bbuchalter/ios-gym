@@ -1,0 +1,118 @@
+{
+  "id": "lesson-36-nat-static",
+  "title": "Static NAT: One-to-One Mapping",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Setup: Configure Interfaces for NAT",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable",
+          "teachingPoint": "Static NAT maps ONE private IP to ONE specific public IP"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Configure WAN interface",
+          "command": "interface g0/0"
+        },
+        {
+          "objective": "Assign public IP",
+          "command": "ip address 10.0.0.34 255.255.255.0"
+        },
+        {
+          "objective": "Mark as NAT outside",
+          "command": "ip nat outside"
+        },
+        {
+          "objective": "Enable interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure LAN interface",
+          "command": "interface g0/1"
+        },
+        {
+          "objective": "Assign private IP",
+          "command": "ip address 192.168.100.1 255.255.255.0"
+        },
+        {
+          "objective": "Mark as NAT inside",
+          "command": "ip nat inside"
+        },
+        {
+          "objective": "Enable interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Creating Static NAT Mapping",
+      "steps": [
+        {
+          "objective": "Create static NAT for server",
+          "command": "ip nat inside source static 192.168.100.10 10.0.0.100",
+          "teachingPoint": "This makes server 192.168.100.10 (private) appear as 10.0.0.100 (public) to the Internet. First IP = inside local, second IP = inside global"
+        }
+      ]
+    },
+    {
+      "section": "Verify and Save",
+      "steps": [
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "View running configuration",
+          "command": "show running-config",
+          "teachingPoint": "Look for 'ip nat inside source static' lines - each line is one static mapping"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory",
+          "teachingPoint": "Static NAT is perfect for servers that need consistent public IPs"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "nat.staticMappings.length",
+      "expectedValue": 1,
+      "description": "Should have 1 static NAT mapping",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/0.natOutside",
+      "expectedValue": true,
+      "description": "G0/0 should be NAT outside",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.natInside",
+      "expectedValue": true,
+      "description": "G0/1 should be NAT inside",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}

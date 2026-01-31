@@ -144,7 +144,11 @@ async function main(): Promise<void> {
   const failed = results.filter(r => !r.result.success);
   
   console.log(`✅ Passed: ${passed.length}/${results.length}`);
-  console.log(`❌ Failed: ${failed.length}/${results.length}\n`);
+  if (failed.length > 0) {
+    console.log(`❌ Failed: ${failed.length}/${results.length}\n`);
+  } else {
+    console.log(''); // Empty line for spacing
+  }
   
   // Report details for failed exercises
   if (failed.length > 0) {

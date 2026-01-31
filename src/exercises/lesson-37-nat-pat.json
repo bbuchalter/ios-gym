@@ -1,0 +1,127 @@
+{
+  "id": "lesson-37-nat-pat",
+  "title": "PAT (Port Address Translation): Overload",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Setup: Create ACL for Inside Hosts",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable",
+          "teachingPoint": "PAT (also called 'overload') lets MANY private IPs share ONE public IP using port numbers"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Create standard ACL for LAN",
+          "command": "access-list 1 permit 192.168.100.0 0.0.0.255",
+          "teachingPoint": "This ACL identifies which inside hosts are allowed to use NAT. ACL 1 = entire LAN subnet"
+        }
+      ]
+    },
+    {
+      "section": "Configure Interfaces",
+      "steps": [
+        {
+          "objective": "Configure WAN interface",
+          "command": "interface g0/0"
+        },
+        {
+          "objective": "Assign public IP",
+          "command": "ip address 10.0.0.34 255.255.255.0"
+        },
+        {
+          "objective": "Mark as NAT outside",
+          "command": "ip nat outside"
+        },
+        {
+          "objective": "Enable interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure LAN interface",
+          "command": "interface g0/1"
+        },
+        {
+          "objective": "Assign private IP",
+          "command": "ip address 192.168.100.1 255.255.255.0"
+        },
+        {
+          "objective": "Mark as NAT inside",
+          "command": "ip nat inside"
+        },
+        {
+          "objective": "Enable interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Enable PAT (Overload)",
+      "steps": [
+        {
+          "objective": "Enable PAT using WAN interface IP",
+          "command": "ip nat inside source list 1 interface g0/0 overload",
+          "teachingPoint": "OVERLOAD = PAT. This command means: translate addresses from ACL 1, use G0/0's IP (10.0.0.34), and share it with port numbers"
+        }
+      ]
+    },
+    {
+      "section": "Verify and Save",
+      "steps": [
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "View configuration",
+          "command": "show running-config",
+          "teachingPoint": "PAT allows hundreds of LAN devices to share one public IP. Each gets a unique port number!"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "nat.overload",
+      "expectedValue": true,
+      "description": "PAT (overload) should be enabled",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "nat.overloadAcl",
+      "expectedValue": 1,
+      "description": "PAT should use ACL 1",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "accessLists.1.type",
+      "expectedValue": "standard",
+      "description": "ACL 1 should exist",
+      "diagnosticCommand": "show access-lists"
+    }
+  ]
+}

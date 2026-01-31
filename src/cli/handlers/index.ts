@@ -24,6 +24,23 @@ import {
 } from "./routing";
 import { handleSshUserSet, handleLineVtyEnter } from "./ssh";
 import { handleRender } from "./show";
+import {
+  handleAclAddStd,
+  handleAclAddExt,
+  handleAclRemove,
+  handleAclApply,
+  handleAclRemoveApply
+} from "./acl";
+import {
+  handleNatIfInside,
+  handleNatIfOutside,
+  handleNatIfRemoveInside,
+  handleNatIfRemoveOutside,
+  handleNatOverloadEnable,
+  handleNatOverloadDisable,
+  handleNatStaticAdd,
+  handleNatStaticRemove
+} from "./nat";
 
 /**
  * Handler registry and dispatcher
@@ -109,6 +126,45 @@ export class HandlerRegistry {
       
       case "line_vty_enter":
         return handleLineVtyEnter(session, args, action);
+      
+      case "acl_add_std":
+        return handleAclAddStd(session, args, action);
+      
+      case "acl_add_ext":
+        return handleAclAddExt(session, args, action);
+      
+      case "acl_remove":
+        return handleAclRemove(session, args, action);
+      
+      case "acl_apply":
+        return handleAclApply(session, args, action);
+      
+      case "acl_remove_apply":
+        return handleAclRemoveApply(session, args, action);
+      
+      case "nat_if_inside":
+        return handleNatIfInside(session, args, action);
+      
+      case "nat_if_outside":
+        return handleNatIfOutside(session, args, action);
+      
+      case "nat_if_remove_inside":
+        return handleNatIfRemoveInside(session, args, action);
+      
+      case "nat_if_remove_outside":
+        return handleNatIfRemoveOutside(session, args, action);
+      
+      case "nat_overload_enable":
+        return handleNatOverloadEnable(session, args, action);
+      
+      case "nat_overload_disable":
+        return handleNatOverloadDisable(session, args, action);
+      
+      case "nat_static_add":
+        return handleNatStaticAdd(session, args, action);
+      
+      case "nat_static_remove":
+        return handleNatStaticRemove(session, args, action);
       
       default:
         result = {

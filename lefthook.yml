@@ -52,6 +52,10 @@
   tests:
     run: ./node_modules/.bin/jest --silent --passWithNoTests
 
+  # Browser console error check - catches runtime JS errors
+  browser-console:
+    run: npm run check:browser-console
+
 pre-commit:
   parallel: true
   commands:

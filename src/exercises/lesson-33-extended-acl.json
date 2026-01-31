@@ -1,0 +1,109 @@
+{
+  "id": "lesson-33-extended-acl",
+  "title": "Extended Access Control Lists",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Extended ACL Syntax",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable",
+          "teachingPoint": "Extended ACLs (100-199) filter by protocol, source AND destination"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        }
+      ]
+    },
+    {
+      "section": "Blocking Attacker Hosts",
+      "steps": [
+        {
+          "objective": "Block ICMP from attacker host",
+          "command": "access-list 101 deny icmp host 10.0.0.50 any",
+          "teachingPoint": "This blocks ping (ICMP) FROM host 10.0.0.50 TO any destination. First 'any' = source would go here if not 'host', second 'any' = destination"
+        },
+        {
+          "objective": "Block TCP from the same attacker",
+          "command": "access-list 101 deny tcp host 10.0.0.50 any",
+          "teachingPoint": "Block all TCP connections (web, SSH, etc.) from this attacker"
+        },
+        {
+          "objective": "Block ICMP from second attacker",
+          "command": "access-list 101 deny icmp host 10.0.0.51 any",
+          "teachingPoint": "Deny rules must come BEFORE permit rules - first match wins!"
+        },
+        {
+          "objective": "Block TCP from second attacker",
+          "command": "access-list 101 deny tcp host 10.0.0.51 any"
+        }
+      ]
+    },
+    {
+      "section": "Permitting Legitimate Traffic",
+      "steps": [
+        {
+          "objective": "Permit OSPF routing traffic",
+          "command": "access-list 101 permit ospf any any",
+          "teachingPoint": "OSPF is needed for routing updates between routers. 'any any' = from any source to any destination"
+        },
+        {
+          "objective": "Permit TCP traffic",
+          "command": "access-list 101 permit tcp any any",
+          "teachingPoint": "TCP includes web (HTTP/HTTPS), SSH, and most application traffic"
+        },
+        {
+          "objective": "Permit UDP traffic",
+          "command": "access-list 101 permit udp any any",
+          "teachingPoint": "UDP includes DNS, DHCP, and real-time applications"
+        },
+        {
+          "objective": "Permit ICMP for friendly hosts",
+          "command": "access-list 101 permit icmp any any",
+          "teachingPoint": "Attackers were blocked above, so this permits ping for everyone else"
+        }
+      ]
+    },
+    {
+      "section": "Verify and Save",
+      "steps": [
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "View your extended ACL",
+          "command": "show access-lists",
+          "teachingPoint": "Notice the deny rules are listed before permit rules - this is critical for security!"
+        },
+        {
+          "objective": "Save your configuration",
+          "command": "write memory"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "accessLists.101.type",
+      "expectedValue": "extended",
+      "description": "ACL 101 should be an extended ACL",
+      "diagnosticCommand": "show access-lists"
+    },
+    {
+      "type": "state-path",
+      "path": "accessLists.101.entries.length",
+      "expectedValue": 8,
+      "description": "ACL 101 should have 8 entries (4 deny + 4 permit)",
+      "diagnosticCommand": "show access-lists"
+    }
+  ]
+}

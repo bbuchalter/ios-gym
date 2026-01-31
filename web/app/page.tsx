@@ -47,6 +47,12 @@ import lesson26 from '../../src/exercises/lesson-26-router-bootstrap.json';
 import lesson27 from '../../src/exercises/lesson-27-ospf-default-route.json';
 // Note: lessons 28-30 are concept reference files (no interactive exercises)
 import lesson31 from '../../src/exercises/lesson-31-cyberpatriot-router-prep.json';
+import lesson32 from '../../src/exercises/lesson-32-standard-acl.json';
+import lesson33 from '../../src/exercises/lesson-33-extended-acl.json';
+import lesson34 from '../../src/exercises/lesson-34-acl-application.json';
+import lesson35 from '../../src/exercises/lesson-35-nat-basics.json';
+import lesson36 from '../../src/exercises/lesson-36-nat-static.json';
+import lesson37 from '../../src/exercises/lesson-37-nat-pat.json';
 
 import type { CommandGrammar } from '@src/types';
 import type { Exercise as ExerciseType } from '@src/validation/types';
@@ -55,17 +61,17 @@ const SCROLL_POSITION_KEY = 'ios-practice-scroll-position';
 
 function PageContent({
   switchGrammar,
-  _layer3Grammar,
+  layer3Grammar,
   routerGrammar,
 }: {
   switchGrammar: CommandGrammar;
-  _layer3Grammar: CommandGrammar; // Catalyst 3650-24PS for Layer 3 switching lessons (future use)
+  layer3Grammar: CommandGrammar; // Catalyst 3650-24PS for Layer 3 switching lessons
   routerGrammar: CommandGrammar;
 }) {
   // Use switchGrammar for L2 lessons (1-12, 14, 16)
-  // Use _layer3Grammar for L3 switch lessons (13, 15, 17-20, 25) - to be wired up
-  // Use routerGrammar for routing lessons (21-24)
-  const grammar = switchGrammar; // Default to switch for now, will update terminals individually
+  // Use layer3Grammar for L3 switch lessons (13, 15, 15a, 17-20, 25)
+  // Use routerGrammar for routing lessons (21-24, 26-27, 32-37)
+  const grammar = switchGrammar; // Default to switch for L2 lessons
   const registry = useTerminalRegistry();
   const [contentVisible, setContentVisible] = useState(false);
 
@@ -2638,7 +2644,11 @@ no shutdown:         Interface is ON [✓]
                   Configure management access on your switch:
                 </p>
 
-                <Exercise exercise={lesson13 as ExerciseType} grammar={grammar} />
+                <Exercise
+                  exercise={lesson13 as ExerciseType}
+                  grammar={layer3Grammar}
+                  deviceModel="3650-24ps"
+                />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -2926,7 +2936,11 @@ Purpose: Gateway for computers in VLAN 100`}
                   Configure SVIs for inter-VLAN routing on a Layer 3 switch:
                 </p>
 
-                <Exercise exercise={lesson15a as ExerciseType} grammar={grammar} />
+                <Exercise
+                  exercise={lesson15a as ExerciseType}
+                  grammar={layer3Grammar}
+                  deviceModel="3650-24ps"
+                />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -2976,7 +2990,11 @@ Purpose: Gateway for computers in VLAN 100`}
                   CyberPatriot!):
                 </p>
 
-                <Exercise exercise={lesson15 as ExerciseType} grammar={grammar} />
+                <Exercise
+                  exercise={lesson15 as ExerciseType}
+                  grammar={layer3Grammar}
+                  deviceModel="3650-24ps"
+                />
 
                 <InfoBox variant="info">
                   <ProTip>
@@ -3151,7 +3169,11 @@ All others are BLOCKED!`}
                   Now configure trunk ports that carry only specific VLANs:
                 </p>
 
-                <Exercise exercise={lesson17 as ExerciseType} grammar={grammar} />
+                <Exercise
+                  exercise={lesson17 as ExerciseType}
+                  grammar={layer3Grammar}
+                  deviceModel="3650-24ps"
+                />
 
                 <div className="my-8 rounded-lg border border-blue-500/50 bg-blue-900/30 p-6">
                   <p className="mb-3 flex items-center gap-2 font-semibold text-blue-300">
@@ -3337,7 +3359,11 @@ Hacker sees: gibberish
                   Configure complete SSH access (this is a big one!):
                 </p>
 
-                <Exercise exercise={lesson18 as ExerciseType} grammar={grammar} />
+                <Exercise
+                  exercise={lesson18 as ExerciseType}
+                  grammar={layer3Grammar}
+                  deviceModel="3650-24ps"
+                />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ You succeeded when:</p>
@@ -3606,7 +3632,11 @@ Only 2 devices, so only need 2 IPs!`}
                   Configure a routed port on a Layer 3 switch:
                 </p>
 
-                <Exercise exercise={lesson19 as ExerciseType} grammar={grammar} />
+                <Exercise
+                  exercise={lesson19 as ExerciseType}
+                  grammar={layer3Grammar}
+                  deviceModel="3650-24ps"
+                />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -3644,7 +3674,11 @@ Only 2 devices, so only need 2 IPs!`}
                   Practice here:
                 </p>
 
-                <Exercise exercise={lesson20 as ExerciseType} grammar={grammar} />
+                <Exercise
+                  exercise={lesson20 as ExerciseType}
+                  grammar={layer3Grammar}
+                  deviceModel="3650-24ps"
+                />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
                   <p className="mb-3 font-semibold text-green-300">✓ Verify your work:</p>
@@ -4494,8 +4528,8 @@ ip ospf cost 30
 
                 <Exercise
                   exercise={lesson25 as ExerciseType}
-                  grammar={routerGrammar}
-                  deviceModel="1941-router"
+                  grammar={layer3Grammar}
+                  deviceModel="3650-24ps"
                 />
 
                 <div className="my-8 rounded-lg border border-green-600 bg-green-900 p-6">
@@ -4705,62 +4739,187 @@ ip ospf cost 30
                   </p>
                 </InfoBox>
 
-                <Diagram title="Extended ACL Examples">
-                  {`┌─────────────────────────────────────────────────────────────┐
-│              EXTENDED ACL (100-199)                          │
-├─────────────────────────────────────────────────────────────┤
-│  ! First, block specific attacker hosts                      │
-│  access-list 101 deny icmp host 10.0.0.50 any  ← Attacker 1 │
-│  access-list 101 deny tcp host 10.0.0.50 any                │
-│  access-list 101 deny icmp host 10.0.0.51 any  ← Attacker 2 │
-│  access-list 101 deny tcp host 10.0.0.51 any                │
-│                                                              │
-│  ! Then permit legitimate traffic                            │
-│  access-list 101 permit ospf any any  ← Routing updates     │
-│  access-list 101 permit tcp any any   ← Web, SSH, etc.      │
-│  access-list 101 permit udp any any   ← DNS, DHCP, etc.     │
-│  access-list 101 permit icmp any any  ← Ping (for friends)  │
-│                                                              │
-│  ! Apply to WAN interface                                    │
-│  interface g0/0                                              │
-│    ip access-group 101 in                                    │
-├─────────────────────────────────────────────────────────────┤
-│  KEY: Order matters! Deny attackers BEFORE permit any.      │
-│       Implicit "deny any" at end of every ACL.              │
-└─────────────────────────────────────────────────────────────┘`}
-                </Diagram>
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">Standard ACLs (1-99)</h3>
+                <p className="mb-4 text-gray-300">
+                  Standard ACLs are the simpler type of access control list. They filter traffic
+                  based ONLY on the <strong className="text-white">source IP address</strong>. They
+                  use ACL numbers <strong className="text-white">1-99</strong>.
+                </p>
+                <InfoBox variant="info">
+                  <p className="mb-2 text-gray-300">
+                    <strong className="text-white">When to use Standard ACLs:</strong>
+                  </p>
+                  <ul className="ml-6 list-disc space-y-1 text-gray-300">
+                    <li>Defining source networks for NAT (which hosts can be translated)</li>
+                    <li>Simple source-based filtering</li>
+                    <li>Controlling which networks can access VTY lines (SSH/Telnet)</li>
+                  </ul>
+                </InfoBox>
+
+                <Exercise
+                  exercise={lesson32 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                  Extended ACLs (100-199)
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  Extended ACLs are much more powerful than standard ACLs. They can filter by{' '}
+                  <strong className="text-white">protocol</strong> (TCP, UDP, ICMP, OSPF),{' '}
+                  <strong className="text-white">source IP</strong>, AND{' '}
+                  <strong className="text-white">destination IP</strong>. They use ACL numbers{' '}
+                  <strong className="text-white">100-199</strong>.
+                </p>
+                <InfoBox variant="important">
+                  <p className="mb-2 text-gray-300">
+                    <strong className="text-white">Critical Rule: ORDER MATTERS!</strong>
+                  </p>
+                  <p className="text-gray-300">
+                    ACL entries are checked from top to bottom. The{' '}
+                    <strong className="text-white">first match wins</strong>. Always put DENY rules
+                    BEFORE PERMIT rules, or attackers will slip through!
+                  </p>
+                </InfoBox>
+
+                <Exercise
+                  exercise={lesson33 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                  Applying ACLs to Interfaces
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  Creating an ACL is only half the battle. ACLs don't do anything until you{' '}
+                  <strong className="text-white">apply them to an interface</strong> with the{' '}
+                  <code className="rounded bg-gray-800 px-1">ip access-group</code> command.
+                </p>
+                <div className="my-6 grid gap-4 md:grid-cols-2">
+                  <div className="rounded-lg border border-blue-600 bg-blue-900 p-4">
+                    <h5 className="mb-2 font-semibold text-blue-300">Inbound (in)</h5>
+                    <p className="text-sm text-gray-300">
+                      Filters traffic ENTERING the interface. Use this on WAN interfaces to block
+                      Internet threats before they reach your network.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-green-600 bg-green-900 p-4">
+                    <h5 className="mb-2 font-semibold text-green-300">Outbound (out)</h5>
+                    <p className="text-sm text-gray-300">
+                      Filters traffic LEAVING the interface. Use this to control what your users can
+                      access.
+                    </p>
+                  </div>
+                </div>
+
+                <Exercise
+                  exercise={lesson34 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
 
                 <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
                   Understanding NAT and PAT
                 </h3>
                 <p className="mb-4 text-gray-300">
-                  NAT (Network Address Translation) lets many private IPs share one public IP. PAT
-                  (Port Address Translation) uses port numbers to track connections.
+                  NAT (Network Address Translation) lets private IPs communicate with the Internet
+                  by translating them to public IPs. Let's learn how to configure it step by step!
                 </p>
 
-                <Diagram title="NAT/PAT Configuration Flow">
-                  {`┌─────────────────────────────────────────────────────────────┐
-│                    NAT/PAT SETUP                             │
-├─────────────────────────────────────────────────────────────┤
-│  Step 1: Identify inside hosts (ACL 1)                       │
-│    access-list 1 permit 192.168.100.0 0.0.0.255             │
-│                                                              │
-│  Step 2: Mark interfaces                                     │
-│    interface g0/0        interface g0/1                      │
-│      ip nat outside        ip nat inside                     │
-│         ↑                      ↑                             │
-│      (Internet)             (LAN)                            │
-│                                                              │
-│  Step 3: Enable PAT (overload)                               │
-│    ip nat inside source list 1 interface g0/0 overload      │
-│                                                              │
-│  Step 4: Static NAT for servers                              │
-│    Server visible from outside as WAN_SUBNET.100             │
-│    ip nat inside source static 192.168.100.10 10.0.0.100    │
-│         ↑                              ↑                     │
-│    (Private Server)           (Public: matches WAN subnet)   │
-└─────────────────────────────────────────────────────────────┘`}
-                </Diagram>
+                <h4 className="mb-4 mt-8 text-2xl font-semibold text-white">
+                  NAT Basics: Inside vs Outside
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  Before NAT can work, you must designate which interfaces are "inside" (private
+                  network) and which are "outside" (public network/Internet).
+                </p>
+                <div className="my-6 grid gap-4 md:grid-cols-2">
+                  <div className="rounded-lg border border-blue-600 bg-blue-900 p-4">
+                    <h5 className="mb-2 font-semibold text-blue-300">NAT Inside</h5>
+                    <p className="text-sm text-gray-300">
+                      Your LAN with private IPs (192.168.x.x, 10.x.x.x). Traffic FROM here gets
+                      translated.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-green-600 bg-green-900 p-4">
+                    <h5 className="mb-2 font-semibold text-green-300">NAT Outside</h5>
+                    <p className="text-sm text-gray-300">
+                      The Internet/WAN with public IPs. Traffic goes TO here after translation.
+                    </p>
+                  </div>
+                </div>
+
+                <Exercise
+                  exercise={lesson35 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <h4 className="mb-4 mt-12 text-2xl font-semibold text-white">
+                  Static NAT: One-to-One Translation
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  Static NAT creates a <strong className="text-white">permanent mapping</strong>{' '}
+                  from one private IP to one specific public IP. This is essential for hosting
+                  servers that need to be reachable from the Internet.
+                </p>
+                <InfoBox variant="tip">
+                  <p className="mb-2 text-gray-300">
+                    <strong className="text-white">CyberPatriot Convention:</strong>
+                  </p>
+                  <p className="text-gray-300">
+                    Servers are typically mapped to the <code>.100</code> address in the WAN subnet.
+                    For example, if your WAN is 10.0.0.0/24, the server appears as 10.0.0.100 on the
+                    outside.
+                  </p>
+                </InfoBox>
+
+                <Exercise
+                  exercise={lesson36 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <h4 className="mb-4 mt-12 text-2xl font-semibold text-white">
+                  PAT (Overload): Many-to-One Translation
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  PAT (Port Address Translation), also called{' '}
+                  <strong className="text-white">NAT overload</strong>, is the magic that lets your
+                  entire LAN share a single public IP address. It uses{' '}
+                  <strong className="text-white">port numbers</strong> to track which inside host
+                  each connection belongs to.
+                </p>
+                <div className="my-6 rounded-lg border border-gray-700 bg-gray-800 p-6">
+                  <h5 className="mb-3 font-semibold text-white">How PAT Works</h5>
+                  <p className="mb-3 text-sm text-gray-300">
+                    When PC1 (192.168.100.5) and PC2 (192.168.100.6) both visit a website:
+                  </p>
+                  <ul className="ml-6 list-disc space-y-2 text-sm text-gray-300">
+                    <li>
+                      PC1's traffic gets translated to 10.0.0.34:<strong>12345</strong>
+                    </li>
+                    <li>
+                      PC2's traffic gets translated to 10.0.0.34:<strong>12346</strong>
+                    </li>
+                    <li>Same public IP, different port numbers!</li>
+                  </ul>
+                </div>
+                <InfoBox variant="tip">
+                  <p className="text-gray-300">
+                    PAT requires a <strong className="text-white">standard ACL</strong> to identify
+                    which inside hosts are allowed to be translated. Typically ACL 1 permits the
+                    entire LAN subnet.
+                  </p>
+                </InfoBox>
+
+                <Exercise
+                  exercise={lesson37 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
 
                 <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
                   Understanding DHCP Pools
@@ -4914,8 +5073,24 @@ ip ospf cost 30
                   ✅ OSPF default route advertisement
                 </div>
                 <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
-                  ✅ ACL, NAT & DHCP concepts
+                  ✅ Standard ACLs (1-99) - source filtering
                 </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ Extended ACLs (100-199) - protocol, source, destination
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ Applying ACLs to interfaces (inbound/outbound)
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ NAT inside/outside interface designation
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ Static NAT (one-to-one mappings)
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
+                  ✅ PAT/Overload (many-to-one with ports)
+                </div>
+                <div className="rounded-lg bg-gray-800 p-4 text-gray-300">✅ DHCP concepts</div>
                 <div className="rounded-lg bg-gray-800 p-4 text-gray-300">
                   ✅ CyberPatriot router challenge prep
                 </div>
@@ -4961,7 +5136,7 @@ export default function LearnPage() {
     <TerminalRegistryProvider>
       <PageContent
         switchGrammar={switchGrammar}
-        _layer3Grammar={layer3Grammar}
+        layer3Grammar={layer3Grammar}
         routerGrammar={routerGrammar}
       />
     </TerminalRegistryProvider>

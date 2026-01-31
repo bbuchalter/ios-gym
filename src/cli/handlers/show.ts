@@ -286,6 +286,85 @@ function renderTemplate(template: string, session: CLISession): string {
     return networkLines.join("");
   });
   
+  // Handle access lists loop
+  result = result.replace(/{#access_lists}([\s\S]*?){#end_access_lists}/g, (match, content) => {
+    const aclLines: string[] = [];
+    
+    // Sort ACLs by number
+    const sortedAcls = Object.values(state.accessLists).sort((a, b) => a.number - b.number);
+    
+    for (const acl of sortedAcls) {
+      let aclBlock = content;
+      
+      // Handle ACL type conditionals
+      if (acl.type === 'standard') {
+        // Remove extended conditional content
+        aclBlock = aclBlock.replace(/{#if\s+type\s+==\s+"extended"}[\s\S]*?{#endif}/g, '');
+        // Process standard conditional content
+        aclBlock = aclBlock.replace(/{#if\s+type\s+==\s+"standard"}([\s\S]*?){#endif}/g, '$1');
+      } else {
+        // Remove standard conditional content
+        aclBlock = aclBlock.replace(/{#if\s+type\s+==\s+"standard"}[\s\S]*?{#endif}/g, '');
+        // Process extended conditional content
+        aclBlock = aclBlock.replace(/{#if\s+type\s+==\s+"extended"}([\s\S]*?){#endif}/g, '$1');
+      }
+      
+      aclBlock = aclBlock.replace(/{number}/g, String(acl.number));
+      aclBlock = aclBlock.replace(/{type}/g, acl.type);
+      
+      // Handle entries loop
+      aclBlock = aclBlock.replace(/{#entries}([\s\S]*?){#end_entries}/g, (_m: string, entryContent: string) => {
+        const entryLines: string[] = [];
+        
+        for (const entry of acl.entries) {
+          let entryLine = entryContent;
+          entryLine = entryLine.replace(/{action}/g, entry.action);
+          
+          // Format source display
+          let sourceDisplay = '';
+          if (entry.source === 'any') {
+            sourceDisplay = 'any';
+          } else if (entry.source.startsWith('host ')) {
+            sourceDisplay = entry.source;
+          } else if (entry.sourceWildcard) {
+            sourceDisplay = `${entry.source} ${entry.sourceWildcard}`;
+          } else {
+            sourceDisplay = entry.source;
+          }
+          entryLine = entryLine.replace(/{source_display}/g, sourceDisplay);
+          
+          // Format destination display (only for extended ACLs)
+          if ('destination' in entry) {
+            const extEntry = entry as { destination: string; destWildcard?: string; protocol: string };
+            let destDisplay = '';
+            if (extEntry.destination === 'any') {
+              destDisplay = 'any';
+            } else if (extEntry.destination.startsWith('host ')) {
+              destDisplay = extEntry.destination;
+            } else if (extEntry.destWildcard) {
+              destDisplay = `${extEntry.destination} ${extEntry.destWildcard}`;
+            } else {
+              destDisplay = extEntry.destination;
+            }
+            entryLine = entryLine.replace(/{dest_display}/g, destDisplay);
+            entryLine = entryLine.replace(/{protocol}/g, extEntry.protocol);
+          } else {
+            entryLine = entryLine.replace(/{dest_display}/g, '');
+            entryLine = entryLine.replace(/{protocol}/g, '');
+          }
+          
+          entryLines.push(entryLine);
+        }
+        
+        return entryLines.join('');
+      });
+      
+      aclLines.push(aclBlock);
+    }
+    
+    return aclLines.join('');
+  });
+  
   return result;
 }
 

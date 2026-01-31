@@ -27,6 +27,8 @@ export interface DeviceState {
   routes: RouteEntry[];
   ospf: OspfConfig;
   ssh: SshConfig;
+  accessLists: Record<number, AccessList>; // ACLs keyed by number
+  nat: NatConfig; // NAT/PAT configuration
   line: {
     console: LineConfig;
   };
@@ -41,6 +43,10 @@ export interface InterfaceConfig {
   trunkAllowed: string | null;
   ip: string | null;
   mask: string | null;
+  accessGroupIn?: number;  // ACL number applied inbound
+  accessGroupOut?: number; // ACL number applied outbound
+  natInside?: boolean;     // NAT inside interface
+  natOutside?: boolean;    // NAT outside interface
 }
 
 export interface VlanConfig {
@@ -93,6 +99,44 @@ export interface VtyConfig {
 
 export interface LineConfig {
   loggingSynchronous: boolean;
+}
+
+// Standard ACL entry (1-99): source only
+export interface StandardAclEntry {
+  action: 'permit' | 'deny';
+  source: string;        // "any", "host x.x.x.x", or network address
+  sourceWildcard?: string; // Wildcard mask for network matching
+}
+
+// Extended ACL entry (100-199): source, dest, protocol
+export interface ExtendedAclEntry {
+  action: 'permit' | 'deny';
+  protocol: string;      // ip, tcp, udp, icmp, ospf, etc.
+  source: string;
+  sourceWildcard?: string;
+  destination: string;
+  destWildcard?: string;
+}
+
+// ACL container
+export interface AccessList {
+  number: number;
+  type: 'standard' | 'extended';
+  entries: (StandardAclEntry | ExtendedAclEntry)[];
+}
+
+// NAT static mapping
+export interface NatStaticMapping {
+  insideLocal: string;   // Private IP
+  insideGlobal: string;  // Public IP
+}
+
+// NAT configuration
+export interface NatConfig {
+  overload: boolean;               // PAT enabled
+  overloadAcl?: number;            // ACL for PAT source addresses
+  overloadInterface?: string;      // Interface for PAT public IP
+  staticMappings: NatStaticMapping[];  // Static NAT entries
 }
 
 // Grammar types from commands.yaml

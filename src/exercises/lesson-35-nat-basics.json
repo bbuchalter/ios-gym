@@ -1,0 +1,119 @@
+{
+  "id": "lesson-35-nat-basics",
+  "title": "NAT Basics: Inside vs Outside",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Understanding NAT Concepts",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable",
+          "teachingPoint": "NAT (Network Address Translation) translates private IPs to public IPs"
+        },
+        {
+          "objective": "Enter global configuration mode",
+          "command": "configure terminal"
+        }
+      ]
+    },
+    {
+      "section": "Configuring Interface IPs",
+      "steps": [
+        {
+          "objective": "Configure WAN interface (public network)",
+          "command": "interface g0/0",
+          "teachingPoint": "G0/0 will be our 'outside' interface facing the Internet"
+        },
+        {
+          "objective": "Assign public IP to WAN",
+          "command": "ip address 10.0.0.34 255.255.255.0",
+          "teachingPoint": "In this scenario, 10.0.0.x is our public network"
+        },
+        {
+          "objective": "Enable WAN interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface config",
+          "command": "exit"
+        },
+        {
+          "objective": "Configure LAN interface (private network)",
+          "command": "interface g0/1",
+          "teachingPoint": "G0/1 will be our 'inside' interface facing the LAN"
+        },
+        {
+          "objective": "Assign private IP to LAN",
+          "command": "ip address 192.168.100.1 255.255.255.0",
+          "teachingPoint": "192.168.x.x is a private IP range that needs NAT to reach the Internet"
+        },
+        {
+          "objective": "Enable LAN interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface config",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Designating NAT Interfaces",
+      "steps": [
+        {
+          "objective": "Mark WAN as NAT outside",
+          "command": "interface g0/0"
+        },
+        {
+          "objective": "Apply NAT outside designation",
+          "command": "ip nat outside",
+          "teachingPoint": "OUTSIDE = where public IPs live (Internet-facing)"
+        },
+        {
+          "objective": "Exit interface config",
+          "command": "exit"
+        },
+        {
+          "objective": "Mark LAN as NAT inside",
+          "command": "interface g0/1"
+        },
+        {
+          "objective": "Apply NAT inside designation",
+          "command": "ip nat inside",
+          "teachingPoint": "INSIDE = where private IPs live (your LAN). Traffic FROM inside gets translated"
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "Save configuration",
+          "command": "write memory",
+          "teachingPoint": "NAT inside/outside is configured, but no translations are happening yet!"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/0.natOutside",
+      "expectedValue": true,
+      "description": "G0/0 should be marked as NAT outside",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.natInside",
+      "expectedValue": true,
+      "description": "G0/1 should be marked as NAT inside",
+      "diagnosticCommand": "show running-config"
+    }
+  ]
+}

@@ -50,6 +50,11 @@ export function createInitialState(deviceModel: DeviceModel = '2960-switch'): De
         transport: []
       }
     },
+    accessLists: {}, // ACLs keyed by number
+    nat: {
+      overload: false,
+      staticMappings: []
+    },
     line: {
       console: {
         loggingSynchronous: false
