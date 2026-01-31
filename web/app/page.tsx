@@ -774,6 +774,54 @@ function PageContent({
                 </InfoBox>
               </LessonSection>
 
+              {/* LESSON: UNDERSTANDING COMMENTS */}
+              <LessonSection title="Reading Configuration Files: Comments">
+                <p className="my-6 text-xl text-gray-200">
+                  When you look at Cisco configurations, you'll see lines that start with an
+                  exclamation mark (<code className="text-green-400">!</code>). These are{' '}
+                  <strong className="text-white">comments</strong>.
+                </p>
+
+                <Diagram title="Comments in IOS Configuration">
+                  {`┌─────────────────────────────────────────────────────────────┐
+│  ! This is a comment - the device ignores it                │
+│  !                                                          │
+│  hostname MySwitch                                          │
+│  !                                                          │
+│  ! Interface configuration section                          │
+│  interface GigabitEthernet0/1                               │
+│    description Uplink to Core                               │
+│    ip address 192.168.1.1 255.255.255.0                     │
+│  !                                                          │
+│  ! End of config                                            │
+└─────────────────────────────────────────────────────────────┘`}
+                </Diagram>
+
+                <InfoBox variant="info">
+                  <p className="mb-2 text-gray-300">
+                    <strong className="text-white">Key points about comments:</strong>
+                  </p>
+                  <ul className="ml-6 list-disc space-y-2 text-gray-300">
+                    <li>
+                      Lines starting with <code className="text-green-400">!</code> are ignored by
+                      the device
+                    </li>
+                    <li>They help humans understand the configuration</li>
+                    <li>Cisco IOS automatically adds blank comment lines to separate sections</li>
+                    <li>
+                      You can add your own comments using <code>remark</code> in ACLs or{' '}
+                      <code>description</code> on interfaces
+                    </li>
+                  </ul>
+                </InfoBox>
+
+                <ProTip>
+                  When you see <code>show running-config</code> output, the{' '}
+                  <code className="text-green-400">!</code> lines are just visual separators — focus
+                  on the actual commands between them!
+                </ProTip>
+              </LessonSection>
+
               {/* LESSON 4: SETTING HOSTNAME */}
               <LessonSection title="Giving Your Device a Name">
                 <p className="my-6 text-xl text-gray-200">
