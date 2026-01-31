@@ -2251,7 +2251,7 @@ Switch#show running-config
                   </p>
                 </InfoBox>
 
-                <h2 className="mb-6 mt-16 text-3xl font-bold text-blue-400">
+                <h2 className="mt-16 mb-6 text-3xl font-bold text-blue-400">
                   CIDR to Subnet Mask Cheatsheet
                 </h2>
                 <p className="mb-6 text-gray-300">
@@ -2299,7 +2299,7 @@ Most Common:
                   </p>
                 </InfoBox>
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">Quick Mental Math</h3>
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">Quick Mental Math</h3>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
                     <h4 className="mb-3 font-semibold text-blue-400">Subnet Mask Pattern</h4>
@@ -4632,7 +4632,7 @@ ip ospf cost 30
                   </ul>
                 </InfoBox>
 
-                <h3 className="mb-4 mt-8 text-2xl font-bold text-white">
+                <h3 className="mt-8 mb-4 text-2xl font-bold text-white">
                   Router Bootstrap: Essential Security
                 </h3>
                 <p className="mb-4 text-gray-300">
@@ -4646,7 +4646,7 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">
                   OSPF: Advertising the Default Route
                 </h3>
                 <p className="mb-4 text-gray-300">
@@ -4662,7 +4662,7 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">
                   Understanding Access Control Lists (ACLs)
                 </h3>
                 <p className="mb-4 text-gray-300">
@@ -4670,7 +4670,7 @@ ip ospf cost 30
                   destination, and protocol.
                 </p>
 
-                <h4 className="mb-4 mt-8 text-xl font-semibold text-blue-400">
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-blue-400">
                   Extended ACL Command Syntax
                 </h4>
                 <p className="mb-4 text-gray-300">
@@ -4739,7 +4739,7 @@ ip ospf cost 30
                   </p>
                 </InfoBox>
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">Standard ACLs (1-99)</h3>
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">Standard ACLs (1-99)</h3>
                 <p className="mb-4 text-gray-300">
                   Standard ACLs are the simpler type of access control list. They filter traffic
                   based ONLY on the <strong className="text-white">source IP address</strong>. They
@@ -4762,7 +4762,7 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">
                   Extended ACLs (100-199)
                 </h3>
                 <p className="mb-4 text-gray-300">
@@ -4789,7 +4789,7 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">
                   Applying ACLs to Interfaces
                 </h3>
                 <p className="mb-4 text-gray-300">
@@ -4820,7 +4820,7 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">
                   Understanding NAT and PAT
                 </h3>
                 <p className="mb-4 text-gray-300">
@@ -4828,7 +4828,7 @@ ip ospf cost 30
                   by translating them to public IPs. Let's learn how to configure it step by step!
                 </p>
 
-                <h4 className="mb-4 mt-8 text-2xl font-semibold text-white">
+                <h4 className="mt-8 mb-4 text-2xl font-semibold text-white">
                   NAT Basics: Inside vs Outside
                 </h4>
                 <p className="mb-4 text-gray-300">
@@ -4857,7 +4857,7 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h4 className="mb-4 mt-12 text-2xl font-semibold text-white">
+                <h4 className="mt-12 mb-4 text-2xl font-semibold text-white">
                   Static NAT: One-to-One Translation
                 </h4>
                 <p className="mb-4 text-gray-300">
@@ -4882,7 +4882,7 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h4 className="mb-4 mt-12 text-2xl font-semibold text-white">
+                <h4 className="mt-12 mb-4 text-2xl font-semibold text-white">
                   PAT (Overload): Many-to-One Translation
                 </h4>
                 <p className="mb-4 text-gray-300">
@@ -4921,7 +4921,7 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">
                   Understanding DHCP Pools
                 </h3>
                 <p className="mb-4 text-gray-300">
@@ -4948,7 +4948,7 @@ ip ospf cost 30
 └─────────────────────────────────────────────────────────────┘`}
                 </Diagram>
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">Threat Mitigation</h3>
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">Threat Mitigation</h3>
                 <p className="mb-4 text-gray-300">
                   CyberPatriot challenges often include threat mitigation tasks — finding and
                   removing malicious configurations or rogue devices.
@@ -4979,7 +4979,7 @@ ip ospf cost 30
 └─────────────────────────────────────────────────────────────┘`}
                 </Diagram>
 
-                <h3 className="mb-4 mt-12 text-2xl font-bold text-white">
+                <h3 className="mt-12 mb-4 text-2xl font-bold text-white">
                   Full CyberPatriot Router Practice
                 </h3>
                 <p className="mb-4 text-gray-300">
