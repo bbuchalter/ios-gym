@@ -4842,16 +4842,27 @@ ip ospf cost 30
                 </h3>
                 <p className="mb-4 text-gray-300">
                   NAT (Network Address Translation) lets private IPs communicate with the Internet
-                  by translating them to public IPs. Let's learn how to configure it step by step!
+                  by translating them to public IPs. Think of it like a{' '}
+                  <strong className="text-white">secret agent with two identities</strong>!
                 </p>
 
-                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
-                  Explore: NAT Concepts
-                </h4>
-                <p className="mb-4 text-gray-300">
-                  Before configuring NAT, let's explore the concepts and see how NAT appears in the
-                  router configuration.
-                </p>
+                <InfoBox variant="info">
+                  <h4 className="mb-3 font-semibold text-blue-300">🕵️ The Secret Agent Analogy</h4>
+                  <p className="text-gray-300">
+                    Just like a secret agent has a <strong>real name</strong> and a{' '}
+                    <strong>cover name</strong>, every device using NAT has two identities:
+                  </p>
+                  <ul className="mt-2 ml-6 list-disc space-y-1 text-gray-300">
+                    <li>
+                      <strong className="text-blue-300">Inside Local</strong> = Real name (private
+                      IP like 192.168.100.10)
+                    </li>
+                    <li>
+                      <strong className="text-green-300">Inside Global</strong> = Cover name (public
+                      IP like 10.0.0.100)
+                    </li>
+                  </ul>
+                </InfoBox>
 
                 <Exercise
                   exercise={lesson29 as ExerciseType}
@@ -4859,26 +4870,157 @@ ip ospf cost 30
                   deviceModel="1941-router"
                 />
 
-                <h4 className="mt-8 mb-4 text-2xl font-semibold text-white">
-                  NAT Basics: Inside vs Outside
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  Inside Local vs Inside Global: The Key to NAT
                 </h4>
                 <p className="mb-4 text-gray-300">
-                  Before NAT can work, you must designate which interfaces are "inside" (private
-                  network) and which are "outside" (public network/Internet).
+                  Understanding these two terms is essential for reading CyberPatriot instructions:
+                </p>
+
+                <div className="my-6 grid gap-4 md:grid-cols-2">
+                  <div className="rounded-lg border border-blue-600 bg-blue-900 p-4">
+                    <div className="mb-2 flex items-center">
+                      <span className="mr-2 text-2xl">🏠</span>
+                      <h5 className="font-semibold text-blue-300">Inside Local</h5>
+                    </div>
+                    <p className="mb-2 text-sm text-gray-300">
+                      The device&apos;s <strong>real private IP address</strong> on your LAN. This
+                      is what the device thinks its address is.
+                    </p>
+                    <div className="mt-2 rounded bg-gray-800 p-2 font-mono text-sm">
+                      <span className="text-blue-400">192.168.100.10</span>
+                    </div>
+                    <p className="mt-2 text-xs text-gray-400">
+                      The server&apos;s actual IP on the LAN
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg border border-green-600 bg-green-900 p-4">
+                    <div className="mb-2 flex items-center">
+                      <span className="mr-2 text-2xl">🌐</span>
+                      <h5 className="font-semibold text-green-300">Inside Global</h5>
+                    </div>
+                    <p className="mb-2 text-sm text-gray-300">
+                      The <strong>public IP address</strong> that represents the device to the
+                      outside world. What the Internet sees.
+                    </p>
+                    <div className="mt-2 rounded bg-gray-800 p-2 font-mono text-sm">
+                      <span className="text-green-400">10.0.0.100</span>
+                    </div>
+                    <p className="mt-2 text-xs text-gray-400">The server&apos;s public identity</p>
+                  </div>
+                </div>
+
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  Reading CyberPatriot NAT Instructions
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  CyberPatriot instructions often say something like: &quot;The inside server should
+                  be known as x.x.x.100 on the outside. x = match the outside network.&quot;
+                  Here&apos;s how to decode this:
+                </p>
+
+                <div className="my-6 rounded-lg border border-gray-700 bg-gray-800 p-6">
+                  <h5 className="mb-4 font-semibold text-white">
+                    Step-by-Step: Decoding NAT Instructions
+                  </h5>
+                  <div className="space-y-4">
+                    <div className="flex items-start">
+                      <span className="mr-3 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                        1
+                      </span>
+                      <div>
+                        <p className="font-semibold text-white">Find your WAN interface IP</p>
+                        <p className="text-sm text-gray-400">
+                          Example: G0/0 has IP <code className="text-blue-400">10.0.0.34</code>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="mr-3 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                        2
+                      </span>
+                      <div>
+                        <p className="font-semibold text-white">
+                          &quot;x = match the outside network&quot; means use the same prefix
+                        </p>
+                        <p className="text-sm text-gray-400">
+                          WAN is 10.0.0.x, so x.x.x.100 becomes{' '}
+                          <code className="text-green-400">10.0.0.100</code>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="mr-3 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                        3
+                      </span>
+                      <div>
+                        <p className="font-semibold text-white">Find your server&apos;s LAN IP</p>
+                        <p className="text-sm text-gray-400">
+                          Example: Server is at{' '}
+                          <code className="text-blue-400">192.168.100.10</code>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="mr-3 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-600 text-sm font-bold text-white">
+                        4
+                      </span>
+                      <div>
+                        <p className="font-semibold text-white">Build the Static NAT command</p>
+                        <div className="mt-1 rounded bg-gray-900 p-2 font-mono text-sm">
+                          ip nat inside source static{' '}
+                          <span className="text-blue-400">192.168.100.10</span>{' '}
+                          <span className="text-green-400">10.0.0.100</span>
+                        </div>
+                        <p className="mt-1 text-xs text-gray-500">
+                          <span className="text-blue-400">Inside Local</span> →{' '}
+                          <span className="text-green-400">Inside Global</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <ProTip>
+                  <strong>Memory Trick:</strong> The command order matches the translation
+                  direction! &quot;ip nat inside source static{' '}
+                  <span className="text-blue-400">[private]</span>{' '}
+                  <span className="text-green-400">[public]</span>&quot; — traffic from the private
+                  IP gets translated TO the public IP.
+                </ProTip>
+
+                <h4 className="mt-8 mb-4 text-2xl font-semibold text-white">
+                  NAT Basics: Inside vs Outside Interfaces
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  Before NAT can work, you must designate which interfaces are &quot;inside&quot;
+                  (private network) and which are &quot;outside&quot; (public network/Internet).
                 </p>
                 <div className="my-6 grid gap-4 md:grid-cols-2">
                   <div className="rounded-lg border border-blue-600 bg-blue-900 p-4">
-                    <h5 className="mb-2 font-semibold text-blue-300">NAT Inside</h5>
+                    <h5 className="mb-2 font-semibold text-blue-300">NAT Inside Interface</h5>
                     <p className="text-sm text-gray-300">
-                      Your LAN with private IPs (192.168.x.x, 10.x.x.x). Traffic FROM here gets
+                      Your LAN interface with private IPs (192.168.x.x). Traffic FROM here gets
                       translated.
                     </p>
+                    <div className="mt-2 rounded bg-gray-800 p-2 font-mono text-xs">
+                      interface g0/1
+                      <br />
+                      ip nat inside
+                    </div>
                   </div>
                   <div className="rounded-lg border border-green-600 bg-green-900 p-4">
-                    <h5 className="mb-2 font-semibold text-green-300">NAT Outside</h5>
+                    <h5 className="mb-2 font-semibold text-green-300">NAT Outside Interface</h5>
                     <p className="text-sm text-gray-300">
-                      The Internet/WAN with public IPs. Traffic goes TO here after translation.
+                      Your WAN interface facing the Internet. Traffic goes TO here after
+                      translation.
                     </p>
+                    <div className="mt-2 rounded bg-gray-800 p-2 font-mono text-xs">
+                      interface g0/0
+                      <br />
+                      ip nat outside
+                    </div>
                   </div>
                 </div>
 

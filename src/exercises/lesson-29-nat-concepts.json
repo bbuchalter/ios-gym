@@ -1,50 +1,126 @@
 {
   "id": "lesson-29-nat-concepts",
-  "title": "NAT and PAT: Address Translation",
+  "title": "NAT Terminology: Inside Local vs Inside Global",
   "deviceModel": "1941-router",
   "goals": [
     {
-      "section": "Understanding NAT Basics",
+      "section": "The Two Identities Problem",
       "steps": [
         {
-          "objective": "Enter privileged mode to explore NAT concepts",
+          "objective": "Enter privileged mode to explore NAT",
           "command": "enable",
-          "teachingPoint": "NAT translates private IPs to public IPs for Internet access"
+          "teachingPoint": "In NAT, every device has TWO identities: what it calls itself (local) and what the Internet sees it as (global)!"
         },
         {
-          "objective": "View current configuration",
+          "objective": "View the router configuration",
           "command": "show running-config",
-          "teachingPoint": "NAT config includes 'ip nat inside/outside' on interfaces"
+          "teachingPoint": "Think of it like a secret agent: your REAL name (inside local) vs your COVER name (inside global)."
+        }
+      ]
+    },
+    {
+      "section": "Understanding NAT Terminology",
+      "steps": [
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal",
+          "teachingPoint": "INSIDE LOCAL = the server's REAL private IP (like 192.168.100.10) - what the server thinks its address is."
+        },
+        {
+          "objective": "Enter WAN interface to explore",
+          "command": "interface g0/0",
+          "teachingPoint": "INSIDE GLOBAL = the server's PUBLIC IP (like 10.0.0.100) - what the Internet sees the server as."
+        },
+        {
+          "objective": "Exit interface",
+          "command": "exit",
+          "teachingPoint": "When instructions say 'server should be known as x.x.x.100 on the outside' - they mean the INSIDE GLOBAL is x.x.x.100!"
+        }
+      ]
+    },
+    {
+      "section": "Reading CyberPatriot Instructions",
+      "steps": [
+        {
+          "objective": "Enter LAN interface to see the inside network",
+          "command": "interface g0/1",
+          "teachingPoint": "CyberPatriot tip: 'x = match the outside network' means use the SAME network prefix as your WAN IP!"
+        },
+        {
+          "objective": "Exit interface",
+          "command": "exit",
+          "teachingPoint": "Example: If WAN is 10.0.0.34, and instructions say 'x.x.x.100', then inside global = 10.0.0.100"
+        },
+        {
+          "objective": "Return to privileged mode",
+          "command": "end",
+          "teachingPoint": "The static NAT command format: ip nat inside source static [INSIDE LOCAL] [INSIDE GLOBAL]"
+        },
+        {
+          "objective": "View configuration again",
+          "command": "show running-config",
+          "teachingPoint": "Real example: ip nat inside source static 192.168.100.10 10.0.0.100 (private server → public address)"
         }
       ]
     }
   ],
   "assertions": [],
   "legacyCommands": [
-    "! NAT REFERENCE - Standard Setup:",
+    "! ============================================================",
+    "! NAT TERMINOLOGY - THE SECRET AGENT ANALOGY",
+    "! ============================================================",
     "!",
-    "! Step 1: Create ACL to identify inside hosts",
-    "! access-list 1 permit 192.168.100.0 0.0.0.255",
+    "! Think of NAT like a secret agent with two identities:",
     "!",
-    "! Step 2: Mark interfaces as inside/outside",
-    "! interface g0/0",
-    "! ip nat outside",
-    "! interface g0/1",
-    "! ip nat inside",
+    "! INSIDE LOCAL  = Your REAL name (private IP)",
+    "!                 Example: 192.168.100.10",
+    "!                 What the server calls itself on your LAN",
     "!",
-    "! Step 3: Enable PAT (overload) using WAN interface IP",
-    "! ip nat inside source list 1 interface g0/0 overload",
+    "! INSIDE GLOBAL = Your COVER name (public IP)", 
+    "!                 Example: 10.0.0.100",
+    "!                 What the Internet sees you as",
     "!",
-    "! Step 4: Static NAT for servers",
-    "! The server should be reachable from outside as WAN_SUBNET.100",
-    "! Example: If WAN is 10.0.0.0/24, server appears as 10.0.0.100",
-    "! ip nat inside source static 192.168.100.10 10.0.0.100",
+    "! ============================================================",
+    "! READING CYBERPATRIOT INSTRUCTIONS",
+    "! ============================================================",
     "!",
-    "! KEY CONCEPTS:",
-    "! - PAT (Port Address Translation) = NAT overload",
-    "! - All LAN hosts share one public IP (WAN interface)",
-    "! - Static NAT maps one private IP to one public IP",
-    "! - 'inside' = your LAN, 'outside' = Internet/WAN",
-    "! - Static NAT public IP should match WAN subnet (x.x.x.100)"
+    "! When you see:",
+    "!   'The inside server should be known as x.x.x.100 on the outside'",
+    "!   'x = match the outside network'",
+    "!",
+    "! Step 1: Find your WAN interface IP (the outside)",
+    "!         Example: g0/0 has IP 10.0.0.34",
+    "!",
+    "! Step 2: Take the network part (10.0.0) and add .100",
+    "!         Result: Inside Global = 10.0.0.100",
+    "!",
+    "! Step 3: Find your server's LAN IP (the inside local)",
+    "!         Example: Server is at 192.168.100.10",
+    "!",
+    "! Step 4: Create the static NAT:",
+    "!         ip nat inside source static 192.168.100.10 10.0.0.100",
+    "!         └── inside local ──┘ └─ inside global ─┘",
+    "!",
+    "! ============================================================",
+    "! COMPLETE NAT SETUP CHECKLIST",
+    "! ============================================================",
+    "!",
+    "! 1. ACL to permit LAN network:",
+    "!    access-list 1 permit 192.168.100.0 0.0.0.255",
+    "!",
+    "! 2. Mark WAN as 'outside':",
+    "!    interface g0/0",
+    "!    ip nat outside",
+    "!",
+    "! 3. Mark LAN as 'inside':",
+    "!    interface g0/1",
+    "!    ip nat inside",
+    "!",
+    "! 4. Enable PAT for all LAN hosts:",
+    "!    ip nat inside source list 1 interface g0/0 overload",
+    "!",
+    "! 5. Static NAT for server:",
+    "!    ip nat inside source static [INSIDE LOCAL] [INSIDE GLOBAL]",
+    "!    ip nat inside source static 192.168.100.10 10.0.0.100"
   ]
 }
