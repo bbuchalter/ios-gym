@@ -55,6 +55,7 @@ import lesson34 from '../../src/exercises/lesson-34-acl-application.json';
 import lesson35 from '../../src/exercises/lesson-35-nat-basics.json';
 import lesson36 from '../../src/exercises/lesson-36-nat-static.json';
 import lesson37 from '../../src/exercises/lesson-37-nat-pat.json';
+import lesson38 from '../../src/exercises/lesson-38-threat-mitigation.json';
 
 import type { CommandGrammar } from '@src/types';
 import type { Exercise as ExerciseType } from '@src/validation/types';
@@ -5083,34 +5084,160 @@ ip ospf cost 30
 
                 <h3 className="mt-12 mb-4 text-2xl font-bold text-white">Threat Mitigation</h3>
                 <p className="mb-4 text-gray-300">
-                  CyberPatriot challenges often include threat mitigation tasks — finding and
-                  removing malicious configurations or rogue devices.
+                  Threat mitigation is like being a{' '}
+                  <strong className="text-white">network detective</strong>! In CyberPatriot
+                  challenges, attackers may have already compromised your router. Your job is to
+                  find the malicious configurations and remove them.
                 </p>
 
-                <Diagram title="Common Threats to Find">
-                  {`┌─────────────────────────────────────────────────────────────┐
-│                    THREAT MITIGATION                         │
-├─────────────────────────────────────────────────────────────┤
-│  1. ROGUE DHCP SERVER                                        │
-│     - Look for unauthorized "ip dhcp pool" configurations   │
-│     - Check switches for DHCP snooping violations           │
-│     - Remove any DHCP pool not in the MOP                   │
-│                                                              │
-│  2. ATTACKER HOST BLOCKING                                   │
-│     - Identify attacker IPs from the scenario               │
-│     - Add deny statements to ACL BEFORE permit any          │
-│     - access-list 101 deny icmp host 10.0.0.50 any          │
-│     - access-list 101 deny tcp host 10.0.0.50 any           │
-│                                                              │
-│  3. UNAUTHORIZED STATIC ROUTES                               │
-│     - Check for routes pointing to wrong next-hop           │
-│     - Remove with: no ip route <dest> <mask> <next-hop>     │
-├─────────────────────────────────────────────────────────────┤
-│  TIP: Use "show running-config" to find suspicious configs  │
-│       Compare against the MOP — anything not listed may be  │
-│       malicious!                                             │
-└─────────────────────────────────────────────────────────────┘`}
-                </Diagram>
+                <InfoBox variant="important">
+                  <h4 className="mb-3 font-semibold text-yellow-200">
+                    🔍 The Golden Rule: Compare Against the MOP
+                  </h4>
+                  <p className="text-gray-300">
+                    The <strong>MOP (Method of Procedure)</strong> tells you exactly what SHOULD be
+                    configured. Anything in the router that&apos;s NOT in the MOP is suspicious and
+                    might be malicious!
+                  </p>
+                </InfoBox>
+
+                <Exercise
+                  exercise={lesson38 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  Common Threats to Look For
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  Attackers can hide malicious configurations anywhere. Here are the most common
+                  threats you&apos;ll encounter:
+                </p>
+
+                <div className="my-6 grid gap-4 md:grid-cols-2">
+                  <div className="rounded-lg border border-red-600 bg-gray-800 p-4">
+                    <div className="mb-2 flex items-center">
+                      <span className="mr-2 text-2xl">🏴‍☠️</span>
+                      <h5 className="font-semibold text-red-400">Rogue DHCP Server</h5>
+                    </div>
+                    <p className="mb-2 text-sm text-gray-300">
+                      An attacker sets up a fake DHCP pool that gives clients the wrong gateway or
+                      DNS server, redirecting their traffic!
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Look for:</strong> Unauthorized{' '}
+                      <code className="rounded bg-gray-700 px-1">ip dhcp pool</code> entries
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Fix:</strong>{' '}
+                      <code className="rounded bg-gray-700 px-1">no ip dhcp pool ROGUE_NAME</code>
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg border border-orange-600 bg-gray-800 p-4">
+                    <div className="mb-2 flex items-center">
+                      <span className="mr-2 text-2xl">🗺️</span>
+                      <h5 className="font-semibold text-orange-400">Unauthorized Routes</h5>
+                    </div>
+                    <p className="mb-2 text-sm text-gray-300">
+                      Attackers add static routes that redirect your traffic through their
+                      servers—like changing road signs to lead cars into a trap!
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Look for:</strong> Routes not in the MOP using{' '}
+                      <code className="rounded bg-gray-700 px-1">show ip route</code>
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Fix:</strong>{' '}
+                      <code className="rounded bg-gray-700 px-1">
+                        no ip route [network] [mask] [next-hop]
+                      </code>
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg border border-yellow-600 bg-gray-800 p-4">
+                    <div className="mb-2 flex items-center">
+                      <span className="mr-2 text-2xl">🚪</span>
+                      <h5 className="font-semibold text-yellow-400">Weak ACLs</h5>
+                    </div>
+                    <p className="mb-2 text-sm text-gray-300">
+                      ACLs that are too permissive let attackers walk right in. Or worse, missing
+                      ACLs mean there&apos;s no security at all!
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Look for:</strong> Missing deny rules, overly broad permits
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Fix:</strong> Add deny rules for known attackers BEFORE permit rules
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg border border-purple-600 bg-gray-800 p-4">
+                    <div className="mb-2 flex items-center">
+                      <span className="mr-2 text-2xl">👤</span>
+                      <h5 className="font-semibold text-purple-400">Unauthorized Users</h5>
+                    </div>
+                    <p className="mb-2 text-sm text-gray-300">
+                      Attackers create their own user accounts to maintain access even after you
+                      change passwords!
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Look for:</strong> Usernames not in the MOP
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Fix:</strong>{' '}
+                      <code className="rounded bg-gray-700 px-1">no username HACKER</code>
+                    </p>
+                  </div>
+                </div>
+
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  The &quot;No&quot; Command: Your Undo Button
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  In Cisco IOS, the <code className="rounded bg-gray-700 px-1">no</code> command
+                  removes configurations. It&apos;s like an undo button! Whatever command created
+                  something, add <code className="rounded bg-gray-700 px-1">no</code> in front to
+                  remove it.
+                </p>
+
+                <div className="my-6 rounded-lg border border-gray-700 bg-gray-800 p-4">
+                  <h5 className="mb-3 font-semibold text-white">
+                    Examples of the &quot;No&quot; Command
+                  </h5>
+                  <div className="space-y-2 font-mono text-sm">
+                    <div className="flex">
+                      <span className="w-1/2 text-green-400">access-list 50 permit any</span>
+                      <span className="text-gray-500">→</span>
+                      <span className="ml-2 text-red-400">no access-list 50</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-1/2 text-green-400">ip route 10.0.0.0 ...</span>
+                      <span className="text-gray-500">→</span>
+                      <span className="ml-2 text-red-400">no ip route 10.0.0.0 ...</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-1/2 text-green-400">username hacker secret ...</span>
+                      <span className="text-gray-500">→</span>
+                      <span className="ml-2 text-red-400">no username hacker</span>
+                    </div>
+                    <div className="flex">
+                      <span className="w-1/2 text-green-400">ip dhcp pool ROGUE</span>
+                      <span className="text-gray-500">→</span>
+                      <span className="ml-2 text-red-400">no ip dhcp pool ROGUE</span>
+                    </div>
+                  </div>
+                </div>
+
+                <ProTip>
+                  <strong>Order Matters for ACLs!</strong> When blocking attackers, always put your{' '}
+                  <code className="rounded bg-gray-700 px-1">deny</code> rules BEFORE{' '}
+                  <code className="rounded bg-gray-700 px-1">permit</code> rules. The router checks
+                  rules from top to bottom and stops at the first match. If you put{' '}
+                  <code className="rounded bg-gray-700 px-1">permit any any</code> first, the
+                  attacker slips through before your deny rule is ever checked!
+                </ProTip>
 
                 <h3 className="mt-12 mb-4 text-2xl font-bold text-white">
                   Full CyberPatriot Router Practice

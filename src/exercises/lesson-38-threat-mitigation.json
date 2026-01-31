@@ -1,0 +1,192 @@
+{
+  "id": "lesson-38-threat-mitigation",
+  "title": "Threat Mitigation: Finding and Removing Malicious Configs",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Detective Work: Finding Suspicious Configurations",
+      "steps": [
+        {
+          "objective": "Enter privileged mode to investigate",
+          "command": "enable",
+          "teachingPoint": "Threat mitigation is like being a network detective - you're looking for things that shouldn't be there!"
+        },
+        {
+          "objective": "View the running configuration to look for suspicious entries",
+          "command": "show running-config",
+          "teachingPoint": "Always compare the config against your MOP (Method of Procedure). Anything NOT in the MOP could be malicious!"
+        },
+        {
+          "objective": "Check the routing table for unauthorized routes",
+          "command": "show ip route",
+          "teachingPoint": "Attackers might add routes that send your traffic through their servers - like redirecting mail to the wrong address!"
+        },
+        {
+          "objective": "View all access lists to check for suspicious rules",
+          "command": "show access-lists",
+          "teachingPoint": "Look for ACLs that permit traffic they shouldn't, or deny traffic that should be allowed."
+        }
+      ]
+    },
+    {
+      "section": "Removing Malicious ACLs",
+      "steps": [
+        {
+          "objective": "Enter configuration mode to make changes",
+          "command": "configure terminal",
+          "teachingPoint": "Once you find something suspicious, you need to remove it carefully. Always know what you're deleting!"
+        },
+        {
+          "objective": "Remove a suspicious access list (example: ACL 50)",
+          "command": "no access-list 50",
+          "teachingPoint": "The 'no' command removes configurations. 'no access-list 50' deletes the entire ACL number 50."
+        },
+        {
+          "objective": "Return to privileged mode",
+          "command": "end",
+          "teachingPoint": "After removing threats, always verify your changes worked correctly."
+        },
+        {
+          "objective": "Verify the ACL was removed",
+          "command": "show access-lists",
+          "teachingPoint": "The suspicious ACL should no longer appear. If it does, try the removal command again."
+        }
+      ]
+    },
+    {
+      "section": "Blocking Known Attackers",
+      "steps": [
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal",
+          "teachingPoint": "Sometimes you need to ADD security - blocking known bad actors from accessing your network."
+        },
+        {
+          "objective": "Create an ACL to block attacker at 10.0.0.50 (ICMP)",
+          "command": "access-list 101 deny icmp host 10.0.0.50 any",
+          "teachingPoint": "This blocks ping (ICMP) from the attacker. Put DENY rules BEFORE permit rules - first match wins!"
+        },
+        {
+          "objective": "Block the same attacker's TCP traffic",
+          "command": "access-list 101 deny tcp host 10.0.0.50 any",
+          "teachingPoint": "Attackers use multiple protocols. Block TCP to stop web, SSH, and most application attacks."
+        },
+        {
+          "objective": "Allow OSPF routing updates",
+          "command": "access-list 101 permit ospf any any",
+          "teachingPoint": "Don't break your network! OSPF needs to pass or routers can't share routing info."
+        },
+        {
+          "objective": "Allow all other TCP traffic",
+          "command": "access-list 101 permit tcp any any",
+          "teachingPoint": "After blocking the attacker, allow legitimate traffic through."
+        },
+        {
+          "objective": "Allow all other UDP traffic",
+          "command": "access-list 101 permit udp any any",
+          "teachingPoint": "UDP is used for DNS and DHCP - essential services that must work!"
+        },
+        {
+          "objective": "Allow all other ICMP traffic",
+          "command": "access-list 101 permit icmp any any",
+          "teachingPoint": "Allow ping from everyone EXCEPT the attacker (who we blocked above)."
+        }
+      ]
+    },
+    {
+      "section": "Applying Protection to the Interface",
+      "steps": [
+        {
+          "objective": "Enter the WAN interface (where attacks come from)",
+          "command": "interface g0/0",
+          "teachingPoint": "ACLs must be applied to an interface to work. The WAN interface faces the Internet - that's where attacks originate!"
+        },
+        {
+          "objective": "Apply the ACL to inbound traffic",
+          "command": "ip access-group 101 in",
+          "teachingPoint": "Apply 'in' to filter traffic ENTERING the router. This stops attacks before they reach your LAN."
+        },
+        {
+          "objective": "Exit to privileged mode",
+          "command": "end",
+          "teachingPoint": "Your protection is now active! The attacker at 10.0.0.50 is blocked."
+        }
+      ]
+    },
+    {
+      "section": "Save and Verify",
+      "steps": [
+        {
+          "objective": "Verify the ACL is applied",
+          "command": "show access-lists",
+          "teachingPoint": "You should see your ACL with the deny rules for 10.0.0.50 listed first, followed by permit rules."
+        },
+        {
+          "objective": "Save your security configuration",
+          "command": "write memory",
+          "teachingPoint": "ALWAYS save after making security changes! If the router reboots, unsaved changes are lost."
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    }
+  ],
+  "legacyCommands": [
+    "! ============================================================",
+    "! THREAT MITIGATION QUICK REFERENCE",
+    "! ============================================================",
+    "!",
+    "! STEP 1: INVESTIGATE",
+    "! show running-config    <- Compare against MOP",
+    "! show ip route          <- Look for unauthorized routes",
+    "! show access-lists      <- Check for suspicious ACLs",
+    "!",
+    "! STEP 2: REMOVE THREATS",
+    "! no access-list 50                    <- Remove entire ACL",
+    "! no ip route 10.0.0.0 255.0.0.0 1.2.3.4  <- Remove rogue route",
+    "! no ip dhcp pool ROGUE_POOL           <- Remove rogue DHCP",
+    "!",
+    "! STEP 3: BLOCK ATTACKERS",
+    "! Order matters! DENY before PERMIT:",
+    "! access-list 101 deny icmp host 10.0.0.50 any",
+    "! access-list 101 deny tcp host 10.0.0.50 any",
+    "! access-list 101 permit ospf any any",
+    "! access-list 101 permit tcp any any",
+    "! access-list 101 permit udp any any",
+    "! access-list 101 permit icmp any any",
+    "!",
+    "! STEP 4: APPLY PROTECTION",
+    "! interface g0/0",
+    "! ip access-group 101 in",
+    "!",
+    "! ============================================================",
+    "! COMMON THREATS TO LOOK FOR",
+    "! ============================================================",
+    "!",
+    "! 1. ROGUE DHCP SERVER",
+    "!    - Unauthorized 'ip dhcp pool' in config",
+    "!    - Could give clients wrong gateway/DNS",
+    "!    - Remove with: no ip dhcp pool <name>",
+    "!",
+    "! 2. UNAUTHORIZED STATIC ROUTES",
+    "!    - Routes not in the MOP",
+    "!    - Could redirect traffic to attacker",
+    "!    - Remove with: no ip route <network> <mask> <next-hop>",
+    "!",
+    "! 3. SUSPICIOUS ACL ENTRIES",
+    "!    - Permits that are too broad",
+    "!    - Denies blocking legitimate traffic",
+    "!    - Remove entire ACL: no access-list <number>",
+    "!",
+    "! 4. UNAUTHORIZED USERS",
+    "!    - Check for unknown usernames",
+    "!    - Remove with: no username <name>",
+    "!",
+    "! TIP: If it's not in the MOP, it's suspicious!"
+  ]
+}
