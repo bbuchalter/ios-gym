@@ -55,6 +55,10 @@ export function createInitialState(deviceModel: DeviceModel = '2960-switch'): De
       overload: false,
       staticMappings: []
     },
+    dhcp: {
+      excludedAddresses: [],
+      pools: {}
+    },
     line: {
       console: {
         loggingSynchronous: false

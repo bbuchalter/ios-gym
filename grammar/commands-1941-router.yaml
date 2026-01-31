@@ -27,6 +27,8 @@ modes:
     prompt: "{hostname}(config-line)#"
   LINE_CONSOLE_CONFIG:
     prompt: "{hostname}(config-line)#"
+  DHCP_POOL_CONFIG:
+    prompt: "{hostname}(dhcp-config)#"
 
 # Argument types your parser should support (validate + suggest)
 arg_types:
@@ -470,6 +472,51 @@ commands:
         inside_global_from: "global"
       help: "Remove static NAT mapping"
 
+    # ===== DHCP SERVER CONFIGURATION =====
+    
+    # Exclude addresses from DHCP pool (range)
+    - name: ip_dhcp_excluded_address_range
+      tokens: ["ip", "dhcp", "excluded-address", {arg: "IP", name: "start"}, {arg: "IP", name: "end"}]
+      action:
+        type: "dhcp_excluded_address"
+        start_from: "start"
+        end_from: "end"
+      help: "Exclude range of addresses from DHCP allocation"
+
+    # Exclude single address from DHCP pool
+    - name: ip_dhcp_excluded_address_single
+      tokens: ["ip", "dhcp", "excluded-address", {arg: "IP", name: "start"}]
+      action:
+        type: "dhcp_excluded_address"
+        start_from: "start"
+      help: "Exclude single address from DHCP allocation"
+
+    # Remove excluded address range
+    - name: no_ip_dhcp_excluded_address_range
+      tokens: ["no", "ip", "dhcp", "excluded-address", {arg: "IP", name: "start"}, {arg: "IP", name: "end"}]
+      action:
+        type: "dhcp_remove_excluded_address"
+        start_from: "start"
+        end_from: "end"
+      help: "Remove excluded address range"
+
+    # Create/enter DHCP pool
+    - name: ip_dhcp_pool
+      tokens: ["ip", "dhcp", "pool", {arg: "WORD", name: "name"}]
+      action:
+        type: "dhcp_pool_enter"
+        name_from: "name"
+        mode: "DHCP_POOL_CONFIG"
+      help: "Create DHCP pool and enter configuration mode"
+
+    # Remove DHCP pool
+    - name: no_ip_dhcp_pool
+      tokens: ["no", "ip", "dhcp", "pool", {arg: "WORD", name: "name"}]
+      action:
+        type: "dhcp_pool_remove"
+        name_from: "name"
+      help: "Remove DHCP pool"
+
   IF_CONFIG:
     - name: exit
       tokens: ["exit"]
@@ -635,6 +682,39 @@ commands:
       tokens: ["no", "logging", "synchronous"]
       action: {type: "set", path: "line.console.loggingSynchronous", value: false}
       help: "Disable logging synchronous"
+
+  DHCP_POOL_CONFIG:
+    - name: exit
+      tokens: ["exit"]
+      action: {type: "mode_pop"}
+      help: "Exit DHCP pool configuration"
+
+    - name: end
+      tokens: ["end"]
+      action: {type: "mode_pop_to", mode: "PRIV_EXEC"}
+      help: "Exit to privileged EXEC"
+
+    - name: network
+      tokens: ["network", {arg: "IP", name: "network"}, {arg: "MASK", name: "mask"}]
+      action:
+        type: "dhcp_pool_network"
+        network_from: "network"
+        mask_from: "mask"
+      help: "Set network for DHCP pool"
+
+    - name: default_router
+      tokens: ["default-router", {arg: "IP", name: "gateway"}]
+      action:
+        type: "dhcp_pool_default_router"
+        gateway_from: "gateway"
+      help: "Set default gateway for DHCP clients"
+
+    - name: dns_server
+      tokens: ["dns-server", {arg: "IP", name: "dns"}]
+      action:
+        type: "dhcp_pool_dns_server"
+        dns_from: "dns"
+      help: "Set DNS server for DHCP clients"
 
 templates:
   show_running_config: |

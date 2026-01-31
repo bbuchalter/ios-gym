@@ -41,6 +41,15 @@ import {
   handleNatStaticAdd,
   handleNatStaticRemove
 } from "./nat";
+import {
+  handleDhcpExcludedAddress,
+  handleDhcpRemoveExcludedAddress,
+  handleDhcpPoolEnter,
+  handleDhcpPoolRemove,
+  handleDhcpPoolNetwork,
+  handleDhcpPoolDefaultRouter,
+  handleDhcpPoolDnsServer
+} from "./dhcp";
 
 /**
  * Handler registry and dispatcher
@@ -165,6 +174,27 @@ export class HandlerRegistry {
       
       case "nat_static_remove":
         return handleNatStaticRemove(session, args, action);
+      
+      case "dhcp_excluded_address":
+        return handleDhcpExcludedAddress(session, args, action);
+      
+      case "dhcp_remove_excluded_address":
+        return handleDhcpRemoveExcludedAddress(session, args, action);
+      
+      case "dhcp_pool_enter":
+        return handleDhcpPoolEnter(session, args, action);
+      
+      case "dhcp_pool_remove":
+        return handleDhcpPoolRemove(session, args, action);
+      
+      case "dhcp_pool_network":
+        return handleDhcpPoolNetwork(session, args, action);
+      
+      case "dhcp_pool_default_router":
+        return handleDhcpPoolDefaultRouter(session, args, action);
+      
+      case "dhcp_pool_dns_server":
+        return handleDhcpPoolDnsServer(session, args, action);
       
       default:
         result = {

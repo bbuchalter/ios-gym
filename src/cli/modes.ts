@@ -11,6 +11,7 @@ export class ModeStack {
   public currentInterface: string | null = null;
   public currentVlan: string | null = null;
   public currentOspfProcess: number | null = null;
+  public currentDhcpPool: string | null = null;
   
   constructor(grammar: CommandGrammar) {
     this.grammar = grammar;
@@ -76,6 +77,7 @@ export class ModeStack {
     this.currentInterface = null;
     this.currentVlan = null;
     this.currentOspfProcess = null;
+    this.currentDhcpPool = null;
   }
   
   /**

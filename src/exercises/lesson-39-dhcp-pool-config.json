@@ -1,0 +1,111 @@
+{
+  "id": "lesson-39-dhcp-pool-config",
+  "title": "DHCP Pool Configuration",
+  "deviceModel": "1941-router",
+  "goals": [
+    {
+      "section": "Prepare the Gateway Interface",
+      "steps": [
+        {
+          "objective": "Enter privileged mode",
+          "command": "enable",
+          "teachingPoint": "Before configuring DHCP, we need a gateway interface for clients to use!"
+        },
+        {
+          "objective": "Enter configuration mode",
+          "command": "configure terminal"
+        },
+        {
+          "objective": "Configure the LAN interface",
+          "command": "interface g0/1",
+          "teachingPoint": "G0/1 will be our LAN interface - this is where DHCP clients will connect."
+        },
+        {
+          "objective": "Assign the gateway IP address",
+          "command": "ip address 192.168.100.1 255.255.255.0",
+          "teachingPoint": "This IP (192.168.100.1) becomes the default-router we'll tell DHCP clients to use!"
+        },
+        {
+          "objective": "Enable the interface",
+          "command": "no shutdown"
+        },
+        {
+          "objective": "Exit interface configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Exclude Reserved Addresses",
+      "steps": [
+        {
+          "objective": "Exclude addresses for the router and servers",
+          "command": "ip dhcp excluded-address 192.168.100.1 192.168.100.10",
+          "teachingPoint": "IMPORTANT: Always exclude the router's IP and any servers! These need permanent addresses."
+        }
+      ]
+    },
+    {
+      "section": "Create the DHCP Pool",
+      "steps": [
+        {
+          "objective": "Create a DHCP pool named SCHOOL_NETWORK",
+          "command": "ip dhcp pool SCHOOL_NETWORK",
+          "teachingPoint": "A 'pool' is like a bucket of IP addresses the router can hand out. Name it something meaningful!"
+        },
+        {
+          "objective": "Define the network range",
+          "command": "network 192.168.100.0 255.255.255.0",
+          "teachingPoint": "This tells DHCP which addresses to give out. Combined with exclusions, clients get .11 through .254"
+        },
+        {
+          "objective": "Set the default gateway",
+          "command": "default-router 192.168.100.1",
+          "teachingPoint": "This is the 'exit door' for clients - the router IP we configured on G0/1!"
+        },
+        {
+          "objective": "Set the DNS server",
+          "command": "dns-server 8.8.8.8",
+          "teachingPoint": "DNS translates website names to IPs. 8.8.8.8 is Google's free DNS server."
+        },
+        {
+          "objective": "Exit DHCP pool configuration",
+          "command": "exit"
+        }
+      ]
+    },
+    {
+      "section": "Verify and Save",
+      "steps": [
+        {
+          "objective": "Return to privileged mode",
+          "command": "end"
+        },
+        {
+          "objective": "View the running configuration",
+          "command": "show running-config",
+          "teachingPoint": "Look for 'ip dhcp pool SCHOOL_NETWORK' and the excluded-address line in the config!"
+        },
+        {
+          "objective": "Save the configuration",
+          "command": "write memory",
+          "teachingPoint": "Now any device on G0/1 will automatically get an IP from 192.168.100.11-254!"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "type": "config-saved",
+      "description": "Configuration must be saved with 'write memory'",
+      "diagnosticCommand": "show running-config"
+    },
+    {
+      "type": "state-path",
+      "path": "interfaces.g0/1.ip",
+      "expectedValue": "192.168.100.1",
+      "description": "G0/1 should have IP 192.168.100.1 (the gateway)",
+      "diagnosticCommand": "show ip interface brief"
+    }
+  ]
+}

@@ -56,6 +56,7 @@ import lesson35 from '../../src/exercises/lesson-35-nat-basics.json';
 import lesson36 from '../../src/exercises/lesson-36-nat-static.json';
 import lesson37 from '../../src/exercises/lesson-37-nat-pat.json';
 import lesson38 from '../../src/exercises/lesson-38-threat-mitigation.json';
+import lesson39 from '../../src/exercises/lesson-39-dhcp-pool-config.json';
 
 import type { CommandGrammar } from '@src/types';
 import type { Exercise as ExerciseType } from '@src/validation/types';
@@ -5166,8 +5167,14 @@ ip ospf cost 30
                 </h4>
                 <p className="mb-4 text-gray-300">
                   A DHCP <strong>pool</strong> is like a bucket of addresses the router can hand
-                  out. Here&apos;s how to set one up:
+                  out. Let&apos;s configure one step by step!
                 </p>
+
+                <Exercise
+                  exercise={lesson39 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
 
                 <Diagram title="DHCP Pool Configuration">
                   {`┌─────────────────────────────────────────────────────────────┐

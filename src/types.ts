@@ -11,7 +11,8 @@ export enum ModeType {
   CONFIG_VLAN = "CONFIG_VLAN",
   ROUTER_OSPF_CONFIG = "ROUTER_OSPF_CONFIG",
   LINE_VTY_CONFIG = "LINE_VTY_CONFIG",
-  LINE_CONSOLE_CONFIG = "LINE_CONSOLE_CONFIG"
+  LINE_CONSOLE_CONFIG = "LINE_CONSOLE_CONFIG",
+  DHCP_POOL_CONFIG = "DHCP_POOL_CONFIG"
 }
 
 export interface DeviceState {
@@ -29,6 +30,7 @@ export interface DeviceState {
   ssh: SshConfig;
   accessLists: Record<number, AccessList>; // ACLs keyed by number
   nat: NatConfig; // NAT/PAT configuration
+  dhcp: DhcpConfig; // DHCP server configuration
   line: {
     console: LineConfig;
   };
@@ -137,6 +139,27 @@ export interface NatConfig {
   overloadAcl?: number;            // ACL for PAT source addresses
   overloadInterface?: string;      // Interface for PAT public IP
   staticMappings: NatStaticMapping[];  // Static NAT entries
+}
+
+// DHCP excluded address range
+export interface DhcpExcludedRange {
+  start: string;
+  end: string;
+}
+
+// DHCP pool configuration
+export interface DhcpPool {
+  name: string;
+  network?: string;
+  mask?: string;
+  defaultRouter?: string;
+  dnsServer?: string;
+}
+
+// DHCP configuration
+export interface DhcpConfig {
+  excludedAddresses: DhcpExcludedRange[];
+  pools: Record<string, DhcpPool>;
 }
 
 // Grammar types from commands.yaml
