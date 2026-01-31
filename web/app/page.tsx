@@ -45,7 +45,9 @@ import lesson24 from '../../src/exercises/lesson-24-ospf-cost.json';
 import lesson25 from '../../src/exercises/lesson-25-capstone.json';
 import lesson26 from '../../src/exercises/lesson-26-router-bootstrap.json';
 import lesson27 from '../../src/exercises/lesson-27-ospf-default-route.json';
-// Note: lessons 28-30 are concept reference files (no interactive exercises)
+import lesson28 from '../../src/exercises/lesson-28-acl-concepts.json';
+import lesson29 from '../../src/exercises/lesson-29-nat-concepts.json';
+import lesson30 from '../../src/exercises/lesson-30-dhcp-concepts.json';
 import lesson31 from '../../src/exercises/lesson-31-cyberpatriot-router-prep.json';
 import lesson32 from '../../src/exercises/lesson-32-standard-acl.json';
 import lesson33 from '../../src/exercises/lesson-33-extended-acl.json';
@@ -4739,6 +4741,20 @@ ip ospf cost 30
                   </p>
                 </InfoBox>
 
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  Explore: ACL Fundamentals
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  Before diving into configuration, let's explore ACL concepts and see how they
+                  appear in the router configuration.
+                </p>
+
+                <Exercise
+                  exercise={lesson28 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
                 <h3 className="mt-12 mb-4 text-2xl font-bold text-white">Standard ACLs (1-99)</h3>
                 <p className="mb-4 text-gray-300">
                   Standard ACLs are the simpler type of access control list. They filter traffic
@@ -4827,6 +4843,20 @@ ip ospf cost 30
                   NAT (Network Address Translation) lets private IPs communicate with the Internet
                   by translating them to public IPs. Let's learn how to configure it step by step!
                 </p>
+
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  Explore: NAT Concepts
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  Before configuring NAT, let's explore the concepts and see how NAT appears in the
+                  router configuration.
+                </p>
+
+                <Exercise
+                  exercise={lesson29 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
 
                 <h4 className="mt-8 mb-4 text-2xl font-semibold text-white">
                   NAT Basics: Inside vs Outside
@@ -4925,28 +4955,131 @@ ip ospf cost 30
                   Understanding DHCP Pools
                 </h3>
                 <p className="mb-4 text-gray-300">
-                  DHCP automatically assigns IP addresses to network devices. Routers can act as
-                  DHCP servers for their LAN.
+                  <strong>DHCP</strong> (Dynamic Host Configuration Protocol) automatically assigns
+                  IP addresses to network devices. Think of it like a{' '}
+                  <strong>receptionist handing out visitor badges</strong> — when you arrive, you
+                  get a badge (IP address) automatically instead of picking your own!
+                </p>
+
+                <Exercise
+                  exercise={lesson30 as ExerciseType}
+                  grammar={routerGrammar}
+                  deviceModel="1941-router"
+                />
+
+                <InfoBox variant="info">
+                  <h4 className="mb-3 font-semibold text-blue-300">
+                    🏫 Real-World Analogy: School Lockers
+                  </h4>
+                  <p className="text-gray-300">
+                    Imagine your school assigns lockers automatically on the first day. You
+                    don&apos;t pick your own locker number — the office gives you one! DHCP works
+                    the same way: devices get assigned an IP address when they connect to the
+                    network.
+                  </p>
+                </InfoBox>
+
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  The DORA Handshake: How Devices Get an IP
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  When your laptop connects to WiFi, it goes through 4 quick steps called{' '}
+                  <strong>DORA</strong>:
+                </p>
+
+                <div className="my-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                  <div className="rounded-lg border border-blue-600 bg-gray-800 p-4">
+                    <div className="mb-2 text-2xl font-bold text-blue-400">D</div>
+                    <div className="font-semibold text-white">Discover</div>
+                    <p className="mt-1 text-sm text-gray-400">
+                      Device shouts: &quot;Anyone have an IP for me?&quot;
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-green-600 bg-gray-800 p-4">
+                    <div className="mb-2 text-2xl font-bold text-green-400">O</div>
+                    <div className="font-semibold text-white">Offer</div>
+                    <p className="mt-1 text-sm text-gray-400">
+                      Router responds: &quot;How about 192.168.100.50?&quot;
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-yellow-600 bg-gray-800 p-4">
+                    <div className="mb-2 text-2xl font-bold text-yellow-400">R</div>
+                    <div className="font-semibold text-white">Request</div>
+                    <p className="mt-1 text-sm text-gray-400">
+                      Device confirms: &quot;Yes, I&apos;ll take that one!&quot;
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-purple-600 bg-gray-800 p-4">
+                    <div className="mb-2 text-2xl font-bold text-purple-400">A</div>
+                    <div className="font-semibold text-white">Acknowledge</div>
+                    <p className="mt-1 text-sm text-gray-400">
+                      Router finalizes: &quot;Done! It&apos;s yours for 24 hours.&quot;
+                    </p>
+                  </div>
+                </div>
+
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  Configuring a DHCP Pool
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  A DHCP <strong>pool</strong> is like a bucket of addresses the router can hand
+                  out. Here&apos;s how to set one up:
                 </p>
 
                 <Diagram title="DHCP Pool Configuration">
                   {`┌─────────────────────────────────────────────────────────────┐
 │                    DHCP CONFIGURATION                        │
 ├─────────────────────────────────────────────────────────────┤
-│  ! Exclude static IPs (router, servers)                      │
+│  STEP 1: Reserve addresses for routers/servers              │
 │  ip dhcp excluded-address 192.168.100.1 192.168.100.10      │
 │                                                              │
-│  ! Create the DHCP pool                                      │
-│  ip dhcp pool LAN_POOL                                       │
-│    network 192.168.100.0 255.255.255.0                       │
-│    default-router 192.168.100.1  ← Gateway for clients      │
-│    dns-server 8.8.8.8            ← DNS for clients          │
+│  STEP 2: Create the DHCP pool                                │
+│  ip dhcp pool SCHOOL_NETWORK                                 │
+│    network 192.168.100.0 255.255.255.0  ← Address range     │
+│    default-router 192.168.100.1         ← Exit door (gateway)│
+│    dns-server 8.8.8.8                   ← Website lookup    │
 ├─────────────────────────────────────────────────────────────┤
-│  Result: Clients get IPs from 192.168.100.11 - .254         │
-│          Gateway: 192.168.100.1                              │
-│          DNS: 8.8.8.8                                        │
+│  Result: Devices get IPs from 192.168.100.11 - .254         │
+│          Gateway: 192.168.100.1 (the router)                 │
+│          DNS: 8.8.8.8 (Google's DNS)                         │
 └─────────────────────────────────────────────────────────────┘`}
                 </Diagram>
+
+                <h4 className="mt-8 mb-4 text-xl font-semibold text-white">
+                  Why Exclude Addresses?
+                </h4>
+                <p className="mb-4 text-gray-300">
+                  Some devices need a <strong>permanent address</strong> that never changes — like
+                  the router itself, servers, or printers. We &quot;exclude&quot; these from the
+                  pool so DHCP doesn&apos;t accidentally give them away!
+                </p>
+
+                <div className="my-6 grid gap-4 md:grid-cols-3">
+                  <div className="rounded-lg bg-gray-800 p-4 text-center">
+                    <div className="mb-2 text-2xl">🖧</div>
+                    <div className="font-semibold text-white">Router</div>
+                    <p className="text-sm text-gray-400">Always needs .1 as the gateway</p>
+                  </div>
+                  <div className="rounded-lg bg-gray-800 p-4 text-center">
+                    <div className="mb-2 text-2xl">🖥️</div>
+                    <div className="font-semibold text-white">Servers</div>
+                    <p className="text-sm text-gray-400">Need fixed IPs so clients can find them</p>
+                  </div>
+                  <div className="rounded-lg bg-gray-800 p-4 text-center">
+                    <div className="mb-2 text-2xl">🖨️</div>
+                    <div className="font-semibold text-white">Printers</div>
+                    <p className="text-sm text-gray-400">
+                      Need fixed IPs so computers know where to print
+                    </p>
+                  </div>
+                </div>
+
+                <ProTip>
+                  <strong>What&apos;s a Lease?</strong> DHCP addresses are temporary — like checking
+                  out a library book! After the &quot;lease&quot; expires (usually 24 hours), the
+                  device asks the router to renew it. This way, addresses get recycled when devices
+                  leave the network.
+                </ProTip>
 
                 <h3 className="mt-12 mb-4 text-2xl font-bold text-white">Threat Mitigation</h3>
                 <p className="mb-4 text-gray-300">
